@@ -1,0 +1,79 @@
+<div class="col-lg-12">
+  <div class="ibox">
+  	<div class="ibox-content">
+
+  			<div class="row m-b-sm m-t-sm">
+          <div class="col-md-7">
+            <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
+          </div>
+  				<div class="col-md-2">
+  					<%= link_to(admin_warehouse_products_path(@warehouse.alph_key), :class => "btn btn-white btn-sm full-width") do %>
+  						<i class="fa fa-refresh"></i> Actualizar
+  					<% end %>
+  				</div>
+          <div class="col-md-3">
+            <% if @actions["RECEIVE_SHIPMENTS"] %>
+    					<%= link_to(admin_shipments_path(@warehouse.alph_key), :class => "btn btn-white btn-sm full-width") do %>
+    						<i class="fa fa-truck"></i> Envíos a mi almacén
+    					<% end %>
+            <% end %>
+  				</div>
+  			</div>
+
+  			<table class="footable table table-stripped  toggle-arrow-tiny" data-page-size="15" data-filter=#filter>
+  					<thead>
+    					<tr>
+                  <th data-sort-ignore="true"></th>
+    					    <!--<th data-hide="phone" data-sort-ignore="true"></th>-->
+                  <th>Clave</th>
+    					    <th>Nombre</th>
+    					    <th data-hide="phone" data-type="numeric">Existencia</th>
+    					    <th data-hide="phone" data-type="numeric">Stock Mínimo</th>
+    					</tr>
+  					</thead>
+  					<tbody>
+            <% @products.each do |wp| %>
+              <% p = wp.Product %>
+  					  <tr>
+                <td></td>
+                <td><%= p.alph_key %></td>
+    						<td><%= p.name %></td>
+    						<td>
+                  <button type="button" class="btn btn-primary btn-sm m-r-sm"
+                          onclick="update_shipment_preparations_form('<%=p.name%>', '<%=p.alph_key%>', <%=wp.id%>, <%=wp.existence%>);">
+                          <%= wp.existence %>
+                  </button>
+                  <% if @actions["UPDATE_STOCK"] %>
+                    <%= link_to "Detalles",
+                    admin_warehouse_products_stock_details_path(params[:warehouse_id], p.id),
+                    :class => "btn btn-white btn-sm" %>
+                  <% end %>
+                </td>
+    						<td>
+                  <button type="button" class="btn btn-warning btn-sm m-r-sm">
+                          <%= wp.min_stock %>
+                  </button>
+                </td>
+  					  </tr>
+  					<% end %>
+  					</tbody>
+            <tfoot>
+              <tr>
+                <td colspan="7">
+                  <div class="pull-right">
+                    <%= will_paginate @products, renderer: BootstrapPagination::Rails %>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
+  			</table>
+
+        <script>
+            $(document).ready(function() {
+                $('.footable').footable();
+            });
+        </script>
+
+  	</div>
+  </div>
+</div>

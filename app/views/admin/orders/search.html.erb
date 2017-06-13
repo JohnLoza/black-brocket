@@ -1,0 +1,153 @@
+<% provide(:title, "Búsqueda de órdenes") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Búsqueda", labels: ["Búsqueda"]} %>
+
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
+  <div class="row">
+    <div class="ibox ibox-content">
+      <h1>Búsqueda</h1>
+
+      <%= form_tag(admin_orders_search_path, method: :get, :class => "form-inline") do %>
+        <div class="form-group">
+          <%= label_tag :warehouse_id, "Almacén" %>
+          <%= select_tag :warehouse_id, options_from_collection_for_select(
+            @warehouses, "id", "name", :selected => params[:warehouse_id]), prompt: "Selecciona...",
+            :class => "form-control m-b", onchange: "referenceNotWriting();" %>
+        </div>
+
+        <div class="form-group">
+          <%= label_tag :start_date, "Fecha de inicio" %>
+          <%= text_field_tag :start_date, params[:start_date], { :class => 'form-control form-control-black',
+  					:maxlength => 15, :placeholder => "1990-11-15", onchange: "referenceNotWriting();" } %>
+        </div>
+
+        <div class="form-group">
+          <%= label_tag :end_date, "Fecha de fin" %>
+          <%= text_field_tag :end_date, params[:end_date], { :class => 'form-control form-control-black',
+  					:maxlength => 15, :placeholder => "1990-11-21", onchange: "referenceNotWriting();" } %>
+        </div>
+
+        <div class="form-group">
+          <%= label_tag :reference, "Referencia" %>
+          <%= text_field_tag :reference, params[:reference], :class => "form-control", onkeyup: "referenceWriting();", maxlength: 15 %>
+        </div>
+
+        <%= submit_tag :Buscar, :class => "btn btn-primary" %>
+      <% end %> <br>
+
+      <table class="footable table table-stripped toggle-arrow-tiny">
+        <thead>
+          <th>Fecha</th>
+          <th>Referencia</th>
+          <th>Cliente</th>
+          <th>Importe Neto</th>
+          <th>IVA</th>
+          <th>IEPS</th>
+          <th>Importe</th>
+          <th>Envío</th>
+          <th>Comisión</th>
+        </thead>
+        <tbody>
+
+          <% if !@order.blank? %>
+            <%= render partial: "order_search", locals: {orders: [@order], totals: false} %>
+          <% else %>
+            <tr><td colspan="9"><strong>FACTURAS NO REQUERIDAS POR CLIENTE</strong></td></tr>
+            <%= render partial: "order_search", locals: {orders: @no_invoice_required_orders, totals: true} %>
+
+            <tr><td colspan="9"><strong>FACTURAS REQUERIDAS</strong></td></tr>
+            <%= render partial: "order_search", locals: {orders:   @invoice_required_orders, totals: true} %>
+
+            <tr><td colspan="9"><strong>PEDIDOS PAGADOS POR ENVIAR</strong></td></tr>
+            <%= render partial: "order_search", locals: {orders: @orders_to_be_sent, totals: true} %>
+
+            <tr style="background-color: #42A5F5; color: #fefefe;">
+              <td colspan=3 style="text-align: right;">
+                Totales:
+              </td>
+              <td colspan="2" style="text-align: right;">
+                Importe neto:
+              </td>
+              <td>
+                $ <span class="money_format grand-total"> 0.00 </span>
+              </td>
+              <td colspan="2" style="text-align: right;">
+                Comisión:
+              </td>
+              <td colspan="2">
+                $ <span class="money_format grand-commission"> 0.00 </span>
+              </td>
+            </tr>
+
+            <tr><td colspan="9"><strong>PEDIDOS POR PAGAR</strong></td></tr>
+            <%= render partial: "order_search", locals: {orders: @orders_to_be_paid, totals: false} %>
+          <% end %>
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function money_format(number){
+    return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
+      return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
+    });
+  }
+
+  function referenceWriting(){
+    $("#warehouse_id").val("");
+    $("#start_date").val("");
+    $("#end_date").val("");
+  }
+
+  function referenceNotWriting(){
+    $("#reference").val("");
+  }
+
+  $(document).ready(function(){
+    // calculate the addition of all the totals of each order (PAID ONES)
+    totals = $(".total");
+    grand_total = 0;
+    totals.each(function(){
+      grand_total += parseInt(  $(this).text()  );
+    });
+    $(".grand-total").html(grand_total);
+
+    // calculate the addition of all the commissions of each order (PAID ONES)
+    commissions = $(".commission");
+    grand_commission = 0;
+    commissions.each(function(){
+      grand_commission += parseInt(  $(this).text()  );
+    });
+    $(".grand-commission").html(grand_commission);
+
+    // Format the numbers in money style ($ 000,000,000)
+    numbers_to_format = $(".money_format");
+    numbers_to_format.each(function(){
+      $(this).html(money_format($(this).text()));
+    });
+
+    // Prepare the calendar script to be run
+    options = {
+                  locale: 'es',
+  								format: 'YYYY-MM-DD',
+                  icons: {
+                      time: 'fa fa-clock-o',
+                      date: 'fa fa-calendar',
+                      up: 'fa fa-chevron-up',
+                      down: 'fa fa-chevron-down',
+                      previous: 'fa fa-chevron-left',
+                      next: 'fa fa-chevron-right',
+                      today: 'fa fa-arrows',
+                      clear: 'fa fa-times'
+                  }
+              }
+    $('#start_date').datetimepicker(options);
+    $('#end_date').datetimepicker(options);
+  });
+</script>
+
+<%= stylesheet_link_tag 'bootstrap-datetimepicker.min', media: 'all' %>
+<%= javascript_include_tag 'bootstrap-datetimepicker-custom' %>

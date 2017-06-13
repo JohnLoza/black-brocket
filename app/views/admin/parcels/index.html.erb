@@ -1,0 +1,36 @@
+<% provide(:title, "Paqueterías") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Almacenes", labels: ['Almacenes', 'Paqueterías'], links: [admin_warehouses_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox-content" style="display: block;">
+          <div class="row">
+            <div class="col-sm-9 b-r margin-bot-resp">
+      	       <h3 class="m-t-none m-b">Lista de paqueterías</h3>
+      	       <p>Aquí puedes realizar diversas acciones como dar de alta una nueva paquetería, modificar, eliminarlo o simplemente ver su información!!!</p>
+      	    </div>
+      		  <div class="hr-line-dashed pro-mobile"></div>
+            <% if @actions["CREATE"] %>
+              <div class="col-sm-3 text-center"><h4>Registrar Nueva</h4>
+                 <p class="text-center">
+                   <%= link_to "<i class='fa fa-truck med-icon'></i>".html_safe, admin_warehouse_new_parcel_path(params[:id]) %>
+                 </p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div><br>
+
+    <div class="row">
+      <%= render "presentation_table" %>
+    </div>
+
+  </div>
+</div>
+<!--End content whit animation-->
+</br></br>

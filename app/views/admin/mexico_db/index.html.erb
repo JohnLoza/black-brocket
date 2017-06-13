@@ -1,0 +1,48 @@
+<% provide(:title, "Entidades de México") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "México", labels: ['Estados']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="ibox">
+        <div class="ibox-content text-center">
+            <h3 class="m-b-xxs">Configuración de LADA</h3>
+            <small>En este apartado puedes registrar una LADA seleccionando el estado y dando click en el botón "Ver poblaciones".</small>
+        </div>
+    </div>
+
+    <div class="ibox-content">
+
+      <label for="state_id">Estado:</label>
+      <%= select_tag :state_id, options_from_collection_for_select(
+        @states, "id", "name"), :class => "form-control m-b", onchange: "state_selected(this);" %>
+
+      <% if @actions["UPDATE"] or @actions["CREATE"] %>
+        <%= link_to "Ver poblaciones", admin_mexico_state_path(@states[0].id), :class => "btn btn-white btn-sm m-b", id: "see_cities" %>
+      <% end %>
+      <br>
+      <% if @actions["UPDATE_STATE_LADA"] %>
+        <label id="change_lada_title">Cambiar el LADA para el estado de: "<%= @states[0].name %>"</label>
+        <%= form_for(:state, url: admin_mexico_state_path(@states[0].id), method: :put, html: {id: "state_LADA_form"}) do |f| %>
+           <%= f.number_field "LADA", { :class => "form-control m-b", min: 0, max: 99999, step: 1} %>
+           <%= f.submit "Editar LADA", :class => "btn btn-primary btn-sm",
+             data: { confirm: "Seguro(a) de modificar el LADA?" } %>
+        <% end # form_for end # %>
+      <% end # if @actions["UPDATE_STATE_LADA"] # %>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function state_selected(select){
+    $("#change_lada_title").text("Cambiar el LADA para el estado de: " +
+                              select.options[select.selectedIndex].textContent);
+
+    new_destination = "<%= admin_mexico_state_path(0) %>";
+    new_destination = new_destination.replace("0", select.value);
+    $("#see_cities").attr("href", new_destination);
+    $("#state_LADA_form").attr("action", new_destination);
+  }
+</script>

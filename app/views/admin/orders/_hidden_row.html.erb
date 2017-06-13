@@ -1,0 +1,46 @@
+<% if !o.tracking_code.blank? %>
+  <p>Código de rastreo: <%= o.tracking_code %></p>
+<% end # if o.tracking_code != nil # %>
+
+<% if ["SENT","DELIVERED"].include? params[:type] %>
+  <p>
+    Paquetería: <%= o.Parcel.parcel_name %>
+  </p>
+<% end %>
+
+<% if !o.pay_photo.blank? %>
+  <%= link_to image_tag(o.pay_photo.url(:mini), :class => "photo-gallery size-48"),
+      image_path(o.pay_photo.url), :data => {:toggle => "lightbox", :title => "Pago de la orden: " + o.alph_key } %>
+  <%= link_to "imprimir", o.pay_photo.url, :class => "btn btn-info btn-sm", target: "_blank" %>
+<% elsif !o.pay_pdf.blank? %>
+  <%= link_to "<i class='fa fa-file-pdf-o fa-5x'></i>".html_safe,
+      o.pay_pdf.url, target: "_blank" %>
+<% end # if !o.pay_photo.blank? # %>
+
+<% if @actions["ACCEPT_REJECT_PAYMENT"] and params[:type] == "ACCEPT_REJECT_PAYMENT" %>
+      <br>
+  <%= link_to "Aceptar", admin_accept_order_pay_path(o.alph_key,"true"),
+            :class => "btn btn-primary btn-sm m-t", method: :put,
+            data:{confirm: "Seguro(a) de aceptar el pago?"}%>
+
+  <%= link_to "Rechazar", "#", :class => "btn btn-danger btn-sm m-t" ,
+            onclick: "update_reject_pay_form('#{o.alph_key}')" %>
+<% end # if o.state == "PAYMENT_DEPOSITED" # %>
+
+<% if @actions["CAPTURE_TRACKING_CODE"] and params[:type] == "CAPTURE_TRACKING_CODE" %>
+  <%= form_tag(admin_capture_tracking_code_path(o.alph_key), method: :put) do %>
+    <br>
+    <%= label_tag :parcel_id, "Paquetería" %>
+    <%= select_tag :parcel_id, options_from_collection_for_select(
+        @parcels, :id, :parcel_name), prompt: :Selecciona,
+        :class => "form-control m-b", required: true %>
+
+    <%= label_tag :tracking_code, "Código de rastreo" %>
+    <%= text_field_tag :tracking_code, "",
+        {:class => "form-control m-b", :maxlength => 20, required: true} %>
+
+    <%= submit_tag "Guardar código de rastreo",
+        {:class => "btn btn-primary",
+          data: {confirm: "Estas seguro(a) de ser el código correcto?"}} %>
+  <% end %>
+<% end %>

@@ -1,0 +1,48 @@
+<div id="<%= question.alph_key %>" class="social-feed-box">
+    <div class="pull-right social-action dropdown">
+        <button data-toggle="dropdown" class="dropdown-toggle btn-white">
+            <i class="fa fa-angle-down"></i>
+        </button>
+        <ul class="dropdown-menu m-t-xs">
+            <li class="disabled"><a href="#">Eliminar</a></li>
+        </ul>
+    </div>
+    <div class="social-avatar">
+    	<h3> <%= question.Product.name %> </h3>
+        <a href="" class="pull-left">
+          <% if !question.Client.photo.blank? %>
+            <%= image_tag question.Client.photo.url(:mini) %>
+          <% else %>
+            <%= image_tag("user_avatar.png") %>
+          <% end %>
+        </a>
+        <div class="media-body">
+            <a href="#"><%= question.Client.username %></a>
+            <small class="text-muted"><%= l(question.created_at, format: :long) %></small>
+        </div>
+    </div>
+    <div class="social-body">
+        <p><%= question.description %></p>
+    </div>
+    <div class="social-footer">
+        <div class="social-comment">
+            <a href="" class="pull-left">
+              <% if !@current_user.photo.blank? %>
+                <%= image_tag @current_user.photo.url(:mini) %>
+              <% else %>
+                <%= image_tag("user_avatar.png") %>
+              <% end %>
+            </a>
+            <div class="media-body">
+            	<%= form_for :prod_answer, remote: true do |f| %>
+	                 <%= f.text_area :description, { :class => 'form-control', :placeholder => "Contesta esta pregunta...", :maxlength => 250, :required => true } %>
+	    			 <%= f.hidden_field :question_id, value: question.alph_key %>
+	    			 <%= f.submit "Guardar respuesta", :class => 'btn btn-primary m-t-sm pull-right',
+	                  data: { confirm: '¿Estás seguro(a) de tu respuesta?' } %>
+  				<% end %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hr-line-dashed"></div>

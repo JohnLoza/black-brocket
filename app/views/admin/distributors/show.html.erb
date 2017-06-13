@@ -1,0 +1,151 @@
+<% provide(:title, "Distribuidores") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del distribuidor", labels: ['Distribuidores', 'Perfil del distribuidor'], links: [admin_distributors_path]} %>
+
+<div class="wrapper wrapper-content">
+  <div class="row animated fadeInRight">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Detalles del perfil</h5>
+                </div>
+                <div class="ibox-content no-padding border-left-right">
+                    <% if !@distributor.photo.blank? %>
+                        <%= image_tag(@distributor.photo.url, { :class => "img-responsive full-width" }) %>
+                    <% else %>
+                        <%= image_tag("user_avatar.png", { :class => "img-responsive full-width" }) %>
+                    <% end %>
+                </div>
+                <div class="ibox-content profile-content">
+                    <h4><strong><%= @distributor.name %> <%= @distributor.lastname %> <%= @distributor.mother_lastname %></strong></h4>
+                    <div class="user-button">
+                        <div class="row">
+                            <div class="col-md-6 p-r-7">
+                                <%#= link_to "<button type='button' class='btn btn-success btn-sm btn-block'><i class='fa fa-pencil'></i> Modificar</button>".html_safe, edit_admin_distributor_path(@distributor.alph_key) %>
+                            </div>
+                            <div class="col-md-6 p-l-7">
+                                <%#= link_to " <button type='button' class='btn btn-danger btn-sm btn-block'><i class='fa fa-trash'></i> Eliminar</button>".html_safe, admin_distributor_path(@distributor.alph_key),
+                  method: "delete", data: { confirm: "Estas seguro(a) de eliminarlo?" } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-8">
+          <% if @actions["SHOW_PERSONAL_DATA"] %>
+            <!--Datos del distribuidor-->
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Información del distribuidor</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <!--a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><%#= link_to "Editar".html_safe, edit_admin_distributor_path(@distributor.alph_key) %></li>
+                        </ul-->
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                          <tr>
+                              <td><b>Clave:</b></td>
+                              <td><%= @distributor.alph_key %></td>
+                              <td><b>Fecha nacimiento:</b></td>
+                              <td><%= l(@distributor.birthday, format: :long) if @distributor.birthday %></td>
+                          </tr>
+                            <tr>
+                                <td><b>Nombre:</b></td>
+                                <td><%= @distributor.name %> <%= @distributor.lastname %> <%= @distributor.mother_lastname %></td>
+                                <td><b>Nombre comercial o de usuario:</b></td>
+                                <td><%= @distributor.username %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Ubicación:</b></td>
+                                <td><%= @distributor_city.name %>, <%= @distributor_city.State.name %></td>
+                                <td><b>Dirección:</b></td>
+                                <td><%= @distributor.address %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Teléfono:</b></td>
+                                <td>(<%=@distributor_city.LADA%>) <%= @distributor.telephone %></td>
+                                <td><b>Celular:</b></td>
+                                <td><%= @distributor.cellphone %></td>
+                            </tr>
+                            <tr>
+                              <td><b>Fecha de creación:</b></td>
+                              <td><%= l(@distributor.created_at, format: :long) %></td>
+                              <td><b>Última modificación:</b></td>
+                              <td><%= l(@distributor.updated_at, format: :long) %></td>
+                            </tr>
+                            <tr>
+                              <td><b>Email:</b></td>
+                              <td><%= @distributor.email %></td>
+                            <% if @actions["SHOW_COMMISSION"] %>
+                                <td><strong>Comisión:</strong></td>
+                                <td><%= @distributor.commission %>%</td>
+                              </tr>
+                            <% end %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+          <% end # if @actions["SHOW_PERSONAL_DATA"] end #%>
+
+          <% if @actions["SHOW_FISCAL_DATA"] %>
+            <!-- Fiscal Data -->
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Información Fiscal</h5>
+                    <div class="ibox-tools"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></div>
+                </div>
+                <div class="ibox-content">
+                  <p>RFC: <%= @distributor.rfc %></p>
+                  <p>Nombre Fiscal ó Razón Social: <%= @distributor.fiscal_number %></p>
+                </div>
+            </div>
+          <% end %>
+
+          <% if @actions["SHOW_BANK_DATA"] %>
+            <!-- Fiscal Data -->
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Información Bancaria</h5>
+                    <div class="ibox-tools"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></div>
+                </div>
+                <div class="ibox-content">
+                  <p>Nombre del banco: <%= @distributor.bank_name %></p>
+                  <p>Beneficiario: <%= @distributor.bank_account_owner %></p>
+                  <p>Número de cuenta: <%= @distributor.bank_account_number %></p>
+                  <p>CLABE interbancaria: <%= @distributor.interbank_clabe %></p>
+                </div>
+            </div>
+          <% end %>
+
+          <% if @actions["SHOW_DISTRIBUTION_REGIONS"] %>
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Zonas de distribución</h5>
+                    <div class="ibox-tools"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></div>
+                </div>
+                <div class="ibox-content">
+                  <% @regions.each do |city| %>
+                    <%= link_to "https://maps.google.com.mx/maps/search/#{city.name}", { target: "_blank" } do %>
+                      <span class="badge badge-info f-size-13"><%=city.name%></span>
+                    <% end %>
+                  <% end %>
+                </div>
+            </div>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div><br>

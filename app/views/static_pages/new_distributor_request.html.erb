@@ -1,0 +1,94 @@
+<% provide(:title, "Quiero ser distribuidor") %>
+<div class="container" style="margin-top: 50px;">
+  <div class="row">
+     <div class="col-md-12">
+         <center>
+           <h1 class="module-title long-up-2x">Quiero ser distribuidor</h1>
+           <h2 class="module-subtitle">Regístrate para poder ser parte de nuestro equipo.</h2>
+         </center>
+         <br><br>
+     </div>
+   </div>
+
+  <div class="show-tips-container">
+    <p>
+      Favor de llenar el siguiente formulario para que uno de nuestros asistentes
+      se comunique con usted y le proporcione la información necesaria para la distribución
+      autorizada de nuestros productos.</p></br>
+    <div class="row">
+      <%= form_tag("#") do %>
+
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <%= label_tag "Nombre(s)" %>
+            <%= text_field_tag :name, nil, :maxlength => 30, required: true,
+            :class => "form-control form-control-black" %>
+          </div>
+          <div class="col-sm-12 form-group">
+            <%= label_tag "Apellido Paterno" %>
+            <%= text_field_tag :lastname, nil, :maxlength => 30, required: true,
+            :class => "form-control form-control-black" %>
+          </div>
+          <div class="col-sm-12 form-group">
+            <%= label_tag "Apellido Materno" %>
+            <%= text_field_tag :mother_lastname, nil, :maxlength => 30, required: true,
+            :class => "form-control form-control-black" %>
+          </div>
+          <div class="col-sm-12 form-group">
+            <%= label_tag "Correo electrónico" %>
+            <%= email_field_tag :email, nil, :maxlength => 50, required: true,
+            :class => "form-control form-control-black" %>
+          </div>
+        </div><!-- .row -->
+      </div>
+
+      <div class="col-md-6">
+        <div class="col-sm-12 form-group">
+          <%= label_tag "Teléfono" %>
+          <%= text_field_tag :telephone, nil, :maxlength => 20, required: true,
+          :class => "form-control form-control-black",
+          onchange: "$('#telephone').attr('required', true);$('#cellphone').attr('required', false);"%>
+        </div>
+        <div class="col-sm-12 form-group">
+          <%= label_tag "Celular" %>
+          <%= text_field_tag :cellphone, nil, :maxlength => 20, required: true,
+          :class => "form-control form-control-black",
+           onchange: "$('#telephone').attr('required', false);$('#cellphone').attr('required', true);"%>
+        </div>
+        <div class="row">
+          <label>Me gustaría ser distribuidor en:</label>
+          <div class="col-sm-12 form-group">
+            <%= render :partial => "/shared/select_state", locals: { states: @states } %>
+          </div>
+        </div><!-- .row -->
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <%= render :partial => "/shared/select_city", locals: { cities: @cities } %>
+          </div>
+        </div><!-- .row -->
+      </div>
+
+      <div class="col-md-12">
+        <%= submit_tag "Enviar", :class => "btn btn-custom-1 pull-right" %>
+      </div>
+      <% end #form end# %>
+
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="devider m-b-xxl">
+          <%= image_tag("divider-down.svg") %>
+        </div>
+      </div>
+  </div></br>
+</div>
+
+<script type="text/javascript">
+function update_state_ref(state) {
+  var _href = $('#get_cities_link').attr('href');
+  $('#get_cities_link').attr('href', _href.replace(/state=[^&]+/, 'state=' + state));
+}
+</script>

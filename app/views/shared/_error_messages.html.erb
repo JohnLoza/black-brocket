@@ -1,0 +1,14 @@
+<% if entity.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      <% error_count = entity.errors.count %>
+      El formulario tiene <%= error_count %> <%if error_count > 1%> errores<%else%>error<%end%>.
+
+      <ul>
+      <% entity.errors.each do |field, msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>

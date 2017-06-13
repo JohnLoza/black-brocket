@@ -1,0 +1,41 @@
+# para linea 1 / Factura / #
+No Factura | 1 | Serie | Fecha documento | Forma de pago(CONTADO) | Método de pago-- |
+Lugar expedición(México) | Observación del documento-- | Referencia | Fecha vencimiento
+
+
+# para linea 2 / Emisor / #
+No Factura | 2 | RFC | Nombre | Calle | Núm ext | Núm int-- | Colonia-- | Ciudad-- |
+Municipio-- | Estado-- | País(México) | Código postal-- | Regimen Fiscal--
+
+
+# para linea 3 / Receptor / #
+No Factura | 3 | Código | RFC | Nombre | Calle | Núm ext-- | Núm int-- |
+Colonia-- | Ciudad-- | Municipio-- | Estado-- | País | Código postal | Email
+
+
+# para linea 4 / Movimientos|Productos / #
+No Factura | 4 | Código | Cantidad | Unidad(No aplica) | Nombre | Precio unitario |
+Porcentaje descuento(0) | Importe descuento(0) | Observaciones movimiento-- |
+Referencia(Documento)-- | IVA | TUA-- | Otros impuestos--
+
+
+# para linea 5 / Impuestos / #
+No Factura | 5 | Impuesto 1(IVA) | Porcentaje-- | Importe |
+Impuesto 2(TUA) | Porcentaje-- | Importe-- |
+Impuesto 3(Otros) | Porcentaje-- | Importe-- |
+Retención ISR-- | Porcentaje-- | Importe-- |
+Retención IVA-- | Porcentaje-- | Importe--
+
+
+# para linea 6 / Extras / #
+No Factura | 6 | Texto extra 1(Vendedor)-- | Texto extra 2(Clave reserva)-- | Texto extra 3-- |
+Importe extra 1-- | Importe extra 2-- | Importe extra 3-- | Fecha extra--
+
+
+# File open #
+r: (sólo lectura) Modo por defecto.
+r+: (lectura y escritura) Comienza la escritura al principio del archivo.
+w: (sólo escritura) Borra el contenido del archivo o crea un nuevo archivo para escritura.
+w+: (lectura y escritura) Borra el contenido del archivo o crea un nuevo archivo para lectura y escritura.
+a: (sólo escritura) Comienza la escritura al final del archivo si existe y si no crea uno nuevo.
+a+: (lectura y escritura) permite leer y escribir ubicando el cursor al final del archivo si éste existe y si no crea uno nuevo.

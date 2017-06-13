@@ -1,0 +1,209 @@
+<%= form_for @fiscal_data, url: @url, :html => {id: "fiscal_data_form"} do |f| %>
+<%= render :partial=>'/shared/error_messages', locals:{entity: @fiscal_data} %>
+  <div class="col-md-6">
+        <h4>Yo soy</h4>
+        <table class="table borderless">
+          <tr>
+            <td>
+              <%= label_tag(:person_moral, "Persona moral") %>
+              <%= radio_button_tag :person, "moral", false, onclick: "changePerson(this.value)" %>
+            </td>
+            <td>
+              <%= label_tag(:person_fisic, "Persona física") %>
+              <%= radio_button_tag :person, "fisic", false, onclick: "changePerson(this.value)" %>
+            </td>
+          </tr>
+        </table>
+
+        <h4 id="person_title"></h4>
+
+        <div class="row">
+  				<div class="col-sm-12 form-group">
+  					<%= f.label :name, "Nombre(s) / Razón Social", id:"label_name" %>
+            <%= f.text_field :name, :class => 'form-control form-control-black',
+                  :maxlength => 99, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+            <span class="help-text">Solo se admite letras, espacios y puntos para nombre y appellidos</span>
+  				</div>
+  			</div><!-- .row -->
+
+
+        <div id="lastnames" style="display: none">
+          <div class="row">
+    				<div class="col-sm-12 form-group">
+    					<%= f.label :lastname, "Apellido paterno" %>
+              <%= f.text_field :lastname, :class => 'form-control form-control-black',
+                    :maxlength => 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+    				</div>
+    			</div><!-- .row -->
+
+          <div class="row">
+    				<div class="col-sm-12 form-group">
+    					<%= f.label :mother_lastname, "Apellido materno" %>
+              <%= f.text_field :mother_lastname, :class => 'form-control form-control-black',
+                      :maxlength => 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+            </div>
+    			</div><!-- .row -->
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <%= f.label :rfc, "RFC" %>
+            <%= f.text_field :rfc, :class => 'form-control form-control-black', onkeyup:"this.value = this.value.toUpperCase();",
+                  required: true, :maxlength => 20 %>
+          </div>
+        </div><!-- .row -->
+
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <%= render :partial => "/shared/select_state", locals: { states: @states } %>
+          </div>
+        </div><!-- .row -->
+
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <%= render :partial => "/shared/select_city", locals: { cities: @cities } %>
+          </div>
+        </div><!-- .row -->
+  </div>
+  <div class="col-md-6">
+      <h4>Dirección Fiscal</h4>
+
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <%= f.label :street, "Calle" %>
+          <%= f.text_field :street, :class => 'form-control form-control-black',
+                :required => true, :maxlength => 50 %>
+        </div>
+      </div><!-- .row -->
+
+      <div class="row">
+ 			 <div class="col-sm-12 form-group">
+ 				 <%= f.label :extnumber, "Número exterior" %>
+ 				 <%= f.number_field :extnumber, :class => 'form-control form-control-black',
+ 				 			:required => true, :maxlength => 5, :step => 1, :min => 0 %>
+ 			 </div>
+ 		 </div><!-- .row -->
+
+ 		 <div class="row">
+ 			 <div class="col-sm-12 form-group">
+ 				 <%= f.label :intnumber, "Número interior" %>
+ 				 <%= f.number_field :intnumber, :class => 'form-control form-control-black',
+ 				 			:maxlength => 4, :step => 1, :min => 0 %>
+ 			 </div>
+ 		 </div><!-- .row -->
+
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <%= f.label :col, "Colonia" %>
+          <%= f.text_field :col, :class => 'form-control form-control-black',
+              :required => true, :maxlength => 50 %>
+        </div>
+      </div><!-- .row -->
+
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <%= f.label :cp, "Código postal" %>
+          <%= f.text_field :cp, :class => 'form-control form-control-black',
+                :required => true, :maxlength => 5 %>
+        </div>
+      </div><!-- .row -->
+
+      <% if logged_in? %>
+ 			 <div class="row">
+ 				 <div class="col-sm-6">
+ 					 <%= link_to "Cancelar", products_path, :class => "btn btn-block btn-custom-1 m-b-sm" %>
+ 				 </div>
+         <div class="col-sm-6">
+ 					 <%= f.submit "Guardar cambios", :class => "btn btn-block btn-custom-1 m-b-sm" %><br>
+ 				 </div>
+ 			 </div><!-- .row -->
+ 		 <% else %>
+ 		   <div class="row">
+ 		     <div class="col-sm-12">
+ 		       <%= f.submit "Guardar cambios", :class => "btn btn-block btn-custom-1 m-b-sm" %>
+ 		     </div>
+ 		   </div><!-- .row -->
+ 		 <% end %>
+  </div>
+<% end %>
+
+
+<style media="screen">
+	input.parsley-success,
+	select.parsley-success,
+	textarea.parsley-success {
+		color: #468847 !important;
+		background-color: #DFF0D8 !important;
+		border: 1px solid #D6E9C6 !important;
+	}
+
+	input.parsley-error,
+	select.parsley-error,
+	textarea.parsley-error {
+		color: #B94A48 !important;
+		background-color: #F2DEDE !important;
+		border: 1px solid #EED3D7 !important;
+	}
+
+	.parsley-errors-list {
+		margin: 2px 0 3px;
+		padding: 0;
+		list-style-type: none;
+		font-size: 0.9em;
+		line-height: 0.9em;
+		opacity: 0;
+
+		transition: all .3s ease-in;
+		-o-transition: all .3s ease-in;
+		-moz-transition: all .3s ease-in;
+		-webkit-transition: all .3s ease-in;
+	}
+
+	.parsley-errors-list.filled {
+		opacity: 1;
+	}
+</style>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    if ($("#fiscal_data_lastname").val() !== "" && $("#fiscal_data_mother_lastname").val() !== "") {
+      $("#person_fisic").click();
+    }else if($("#fiscal_data_name").val() !== ""){
+      $("#person_moral").click();
+    }
+
+    // Init parsley to validate the formularie
+		$('#fiscal_data_form').parsley();
+  });
+
+  function changePerson(value){
+    $("#fiscal_data_name").removeAttr("disabled");
+    $("#fiscal_data_lastname").removeAttr("disabled");
+    $("#fiscal_data_mother_lastname").removeAttr("disabled");
+
+    if (value=="moral") {
+
+      $("#lastnames").css("display", "none");
+      $("#person_title").text("Persona Moral");
+      $("#label_name").html("Razón Social");
+
+      $("#fiscal_data_lastname").val("");
+      $("#fiscal_data_lastname").removeAttr("required");
+
+      $("#fiscal_data_mother_lastname").val("");
+      $("#fiscal_data_mother_lastname").removeAttr("required");
+
+    }else if (value=="fisic") {
+      $("#lastnames").css("display", "block");
+      $("#person_title").text("Persona Física");
+      $("#label_name").html("Nombre(s)");
+
+      $("#fiscal_data_lastname").attr("required", "true");
+      $("#fiscal_data_mother_lastname").attr("required", "true");
+    }
+
+  }
+</script>
+
+<%= javascript_include_tag 'parsley-custom' %>

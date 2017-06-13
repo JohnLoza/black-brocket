@@ -1,0 +1,8 @@
+<% if @comment.valid? %>
+  container = $('#comments-<%=@tip_id%>');
+  container.prepend('<%= j render partial: "comment", locals: {comment: @comment}%>');
+
+  form = container.parent().find("form");
+  description_field = form.find("#tip_recipe_comment_description");
+  description_field.val("");
+<% end %>

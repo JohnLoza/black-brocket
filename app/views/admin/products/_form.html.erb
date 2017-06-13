@@ -1,0 +1,241 @@
+<div class="row">
+  <div class="col-lg-12">
+
+    <div class="tabs-container">
+      <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> Datos del producto</a></li>
+        <% if @actions["UPDATE_PRODUCT_DATA"] %>
+          <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false"> Imágenes</a></li>
+        <% end # if @actions["UPDATE_PRODUCT_DATA"] # %>
+      </ul>
+      <div class="tab-content">
+
+        <div id="tab-1" class="tab-pane active">
+          <div class="panel-body">
+            <%= form_for @product, url: @url, :html => {:id => "product_form", :class => 'form-horizontal'} do |f| %>
+            <%= render :partial=>'/shared/error_messages', locals:{entity: @product} %>
+
+            <% if @actions["UPDATE_NAME"] %>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
+                <div class="col-sm-10">
+                  <%= f.text_field :alph_key, { :class => 'form-control', :disabled => true } %>
+                </div>
+              </div>
+            <% end # if @actions["UPDATE_NAME"] # %>
+
+            <% if @actions["UPDATE_NAME"] or @actions["CREATE"] %>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :name, "Nombre" %></label>
+                <div class="col-sm-10">
+                  <%= f.text_field :name, :class => 'form-control', :placeholder => "Café mocha",
+                        :required => true, :maxlength => 50 %>
+                </div>
+              </div>
+            <% end # if @actions["UPDATE_NAME"] # %>
+
+            <% if @actions["UPDATE_PRICE"] or @actions["CREATE"] %>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :price, "Precio máximo del producto" %></label>
+                <div class="col-sm-10">
+                  <%= f.number_field :price, :class => 'form-control', :placeholder => "110",
+                        :required => true, :maxlength => 11, :min => 1, :step => 0.01 %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :recommended_price, "Precio recomendado" %></label>
+                <div class="col-sm-10">
+                  <%= f.number_field :recommended_price, :class => 'form-control', :placeholder => "100",
+                        :required => true, :maxlength => 11, :min => 1, :step => 0.01%>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :lowest_price, "Precio mínimo del producto" %></label>
+                <div class="col-sm-10">
+                  <%= f.number_field :lowest_price, :class => 'form-control', :placeholder => "100",
+                        :required => true, :maxlength => 11, :min => 1, :step => 0.01 %>
+                </div>
+              </div>
+              <div class="hr-line-dashed"></div>
+            <% end # if @actions["UPDATE_PRICE"] # %>
+
+            <% if @actions["UPDATE_SHOW_IN_WEB_PAGE"] or @actions["CREATE"] %>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :show, "Mostrar en la página web" %></label>
+                <div class="col-sm-10">
+                  <%= f.check_box :show, :class => "js-switch" %>
+                </div>
+              </div>
+              <div class="hr-line-dashed"></div>
+            <% end # if @actions["UPDATE_SHOW_IN_WEB_PAGE"] # %>
+
+            <% if @actions["UPDATE_PRODUCT_DATA"] or @actions["CREATE"] %>
+              <div class="form-group">
+                <%= f.label :iva, "IVA", :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+                  <%= f.number_field :iva, :class => "form-control", :placeholder => "ej. 16 (sin signo de porcentaje %)",
+                        :required => true, :min => 0, :max => 99, :step => 0.1 %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :ieps, "IEPS", :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+                  <%= f.number_field :ieps, :placeholder => "ej. 8 (sin signo de porcentaje %)", :class => "form-control",
+                        :required => true, :min => 0, :max => 99, :step => 0.1 %>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :description, "Descripción del producto" %></label>
+                <div class="col-sm-10">
+                  <%= f.text_area :description_body, :id => "summernote", :class => "form-control" %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :preparation, "Preparación del producto" %></label>
+                <div class="col-sm-10">
+                  <%= f.text_area :preparation_body, :id => "summernote2", :class => 'form-control' %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :presentation, "Presentación del producto" %></label>
+                <div class="col-sm-10">
+                  <%= f.text_field :presentation, :class => 'form-control', placeholder: "Bolsa de 500grs.",
+                        :required => true, :maxlength => 50 %>
+                </div>
+              </div>
+
+              <h3>Categorías</h3>
+                  <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>Caliente</td>
+                        <td align="right"><%= f.check_box :hot, :class => "js-switch" %></td>
+                    </tr>
+                    <tr>
+                        <td>Helado</td>
+                        <td align="right"><%= f.check_box :cold, :class => "js-switch" %></td>
+                    </tr>
+                    <tr>
+                        <td>Frappé</td>
+                        <td align="right"><%= f.check_box :frappe, :class => "js-switch" %></td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+              <div class="form-group">
+                <% if !@product.video.blank? %>
+                  <video controls>
+                    <source src="<%= @product.video.url %>" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                <% end %>
+                <label class="col-sm-2 control-label"><%= f.label :video, "Cargar video" %></label>
+                <div class="col-sm-10">
+                  <%= f.file_field :video %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :principal_photo, "Cargar fotografía de portada" %></label>
+                <div class="col-sm-10">
+                  <%= f.file_field :principal_photo, :multiple => false %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :photo, "Cargar fotografías secundarias" %></label>
+                <div class="col-sm-10">
+                  <%= f.file_field :photo, :multiple => true %>
+                </div>
+              </div>
+              <div class="hr-line-dashed"></div>
+            <% end # if @actions["UPDATE_PRODUCT_DATA"] # %>
+
+            <div class="form-group">
+              <div class="col-sm-4 col-sm-offset-2">
+                <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
+                <%= f.submit "Guardar cambios", :class => "btn btn-primary" %>
+              </div>
+            </div>
+            <% end %>
+          </div>
+        </div>
+
+        <% if @actions["UPDATE_PRODUCT_DATA"] %>
+          <div id="tab-2" class="tab-pane">
+            <div class="panel-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-stripped">
+                    <thead>
+                    <tr>
+                      <th>Imagen</th>
+                      <th>Principal</th>
+                      <th>Eliminar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <% @photos.each do |p| %>
+                        <% if p.is_principal %>
+                          <tr id="<%= p.alph_key %>" class="selected">
+                        <% else %>
+                          <tr id="<%= p.alph_key %>">
+                        <% end %>
+                        <td><%= image_tag p.photo.url(:mini), :class => "feed-photo" %></td>
+                        <td>
+                          <%= link_to "Principal".html_safe, admin_products_set_principal_path(@product.alph_key, p.alph_key),
+                                remote: true, :class => "btn btn-primary btn-lg", id: p.alph_key %>
+                        </td>
+                        <td>
+                            <%= link_to "<i class='fa fa-trash'></i> ".html_safe, admin_products_photo_destroy_path(@product.alph_key, p.alph_key),
+                                  remote: true, :class => "btn btn-danger btn-lg", data: { confirm: "Estas seguro(a) de eliminarlo? esta será eliminada instantaneamente sin necesidad de presionar el botón de guardar."} %>
+                        </td>
+                        </tr>
+                      <% end if @photos %>
+                    </tbody>
+                </table>
+              </div>
+
+             <!-- -->
+
+            </div>
+          </div>
+        <% end # if @actions["UPDATE_PRODUCT_DATA"] # %>
+
+      </div>
+    </div>
+
+  </div>
+</div><br>
+
+<style>
+  .navbar-default{z-index: 0 !important;}
+
+  tr.selected{
+    background-color: #E0E0E0;
+    border-color: #BDBDBD;
+  }
+</style>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#summernote').summernote({
+      height: "250px"
+    });
+    $('#summernote2').summernote({
+       height: "250px"
+    });
+    $('.note-insert, .note-help').remove();
+
+    // init parsley to validate the formularie
+    $('#product_form').parsley();
+
+    var checks = $(".js-switch");
+    for(cont = 0; cont < checks.length; cont ++){
+      var switchery = new Switchery(checks[cont], { color: '#1AB394' });
+    }
+  });
+</script>
+
+<%= stylesheet_link_tag 'summernote', media: 'all' %>
+<%= javascript_include_tag 'summernote.min' %>
+<%= javascript_include_tag 'parsley-custom' %>

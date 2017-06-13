@@ -1,0 +1,44 @@
+<center>
+  <div class="row">
+    <h1><%= @product.name %></h1>
+    <h2>LOT. <%= @batch %></h2>
+
+    <div style="display: inline-block">
+      <%= raw @qr.as_html %>
+    </div>
+    <div style="display: inline-block">
+      <p style="text-align: left;">
+        CAD: <%= @expiration_date %>
+      </p>
+      <p style="text-align: left;">
+        CANT. EN CESTA: ______________________
+      </p>
+      <p style="text-align: left;">
+        CESTA NÚMERO: ______________________
+      </p>
+    </div>
+    <p>
+      CANT. TOTAL DE LOTE: ___________________________________
+    </p>
+  </div>
+</center>
+
+<style>
+  table {
+    border-width: 0;
+    border-style: none;
+    border-color: #0000ff;
+    border-collapse: collapse;
+  }
+
+  td {
+    border-left: solid 5px #000;
+    padding: 0;
+    margin: 0;
+    width: 0px;
+    height: 5px;
+  }
+
+  td.black { border-color: #000; }
+  td.white { border-color: #fff; }
+</style>

@@ -1,0 +1,81 @@
+<% provide(:title, "Productos") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Productos en el almacén", labels: ['Almacenes', 'Productos en el almacén'], links: [admin_warehouses_path]} %>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <%= render "/shared/warehouse_head_bar" %>
+
+    <div class="ibox ibox-content">
+      <h3 class="m-t-none m-b"><strong>Producto:</strong> <%= @product.name %></h3>
+      <h4>Detalles de inventario (Lotes)</h4>
+      <table class="footable table table-stripped">
+        <thead>
+          <tr>
+            <th>Cantidad</th>
+            <th>Lote</th>
+            <th>Fecha de caducidad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @stock_details.each do |d| %>
+          <tr>
+            <td><button class="btn btn-primary btn-sm m-r-sm"><%= d.existence %></button></td>
+            <td><%= d.batch %></td>
+            <td><%= d.expiration_date %></td>
+            <td><a class="btn btn-white btn-sm" onclick="update_stock_form('<%=d.batch%>','<%=d.expiration_date%>');">Modificar</a></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal inmodal in" id="boot_modal" tabindex="-1"
+         role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title"> Modificar stock </h4>
+          </div>
+          <div class="modal-body">
+            <%= form_for(:warehouse_product,
+                :url=> admin_warehouse_products_stock_details_path(@warehouse.alph_key, @product.id),
+                method: :put, html:{id: "update_stock_form"}) do |f| %>
+              <%= f.label :existence, "Existencia real del lote:" %>
+              <%= f.number_field :existence,
+                    { :class => "form-control m-b", min: "0", step: "0", required: "true"} %>
+
+              <%= f.hidden_field :batch %>
+              <%= f.hidden_field :expiration_date %>
+
+              <%= f.submit "Modificar existencia", :class => "btn btn-success btn-sm",
+                  data: {confirm: "Estas seguro(a) de modificar la existencia?"} %>
+            <% end %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-greenbeauty"
+                    data-dismiss="modal"> Cerrar </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+  </div>
+</div>
+
+<script type="text/javascript">
+  function update_stock_form(batch, expiration_date){
+    $("#boot_modal").modal("show");
+    $("#warehouse_product_batch").val(batch);
+    $("#warehouse_product_expiration_date").val(expiration_date);
+  }
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.footable').footable();
+    });
+</script>

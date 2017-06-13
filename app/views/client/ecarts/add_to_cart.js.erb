@@ -1,0 +1,14 @@
+<% if @quantity_is_correct %>
+  badge = $("#ecart-badge");
+  badge.addClass("badge");
+  badge.text("<%= session[:e_cart].size %>");
+  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Añadido al carrito de compras.'} %>");
+<% else %>
+  <% if params[:quantity].to_i <= 0 %>
+    <% message = "Houston tenemos un problema!, no podemos enviar " + params[:quantity] + " producto(s)" %>
+    $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: message} %>");
+  <% else %>
+    <% message = "Lo lamentamos pero actualmente solo contamos con " + @product.existence + " unidad(es) en stock" %>
+    $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: message} %>");
+  <% end %>
+<% end %>

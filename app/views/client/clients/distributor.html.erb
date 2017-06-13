@@ -1,0 +1,45 @@
+<% provide(:title, "Mi distribuidor") %>
+<div class="wrapper wrapper-content">
+  <div class="row animated fadeInRight">
+
+    <center>
+      <h1 class="module-title long-up-2x">Distribuidores en la zona</h1>
+      <h2 class="module-subtitle">Descubre nuestros distribuidores autorizados cerca de tu ubicación.</h2>
+    </center>
+    <br><br>
+    <div class="show-tips-container">
+        <% if @distributor %>
+          <div class="col-sm-12 m-b-md">
+            <%= render partial: "distributor" %>
+          </div>
+          <br>
+          <div class="col-sm-12">
+            <%= render partial: "/shared/messages", locals: {messages:@messages, create_message_url: @create_message_url}%>
+          </div>
+        <% elsif @worker %>
+          <div class="col-sm-12 m-b-md">
+            <%= render partial: "worker" %>
+          </div>
+          <br>
+          <div class="col-sm-12">
+            <%= render partial: "/shared/messages", locals: {messages:@messages, create_message_url: @create_message_url}%>
+          </div>
+        <% else %>
+          <h5 class="text-center">
+            No hay ningún distribuidor que le corresponda atender tus
+            pedidos por la población en que te encuentras, sin embargo,
+            pronto uno de nuestros asistentes se comunicará contigo para atenderte.
+          </h5>
+        <% end %>
+    </div>
+    <div class="row">
+    		<div class="col-sm-6 col-sm-offset-3">
+          <div class="devider m-b-xxl">
+            <%= image_tag("divider-down.svg") %>
+          </div>
+    		</div>
+    </div>
+
+  </div>
+</div>
+<br><br>

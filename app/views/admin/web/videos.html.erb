@@ -1,0 +1,81 @@
+<% provide(:title, "Video") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Web", labels: ['Web', 'Videos'], links: [admin_web_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <!--Content-->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+          <div class="ibox-title">
+               <h5>Cambio del video para la página de bienvenida</h5>
+               <div class="ibox-tools">
+                   <a class="collapse-link">
+                       <i class="fa fa-chevron-up"></i>
+                   </a>
+               </div>
+          </div>
+          <div class="ibox-content">
+              <h4>El video en uso es el siguiente</h4>
+              <div class="hr-line-dashed"></div>
+
+              <% if !@video.id.nil? %>
+                <video controls>
+                  <source src="<%= @video.video.url %>" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <div class="hr-line-dashed"></div>
+                <%= link_to "<i class='fa fa-trash'></i> Restaurar valores predeterminados".html_safe, "",
+                    :class => "btn btn-danger btn-sm", method: :delete,
+                    data: { confirm: "Seguro(a) de restaurar los valores por defecto del video de bienvenida?" } %>
+              <% else %>
+                <video controls>
+                  <source src="<%= video_url 'video.mp4'%>" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              <% end %>
+
+              <div class="hr-line-dashed"></div>
+
+              <%= form_for @video, url: admin_web_videos_path, :html => {:class => 'form-horizontal'}, method: :post do |f| %>
+                <%= render :partial=>'/shared/error_messages', locals:{entity: @video} %>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label"><%= f.label :video, "Elige un nuevo video \'mp4\' o \'webm\'" %></label>
+                  <div class="col-sm-9">
+                      <%= f.file_field :video %>
+                  </div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <%= link_to "Regresar".html_safe, admin_web_path, :class => "btn btn-white" %>
+                        <%= f.submit "Guardar", :class => "btn btn-primary" %>
+                    </div>
+                </div>
+              <% end %>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!--End content whit animation-->
+<br><br>
+<script>
+$(document).ready(function(){
+  $('#new_web_video').submit(function(){
+    if($('#web_video_video').val().length < 1){
+      $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Elige un video.'} %>");
+      return false;
+    }else{
+      return true;
+    }
+  });
+});
+</script>

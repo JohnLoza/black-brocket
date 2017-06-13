@@ -1,0 +1,98 @@
+<% provide(:title, "Búsqueda por lote") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Búsqueda por lote", labels: ['Almacenes', "Búsqueda por lote"], links: [admin_warehouses_path]} %>
+
+<br>
+<div class="ibox">
+    <div class="ibox-content text-center">
+        <h3 class="m-b-xxs">Búsqueda por lote</h3>
+        <small>Aquí puedes escribir el nombre del lote para encontrar los detalles de este.</small>
+    </div>
+</div>
+
+<div class="col-md-12">
+  <div class="row">
+    <div class="ibox ibox-content">
+      <%= form_tag(admin_batch_search_path, method: :get, :class => "form-inline") do %>
+        <div class="form-group">
+          <%= label_tag :batch, "Lote a búscar: " %>
+          <%= text_field_tag :batch, params[:batch],
+              :class => "form-control", maxlenght: 20, :placeholder => "Introduce el lote" %>
+          <%= submit_tag "Búscar", :class => "btn btn-white" %>
+        </div>
+      <% end %>
+
+      <% if !@products_in_warehouse.nil? and @products_in_warehouse.any? %>
+      <div class="hr-line-dashed"></div>
+
+      <h3>Nombre del producto: <strong><%= @products_in_warehouse[0].Product.name %></strong></h3>
+      <p><strong>Fecha de caducidad:</strong>  <i class="fa fa-calendar"></i> <%= @products_in_warehouse[0].expiration_date %></p>
+      <address>
+          <strong>Productos en almacén:</strong><br><br>
+          <div class="row">
+          <% @products_in_warehouse.each do |p_in_w| %>
+            <div class="col-md-12">
+              <div class="panel panel-success">
+                <div class="panel-heading">
+                  <i class="fa fa-cubes"></i> <strong>Almacén:</strong> <%= p_in_w.Warehouse.name %>
+                </div>
+                <div class="panel-body">
+                    <p><strong>Cantidad:</strong> <%= p_in_w.existence %></p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          </div>
+
+          <strong>Productos preparados para enviar al cliente:</strong><br><br>
+          <div class="row">
+          <% @products_to_ship.each do |ps| %>
+          <% client = ps.Order.Client %>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <strong>Cliente:</strong> <%= link_to client.username,
+                            admin_client_path(client.alph_key) %>
+                </div>
+                <div class="panel-body">
+                  <p>
+                    <strong>Referencia: </strong> <%= ps.Order.alph_key %>
+                  </p>
+                  <p><strong>Cantidad:</strong> <%= ps.quantity %></p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          </div>
+
+          <strong>Productos enviados a clientes:</strong><br><br>
+          <div class="row">
+          <% @products_shipped.each do |ps| %>
+          <% client = ps.Order.Client %>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <strong>Cliente:</strong> <%= link_to client.username,
+                            admin_client_path(client.alph_key) %>
+                </div>
+                <div class="panel-body">
+                  <p>
+                    <strong>Referencia: </strong> <%= ps.Order.alph_key %>
+                  </p>
+                  <p><strong>Cantidad:</strong> <%= ps.quantity %></p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          </div>
+      </address>
+
+      <% elsif params[:batch] %>
+        <div class="hr-line-dashed"></div>
+        <div class="alert alert-danger alert-dismissable">
+            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+            <i class="fa fa-times-circle-o"></i> No se encontró el lote específicado.
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

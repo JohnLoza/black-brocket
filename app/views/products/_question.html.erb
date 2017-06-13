@@ -1,0 +1,21 @@
+<div style="border-bottom: 1px dotted #DDD">
+  <p>
+    <i class="fa fa-comments-o"></i>
+    <%= question.description %>
+    <small style="font-size: 65%;color: #919191;">-
+      <%= l(question.created_at, format: :long) %>
+    </small>
+  </p>
+  <% answer = question.Answer %>
+  <% if answer %>
+    <div style="margin-left: 2em;">
+      <p>
+        <i class="fa fa-comments"></i>
+        <%= answer.description %>
+        <small style="font-size: 65%;color: #919191;">-
+          <%= l(answer.created_at, format: :long) %>
+        </small>
+      </p>
+    </div>
+  <% end %>
+</div>

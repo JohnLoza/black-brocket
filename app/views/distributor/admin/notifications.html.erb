@@ -1,0 +1,19 @@
+<% provide(:title, "Notificaciones") %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Notificaciones", labels: ['Notificaciones']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="ibox">
+      <div class="ibox-content text-center">
+          <h3 class="m-b-xxs">Listado de tus notificaciones</h3>
+          <small>Aquí encontrarás la lista de todas las notificaciones que has recibido</small>
+      </div>
+    </div>
+    <div class="ibox">
+      <div class="ibox-content">
+          <%= render "shared/notification_list" %>
+      </div>
+    </div>
+  </div>
+</div>

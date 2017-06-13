@@ -1,0 +1,184 @@
+<% provide(:title, "Mis órdenes") %>
+
+<center>
+  <h1 class="module-title long-up-2x">Mis órdenes</h1>
+	<h2 class="module-subtitle">Aquí puedes ver todas las órdenes que has realizado.</h2><br/>
+</center>
+<br><br>
+
+<% @orders.each do |o| %>
+  <div id="<%=o.alph_key%>" class="order-box">
+    <div class="row order-box-title">
+      <div class="col-xs-9">
+        <b>Órden</b>
+      </div>
+      <div class="col-xs-3 text-right">
+        <% if o.state == "WAITING_FOR_PAYMENT" %>
+          <!-- to cancel an order -->
+          <%= link_to "<span class='icon-close' style='font-size: 30px;'></span>".html_safe,
+                      client_cancel_order_path(@current_user.alph_key, o.alph_key),
+                      data:{confirm: "Seguro(a) de cancelar el pedido?"},
+                      remote: true, method: :delete %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="row order-box-info">
+      <div class="col-sm-1">
+        <b>Folio:</b></br>
+        <%= o.alph_key %>
+      </div>
+      <div class="col-sm-2">
+        <b>Fecha:</b></br> <%= l(o.created_at, format: :long) %>
+      </div>
+      <div class="col-sm-2">
+         <b>Status:</b></br>
+         <% case t(o.state)
+         when "Pedido cancelado"%>
+           <label class="label label-danger" style="font-size: 13px;"><%=t(o.state)%></label>
+         <%when "Pago rechazado"%>
+           <label class="label label-warning" style="font-size: 13px;"><%=t(o.state)%></label>
+         <%when "Pedido entregado"%>
+           <label class="label label-success" style="font-size: 13px;"><%=t(o.state)%></label>
+         <%else%>
+           <label class="label label-custom-2" style="font-size: 13px;"><%=t(o.state)%></label>
+         <%end%>
+      </div>
+      <div class="col-sm-1">
+        <b>Total:</b></br> $ <%= o.total %>
+      </div>
+      <div class="col-sm-2">
+        <b>Código de rastreo:</b>
+        <% if o.tracking_code and o.parcel_id %>
+          <% parcel = o.Parcel %>
+          <a href="<%=parcel.tracking_url%>" target="_blank">
+            <%= image_tag parcel.image.url(:mini), :class => "img-rounded",:style =>"width:60px;" %>
+          </a>
+        <% end %><br>
+        <%= o.tracking_code %>
+      </div>
+      <div class="col-sm-2 text-center">
+        <b>Comprobante:</b></br>
+        <% if !o.pay_photo.blank? %>
+          <%= link_to image_tag(o.pay_photo.url(:mini), :class => "img-rounded",:style =>"width:60px;"),
+              image_path(o.pay_photo.url), :data => {:toggle => "lightbox", :title => "Pago de la orden: " + o.alph_key } %>
+        <% elsif !o.pay_pdf.blank? %>
+          <%= link_to "<i class='fa fa-file-pdf-o fa-5x'></i>".html_safe,
+              o.pay_pdf.url, target: "_blank" %>
+        <% else %>
+          <span class="label label-default">  No se ha subido ninguna foto.</span>
+        <% end %>
+      </div>
+      <div class="col-sm-2 text-center">
+        <b>Ver pedido:</b></br>
+        <%= link_to "<span class='icon-eye'></span>".html_safe, client_order_path(@current_user.alph_key, o.alph_key),
+            :class => "darklink", style: "font-size: 32px;", target: "_blank" %>
+      </div>
+    </div>
+    <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>
+    <div class="row order-box-foot">
+      <div class="col-sm-6">
+        <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>
+          <a class="darklink" data-toggle="modal" data-target="#myModal" style="cursor:pointer;"><span class="fa fa-exclamation fa-rotate-180"></span> Información para realizar el pago...</a>
+        <% else %>
+          <!--span class="icon-check" style="font-size: 20px;color: #F5D76E;"></span> <b>Orden pagada con exito</b-->
+        <% end %>
+      </div>
+
+      <%= form_for(o, url: client_upload_pay_order_path(@current_user.alph_key, o.alph_key),
+                      method: :put, html:{id:"form_photo_#{o.alph_key}"},
+                      data:{confirm: "Seguro(a) de ser el archivo correcto?"}) do |f| %>
+        <div class="col-sm-2 text-right">
+          <%= f.file_field :pay_photo, id: "field_#{o.alph_key}",
+              :style =>"display: none;", :multiple => false,
+              :onchange => "$('#pay_photo_commit_#{o.alph_key}').click();" %></br>
+        </div>
+        <div class="col-sm-4">
+          <i onclick="$('#field_<%=o.alph_key%>').click();"
+             class="btn btn-custom-1 btn-sm pull-right">Enviar comprobante de pago</i>
+
+          <%= f.submit "Subir foto del pago".html_safe,
+              id: "pay_photo_commit_#{o.alph_key}", style: "display: none;" %>
+        </div>
+      <% end if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>
+    </div>
+    <% end %>
+  </div>
+  </br></br>
+<% end %>
+
+<div class="row">
+  <div class="col-md-12">
+     <div class="pull-right">
+       <%= will_paginate @orders, renderer: BootstrapPagination::Rails %>
+     </div>
+   </div>
+</div>
+<br><br>
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="devider m-b-xxl">
+        <%= image_tag("divider-down.svg") %>
+      </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3 class="iconbox-title">Instrucciones de pago</h3>
+      </div>
+      <div class="modal-body">
+         <p><b>Paso 1:</b> Realice el pago total de su compra a una de las siguientes cuentas.</p>
+         <table class="table">
+           <thead>
+             <tr><th>Nombre del banco</th>
+               <th>Número de cuenta</th>
+               <th>Clabe interbancaria</th>
+               <th>Beneficiario</th>
+               <th>Correo electrónico</th>
+               <th>RFC</th>
+             </tr>
+           </thead>
+           <tbody>
+             <% @bank_accounts.each do |b| %>
+               <tr>
+                 <td><%= b.bank_name %></td>
+                 <td><%= b.account_number %></td>
+                 <td><%= b.interbank_clabe %></td>
+                 <td><%= b.owner %></td>
+                 <td><%= b.email %></td>
+                 <td><%= b.RFC %></td>
+               </tr>
+             <% end %>
+           </tbody>
+         </table>
+         <p><b>Paso 2:</b> Tome una foto, escanee o guarde el archivo del comprobante de pago.</p>
+         <p><b>Paso 3:</b> Seleccione el comprobante de pago dando click en “Enviar comprobante de pago”</p>
+         <p><b>NOTA:</b> Si  por error eligió un archivo equivocado y desea enviar otro, solo de click  nuevamente  en “Enviar comprobante de pago” y seleccione  el correcto.</p>
+         <p>
+           Si tiene alguna duda o comentario comuníquese sin costo al teléfono 01 800 500 7050
+         </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  // init ekko-lightbox
+  $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+    event.preventDefault();
+    $(this).ekkoLightbox();
+  });
+});
+</script>
+
+<%= stylesheet_link_tag 'ekko-lightbox.min', media: 'all' %>
+<%= javascript_include_tag 'ekko-lightbox.min' %>

@@ -1,0 +1,76 @@
+<% provide(:title, "Almacenes") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del almacén", labels: ['Almacénes', 'Perfil del almacén'], links: [admin_warehouses_path]} %>
+
+<div class="wrapper wrapper-content">
+  <div class="row animated fadeInRight">
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Detalles del perfil</h5>
+                </div>
+                <div class="ibox-content no-padding border-left-right">
+        					<%= image_tag("warehouse_image_small.jpg", { :class => "img-responsive full-width" }) %>
+                </div>
+                <div class="ibox-content profile-content">
+                    <h4><strong><%= @warehouse.name %></strong></h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+          <!--Datos del distribuidor-->
+          <div class="ibox float-e-margins">
+              <div class="ibox-title">
+                  <h5>Información del almacén</h5>
+                  <div class="ibox-tools">
+                      <a class="collapse-link">
+                          <i class="fa fa-chevron-up"></i>
+                      </a>
+                      <!--a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                          <i class="fa fa-wrench"></i>
+                      </a>
+                      <ul class="dropdown-menu dropdown-user">
+                          <li><%#= link_to "Editar".html_safe, edit_admin_worker_path(@warehouse.alph_key) %></li>
+                      </ul-->
+                      <a class="close-link">
+                          <i class="fa fa-times"></i>
+                      </a>
+                  </div>
+              </div>
+              <div class="ibox-content">
+                  <div class="table-responsive">
+                      <table class="table table-hover">
+                        <tr>
+                          <td><b>Clave:</b></td>
+                          <td><%= @warehouse.alph_key %></td>
+                        </tr>
+                        <tr>
+                            <td><b>Ubicación:</b></td>
+                            <td><%= @warehouse_city.name %>, <%= @warehouse_city.State.name %></td>
+                        </tr>
+                        <tr>
+                          <td><b>Dirección:</b></td>
+                          <td><%= @warehouse.address %></td>
+                        </tr>
+                        <tr>
+                            <td><b>Teléfono:</b></td>
+                            <td>(<%=@warehouse_city.LADA%>) <%= @warehouse.telephone %></td>
+                        </tr>
+                        <tr>
+                          <td><b>Fecha de creación:</b></td>
+                          <td><%= l(@warehouse.created_at, format: :long) %></td>
+                          <td><b>Última modificación:</b></td>
+                          <td><%= l(@warehouse.updated_at, format: :long) %></td>
+                        </tr>
+                      </table>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+
+    </div>
+  </div>
+</div><br>

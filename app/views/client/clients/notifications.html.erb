@@ -1,0 +1,22 @@
+<% provide(:title, "Notificaciones") %>
+<div class="show-tips-container">
+  <div class="row">
+    <div class="col-md-12">
+        <center>
+          <h1 class="module-title long-up-2x">Notificaciones</h1>
+      		<h2 class="module-subtitle">Aquí verás todas las notificaciones que hayas recibido.</h2>
+        </center>
+        <br><br>
+    </div>
+  </div>
+
+  <%= render "shared/notification_list" %>
+
+  <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="devider m-b-xxl">
+          <%= image_tag("divider-down.svg") %>
+        </div>
+      </div>
+  </div>
+</div>

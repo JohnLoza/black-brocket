@@ -1,0 +1,71 @@
+<% provide(:title, "Clientes") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Trabajo de Distribuidor", labels: ['Clientes']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="ibox">
+        <div class="ibox-content text-center">
+            <h3 class="m-b-xxs">Lista de clientes sin distribuidor</h3>
+            <small>Aquí verás la lista de los clientes que debido a su ubicación no cuentan con un distribuidor asignado.</small>
+        </div>
+    </div>
+
+    <div class="ibox ibox-content">
+
+      <div class="row m-b-sm m-t-sm">
+        <div class="col-md-10">
+          <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
+        </div>
+				<div class="col-md-2">
+          <%= link_to "Ver mis clientes", admin_distributor_work_my_clients_path, :class => "btn btn-info btn-sm full-width" %>
+				</div>
+			</div>
+
+			<table class="footable table table-stripped toggle-arrow-tiny" data-filter=#filter>
+					<thead>
+  					<tr>
+                <th data-sort-ignore="true"></th>
+  					    <th data-sort-ignore="true"></th>
+  					    <th>Nombre</th>
+  					    <th data-hide="phone">Email</th>
+                <th data-hide="phone,tablet">Teléfono</th>
+  					    <th data-hide="phone,tablet">Celular</th>
+  					    <th data-hide="phone">Ubicación</th>
+                <th>Acción</th>
+  					</tr>
+					</thead>
+					<tbody>
+            <% @clients.each do |c| %>
+  					  <tr>
+                <td></td>
+    						<%= render partial: "client_block_content", locals: {client: c} %>
+    						<td><%= link_to :Atender, admin_distributor_work_take_client_path(c.alph_key),
+                            :class => "btn btn-white btn-sm hidden-button", method: :put,
+                            data: {confirm: "Seguro(a)? Esto no puede ser deshecho."} %></td>
+  					  </tr>
+            <% end %>
+					</tbody>
+          <tfoot>
+            <tr>
+              <td colspan="8">
+                <div class="pull-right">
+                  <!--footable-->
+                  <%= will_paginate @clients, renderer: BootstrapPagination::Rails %>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+			</table>
+
+      <script>
+          $(document).ready(function() {
+              $('.footable').footable();
+          });
+      </script>
+
+    </div>
+
+  </div>
+</div>

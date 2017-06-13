@@ -1,0 +1,91 @@
+<% provide(:title, "Ofertas") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Web", labels: ['Web', 'Ofertas'], links: [admin_web_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <!--Content-->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+          <div class="ibox-title">
+               <h5>Cambia las imágenes en la galería de ofertas</h5>
+               <div class="ibox-tools">
+                   <a class="collapse-link">
+                       <i class="fa fa-chevron-up"></i>
+                   </a>
+               </div>
+          </div>
+          <div class="ibox-content">
+
+              <% if @offers.any? %>
+
+                <h4> Estas son las imágenes actualmente visibles en la galería </h4>
+                <div class="hr-line-dashed"></div>
+
+                <div class="row">
+                  <% @offers.each do |offer| %>
+                    <div class="col-md-6" style="display: inline-block; padding: 10px;">
+                        <center>
+                        <%= image_tag offer.photo.url, :class => "img-responsive" %>
+                        </center>
+                        <div class="row">
+                          <div class="col-md-9 p-r-7">
+                              <a href="<%= offer.url %>" class='btn btn-white btn-sm m-t btn-block' style="text-align: left;"><strong>URL:</strong> <%= offer.url %></a>
+                          </div>
+                          <div class="col-md-3 p-l-7">
+                            <%= link_to "<button type='button' class='btn btn-danger btn-sm m-t btn-block'><i class='fa fa-trash'></i> Eliminar</button>".html_safe, admin_web_destroy_offer_path(offer.id),
+                                method: :delete, data: { confirm: "Estás seguro(a) de eliminar la imágen? esto no se puede deshacer." } %>
+                          </div>
+                        </div>
+                        <div class="hr-line-dashed" style="margin-bottom: 5px;margin-top: 15px;"></div>
+                    </div>
+                  <% end %>
+                </div>
+
+              <% else %>
+
+                <center>
+                  <h1>¡Aún no hay imágenes! sube unas nuevas aquí abajo</h1>
+                  <i class="fa fa-arrow-down big-icon"></i>
+                </center>
+
+              <% end %>
+             </br>
+              <%= form_for @new_offer, url: admin_web_offers_path, :html => {:class => 'form-horizontal'}, method: :post do |f| %>
+
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :url, "URL a la que conducirá esta oferta" %></label>
+                  <div class="col-sm-8">
+                    <%= f.text_field :url, :placeholder => "https://www.blackbrocket.com/products/PNcSPwlJ", :class => "form-control", maxlength: 210 %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :offer, "Elige las imágenes que deseas subir, pueden ser jpg, jpeg o png." %></label>
+                  <div class="col-sm-8"></br>
+                    <%= f.file_field :offer %>
+                  </div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <%= link_to "Regresar".html_safe, admin_web_path, :class => "btn btn-white" %>
+                        <%= f.submit "Guardar", :class => "btn btn-primary" %>
+                    </div>
+                </div>
+
+              <% end %>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!--End content whit animation-->
+<br><br>

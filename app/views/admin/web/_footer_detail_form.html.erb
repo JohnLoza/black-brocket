@@ -1,0 +1,7 @@
+<%= form_for(FooterExtraDetail.new, url: admin_web_footer_details_path) do |f| %>
+  <%= f.label :name, "Nombre del detalle" %>
+  <%= f.text_field :name, :class => "form-control", :maxlength => 60 %>
+  <%= f.label :detail, "Detalle" %>
+  <%= f.text_area :detail, :class => "form-control", :maxlength => 150 %>
+  <%= f.submit :Guardar, :class => "btn btn-primary" %>
+<% end %>

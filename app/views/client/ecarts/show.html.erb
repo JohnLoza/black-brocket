@@ -1,0 +1,14 @@
+<% provide(:title, "Mi carrito") %>
+<div class="col-md-12">
+    <center>
+      <h1 class="module-title long-up-2x">Mi carrito</h1>
+  		<h2 class="module-subtitle">Aquí puedes ver los productos que has seleccionado.</h2>
+    </center>
+    <br><br>
+</div>
+
+<% if session[:e_cart] %>
+  <%= render partial: "products" %>
+<% else %>
+  <%= render partial: "no_products" %>
+<% end %>

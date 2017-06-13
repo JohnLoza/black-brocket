@@ -1,0 +1,52 @@
+<% provide(:title, "Trabajadores") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Trabajadores", labels: ['Trabajadores']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+      <div class="ibox">
+  	    <div class="ibox-content" style="display: block;">
+  	      <div class="row">
+  	        <div class="col-sm-9 b-r margin-bot-resp">
+  	           <h3 class="m-t-none m-b">Lista de trabajadores</h3>
+  	           <p>Aquí puedes realizar diversas acciones como dar de alta un trabajador, modificar, eliminarlo o simplemente ver su información!!!</p>
+               <p>En la búsqueda, separa los parámetros con "," ejemplo: Guadalajara, Querétaro, T0009 </p>
+
+  	           <%= form_for(:site_worker, url: admin_workers_path, method: :get) do |f| %>
+      				   <div class="input-group">
+                   
+                   <% if params[:site_worker] %>
+      				        <%= f.text_field :search, value: params[:site_worker][:search], :class => "input form-control",  :placeholder => "Buscar trabajador...", :maxlength => 50  %>
+                   <% else %>
+                      <%= f.text_field :search, :class => "input form-control",  :placeholder => "Buscar trabajador...", :maxlength => 50  %>
+                   <% end %>
+
+                   <span class="input-group-btn">
+      						 <%= f.submit "Buscar".html_safe, :class => "btn btn btn-success" %>
+      					   </span>
+      			     </div>
+  			      <% end %>
+  		   	 </div>
+  		     <div class="hr-line-dashed pro-mobile"></div>
+             <% if @actions["CREATE"] %>
+               <div class="col-sm-3 text-center">
+                  <h4>Registrar Nuevo</h4>
+    	            <%= link_to "<i class='fa fa-user-plus med-icon'></i>".html_safe, new_admin_worker_path %>
+    	         </div>
+             <% end %>
+  	       </div>
+  	    </div>
+      </div>
+
+      <div class="row">
+        <%= @actions_calalog %>
+        <%= render partial: "presentation_table" %>
+      </div>
+      <% # @workers.each do |w| %>
+          <% # = render partial: "presentation_card", locals: { worker: w } %>
+      <% # end %>
+
+  </div>
+</div>
+<!--End content whit animation-->

@@ -1,0 +1,21 @@
+<% provide(:title, "Clientes") %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Clientes", labels: ['Clientes']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="ibox">
+      <div class="ibox-content text-center">
+        <h3 class="m-b-xxs">Lista de clientes</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <%= render partial: "presentation_table" %>
+    </div>
+
+  </div>
+</div>
+<!--End content whit animation-->
+<br><br>

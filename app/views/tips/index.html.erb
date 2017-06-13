@@ -1,0 +1,126 @@
+<% provide(:title, "Tips") %>
+<div class="tips-container">
+  <div class="row">
+    <div class="col-md-12">
+      <center>
+        <h3 class="module-title long-up-2x">Tips y Recetas</h3>
+        <h3 class="module-subtitle">Disfruta de nuestras recetas recomendadas y sigue nuestros tips</h3>
+      </center>
+      <br><br>
+    </div>
+  </div>
+
+  <div class="row">
+    <% @tips.each do |t| %>
+        <div class="col-sm-6 col-lg-4 col-md-4">
+            <div class="thumbnail tip-back">
+                <div class="caption" style="height: 50px; padding-top: 15px;">
+                  <h4><%= t.title %></h4>
+                </div>
+                <% if !t.video.blank? %>
+                  <div class="caption divider-row-top" style="min-height: 200px; padding: 0;">
+                    <video width="320" height="200" controls>
+                      <source src="<%= t.video.url %>" type="video/mp4">
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                <% elsif !t.image.blank? %>
+                  <div class="caption divider-row-top tip-image" style="background-image: url('<%= t.image.url %>');">
+                    <% image_tag(t.image.url , { :class => "img-responsive full-width", :style =>"margin-bottom: 10px;", :align =>"left" }) %>
+                  </div>
+                <% end %>
+                <div class="caption divider-row-top tip-desc-200">
+                    <div class="menu-detail cortar">
+                      <!-- For heroku not crashing -->
+                      <% file_path = file_path = "app/views" + t.description_render_path.sub("/shared/tips_recipes/", "/shared/tips_recipes/_")
+                      if !File.exists?(file_path)
+                        File.open(file_path, "w"){|file| file.write("<h1>Tip and or Recipe</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis facilisis tempor libero quis sollicitudin. Sed volutpat risus nibh, vel scelerisque nunc dapibus ac. Cras porta magna lobortis, rutrum ante ac, viverra justo. Vivamus sed orci risus. Quisque viverra eros leo, quis fermentum ante cursus id. Integer urna ligula, dapibus id purus id, tempus porta magna. Pellentesque ut purus ultrices, tincidunt odio nec, sollicitudin arcu. Nulla dui turpis, sodales quis dui sed, consectetur vestibulum lorem. Maecenas libero lacus, pellentesque non arcu non, facilisis suscipit massa.</p>") }
+                      end %>
+                      <!-- For heroku not crashing -->
+                      <%= render t.description_render_path %>
+                    </div>
+                </div>
+                <div class="tip-back-200"></div>
+                <div class="caption divider-row-top tip-foot-back-200 tip-foot">
+                    <small class="pull-left"> <small><%= t(t.updated_at, format: :long) %></small></small>
+                    <%= link_to "Ver todo", tip_path(t.id), :class => "btn btn-default btn-sm pull-right" %>
+                </div>
+            </div>
+        </div>
+    <% end %>
+ </div>
+
+ <div class="row">
+   <div class="col-md-12">
+      <div class="pull-right">
+        <%= will_paginate @tips, renderer: BootstrapPagination::Rails %>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="devider m-b-xxl">
+          <%= image_tag("divider-down.svg") %>
+        </div>
+      </div>
+  </div>
+
+<style>
+.tip-back{
+  color: #333;
+  background-color: #f5f5f5;
+  border-color: #ddd;
+  height:500px;
+}
+.tip-desc-200{
+  height:200px;
+  padding-top:15px;
+}
+.tip-desc-400{
+  height:400px;
+  padding-top:15px;
+}
+.tip-back-200{
+height: 200px;
+position: relative;
+top: -200px;
+/* background-color: #f5f5f5; */
+background: #87e0fd;
+background: -moz-linear-gradient(top, #87e0fd 0%, #f5f5f5 100%);
+background: -webkit-linear-gradient(top, #87e0fd 0%,#f5f5f5 100%);
+/*background: linear-gradient(to bottom, rgba(135, 224, 253, 0) 0%,#f5f5f5 100%);*/
+background: linear-gradient(to bottom, rgba(221, 225, 235, 0.07) 0%, #f5f5f5 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87e0fd', endColorstr='#f5f5f5',GradientType=0 );
+}
+.tip-back-400{
+height: 400px;
+position: relative;
+top: -400px;
+/* background-color: #f5f5f5; */
+background: #87e0fd;
+background: -moz-linear-gradient(top, #87e0fd 0%, #f5f5f5 100%);
+background: -webkit-linear-gradient(top, #87e0fd 0%,#f5f5f5 100%);
+/*background: linear-gradient(to bottom, rgba(135, 224, 253, 0) 0%,#f5f5f5 100%);*/
+background: linear-gradient(to bottom, rgba(221, 225, 235, 0.07) 0%, #f5f5f5 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87e0fd', endColorstr='#f5f5f5',GradientType=0 );
+}
+.tip-foot{
+  height: 50px;
+}
+.tip-foot-back-200{
+  position: relative;
+  top: -200px;
+}
+.tip-foot-back-400{
+  position: relative;
+  top: -400px;
+}
+.tip-image{
+  height:200px;
+  padding: 0px;
+  background-position: center;
+  background-size: cover;
+}
+</style>

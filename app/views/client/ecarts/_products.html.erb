@@ -1,0 +1,187 @@
+<div id="ecart_content">
+  <% @products.each do |wp| %>
+  <div id="<%=wp.alph_key%>" class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;">
+    <% p = wp.Product %>
+
+        <div class="col-sm-1">
+          <center>
+            <% @photos.each do |photo| %>
+              <% if photo.product_id == p.id %>
+                <%= link_to image_tag(photo.photo.url(:mini),:class => "img-circle"), product_path(wp.alph_key) %>
+                <% break %>
+              <% end %>
+            <% end %>
+          </center>
+        </div>
+        <div class="col-sm-4">
+          <label>Nombre:</label><br>
+          <%=p.name%>
+        </div>
+        <div class="col-sm-1">
+          <label>Clave:</label><br>
+          <%=p.alph_key%>
+        </div>
+        <div class="col-sm-2">
+          <label>Cantidad:</label>
+         <input type="number" min="1" value="<%= session[:e_cart][wp.alph_key] %>"
+         onchange="update_quantity('<%=wp.alph_key%>', this.value, <%=wp.existence%>)"
+         id="<%=wp.alph_key%>-quantity-input" class="form-control form-control-black text-center"/>
+        </div>
+        <div class="col-sm-2">
+          <label>Precio Unitario:</label><br>
+            $<span>
+              <% monto = 0 %>
+              <% if @product_prices.any? %>
+                <% @product_prices.each do |pp| %>
+                  <% if p.id == pp.product_id %>
+                    <% monto = pp.client_price * session[:e_cart][wp.alph_key].to_i %>
+                    <%= pp.client_price %>
+                  <% end # if p.id == pp.product_id # %>
+                <% end # @product_prices.each # %>
+              <% else %>
+                <% monto = p.price * session[:e_cart][wp.alph_key].to_i %>
+                <%= p.price %>
+              <% end # if @product_prices.any? # %>
+            </span>
+        </div>
+        <div class="col-sm-1">
+          <% @total += monto %>
+          <label>Importe: </label><br>
+            $<span id="<%=wp.alph_key%>-cost" class="individual-cost">
+               <%= monto %>
+            </span>
+        </div>
+        <div class="col-sm-1 text-center">
+          <br>
+          <%= link_to "<span class='icon-close' style='font-size: 34px;'></span>".html_safe,
+             client_remove_from_cart_path(@current_user.alph_key, wp.alph_key),
+             method: :put, data:{confirm: "Estas seguro(a) de quitarlo del carrito?"} %>
+        </div>
+  </div>
+
+  <% end %>
+
+  <div class="col-md-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;">
+        <div class="col-md-10 text-right">
+          <strong>Sub total:</strong>
+        </div>
+        <div class="col-md-2" >
+          $ <label id="order-sub-total" style="font-size:20px;"><%= @total %></label>
+        </div>
+
+        <div class="col-md-10 text-right">
+          <strong>Coste de envío:</strong>
+        </div>
+        <div class="col-md-2" >
+          $ <label id="order-shipping-cost" style="font-size:20px;">
+            <% if @total >= @warehouse.wholesale %>
+              <% shipping_cost_is_present = "NO" %>
+              0.00
+            <% else %>
+              <% shipping_cost_is_present = "YES" %>
+              <%= @warehouse.shipping_cost %>
+            <% end %>
+          </label>
+        </div>
+
+        <div class="col-md-10 text-right">
+          <strong>Total:</strong>
+        </div>
+        <div class="col-md-2" >
+          <% @total += @warehouse.shipping_cost if @total < @warehouse.wholesale %>
+          $ <label id="order-grand-total" style="font-size:20px;"><%= @total %></label>
+        </div>
+  </div>
+
+  <div class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;margin-bottom: 40px;">
+    <%= form_tag client_create_order_path(@current_user.alph_key), method: :post do %>
+        <div class="col-sm-10 text-right">
+          <%= label_tag "invoice", "Requiero factura" %>&nbsp;&nbsp;
+          <%= check_box_tag "invoice" %>
+        </div>
+        <div class="col-sm-2" >
+          <%= submit_tag "Comprar", :class => "btn btn-block btn-custom-1",
+              data: {confirm: "Seguro(a) de realizar la compra?"} %>
+        </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="row" style="border-top: 1px dotted #DDD;">
+  <div class="col-md-12">
+    <p>
+      <b>NOTA:</b> Para que el envío sea totalmente gratis y con el beneficio de un precio de mayoreo,
+      es necesario la compra mínima de <b>$<span class="individual-cost"><%= @warehouse.wholesale %></b></span>
+      de cualquiera de nuestros productos.
+    </p>
+  </div>
+  <% if !@product_prices.any? %>
+    <div class="col-md-12">
+      <br>
+      <center>
+      <h3 class="iconbox-title">¿Es usted mayorista?</h3>
+      </center>
+      <br>
+    </div>
+  <% end %>
+  <div class="col-sm-12">
+    <% notice = WebInfo.where(name: "ECART_NOTICE").take %>
+    <%= render notice.description_render_path %>
+  </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="devider m-b-xxl">
+        <%= image_tag("divider-down.svg") %>
+      </div>
+    </div>
+</div>
+
+<%= link_to ".",
+    client_ecart_update_quantity_path(@current_user.alph_key) + "?product=abc&new_quantity=123&current_existence=123",
+    method: :put, remote: true, id: "update_quantity_link",
+    style: "visibility: hidden;" %>
+
+<label id="shipping_cost" style="display: none;">
+  <%= @warehouse.shipping_cost %>
+</label>
+<label id="wholesale" style="display: none;">
+  <%= @warehouse.wholesale %>
+</label>
+<label id="shipping_cost_is_present" style="display: none;">
+  <%= shipping_cost_is_present %>
+</label>
+
+<script type="text/javascript">
+  function update_quantity(product, new_quantity, current_existence) {
+    var _href = $('#update_quantity_link').attr('href');
+    $('#update_quantity_link').attr('href',
+      _href.replace(/product=[^&]+/, 'product=' + product));
+
+    _href = $('#update_quantity_link').attr('href');
+    $('#update_quantity_link').attr('href',
+      _href.replace(/new_quantity=[^&]+/, 'new_quantity=' + new_quantity));
+
+    _href = $('#update_quantity_link').attr('href');
+    $('#update_quantity_link').attr('href',
+      _href.replace(/current_existence=[^&]+/, 'current_existence=' + current_existence));
+
+    $('#update_quantity_link').click();
+  }
+
+  function money_format(number){
+    return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
+      return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
+    });
+  }
+
+  $(document).ready(function(){
+    costs = $(".individual-cost");
+    costs.each(function(){
+      $(this).html(money_format($(this).text()));
+    });
+
+    total = $("#grand-total");
+    total.html(money_format(total.text()));
+  });
+</script>

@@ -1,0 +1,2 @@
+<% shipment_details_url = admin_shipment_details_path(@warehouse.alph_key, "s_id") %>
+<%= render partial: "shipments", locals: {details_url: shipment_details_url } %>

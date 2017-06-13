@@ -1,0 +1,36 @@
+<% provide(:title, "Tips") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Tips y Recetas", labels: ['Tips y Recetas']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="row">
+  	  <div class="col-lg-12">
+  	    <div class="ibox-content" style="display: block;">
+  	      <div class="row">
+  	        <div class="col-sm-9 b-r margin-bot-resp">
+  	           <h3 class="m-t-none m-b">Lista de Tips y Recetas</h3>
+  	           <p>Aquí puedes realizar diversas acciones como escribir un tip o receta que será publicada en la página web así como modificar o simplemente ver su información!</p>
+            </div>
+	          <div class="hr-line-dashed pro-mobile"></div>
+            <div class="col-sm-3 text-center">
+               <h4>Registrar Nuevo</h4>
+               <%= link_to "<i class='fa fa-book med-icon'></i>".html_safe, new_admin_tip_path %>
+	          </div>
+  	      </div>
+  	    </div>
+  	  </div>
+    </div>
+    <br>
+  	<div class="row">
+  	  <div class="col-lg-12">
+  	    <div class="ibox-content" style="display: block;">
+          <%= render "presentation_table" %>
+  	    </div>
+  	  </div>
+  	</div>
+
+  </div>
+</div>
+<!--End content whit animation-->

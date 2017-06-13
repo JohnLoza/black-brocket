@@ -1,0 +1,109 @@
+<% provide(:title, "Órdenes por entregar") %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Órdenes", labels: ['Órdenes por entregar']} %>
+
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
+  <div class="row">
+
+    <div class="ibox">
+      <div class="ibox-content text-center">
+        <h3 class="m-b-xxs">Listado de órdenes</h3>
+        <small>Aquí encontrarás la lista de todas las órdenes de los clientes de tu zona</small>
+      </div>
+    </div>
+
+
+    <!--Table-->
+    <div class="ibox">
+        <div class="ibox-content">
+
+            <div class="row m-b-sm m-t-sm">
+              <div class="col-md-10">
+                <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Buscar en tabla">
+              </div>
+                <div class="col-md-2">
+                  <%= link_to(distributor_orders_path, :class => "btn btn-white btn-sm full-width") do %>
+                    <i class="fa fa-refresh"></i> Actualizar
+                  <% end %>
+                </div>
+            </div>
+
+            <!--<div class="table-responsive">-->
+            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15" data-filter=#filter>
+                <thead>
+                <tr>
+                    <th>Folio</th>
+                    <th data-hide="phone">Fecha de creación</th>
+                    <th data-hide="phone">Usuario</th>
+                    <th data-hide="tablet">Ubicación</th>
+                    <th data-hide="phone">Status</th>
+                    <th data-sort-ignore="true">Acción</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <% @orders.each do |o| %>
+                    <tr id="<%=o.alph_key%>">
+                      <td><%=o.alph_key%></td>
+                      <td><%= l(o.created_at, format: :long) %></td>
+                      <td><%= o.Client.username %></td>
+                      <td><%= o.City.name %>, <%= o.City.State.name %></td>
+                      <td>
+                        <% case t(o.state)
+                        when "Pedido cancelado"%>
+                            <label class="label label-danger"><%=t(o.state)%></label>
+                          <%when "Por pagar"%>
+                            <label class="label label-warning"><%=t(o.state)%></label>
+                          <%when "Pago depositado"%>
+                            <label class="label label-information"><%=t(o.state)%></label>
+                          <%when "Pago aceptado"%>
+                            <label class="label label-primary"><%=t(o.state)%></label>
+                          <%when "Pago rechazado"%>
+                            <label class="label label-danger"><%=t(o.state)%></label>
+                          <%when "Surtido"%>
+                            <label class="label label-primary"><%=t(o.state)%></label>
+                          <%when "Pedido entregado"%>
+                            <label class="label label-success"><%=t(o.state)%></label>
+                          <%when "Pedido enviado"%>
+                            <label class="label label-success"><%=t(o.state)%></label>
+                          <%when "Pagado y se recibió factura"%>
+                            <label class="label label-information"><%=t(o.state)%></label>
+                          <%else%>
+                            <label class="label label-information"><%=t(o.state)%></label>
+                          <%end%>
+                          <% if o.commission_in_progress %>
+                            <i class="fa fa-check fa-2x" style="color: #8BC34A;"></i>
+                          <% end %>
+                      </td>
+                      <td>
+                        <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
+                                    distributor_order_details_path(o.alph_key),
+                                    :class => "btn btn-white btn-sm hidden-button" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+                <tfoot>
+                <tr>
+                  <td colspan="7">
+                    <div class="pull-right">
+                      <% if @orders != Array.new %>
+                        <%= will_paginate @orders, renderer: BootstrapPagination::Rails %>
+                      <% end %>
+                    </div>
+                  </td>
+                </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+    </br>
+    <!--End Table-->
+
+  </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('.footable').footable();
+    });
+</script>

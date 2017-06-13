@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-md-4">
+      <center>
+        <%= image_tag User.getImage(@distributor), {:class => "img-responsive full-width"} %>
+      </center>
+    </div>
+    </br>
+    <div class="col-md-8">
+      <!--Datos del distribuidor-->
+      <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th colspan="4"><%= @distributor.username %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Nombre:</b></td>
+                <td colspan="3"><%= @distributor.name %> <%= @distributor.lastname %> <%= @distributor.mother_lastname %></td>
+              </tr>
+              <% distributor_city = @distributor.City %>
+              <% if @distributor.show_address %>
+                <tr>
+                  <td><b>Ubicación:</b></td>
+                  <td><%= distributor_city.name %>, <%= distributor_city.State.name %></td>
+
+                  <td><b>Dirección:</b></td>
+                  <td><%= @distributor.address %></td>
+                </tr>
+              <% end %>
+              <tr>
+                <td><b>Teléfono:</b></td>
+                <td>(<%= distributor_city.LADA %>) <%= @distributor.telephone %></td>
+                <td><b>Celular:</b></td>
+                <td><%= @distributor.cellphone %></td>
+              </tr>
+              <tr>
+                <td><b>Email:</b></td>
+                <td><%= @distributor.email %></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+</div>

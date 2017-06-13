@@ -1,0 +1,42 @@
+<% provide(:title, "Estadísticas") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Estadísticas", labels: ['Estadísticas', 'Ventas'], links: [admin_statistics_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="ibox-content">
+      <h3 class="text-center">Los mejores <%= params[:dist_quantity] %> distribuidores</h3>
+      <canvas id="chart_canvas" style="padding-right: 30px;padding-left: 10px;"></canvas>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    var ctx = $("#chart_canvas");
+    var myNewChart = new Chart(ctx, {
+        type: "bar",
+        data:{
+          labels: <%= raw @dist_names %>,
+          datasets: [{
+                  label: "Ventas",
+                  backgroundColor: "rgba(0, 150, 136, 0.5)",
+                  hoverBackgroundColor: "rgba(0, 150, 136, 0.8)",
+                  borderWidth: 1,
+                  data: <%= raw @details.map{|detail| detail.sum_q}.to_json %>
+              }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }// ticks
+            }]// yAxes
+          }// scales
+        }// options
+    })
+  });
+</script><br/><br/>
+
+<%= javascript_include_tag 'Chart.min' %>

@@ -1,0 +1,6 @@
+<% if params[:warehouse_product][:min_stock].to_i > 0 %>
+  $("#min-stock-<%= params[:id] %>").html(<%=params[:warehouse_product][:min_stock].to_i%>);
+  $("#modal").modal("hide");
+<% else %>
+  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'La cantidad debe ser mayor que cero'} %>");
+<% end %>

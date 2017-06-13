@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= csrf_meta_tags %>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= yield(:title) %> | BlackBrocket</title>
+  <!--stylesheets-->
+  <%= stylesheet_link_tag 'admin', media: 'all' %>
+  <!--javascript-->
+  <%= javascript_include_tag 'admin' %>
+</head>
+<body class="canvas-menu skin-4 mini-navbar">
+
+  <!--Wrapper-->
+  <div id="wrapper">
+
+    <!--Menu-->
+    <%= render 'shared/admin/navbar' %>
+    <!--End Menu-->
+
+    <!--Page wrapper-->
+    <div id="page-wrapper" class="gray-bg">
+
+      <!--Top Bar-->
+      <%= render 'shared/admin/topbar' %>
+      <!--End Top Bar-->
+
+      <!--Alerts-->
+      <div id="dismissible_alerts">
+        <!-- Should have only 1 flash at the same time -->
+        <% flash.each do |message_type, message| %>
+          <%= render partial: "/shared/dismissible_alert", locals: {message_type: message_type, message: message.html_safe} %>
+        <% end %>
+      </div>
+      <!--End Alerts-->
+
+      <!--Content-->
+      <%= yield %>
+      <!--End Content-->
+
+      <!--<div class="row">
+        <div class="col-md-12">
+          <% debug(params) if Rails.env.development? %>
+        </div>
+      </div>-->
+
+      <!--Footer-->
+      <br><br><br>
+      <%= render 'shared/admin/footer' %>
+      <!--End Footer-->
+
+    </div>
+    <!--End Page wrapper-->
+
+  </div>
+  <!--End Wrapper-->
+
+</body>
+</html>
+
+<script type="text/javascript">
+(function($) {
+    var $window = $(window),
+        $body = $('body');
+
+    $window.resize(function resize(){
+        if ($window.width() < 500) {
+            return $body.removeClass('mini-navbar');
+        }
+    }).trigger('resize');
+})(jQuery);
+$('body.canvas-menu .sidebar-collapse').slimScroll({
+      height: '100%',
+      railOpacity: 0.9
+});
+</script>

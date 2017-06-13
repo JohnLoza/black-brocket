@@ -1,0 +1,120 @@
+<% provide(:title, "Órdenes") %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Órdenes de cliente", labels: ['Clientes', 'Órdenes'], links: [admin_clients_path]} %>
+
+<div class="wrapper wrapper-content">
+  <div class="row animated fadeInRight">
+    <div class="row">
+
+      <div class="col-lg-12">
+        <%= render "/shared/client_head_bar" %>
+      </div>
+
+      <div class="col-lg-12">
+        <div class="ibox">
+          <div class="ibox-content">
+            <h3>Órdenes de <%=@client.name%> <%=@client.lastname%></h3>
+
+            <div class="row m-b-sm m-t-sm">
+              <div class="col-md-10">
+                <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
+              </div>
+              <div class="col-md-2">
+                <%= link_to(admin_orders_path, :class => "btn btn-white btn-sm full-width") do %>
+                  <i class="fa fa-refresh"></i> Actualizar
+                <% end %>
+              </div>
+            </div>
+
+            <table class="footable table table-stripped toggle-arrow-tiny" data-filter=#filter>
+              <thead>
+                <tr>
+                  <th>Folio</th>
+                  <!--<th data-hide="all">Cliente</th>
+                  <th data-hide="all">Teléfono del Cliente</th>
+                  <th data-hide="all">Correo del Cliente</th>-->
+                  <th data-hide="all">Correo electrónico</th>
+                  <th data-hide="all">Ubicación</th>
+                  <th data-hide="all">Teléfono</th>
+                  <th data-type="numeric">Total a pagar</th>
+                  <th>Status</th>
+                  <th data-hide="all"></th>
+                  <th data-hide="phone,tablet">Fecha de creación</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @orders.each do |o| %>
+                  <tr id="<%=o.alph_key%>">
+                    <td><%=o.alph_key%></td>
+                    <td><%= @client.email %></td>
+                    <td>
+                      <% if o.city_id == @client_city.id %>
+                        <%= @client_city.name %>, <%= @client_city.State.name %>
+                      <% else %>
+                        <% city = o.City %>
+                        <%= city.name %>, <%= city.State.name %>
+                      <% end %>
+                    </td>
+                    <td><%= @client.telephone %></td>
+                    <td>$ <%= o.total %></td>
+                    <td>
+                      <% case t(o.state)
+                      when "Pedido cancelado"%>
+                        <label class="label label-danger"><%=t(o.state)%></label>
+                      <%when "Por pagar"%>
+                        <label class="label label-warning"><%=t(o.state)%></label>
+                      <%when "Pago depositado"%>
+                        <label class="label label-information"><%=t(o.state)%></label>
+                      <%when "Pago aceptado"%>
+                        <label class="label label-primary"><%=t(o.state)%></label>
+                      <%when "Pago rechazado"%>
+                        <label class="label label-danger"><%=t(o.state)%></label>
+                      <%when "Surtido"%>
+                        <label class="label label-primary"><%=t(o.state)%></label>
+                      <%when "Pedido entregado"%>
+                        <label class="label label-success"><%=t(o.state)%></label>
+                      <%when "Pedido enviado"%>
+                        <label class="label label-success"><%=t(o.state)%></label>
+                      <%when "Pagado y se recibió factura"%>
+                        <label class="label label-information"><%=t(o.state)%></label>
+                      <%else%>
+                        <label class="label label-information"><%=t(o.state)%></label>
+                      <%end%>
+                    </td>
+                    <td>
+                      <% if !o.tracking_code.blank? %>
+                        <p>Código de rastreo: <%= o.tracking_code %></p>
+                      <% end # if o.tracking_code != nil # %>
+                    </td>
+                    <td><%= l(o.created_at, format: :long) %></td>
+                    <td>
+                      <%= link_to "<i class='fa fa-eye'></i> Ver pedido".html_safe,
+                          admin_order_details_path(o.alph_key),
+                          :class => "btn btn-white btn-sm", target: "_blank" %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="7">
+                    <div class="pull-right">
+                      <%= will_paginate @orders, renderer: BootstrapPagination::Rails %>
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <script>
+                $(document).ready(function() {
+                    $('.footable').footable();
+                });
+            </script>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

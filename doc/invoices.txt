@@ -1,0 +1,299 @@
+167|1|A0001|2016-11-8|CONTADO||México||_oOPtd_Y|2016-11-8
+167|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+167|3|C0033|12345678912345678912|ange  |call|1234|4321|centrr||Elota|Sinaloa|México|123456|angelica@gmail.com
+167|4|P0001|5|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+167|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+167|6||||250.0|||
+168|1|A0001|2016-11-8|CONTADO||México||XwJPoG0U|2016-11-8
+168|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+168|3|C0008|CLIENTE0000000000008|lizbeth ju wong|mielo|2345||vistas||Villa Corona|Jalisco|México|3456|cliente8@gmail.com
+168|4|P0001|20|bolsa 800grs|Café soluble|250.0|0|0|||0.0||0.0
+168|4|P0005|5|Bolsa de 750grs.|Café Molido Fino|430.0|0|0|||0.0||0.0
+168|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+168|6||||0.0|||
+169|1|A0002|2016-11-8|CONTADO||México||3BX2Nlvt|2016-11-8
+169|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+169|3|C0003|ASJDIFKW785W|María Pérez Torres|foobar fiscal|foobar |foobar|foobar fiscal||Amecameca|Edo. México|México|foofis|cliente3@gmail.com
+169|4|P0001|10|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+169|4|P0004|10|Bolsa de 800 grs.|Capuccino Clásico|345.0|0|0|||475.86||0.0
+169|4|P0007|5|Bolsa de 800grs.|Mocha|325.0|0|0|||77.38||30.35
+169|5|IVA||553.24|TUA|||OTROS IMPUESTOS||30.35||||||
+169|6||||0.0|||
+170|1|A0003|2016-11-8|CONTADO||México||RN7yOd1G|2016-11-8
+170|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+170|3|C0085||Leo Chávez Rosales|Presa|15||Lima||Tequisquiapan|Querétaro|México|44563|leo@gmail.com
+170|4|P0001|10|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+170|4|P0005|5|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||0.0||0.0
+170|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+170|6||||0.0|||
+171|1|A0002|2016-11-8|CONTADO||México||0DiAo9rG|2016-11-8
+171|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+171|3|C0089||joseluis sds dsdsdsdsd|call|1278||col||Gustavo A. Madero|Ciudad de México|México|123456|joseluis@gmail.com
+171|4|P0001|5|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+171|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+171|6||||250.0|||
+172|1|A0003|2016-11-8|CONTADO||México||o10xyHWd|2016-11-8
+172|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+172|3|C0059|CAAB456288G7|Café Abril, SA de CV  |Calle 1|12||Centro||Querétaro|Querétaro|México|445651|abril@gmail.com
+172|4|P0005|5|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||0.0||0.0
+172|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+172|6||||150.0|||
+173|1|A0003|2016-11-8|CONTADO||México||db-WCZ67|2016-11-8
+173|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+173|3|C0061||Araceli Duran Meza|Miramar|2430||Iturbide||Arroyo Seco|Querétaro|México|45632|araceli@gmail.com
+173|4|P0005|1|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||0.0||0.0
+173|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+173|6||||150.0|||
+174|1|A0003|2016-11-8|CONTADO||México||320Kx0oZ|2016-11-8
+174|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+174|3|C0061||Araceli Duran Meza|Miramar|2430||Iturbide||Arroyo Seco|Querétaro|México|45632|araceli@gmail.com
+174|4|P0005|1|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||57.24||0.0
+174|5|IVA||57.24|TUA|||OTROS IMPUESTOS||0.0||||||
+174|6||||150.0|||
+175|1|A0002|2016-11-8|CONTADO||México||2Q7Vh0Cz|2016-11-8
+175|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+175|3|C0089||joseluis sds dsdsdsdsd|call|1278||col||Gustavo A. Madero|Ciudad de México|México|123456|joseluis@gmail.com
+175|4|P0007|5|Bolsa de 800grs.|Mocha|325.0|0|0|||77.38||30.35
+175|5|IVA||77.38|TUA|||OTROS IMPUESTOS||30.35||||||
+175|6||||250.0|||
+176|1|A0002|2016-11-8|CONTADO||México||QlpoeFYp|2016-11-8
+176|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+176|3|C0089||joseluis sds dsdsdsdsd|call|1278||col||Gustavo A. Madero|Ciudad de México|México|123456|joseluis@gmail.com
+176|4|P0005|10|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||572.41||0.0
+176|5|IVA||572.41|TUA|||OTROS IMPUESTOS||0.0||||||
+176|6||||0.0|||
+177|1|A0001|2016-11-8|CONTADO||México||HTCAWOvL|2016-11-8
+177|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+177|3|C0001|12345678ABC|safiscalax  |foóbar fiscal calleñ|1234|4321|foobar fiscal||Ahuatlán|Puebla|México|45597|cliente1@gmail.com
+177|4|P0001|3|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+177|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+177|6||||250.0|||
+178|1|A0001|2016-11-8|CONTADO||México||E2iluac-|2016-11-8
+178|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+178|3|C0033|12345678912345678912|ange  |call|1234|4321|centrr||Elota|Sinaloa|México|123456|angelica@gmail.com
+178|4|P0001|3|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+178|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+178|6||||250.0|||
+179|1|A0001|2016-11-8|CONTADO||México||HC4CUppV|2016-11-8
+179|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+179|3|C0001|12345678ABC|safiscalax  |foóbar fiscal calleñ|1234|4321|foobar fiscal||Ahuatlán|Puebla|México|45597|cliente1@gmail.com
+179|4|P0001|2|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+179|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+179|6||||250.0|||
+180|1|A0001|2016-11-8|CONTADO||México||UA8pdLz1|2016-11-8
+180|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+180|3|C0008|CLIENTE0000000000008|lizbeth ju wong|mielo|2345||vistas||Villa Corona|Jalisco|México|3456|cliente8@gmail.com
+180|4|P0005|5|Bolsa de 750grs.|Café Molido Fino|430.0|0|0|||296.55||0.0
+180|5|IVA||296.55|TUA|||OTROS IMPUESTOS||0.0||||||
+180|6||||250.0|||
+181|1|A0001|2016-11-8|CONTADO||México||5rsG9ldz|2016-11-8
+181|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+181|3|C0020|CRCS637833LK3|Crush Caffee, SA de CV  |Las Rosas|43||Mercaderes||Guadalajara|Jalisco|México|33499|marcoa@yahoo.com
+181|4|P0023|5|Bolsa|Dark Intense|260.0|0|0|||0.0||43.96
+181|5|IVA||0.0|TUA|||OTROS IMPUESTOS||43.96||||||
+181|6||||250.0|||
+182|1|A0003|2016-11-8|CONTADO||México||6N6qA5TQ|2016-11-8
+182|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+182|3|C0061||Araceli Duran Meza|Miramar|2430||Iturbide||Arroyo Seco|Querétaro|México|45632|araceli@gmail.com
+182|4|P0001|4|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+182|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+182|6||||150.0|||
+183|1|A0001|2016-11-8|CONTADO||México||ffEBY1og|2016-11-8
+183|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+183|3|C0097|CASIMA1234567890123R|Mario  Casas Sierra|Héroes |17||jardines ||Guadalajara|Jalisco|México|44870|mario@gmail.com
+183|4|P0001|1|bolsa 800grs|Café soluble|280.0|0|0|||0.0||0.0
+183|4|P0023|5|Bolsa|Dark Intense|300.0|0|0|||0.0||50.72
+183|5|IVA||0.0|TUA|||OTROS IMPUESTOS||50.72||||||
+183|6||||250.0|||
+184|1|A0001|2016-11-8|CONTADO||México||8904a-Y9|2016-11-8
+184|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+184|3|C0097|CASIMA1234567890123R|Mario  Casas Sierra|Héroes |17||jardines ||Guadalajara|Jalisco|México|44870|mario@gmail.com
+184|4|P0001|1|bolsa 800grs|Café soluble|280.0|0|0|||0.0||0.0
+184|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+184|6||||250.0|||
+185|1|A0001|2016-11-8|CONTADO||México||9hIX-AHi|2016-11-8
+185|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+185|3|C0020|CRCS637833LK3|Crush Caffee, SA de CV  |Las Rosas|43||Mercaderes||Guadalajara|Jalisco|México|33499|marcoa@yahoo.com
+185|4|P0001|5|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+185|4|P0005|3|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||171.72||0.0
+185|4|P0023|2|Bolsa|Dark Intense|260.0|0|0|||0.0||17.58
+185|5|IVA||171.72|TUA|||OTROS IMPUESTOS||17.58||||||
+185|6||||250.0|||
+186|1|A0001|2016-11-8|CONTADO||México||UlYCN_qb|2016-11-8
+186|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+186|3|C0093|HGg|jh  |jijk|98||kkjkj||Ayotlán|Jalisco|México|12|rick@gmail.com
+186|4|P0005|2|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||114.48||0.0
+186|4|P0023|3|Bolsa|Dark Intense|260.0|0|0|||0.0||26.38
+186|5|IVA||114.48|TUA|||OTROS IMPUESTOS||26.38||||||
+186|6||||250.0|||
+187|1|A0001|2016-11-8|CONTADO||México||2yREs2bf|2016-11-8
+187|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+187|3|C0074||Gregoria Vázquez Olivo|Heroes|17||Centro||Guadalajara|Jalisco|México|44100|gregoria@gmail.com
+187|4|P0001|5|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+187|4|P0005|1|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||57.24||0.0
+187|4|P0023|3|Bolsa|Dark Intense|260.0|0|0|||0.0||26.38
+187|5|IVA||57.24|TUA|||OTROS IMPUESTOS||26.38||||||
+187|6||||250.0|||
+188|1|A0001|2016-11-8|CONTADO||México||omp9Mcto|2016-11-8
+188|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+188|3|C0073|MACS673380KL3|Mar Café, S.A. de C.V.  |Los Capulines |23|B|Los Zauces||Guadalajara|Jalisco|México|56700|marcela@gmail.com
+188|4|P0001|2|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+188|4|P0005|3|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||171.72||0.0
+188|5|IVA||171.72|TUA|||OTROS IMPUESTOS||0.0||||||
+188|6||||250.0|||
+189|1|A0001|2016-11-8|CONTADO||México||2F3SgN0D|2016-11-8
+189|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+189|3|C0001|12345678ABC|safiscalax  |foóbar fiscal calleñ|1234|4321|foobar fiscal||Ahuatlán|Puebla|México|45597|cliente1@gmail.com
+189|4|P0001|5|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+189|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+189|6||||250.0|||
+190|1|A0003|2016-11-8|CONTADO||México||ZbRdBAku|2016-11-8
+190|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+190|3|C0085||Leo Chávez Rosales|Presa|15||Lima||Tequisquiapan|Querétaro|México|44563|leo@gmail.com
+190|4|P0001|3|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+190|4|P0005|2|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||114.48||0.0
+190|5|IVA||114.48|TUA|||OTROS IMPUESTOS||0.0||||||
+190|6||||150.0|||
+191|1|A0003|2016-11-8|CONTADO||México||e-cjo7b3|2016-11-8
+191|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+191|3|C0085||Leo Chávez Rosales|Presa|15||Lima||Tequisquiapan|Querétaro|México|44563|leo@gmail.com
+191|4|P0005|2|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||114.48||0.0
+191|5|IVA||114.48|TUA|||OTROS IMPUESTOS||0.0||||||
+191|6||||150.0|||
+192|1|A0003|2016-11-8|CONTADO||México||n3sOTkWh|2016-11-8
+192|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+192|3|C0061||Araceli Duran Meza|Miramar|2430||Iturbide||Arroyo Seco|Querétaro|México|45632|araceli@gmail.com
+192|4|P0007|5|Bolsa de 800grs.|Mocha|325.0|0|0|||77.38||30.35
+192|5|IVA||77.38|TUA|||OTROS IMPUESTOS||30.35||||||
+192|6||||150.0|||
+193|1|A0003|2016-11-8|CONTADO||México||L5UuH1qC|2016-11-8
+193|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+193|3|C0061||Araceli Duran Meza|Miramar|2430||Iturbide||Arroyo Seco|Querétaro|México|45632|araceli@gmail.com
+193|4|P0001|3|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+193|4|P0007|3|Bolsa de 800grs.|Mocha|325.0|0|0|||46.43||18.21
+193|5|IVA||46.43|TUA|||OTROS IMPUESTOS||18.21||||||
+193|6||||150.0|||
+194|1|A0003|2016-11-8|CONTADO||México||9aDxV0J-|2016-11-8
+194|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+194|3|C0059|CAAB456288G7|Café Abril, SA de CV  |Calle 1|12||Centro||Querétaro|Querétaro|México|445651|abril@gmail.com
+194|4|P0001|3|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+194|4|P0007|5|Bolsa de 800grs.|Mocha|325.0|0|0|||77.38||30.35
+194|5|IVA||77.38|TUA|||OTROS IMPUESTOS||30.35||||||
+194|6||||150.0|||
+195|1|A0002|2016-11-8|CONTADO||México||ABSERYc_|2016-11-8
+195|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+195|3|C0089||joseluis sds dsdsdsdsd|call|1278||col||Gustavo A. Madero|Ciudad de México|México|123456|joseluis@gmail.com
+195|4|P0001|5|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+195|4|P0005|3|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||171.72||0.0
+195|5|IVA||171.72|TUA|||OTROS IMPUESTOS||0.0||||||
+195|6||||250.0|||
+196|1|A0002|2016-11-8|CONTADO||México||uP47oErV|2016-11-8
+196|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+196|3|C0003|ASJDIFKW785W|María Pérez Torres|foobar fiscal|foobar |foobar|foobar fiscal||Amecameca|Edo. México|México|foofis|cliente3@gmail.com
+196|4|P0001|2|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+196|4|P0004|4|Bolsa de 800 grs.|Capuccino Clásico|345.0|0|0|||190.34||0.0
+196|4|P0005|5|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||286.21||0.0
+196|4|P0007|4|Bolsa de 800grs.|Mocha|325.0|0|0|||61.9||24.28
+196|5|IVA||538.45|TUA|||OTROS IMPUESTOS||24.28||||||
+196|6||||0.0|||
+197|1|A0002|2016-11-8|CONTADO||México||akokBcpD|2016-11-8
+197|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+197|3|C0003|ASJDIFKW785W|María Pérez Torres|foobar fiscal|foobar |foobar|foobar fiscal||Amecameca|Edo. México|México|foofis|cliente3@gmail.com
+197|4|P0001|3|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+197|4|P0007|3|Bolsa de 800grs.|Mocha|325.0|0|0|||46.43||18.21
+197|5|IVA||46.43|TUA|||OTROS IMPUESTOS||18.21||||||
+197|6||||250.0|||
+198|1|A0002|2016-11-8|CONTADO||México||6BzuQCux|2016-11-8
+198|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+198|3|C0003|ASJDIFKW785W|María Pérez Torres|foobar fiscal|foobar |foobar|foobar fiscal||Amecameca|Edo. México|México|foofis|cliente3@gmail.com
+198|4|P0004|5|Bolsa de 800 grs.|Capuccino Clásico|345.0|0|0|||237.93||0.0
+198|5|IVA||237.93|TUA|||OTROS IMPUESTOS||0.0||||||
+198|6||||250.0|||
+199|1|A0002|2016-11-8|CONTADO||México||KXJ7Cy7e|2016-11-8
+199|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+199|3|C0089||joseluis sds dsdsdsdsd|call|1278||col||Gustavo A. Madero|Ciudad de México|México|123456|joseluis@gmail.com
+199|4|P0001|3|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+199|4|P0004|3|Bolsa de 800 grs.|Capuccino Clásico|345.0|0|0|||142.76||0.0
+199|4|P0005|3|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||171.72||0.0
+199|4|P0007|3|Bolsa de 800grs.|Mocha|325.0|0|0|||46.43||18.21
+199|5|IVA||360.91|TUA|||OTROS IMPUESTOS||18.21||||||
+199|6||||0.0|||
+200|1|A0002|2016-11-8|CONTADO||México||xt9_ALUB|2016-11-8
+200|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+200|3|C0089||joseluis sds dsdsdsdsd|call|1278||col||Gustavo A. Madero|Ciudad de México|México|123456|joseluis@gmail.com
+200|4|P0004|2|Bolsa de 800 grs.|Capuccino Clásico|345.0|0|0|||95.17||0.0
+200|4|P0007|5|Bolsa de 800grs.|Mocha|325.0|0|0|||77.38||30.35
+200|5|IVA||172.55|TUA|||OTROS IMPUESTOS||30.35||||||
+200|6||||250.0|||
+201|1|A0001|2016-11-8|CONTADO||México||Z7Bx_2vF|2016-11-8
+201|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+201|3|C0097|CASIMA1234567890123R|Mario  Casas Sierra|Héroes |17||jardines ||Guadalajara|Jalisco|México|44870|mario@gmail.com
+201|4|P0001|2|bolsa 800grs|Café soluble|280.0|0|0|||0.0||0.0
+201|4|P0023|10|Bolsa|Dark Intense|300.0|0|0|||0.0||101.45
+201|5|IVA||0.0|TUA|||OTROS IMPUESTOS||101.45||||||
+201|6||||0.0|||
+202|1|A0001|2016-11-8|CONTADO||México||QCOhYda1|2016-11-8
+202|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+202|3|C0097|CASIMA1234567890123R|Mario  Casas Sierra|Héroes |17||jardines ||Guadalajara|Jalisco|México|44870|mario@gmail.com
+202|4|P0005|4|Bolsa de 750grs.|Café Molido Fino|440.0|0|0|||242.76||0.0
+202|4|P0023|3|Bolsa|Dark Intense|300.0|0|0|||0.0||30.43
+202|5|IVA||242.76|TUA|||OTROS IMPUESTOS||30.43||||||
+202|6||||250.0|||
+203|1|A0001|2016-11-8|CONTADO||México||Z5N4YNRL|2016-11-8
+203|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+203|3|C0073|MACS673380KL3|Mar Café, S.A. de C.V.  |Los Capulines |23|B|Los Zauces||Guadalajara|Jalisco|México|56700|marcela@gmail.com
+203|4|P0001|3|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+203|4|P0023|5|Bolsa|Dark Intense|260.0|0|0|||0.0||43.96
+203|5|IVA||0.0|TUA|||OTROS IMPUESTOS||43.96||||||
+203|6||||250.0|||
+204|1|A0001|2016-11-8|CONTADO||México||9XgooMJ_|2016-11-8
+204|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+204|3|C0074||Gregoria Vázquez Olivo|Heroes|17||Centro||Guadalajara|Jalisco|México|44100|gregoria@gmail.com
+204|4|P0001|2|bolsa 800grs|Café soluble|235.0|0|0|||0.0||0.0
+204|4|P0005|2|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||114.48||0.0
+204|4|P0023|2|Bolsa|Dark Intense|260.0|0|0|||0.0||17.58
+204|5|IVA||114.48|TUA|||OTROS IMPUESTOS||17.58||||||
+204|6||||250.0|||
+205|1|A0001|2016-11-8|CONTADO||México||3205tLO9|2016-11-8
+205|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+205|3|C0029|22545454|luis2  |Galeana 125|3232323||cent||Guadalajara|Jalisco|México|44100|luis@gmail.com
+205|4|P0005|2|Bolsa de 750grs.|Café Molido Fino|415.0|0|0|||114.48||0.0
+205|4|P0023|6|Bolsa|Dark Intense|260.0|0|0|||0.0||52.75
+205|5|IVA||114.48|TUA|||OTROS IMPUESTOS||52.75||||||
+205|6||||250.0|||
+206|1|A0001|2016-11-8|CONTADO||México||dPSnH_Nq|2016-11-8
+206|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+206|3|C0097|CASIMA1234567890123R|Mario  Casas Sierra|Héroes |17||jardines ||Guadalajara|Jalisco|México|44870|mario@gmail.com
+206|4|P0025|6|Bolsa 1.500|Moras del Bosque|330.0|0|0|||0.0||76.15
+206|5|IVA||0.0|TUA|||OTROS IMPUESTOS||76.15||||||
+206|6||||250.0|||
+207|1|A0001|2016-11-8|CONTADO||México||tP-A53CV|2016-11-8
+207|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+207|3|C0020|CRCS637833LK3|Crush Caffee, SA de CV  |Las Rosas|43||Mercaderes||Guadalajara|Jalisco|México|33499|marcoa@yahoo.com
+207|4|P0032|2|Bolsa 1530 grs|Chococanela|220.0|0|0|||57.39||14.72
+207|5|IVA||57.39|TUA|||OTROS IMPUESTOS||14.72||||||
+207|6||||250.0|||
+208|1|A0001|2016-11-8|CONTADO||México||k9VnUQ9x|2016-11-8
+208|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+208|3|C0039|MASM674489KL3|Marcos David Maqueda Sotomayor|Álamos Primera Sección|20||Álamos||Zapopan|Jalisco|México|10001|davidm@gmail.com
+208|4|P0032|3|Bolsa 1530 grs|Chococanela|220.0|0|0|||60.0||0.0
+208|5|IVA||60.0|TUA|||OTROS IMPUESTOS||0.0||||||
+208|6||||250.0|||
+209|1|A0001|2016-11-8|CONTADO||México||f8dNrzuQ|2016-11-8
+209|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+209|3|C0039|MASM674489KL3|Marcos David Maqueda Sotomayor|Álamos Primera Sección|20||Álamos||Zapopan|Jalisco|México|10001|davidm@gmail.com
+209|4|P0023|12|Bolsa|Dark Intense|260.0|0|0|||0.0||105.51
+209|5|IVA||0.0|TUA|||OTROS IMPUESTOS||105.51||||||
+209|6||||250.0|||
+210|1|A0001|2016-11-8|CONTADO||México||XGzjs2t3|2016-11-8
+210|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+210|3|C0033|12345678912345678912|ange  |call|1234|4321|centrr||Elota|Sinaloa|México|123456|angelica@gmail.com
+210|4|P0001|5|bolsa 800grs|Café soluble|290.0|0|0|||0.0||0.0
+210|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+210|6||||250.0|||
+211|1|A0001|2016-11-8|CONTADO||México||pHWuYFky|2016-11-8
+211|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES
+211|3|C0001|12345678ABC|safiscalax  |foóbar fiscal calleñ|1234|4321|foobar fiscal||Ahuatlán|Puebla|México|45597|cliente1@gmail.com
+211|4|P0001|5|bolsa 800grs|Café soluble|290.0|0|0|||0.0||0.0
+211|5|IVA||0.0|TUA|||OTROS IMPUESTOS||0.0||||||
+211|6||||250.0|||

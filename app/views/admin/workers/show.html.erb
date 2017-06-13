@@ -1,0 +1,96 @@
+<% provide(:title, "Trabajadores") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del trabajador", labels: ['Trabajadores', 'Perfil del trabajador'], links: [admin_workers_path]} %>
+
+<div class="wrapper wrapper-content">
+  <div class="row animated fadeInRight">
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Detalles del perfil</h5>
+                </div>
+                <div class="ibox-content no-padding border-left-right">
+        					<% if !@worker.photo.blank? %>
+        						<%= image_tag(@worker.photo.url, { :class => "img-responsive full-width" }) %>
+        					<% else %>
+        						<%= image_tag("user_avatar.png", { :class => "img-responsive full-width" }) %>
+        					<% end %>
+                </div>
+                <div class="ibox-content profile-content">
+                    <h4><strong><%= @worker.name %> <%= @worker.lastname %> <%= @worker.mother_lastname %></strong></h4>
+                    <h4><strong>Almacén: </strong><%=@worker.Warehouse.name%></h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+          <!--Datos del distribuidor-->
+          <div class="ibox float-e-margins">
+              <div class="ibox-title">
+                  <h5>Información del trabajador</h5>
+                  <div class="ibox-tools">
+                      <a class="collapse-link">
+                          <i class="fa fa-chevron-up"></i>
+                      </a>
+                      <!--a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                          <i class="fa fa-wrench"></i>
+                      </a>
+                      <ul class="dropdown-menu dropdown-user">
+                          <li><%#= link_to "Editar".html_safe, edit_admin_worker_path(@worker.alph_key) %></li>
+                      </ul-->
+                      <a class="close-link">
+                          <i class="fa fa-times"></i>
+                      </a>
+                  </div>
+              </div>
+              <div class="ibox-content">
+                  <div class="table-responsive">
+                      <table class="table table-hover">
+                        <tr>
+                            <td><b>Clave:</b></td>
+                            <td><%= @worker.alph_key %></td>
+                            <td><b>Fecha nacimiento:</b></td>
+                            <td><%= l(@worker.birthday, format: :long) if @worker.birthday %></td>
+                          </tr>
+                          <tr>
+                              <td><b>Nombre:</b></td>
+                              <td colspan="3"><%= @worker.name %> <%= @worker.lastname %> <%= @worker.mother_lastname %></td>
+                            </tr>
+                          <tr>
+                              <td><b>Ubicación:</b></td>
+                              <td><%= @worker_city.name %>, <%= @worker_city.State.name %></td>
+                              <td><b>Dirección:</b></td>
+                              <td><%= @worker.address %></td>
+                          </tr>
+                          <tr>
+                              <td><b>Teléfono:</b></td>
+                              <td>(<%=@worker_city.LADA%>) <%= @worker.telephone %></td>
+                              <td><b>Teléfono celular:</b></td>
+                              <td><%= @worker.cellphone %></td>
+                          <tr>
+                              <td><b>RFC:</b></td>
+                              <td><%= @worker.rfc %></td>
+                              <td><b>NSS:</b></td>
+                              <td><%= @worker.nss %></td>
+                          </tr>
+                          <tr>
+                            <td><b>Fecha de creación:</b></td>
+                            <td><%= l(@worker.created_at, format: :long) %></td>
+                            <td><b>Última modificación:</b></td>
+                            <td><%= l(@worker.updated_at, format: :long) %></td>
+                          </tr>
+                          <tr>
+                            <td><b>Email:</b></td>
+                            <td colspan="3"><%= @worker.email %></td>
+                          </tr>
+                      </table>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+
+    </div>
+  </div>
+</div><br>

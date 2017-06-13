@@ -1,0 +1,23 @@
+<% alph_key = SecureRandom.urlsafe_base64(6) %>
+
+<div id="<%= alph_key %>">
+  <%= label_tag :product, "Producto" %>
+  <%= select_tag "[product_id][]",
+    options_from_collection_for_select(@products, "id", "name"),
+    :class => "form-control m-b", required: true %>
+
+  <%= label_tag :quantity, "Cantidad" %>
+  <%= number_field_tag "[quantity][]", "",
+      {:class => "form-control m-b", min: 1, max: 999999, step: 1} %>
+
+  <%= label_tag :batch, "Número de lote" %>
+  <%= text_field_tag "[batch][]", "",
+      {:class => "form-control m-b", :maxlength => 15} %>
+
+  <a class="btn btn-danger btn-sm" onclick="$('#<%= alph_key %>').remove();">
+    <i class="fa fa-trash"></i>
+    Eliminar Campos
+  </a>
+
+  <div class="hr-line-dashed"></div>
+</div>

@@ -1,0 +1,114 @@
+<% provide(:title, "Web") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Web", labels: ['Web']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="ibox">
+        <div class="ibox-content text-center">
+            <h3 class="m-b-xxs">Contenido de la página web</h3>
+            <small>En este menú encotrarás opciones que te permitirán gestionar contenido de la página web.</small>
+        </div>
+    </div>
+
+    <div class="ibox-content">
+      <h3>Gestión del contenido para la página de inicio</h3>
+    </div>
+
+    <!-- Content -->
+    <%= link_to(admin_web_videos_path, style:"color: #FEFEFE;") do %>
+      <div class="col-md-6" style="padding: 15px; background-color: #33B5E5;">
+        <center>
+          <label>Video</label><br/>
+          <i class="fa fa-film big-icon" style="color: #FEFEFE;"></i>
+        </center>
+      </div>
+    <% end if @actions["VIDEO"] %>
+
+    <%= link_to(admin_web_photos_path, style:"color: #FEFEFE;") do %>
+      <div class="col-md-6" style="padding: 15px; background-color: #AA66CC;">
+        <center>
+          <label>Galería / Imágenes</label><br/>
+          <i class="fa fa-image big-icon" style="color: #FEFEFE;"></i>
+        </center>
+      </div>
+    <% end if @actions["GALLERY_IMAGES"] %>
+
+    <%= link_to(admin_web_offers_path, style:"color: #FEFEFE;") do %>
+      <div class="col-md-6" style="padding: 15px; background-color: #99CC00;">
+        <center>
+          <label>Promociones</label><br/>
+          <i class="fa fa-tags big-icon" style="color: #FEFEFE;"></i>
+        </center>
+      </div>
+    <% end if @actions["OFFERS"] %>
+
+    <%= link_to(admin_web_info_path("WELCOME_MESSAGE"), style:"color: #FEFEFE;") do %>
+      <div class="col-md-6" style="padding: 15px; background-color: #FFBB33;">
+        <center>
+          <label>Texto de Bienvenida</label><br/>
+          <i class="fa fa-child big-icon" style="color: #FEFEFE;"></i>
+        </center>
+      </div>
+    <% end if @actions["TEXTS"] %>
+
+    <%= link_to(admin_web_footer_details_path, style:"color: #FEFEFE;") do %>
+      <div class="col-md-6" style="padding: 15px; background-color: #AA66CC;">
+        <center>
+          <label>Información del pie de página</label><br/>
+          <i class="fa fa-info-circle big-icon" style="color: #FEFEFE;"></i>
+        </center>
+      </div>
+    <% end if @actions["FOOTER_DETAILS"] %>
+
+    <%= link_to(admin_web_services_path, style:"color: #FEFEFE;") do %>
+      <div class="col-md-6" style="padding: 15px; background-color: #33B5E5;">
+        <center>
+          <label>Cuadros de servicios</label><br/>
+          <i class="fa fa-file-text big-icon" style="color: #FEFEFE;"></i>
+        </center>
+      </div>
+    <% end if @actions["TEXTS"] %>
+
+    <%= link_to(admin_web_info_path("PRIVACY_POLICY"), style:"color: #FEFEFE;") do %>
+      <div class="col-md-6" style="padding: 15px; background-color: #3F51B5;">
+        <center>
+          <label>Aviso de privacidad</label><br/>
+          <i class="fa fa-eye-slash big-icon" style="color: #FEFEFE;"></i>
+        </center>
+      </div>
+    <% end if @actions["PRIVACY_POLICY"] %>
+
+    <%= link_to(admin_web_info_path("TERMS_OF_SERVICE"), style:"color: #FEFEFE;") do %>
+      <div class="col-md-6" style="padding: 15px; background-color: #795548;">
+        <center>
+          <label>Términos y condiciones</label><br/>
+          <i class="fa fa-shield big-icon" style="color: #FEFEFE;"></i>
+        </center>
+      </div>
+    <% end if @actions["TERMS_OF_SERVICE"] %>
+
+    <%= link_to(admin_web_info_path("ECART_NOTICE"), style:"color: #FEFEFE;") do %>
+      <div class="col-md-6" style="padding: 15px; background-color: #FFBB33;">
+        <center>
+          <label>Aviso del carrito</label><br/>
+          <i class="fa fa-shopping-cart big-icon" style="color: #FEFEFE;"></i>
+        </center>
+      </div>
+    <% end if @actions["TEXTS"] %>
+
+    <%= link_to(admin_web_social_networks_path, style:"color: #FEFEFE;") do %>
+      <div class="col-md-6" style="padding: 15px; background-color: #FF4444;">
+        <center>
+          <label>Redes Sociales</label><br/>
+          <i class="fa fa-twitch big-icon" style="color: #FEFEFE;"></i>
+        </center>
+      </div>
+    <% end if @actions["SOCIAL_NETWORKS"] %>
+    <!-- Content -->
+
+  </div>
+</div>
+<!--End content whit animation-->
+<br><br><br>

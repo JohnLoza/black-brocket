@@ -1,0 +1,58 @@
+<% provide(:title, "Bienvenido") %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Bienvenido", labels: ['Bienvenido']} %>
+
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <!--center>
+      <h1>Actividad Reciente</h1>
+      <i class="fa fa-newspaper-o big-icon"></i>
+    </center-->
+    <div class="col-lg-12">
+      <% if !@current_user.home_img.blank? %>
+        <% home_img = @current_user.home_img.url %>
+      <% end %>
+        <% bgImage = @current_user.getHomeImage(image_url("distributor-default-bg.jpg")) %>
+        <div class="widget-head-color-box p-lg text-center full-cover-bg text-white-sh p-xxl" style="background-image: url('<%= bgImage %>'); position: relative;height: 400px;">
+            <div class="m-b-md">
+                <h2 class="font-bold no-margins"><%= @current_user.username %></h2>
+                <small>Distribuidor</small>
+            </div>
+            <%= image_tag User.getImage(@current_user, :mini), :class => "img-circle img-rounded m-b-md" %>
+            <div class="m-sm pull-right-bottom">
+                <span class="btn btn-info" onclick="$('#distributor_home_img').click();">Cambiar imagen</span>
+
+                <%= form_for(current_user, url: distributor_update_home_image_path, method: :post, html: {style: "display: none;"}) do |f| %>
+                  <%= f.file_field :home_img,
+                      {:class => "input form-control",
+                       onchange: "$('#commit').click();"} %>
+
+                  <%= f.submit :Guardar,
+                      {id: "commit", :class => "btn btn-success",
+                       data: {confirm: "Estas seguro(a) de ser la imagen que quieres?"}} %>
+                <% end %>
+
+            </div>
+        </div>
+        <div class="widget-text-box">
+            <h3 class="media-heading"><i class="fa fa-map-marker"></i> Zonas que debo distribuir: <small>- Haz click sobre la etiqueta para ver la zona en google maps</small></h3>
+            <div class="hr-line-dashed"></div>
+            <center>
+              <% @regions.each do |region| %>
+                <% city_name = region.name %>
+                <%= link_to "https://maps.google.com.mx/maps/search/#{city_name}", { target: "_blank" } do %>
+                  <span class="badge badge-info f-size-16 m-sm" style="color: #FEFEFE;"> <%=city_name%> </span>
+                <% end %>
+              <% end %>
+            </center>
+            <div class="text-right">
+               <%= link_to(log_out_path, method: "delete") do %><span class="btn btn-xs btn-success"><i class="fa fa-sign-out"></i> Cerrar sesión</span><% end %>
+            </div>
+        </div>
+    </div>
+
+  </div>
+</div>
+<!--End content whit animation-->

@@ -1,0 +1,63 @@
+<% @products.each do |wp| %>
+  <% p = wp.Product %>
+
+  <div class="col-sm-4 col-lg-4 col-md-4">
+      <div class="thumbnail">
+          <% @photos.each do |photo| %>
+            <% if photo.product_id == p.id %>
+              <%= link_to image_tag(photo.photo.url(:thumb)), product_path(wp.alph_key) %>
+              <% break %>
+            <% end %>
+          <% end %>
+          <div class="caption" style="height:100px;">
+              <h4 class="pull-right">
+                $<span class="money_format">
+                  <% if @product_prices.any? %>
+                    <% @product_prices.each do |pp| %>
+                      <% if pp.product_id == p.id %>
+                        <%= pp.client_price %>
+                        <% break %>
+                      <% end # if pp.product_id == p.id # %>
+                    <% end # product_prices.each # %>
+                  <% else %>
+                    <%=p.price%>
+                  <% end # if product_prices.any? # %>
+                </span>
+              </h4>
+              <% if wp.existence > 0 %>
+                <%= link_to(product_path(wp.alph_key), :class => "darklink") do %>
+                  Producto Disponible
+                <% end %>
+              <% else %>
+                <%= link_to(product_path(wp.alph_key), :class => "darklink", style: "color: #F44336;") do %>
+                  Producto Agotado
+                <% end %>
+              <% end %>
+              <h4 class="nowrap-10em slide-image menu-title text-left"><%=link_to p.name, product_path(wp.alph_key), :class => "darklink"%></h4>
+              <div class="menu-detail cortar text-left">
+                <% if p.cold %>
+                  Frío /
+                <% end %>
+                <% if p.hot %>
+                  Caliente /
+                <% end %>
+                <% if p.frappe %>
+                  Frappé /
+                <% end %>
+                <% if p.cold == false && p.hot == false && p.frappe == false%>
+                Sin especificar
+                <% end %>
+              </div>
+          </div>
+      </div>
+  </div>
+<% end %>
+
+<style type="text/css">
+.cortar{
+  width:100%;
+  height:20px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden; }
+</style>

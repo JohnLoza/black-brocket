@@ -1,0 +1,23 @@
+<!--Header band-->
+<div class="row wrapper border-bottom white-bg page-heading">
+   <div class="col-sm-6">
+       <h2><%= title %></h2>
+       <ol class="breadcrumb">
+       	  <li><%= link_to "Inicio", distributor_welcome_path %></li>
+
+       	  <% cont = 0 %>
+       	  <% labels.each do |lab| %>
+       	  	<% if cont == labels.size - 1 %>
+       	  		<li><strong><%=lab%></strong></li>
+       	  	<% else %>
+       	  	    <% links.each do |lin| %>
+       	  		<li><%= link_to(lin) do %><%=lab%><% end %></li>
+       	  		<% end %>
+       	  	<% end
+       	  	   cont += 1 %>
+       	  <% end %>
+
+       </ol>
+    </div>
+</div>
+<!--End Header band-->

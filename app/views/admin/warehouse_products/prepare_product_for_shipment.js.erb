@@ -1,0 +1,10 @@
+if($("#<%=params[:id]%>").length == 0){
+  $("#prepare_product_for_shipment").append("<div class='col-md-12 well' id='<%=params[:id]%>'><h4 class='m-l'>Lote(s) de producto: <small><%=@hash[params[:id]]['name']%></small></h4></div>");
+}
+
+container = $("#<%=@hash.keys[0]%>");
+container.append("<%= j render partial: 'product_preparated', locals: {product: @hash[params[:id]][@alph_key], product_key: @alph_key} %>");
+
+<% message = "Agregado el producto " + @hash[params[:id]]["name"] + " a los preparativos" %>
+$("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: message} %>");
+$("#modal").modal("hide");

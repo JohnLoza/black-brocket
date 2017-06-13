@@ -1,0 +1,316 @@
+<% provide(:title, "Nueva visita") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Nueva visita", labels: ['Clientes', 'Visitas', 'Nueva visita'], links: [admin_clients_path, admin_supervisor_visits_path(params[:id])]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+     <div class="row">
+        <div class="col-lg-12">
+          <div class="ibox float-e-margins">
+            <div class="ibox-title">
+              <h5>Nuevo formulario de visita al supervisor <small>Contesta el siguiente formulario honestamente</small></h5>
+              <div class="ibox-tools">
+                <a class="collapse-link">
+                  <i class="fa fa-chevron-up"></i>
+                </a>
+              </div>
+            </div>
+            <div class="ibox-content">
+              <%= form_for(@visit_detail, url: admin_new_supervisor_visit_path(params[:id]), :html => {:class => 'form-horizontal'}) do |f| %>
+                <h3>1.- Referencia del cliente</h3>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label">Tipo de cliente <br></label>
+                    <div class="col-sm-8">
+                      <% array = ["Cafetería", "Restaurante", "Bar", "Hotel", "Servicios públicos", "Servicios privados", "Comercio"] %>
+                      <% array.each do |item| %>
+                          <div class="radio">
+                            <label> <%= f.radio_button :client_type, item, required: true %> <%= f.label :label, item, required: true %> </label>
+                          </div>
+                      <% end %>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label">Perfil del cliente:</label>
+                    <div class="col-sm-8">
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :location, "Ubicación" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :location, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :local_size, "Tamaño" %></label>
+                    <div class="col-sm-8">
+                      <%= f.select :local_size, ["de 3m2 a 9m2","de 10m2 a 19m2", "de 20m2 a 50m2", "Más de 50m2"], {prompt: "Selecciona..."}, {:class => "form-control", required: true} %>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :instalations, "Instalaciones" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :instalations, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :infrastructure, "Infraestructura" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :infrastructure, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :visibility, "Visibilidad o exposición" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :visibility, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :motor_traffic, "Tráfico automovilístico" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :motor_traffic, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :walker_traffic, "Tráfico peatonal" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :walker_traffic, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :global_profile, "Valoración general del perfil" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :global_profile, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <h3>2.- Valoración comercial</h3>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :years_commerce, "Años en el mercado" %></label>
+                    <div class="col-sm-8">
+                      <%= f.select :years_commerce, ["Menos de 5 años","5-10 años","11-50 años","Más de 50 años"], {prompt: "Selecciona..."}, {:class => "form-control", required: true} %>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :consumers, "Flujo de consumidores" %></label>
+                    <div class="col-sm-8">
+                      <%= f.text_field :consumers, {:class => "form-control", :placeholder => "ejemplo: 9, 2:30pm", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10 y especificar hora de visita. Ejemplo: 9, 2:30pm</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :client_clients_opinion_our_product, "Percepción de clientes respecto a nuestro producto: " %></label>
+                    <div class="col-sm-8">
+                      <%= f.select :client_clients_opinion_our_product, ["Malo","Regular","Bueno","Excelente"], {prompt: "Selecciona..."}, {:class => "form-control", required: true} %>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :client_clients_opinion_his_products, "Percepción de clientes respecto a los productos del cliente: " %></label>
+                    <div class="col-sm-8">
+                      <%= f.select :client_clients_opinion_his_products, ["Malo","Regular","Bueno","Excelente"], {prompt: "Selecciona..."}, {:class => "form-control", required: true} %>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :client_clients_opinion_his_service, "Percepción de clientes respecto al servicio del establecimiento: " %></label>
+                    <div class="col-sm-8">
+                      <%= f.select :client_clients_opinion_his_service, ["Malo","Regular","Bueno","Excelente"], {prompt: "Selecciona..."}, {:class => "form-control", required: true} %>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :client_workers, "Aproximado de trabajadores en el establecimiento" %></label>
+                    <div class="col-sm-8">
+                      <%= f.select :client_workers, ["1-5","5-10","10-50","Más de 50"], {prompt: "Selecciona..."}, {:class => "form-control", required: true} %>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :client_branches, "Número de establecimientos" %></label>
+                    <div class="col-sm-8">
+                      <%= f.select :client_branches, ["1","2-3","4-5","6-10","11-20","21-50","Más de 50"], {prompt: "Selecciona..."}, {:class => "form-control", required: true} %>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :global_commerce, "Valoración general del comercio" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :global_commerce, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <h3>3.- Valoración del producto</h3>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :product_quality, "Calidad" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :product_quality, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :product_assortment, "Surtido" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :product_assortment, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :product_price, "Precio" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :product_price, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :product_taste, "Sabor" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :product_taste, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :product_packing, "Empaque del producto" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :product_packing, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :packing_aspect, "Aspecto del empaque" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :packing_aspect, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :product_shipping_packing, "Empaque externo de envío" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :product_shipping_packing, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :product_expiration, "Problemas con la expiración del producto" %></label>
+                    <div class="col-sm-8">
+                      <%= f.text_area :product_expiration, {:class => "form-control", :maxlength => 250} %>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :need_new_products, "Disposición a experimentar productos nuevos" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :need_new_products, {min: 0, max: 1000, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 1000 (0 si no desea, del 1 al 1000 si compraría, el número es la cantidad).</span>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <h3>4.- Valoración del servicio</h3>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :visits, "¿Son apropiadas el número de visitas de nuestro distribuidor?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.text_area :visits, {:class => "form-control", :maxlength => 250} %>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :worker_uniform, "¿Nuestro distribuidor porta su uniforme cuando lo visita?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.text_area :worker_uniform, {:class => "form-control", :maxlength => 250} %>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :distributor, "¿Qué tan cordial considera el trato del distribuidor?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :distributor, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :worker, "¿Qué tan cordial es el trato con el personal directo?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :worker, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :shipment, "¿Qué tan conforme está con el servicio de entrega?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :shipment, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :shipment_time, "¿Qué tan apropiados son los tiempos de entrega?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :shipment_time, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :global_service, "Valoración general del servicio" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :global_service, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <h3>5.- Valoración Web</h3>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :web_easy, "¿Qué tan fácil es ingresar al sitio?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :web_easy, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :purchase_system, "¿Cómo califica el sistema de compra?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :purchase_system, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :payment_system, "¿Cómo califica el sistema de pagos?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :payment_system, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :purchase_follow_up, "¿Cómo califica el seguimiento de sus compras?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :purchase_follow_up, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :global_web, "En general ¿Qué tan amigable es nuestro sitio web?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.number_field :global_web, {min: 1, max: 10, :class => "form-control", :placeholder => "0", required: true} %>
+                      <span class="help-block m-b-none">Califica con un numero del 1 al 10.</span>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label"><%= f.label :extra_comments, "¿Algún comentario extra que tenga?" %></label>
+                    <div class="col-sm-8">
+                      <%= f.text_area :extra_comments, {:class => "form-control"} %>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-1">
+                        <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
+                        <%= f.submit :Guardar, :class => "btn btn-primary", data: {confirm: "Estás seguro(a) de guardar la información?"} %>
+                    </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+     </div>
+
+  </div>
+</div>

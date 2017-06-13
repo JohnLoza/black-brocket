@@ -1,0 +1,51 @@
+<% provide(:title, "Visitas") %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Visitas de cliente", labels: ['Clientes', 'Visitas'], links: [admin_clients_path]} %>
+
+<div class="wrapper wrapper-content">
+  <div class="row animated fadeInRight">
+    <div class="row">
+
+      <div class="col-lg-12">
+        <%= render "/shared/client_head_bar" %>
+      </div>
+
+      <div class="col-lg-12">
+        <div class="ibox">
+          <div class="ibox-content text-center">
+              <h3 class="m-b-xxs">Listado de tus Visitas</h3>
+              <small>Aquí encontrarás la lista de todas las visitas que ha recibido este cliente</small>
+          </div>
+        </div>
+       </div>
+
+       <% @visits.each do |v| %>
+         <div class="col-lg-4 col-sm-6">
+            <div class="contact-box">
+                <div class="col-sm-12">
+                    <h3><strong>Fecha de visita</strong></h3>
+                    <p><i class="fa fa-calendar"></i> <%=l(v.visit_date, format: :long)%></p>
+                    <address>
+                        <strong>Visita reconocida por el cliente:</strong>
+                        <% if v.client_recognizes_visit %>
+                          <i class="fa fa-check fa-2x" style="color: #8BC34A;"></i>
+                        <% elsif v.client_recognizes_visit == false %>
+                          <i class="fa fa-close fa-2x" style="color: #F44336;"></i>
+                        <% end %><br>
+                        El trato del distribuidor fue: <%=v.treatment_answer%><br>
+                        Comentarios extra: <%=v.extra_comments%><br>
+                    </address>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+          </div>
+       <% end %>
+
+       <div class="col-md-12">
+         <div class="pull-right">
+           <%= will_paginate @visits, renderer: BootstrapPagination::Rails %>
+         </div>
+       </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+# See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+#
+User-agent: Googlebot
+Disallow: /admin/
+Disallow: /distributor/
+
+User-agent: Googlebot-Mobile
+Disallow: /admin/
+Disallow: /distributor/
+
+User-agent: Googlebot-Image
+Disallow: /admin/
+Disallow: /distributor/
+
+User-agent: *
+Disallow: /

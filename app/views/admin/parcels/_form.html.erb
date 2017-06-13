@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+          <div class="ibox-title">
+              <h5>Datos de la paquetería</h5>
+              <div class="ibox-tools">
+                  <a class="collapse-link">
+                      <i class="fa fa-chevron-up"></i>
+                  </a>
+              </div>
+          </div>
+          <div class="ibox-content">
+            <%= form_for(@parcel, url: @url, method: @method, :html => {:class => 'form-horizontal'}) do |f| %>
+            <%= render :partial=>'/shared/error_messages', locals:{entity: @parcel} %>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :parcel_name, "Nombre" %></label>
+                <div class="col-sm-10">
+                  <%= f.text_field :parcel_name, :class => 'form-control', :placeholder => "ej. Estafeta", :maxlength => 50, :required => true %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :cost, "Costo" %></label>
+                <div class="col-sm-10">
+                  <%= f.number_field :cost, :class => 'form-control', min: 0, max: 999999, step: 0.01, :required => true, :placeholder => "249.99" %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :tracking_url, "Url de seguimiento" %></label>
+                <div class="col-sm-10">
+                  <%= f.text_field :tracking_url, :class => 'form-control', :maxlength => 250, :required => true, :placeholder => "http://www.estafeta.com/Rastreo/" %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :image, "Imagen de paquetería" %></label>
+                <div class="col-sm-7">
+                  <%= f.file_field :image, :multiple => false %><br>
+                </div>
+              </div>
+              <div class="hr-line-dashed"></div>
+              <div class="form-group">
+                  <div class="col-sm-4 col-sm-offset-2">
+                      <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
+                      <%= f.submit "Guardar cambios", :class => "btn btn-primary" %>
+                  </div>
+              </div>
+            <% end %>
+          </div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,313 @@
+<% provide(:title, "Detalles de Visita") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Detalles de visita", labels: ['Clientes', 'Visitas', 'Detalles'], links: [admin_clients_path, admin_supervisor_visits_path(params[:id])]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="ibox">
+          <div class="ibox-content text-center">
+              <h3 class="m-b-xxs">Detalle de la visita del supervisor</h3>
+              <small>Aquí encontrarás el detalle del cuestionario realizado al cliente durante la visita del supervisor</small>
+          </div>
+    </div>
+
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>Nuevo formulario de visita al supervisor <small>Contesta el siguiente formulario honestamente</small></h5>
+        <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+        </div>
+      </div>
+      <div class="ibox-content">
+        <div class="form-horizontal">
+          <h3>1.- Referencia del cliente</h3>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Tipo de cliente: </label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.client_type %>
+              </div>
+          </div>
+          <!--<div class="form-group">
+            <label class="col-sm-4 control-label">Perfil del cliente:</label>
+              <div class="col-sm-8 m-t-7">
+              </div>
+          </div>-->
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Ubicación:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.location %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Tamaño:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.local_size %>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Instalaciones:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.instalations %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Infraestructura:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.infrastructure %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Visibilidad o exposición:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.visibility %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Tráfico automovilístico:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.motor_traffic %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Tráfico peatonal:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.walker_traffic %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Valoración general del perfil:</label>
+              <div class="col-sm-8 m-t-7">
+                 <%= @detail.global_profile %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="hr-line-dashed"></div>
+          <h3>2.- Valoración comercial</h3>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Años en el mercado:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.years_commerce %>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Flujo de consumidores:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.consumers %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10 y hora de visita.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Percepción de clientes respecto a nuestro producto:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.client_clients_opinion_our_product %>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Percepción de clientes respecto a los productos del cliente:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.client_clients_opinion_his_products %>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Percepción de clientes respecto al servicio del establecimiento:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.client_clients_opinion_his_service %>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Aproximado de trabajadores en el establecimiento:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.client_workers %>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Número de establecimientos:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.client_branches %>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Valoración general del comercio:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.global_commerce %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="hr-line-dashed"></div>
+          <h3>3.- Valoración del producto</h3>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Calidad:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.product_quality %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Surtido:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.product_assortment %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Precio:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.product_price %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Sabor:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.product_taste %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Empaque del producto</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.product_packing %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Aspecto del empaque:</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.packing_aspect %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Empaque externo de envío</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.product_shipping_packing %>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Problemas con la expiración del producto</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.product_expiration %>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Disposición a experimentar productos nuevos</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.need_new_products %>
+                <small class="help-block m-b-none">Califica con un numero del 1 al 1000 (0 si no desea, del 1 al 1000 si compraría, el número es la cantidad).</small>
+              </div>
+          </div>
+          <div class="hr-line-dashed"></div>
+          <h3>4.- Valoración del servicio</h3>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">¿Son apropiadas el número de visitas de nuestro distribuidor?</label>
+              <div class="col-sm-8 m-t-7">
+                <%= @detail.visits %>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">¿Nuestro distribuidor porta su uniforme cuando lo visita?</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.worker_uniform%>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">¿Qué tan cordial considera el trato del distribuidor?</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.distributor%>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">¿Qué tan cordial es el trato con el personal directo?</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.worker%>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">¿Qué tan conforme está con el servicio de entrega?</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.shipment%>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">¿Qué tan apropiados son los tiempos de entrega?</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.shipment_time%>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Valoración general del servicio</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.global_service%>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="hr-line-dashed"></div>
+          <h3>5.- Valoración Web</h3>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">¿Qué tan fácil es ingresar al sitio?</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.web_easy%>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">¿Cómo califica el sistema de compra?</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.purchase_system%>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cómo califica el sistema de pagos?</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.payment_system%>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">¿Cómo califica el seguimiento de sus compras?</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.purchase_follow_up%>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">En general ¿Qué tan amigable es nuestro sitio web?</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.global_web%>
+                <small class="help-block m-b-none">Calificación recibida del 1 al 10.</small>
+              </div>
+          </div>
+          <div class="hr-line-dashed"></div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">¿Algún comentario extra que tenga?</label>
+              <div class="col-sm-8 m-t-7">
+                <%=@detail.extra_comments%>
+              </div>
+          </div>
+          <div class="hr-line-dashed"></div>
+          <div class="form-group">
+              <div class="col-sm-4 col-sm-offset-1">
+                  <a class="btn btn-white" href="javascript:history.back();">Regresar</a>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

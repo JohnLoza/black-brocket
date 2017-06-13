@@ -1,0 +1,11 @@
+<% provide(:title, "Tips") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Nuevo Tip", labels: ['Tips y Recetas', 'Nuevo Tip o Receta'], links: [admin_tips_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+	  <%= render 'form' %>
+  </div>
+</div>
+<br>
+<!--End content whit animation-->

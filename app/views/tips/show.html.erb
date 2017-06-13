@@ -1,0 +1,98 @@
+<% provide(:title, "Tips") %>
+<div class="show-tips-container">
+  <h1 class="module-title long-up-2x">
+    <%= link_to(tips_path, :class => "darklink") do %>
+      <small><span class="icon-arrow-left"></span></small>
+    <% end %>
+    <%= @tip.title %></h1>
+  <div class="row divider-row-top">
+    <div class="col-md-12">
+        <% if !@tip.video.blank? %>
+          <video controls>
+            <source src="<%= @tip.video.url %>" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        <% elsif !@tip.image.blank? %>
+          <%= image_tag(@tip.image.url , { :class => "img-responsive full-width show-tip-image", :align =>"left" }) %>
+        <% end %>
+
+        <!-- For heroku not crashing -->
+        <% file_path = file_path = "app/views" + @tip.description_render_path.sub("/shared/tips_recipes/", "/shared/tips_recipes/_")
+        if !File.exists?(file_path)
+          File.open(file_path, "w"){|file| file.write("<h1>Tip and or Recipe</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis facilisis tempor libero quis sollicitudin. Sed volutpat risus nibh, vel scelerisque nunc dapibus ac. Cras porta magna lobortis, rutrum ante ac, viverra justo. Vivamus sed orci risus. Quisque viverra eros leo, quis fermentum ante cursus id. Integer urna ligula, dapibus id purus id, tempus porta magna. Pellentesque ut purus ultrices, tincidunt odio nec, sollicitudin arcu. Nulla dui turpis, sodales quis dui sed, consectetur vestibulum lorem. Maecenas libero lacus, pellentesque non arcu non, facilisis suscipit massa.</p>") }
+        end %>
+        <!-- For heroku not crashing -->
+        <%= render @tip.description_render_path %>
+    </div>
+  </div>
+
+  <div class="row divider-row-top long-up">
+    <div class="col-md-12">
+      <div class="panel-group long">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+                Nuevo Comentario
+            </h4>
+          </div>
+          <div class="panel-body">
+            <%= form_for(TipRecipeComment.new, url: create_tip_comment_path(@tip.id),
+                        method: :post, remote: true,
+                        html: {id: "form-#{@tip.id}", :class => "form"}) do |f| %>
+
+              <!--<%= f.label :description, "Nuevo comentario" %>-->
+              <%= f.text_area :description, :class => "text-area form-control", :maxlength => 250 %>
+              <a onclick="verify_message(this)" class="btn btn-custom-1 pull-right">Comentar</a>
+              <%= f.submit nil, :class => "commit", style: "display: none;" %>
+            <% end %>
+          </div>
+        </div>
+
+        <div id="comments-<%=@tip.id%>">
+          <%= render partial: "comment", collection: @comments %>
+          <div class="row">
+            <div class="col-md-12">
+               <div class="pull-right">
+                 <%= will_paginate @comments, renderer: BootstrapPagination::Rails %>
+               </div>
+             </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="devider m-b-xxl">
+        <%= image_tag("divider-down.svg") %>
+      </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+  // verify message before submit to not save empty comments
+  function verify_message(triger_object){
+    form = $(triger_object).parent();
+    description_field = form.find("#tip_recipe_comment_description");
+    if (description_field.val().trim() != ""){
+      form.find(".commit").click();
+    }
+  }
+</script>
+
+<style media="screen">
+  .text-area{
+    border: solid 1px #888;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  .show-tip-image{
+    width: 400px;
+    margin-right: 40px;
+    margin-bottom: 10px;
+  }
+</style>

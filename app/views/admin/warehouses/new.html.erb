@@ -1,0 +1,11 @@
+<% provide(:title, "Almacenes") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Registrar almacén", labels: ['Almacenes', 'Registrar almacén'], links: [admin_warehouses_path]} %>
+
+<!--Content whit animation-->    
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+	<%= render 'form' %>
+  </div>
+</div>
+<br>
+<!--End content whit animation-->

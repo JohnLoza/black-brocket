@@ -1,0 +1,125 @@
+<% provide(:title, "Precios") %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Precios del cliente", labels: ['Clientes', 'Precios'], links: [distributor_clients_path]} %>
+
+<div class="wrapper wrapper-content">
+  <div class="row animated fadeInRight">
+    <div class="row">
+
+      <div class="col-lg-12">
+        <%= render "/shared/client_head_bar" %>
+      </div>
+
+      <div class="col-lg-12">
+        <div class="ibox ibox-content">
+          <h3>Listado de precios</h3>
+
+          <% if @client.has_custom_prices %>
+            <div class="alert alert-success">
+              <i class="fa fa-check"></i> El cliente ya cuenta con precios definidos
+            </div>
+          <% else %>
+            <div class="alert alert-warning">
+              <i class="fa fa-warning"></i> El cliente aún no cuenta con precios definidos
+            </div>
+          <% end %>
+
+        </div>
+      </div>
+
+      <div class="col-lg-12">
+        <!--Table-->
+        <div class="ibox">
+            <div class="ibox-content">
+
+                <div class="row m-b-sm m-t-sm">
+                  <div class="col-md-8">
+                    <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Buscar en tabla">
+                  </div>
+                    <div class="col-md-4">
+                      <i class="btn btn-white btn-sm"
+                         onclick="update_product_prices_to_default()">
+                         Establecer todos los precios recomendados
+                      </i>
+                    </div>
+                </div>
+                <%= form_tag(distributor_client_create_prices_path(@client.alph_key)) do %>
+                  <!--<div class="table-responsive">-->
+                  <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15" data-filter=#filter>
+                      <thead>
+                      <tr>
+                          <th>Producto</th>
+                          <th data-sort-ignore="true"></th>
+                          <th data-hide="all">Precio mínimo</th>
+                          <th data-hide="all">Precio recomendado</th>
+                          <th data-hide="all">Precio máximo</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <% @products.each do |p| %>
+                          <tr>
+                            <td><%= label_tag "product[#{p.id}]", p.name %></td>
+                            <% field_value = nil
+                               if @product_prices.any?
+                                 @product_prices.each do |pp|
+                                   if pp.product_id == p.id
+                                     field_value = pp.client_price
+                                     break
+                                   end
+                                 end # @product_prices.each #
+                               end # if @product_prices.any? # %>
+                            <td>
+                              <%= number_field_tag "product[#{p.id}]", field_value,
+                                  {:class => "form-control product-control", max: p.price,
+                                   recommended: p.recommended_price, min: p.lowest_price,
+                                   step: 0.01, required: 'required'} %>
+                                   <span class="help-block m-b-none">Escribe el precio pactado para "<%= p.name %>".</span>
+                            </td>
+                            <td>$ <%= p.lowest_price %></td>
+                            <td>$ <%= p.recommended_price %></td>
+                            <td>$ <%= p.price %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colspan="2">
+                            <br>
+                            <div class="pull-right">
+                              <i class="btn btn-white"
+                                 onclick="update_product_prices_to_default()">
+                                 Establecer todos los precios recomendados
+                              </i>
+                              <%= submit_tag :Guardar, :class => "btn btn-primary" %>
+                            </div>
+                          </td>
+                        </tr>
+                      </tfoot>
+                  </table>
+                <% end %>
+            </div>
+        </div>
+      </div>
+      </br>
+      <!--End Table-->
+
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function update_product_prices_to_default(){
+    products = $(".product-control");
+    for(indx=0; indx<products.length; indx++){
+      p = $(products[indx]);
+      p.val(p.attr("recommended"));
+    }
+    $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Establecido el precio recomendado.'} %>");
+  }
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.footable').footable();
+    });
+</script>

@@ -1,0 +1,185 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+            <h5>Historial de ventas</h5>
+            <div class="ibox-tools">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+            </div>
+      </div>
+      <div class="ibox-content">
+        <%= form_tag(admin_sales_statistics_path, method: :post) do %>
+
+          <div class="row">
+            <div class="col-lg-6">
+              <label>Ventas a recopilar desde (formato: YYYY-MM-DD)</label><br>
+              <div class='input-group date' id='from_date_picker'>
+                  <input type='text' class="form-control" name="from_date" id="from_date" maxlength="20" />
+                  <span class="input-group-addon">
+                      <span class="fa fa-calendar"></span>
+                  </span>
+              </div>
+              <br/>
+            </div>
+            <div class="col-lg-6">
+              <label>Hasta (formato: YYYY-MM-DD)</label><br>
+                <div class='input-group date' id='to_date_picker'>
+                    <input type='text' class="form-control" name="to_date" id="to_date" maxlength="20" />
+                    <span class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                    </span>
+                </div>
+                <br/>
+            </div>
+          </div>
+
+          <label class="leyend">De no estipular fechas para el muestreo,
+            las estadísticas se llevarán acabo con todas las ventas
+            registradas en el sistema, sin importar la fecha de expedición.</label>
+
+          <!-- dates part end -->
+          <div class="hr-line-dashed"></div>
+
+          <label>Seleccionar productos</label>
+          <%= select_tag "products_select",
+              options_from_collection_for_select(@products, "id", "name"),
+              prompt: "Productos", :class => "form-control", onchange:"AddItem('product');" %>
+
+          <br/><div id="selected_products"></div>
+          <label class="leyend">De no elegirse ningún producto, las estadísticas
+            se llevarán a cabo sin excluir ningún producto, es decir, se tomarán
+            en cuenta todos los productos disponibles actualmente en el sistema.</label>
+
+          <!-- products part end -->
+          <div class="hr-line-dashed"></div>
+
+          <label>Seleccionar distribuidores (Hasta un máximo de 8)</label>
+          <%= select_tag "distributors_select",
+              options_from_collection_for_select(@distributors, "id", "username"),
+              prompt: "Distribuidores", :class => "form-control", onchange:"AddItem('distributor');" %>
+
+          <br/><div id="selected_distributors"></div>
+          <label class="leyend">De no elegirse ningún distribuidor, las estadísticas
+            se llevarán acabo sin separar las ventas por distribuidores, es decir,
+            se van a englobar las ventas de todos los distribuidores en la misma gráfica.</label>
+
+          <br>
+          <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal">
+            Top los mejores distribuidores
+          </a>
+          <!-- distributors part end -->
+          <div class="hr-line-dashed"></div>
+
+          <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
+          <%= submit_tag "Realizar grafica", :class => "btn btn-primary" %>
+        <!-- form end -->
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Los mejores distribuidores</h4>
+      </div>
+      <%= form_tag(admin_best_dist_statistics_path, method: :post) do %>
+        <div class="modal-body">
+          <label>Quieres ver los mejores: </label>
+          <%= number_field_tag :dist_quantity, 5, :min => 1, :class => "form-control" %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-white btn-sm" data-dismiss="modal">Cancelar</button>
+          <%= submit_tag "Gráficar", :class => "btn btn-primary"%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  options = {
+                locale: 'es',
+                format: 'YYYY-MM-DD',
+                icons: {
+                    time: 'fa fa-clock-o',
+                    date: 'fa fa-calendar',
+                    up: 'fa fa-chevron-up',
+                    down: 'fa fa-chevron-down',
+                    previous: 'fa fa-chevron-left',
+                    next: 'fa fa-chevron-right',
+                    today: 'fa fa-arrows',
+                    clear: 'fa fa-times'
+                }
+            }
+  $(document).ready(function () {
+      $('#from_date_picker').datetimepicker(options);
+      $('#to_date_picker').datetimepicker(options);
+  });
+
+  function AddItem(name){
+    opt = $('#'+name+'s_select option:selected');
+    var id = opt.val();
+    var item_name = opt.text();
+
+    if (id != ""){
+      if (name == "distributor" && $(".distributor_selected").length == 8){
+        $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Solo se puede elegir un máximo de 8 distribuidores.'} %>");
+        return
+      }
+
+      if ($("#selected_"+name+"_"+id).length == 0){
+
+        $('#selected_'+name+'s').append(""+
+            "<div id='selected_"+name+"_"+id+"' class='btn-success "+name+"_selected'>"+
+              "<input type='hidden' name='"+name+"s[]' value='"+id+"' />"+
+              item_name+
+              "<a onclick='RemoveItem(&quot;"+name+"&quot;,"+id+")' class='white'>"+
+                " <i class='fa fa-times'></i>"+
+              "</a>"+
+            "</div>");
+
+      }
+    }
+  }
+
+  function RemoveItem(name, id){
+    $("#selected_"+name+"_"+id).remove();
+  }
+
+  function ClearDates(check){
+    if(check.checked){
+      $("#from_date").val("");
+      $("#to_date").val("");
+    }
+  }
+
+</script>
+
+<style>
+  .product_selected, .distributor_selected
+  {
+    border-radius: 5px;
+    display: inline-block;
+    margin: 10px;
+    padding: 5px;
+  }
+  .white
+  {
+    color: #fefefe;
+  }
+  .leyend
+  {
+    color:  #3f51b5;
+  }
+</style>
+
+<%= stylesheet_link_tag 'bootstrap-datetimepicker.min', media: 'all' %>
+<%= javascript_include_tag 'bootstrap-datetimepicker-custom' %>

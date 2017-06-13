@@ -1,0 +1,6 @@
+<% if @saved %>
+  $("#name, #message, #email").val("");
+  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Tu mensaje ha sido enviado.'} %>");
+<% else %>
+  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Ocurrió un error al guardar tu mensaje, inténtalo de nuevo.'} %>");
+<% end %>

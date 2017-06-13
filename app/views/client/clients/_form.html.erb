@@ -1,0 +1,374 @@
+<%= form_for @client, url: @url, :html => {id: "client_form"} do |f| %>
+	<%= render :partial=>'/shared/error_messages', locals:{entity: @client} %>
+	<div class="col-md-6">
+		<p>Datos de usuario</p>
+
+		<div class="row">
+			<div class="col-sm-12 form-group">
+				<%= f.label :name, "Nombre(s)" %>
+				<%= f.text_field :name, :class => 'form-control form-control-black', :placeholder => "John",
+						:required => true, :minlength => 2, :maxlength => 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+				<span class="help-text">Solo se admite letras, espacios y puntos para nombre y appellidos</span>
+			</div>
+		</div><!-- .row -->
+
+		<div class="row">
+			<div class="col-sm-12 form-group">
+				<%= f.label :lastname, "Apellido paterno" %>
+				<%= f.text_field :lastname, :class => 'form-control form-control-black', :placeholder => "Black",
+						:required => true, :minlength => 2, :maxlength => 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+			</div>
+		</div><!-- .row -->
+
+		<div class="row">
+			<div class="col-sm-12 form-group">
+				<%= f.label :mother_lastname, "Apellido materno" %>
+				<%= f.text_field :mother_lastname, :class => 'form-control form-control-black', :placeholder => "Smith",
+						:required => true, :minlength => 2, :maxlength => 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+			</div>
+		</div><!-- .row -->
+
+		<div class="row">
+			<div class="col-sm-12 form-group">
+				<%= f.label :birthday, "Fecha de nacimiento (yyyy-mm-dd)" %>
+				<div class='input-group date' id="datetimepicker">
+					<%= f.text_field :birthday, :class => 'form-control form-control-black',
+						:required => true, :maxlength => 10  %>
+					<span class="input-group-addon">
+						<span class="fa fa-calendar"></span>
+					</span>
+				</div>
+				<span class="help-text">Debes ser mayor de 18 años para usar el servicio.</span>
+			</div>
+		</div><!-- .row -->
+
+		<div class="row">
+			<div class="col-sm-12 form-group">
+				<%= f.label :username, "Nombre comercial o de usuario" %>
+				<%= f.text_field :username, :class => 'form-control form-control-black', :placeholder => "John01",
+						:required => true, :minlength => 5, :maxlength => 15 %>
+				<span class="help-text">Mínimo 5 caracteres, máximo 15.</span>
+			</div>
+		</div><!-- .row -->
+
+		<div class="row">
+			<div class="col-sm-12 form-group">
+	      <%= f.label :email, "Correo electrónico" %>
+	      <%= f.email_field :email, :class => 'form-control form-control-black', :placeholder => "john@example.com",
+						:required => true, :maxlength => 50 %>
+			</div>
+		</div><!-- .row -->
+
+		<% if logged_in? %>
+
+			<div class="row">
+				<div class="col-sm-12 form-group">
+		      <%= f.label :email_confirmation, "Confirma tu correo electrónico" %>
+		      <%= f.email_field :email_confirmation, :value => @current_user.email,
+							:class => 'form-control form-control-black', :placeholder => "john@example.com",
+							:required => true, :maxlength => 50, "data-parsley-equalto"=>"#client_email" %>
+				</div>
+			</div><!-- .row -->
+
+			<div class="form-group <%if @client.errors.any?%>parsley-error<%end%>">
+				<div class="row">
+					<div class="col-sm-12 form-group">
+						<%= f.label :password, "Contraseña" %>
+						<%= f.password_field :password, :placeholder => '********', :class => 'form-control form-control-black',
+								:minlength => 6, :maxlength => 20 %>
+						<span class="help-text">Mínimo 6 caracteres y máximo 20.</span>
+					</div>
+				</div><!-- .row -->
+
+				<div class="row">
+					<div class="col-sm-12 form-group">
+						<%= f.label :password_confirmation, "Confirma contraseña" %>
+						<%= f.password_field :password_confirmation, :placeholder => '********', :class => 'form-control form-control-black',
+								"data-parsley-equalto"=>"#client_password" %>
+					</div>
+				</div><!-- .row -->
+			</div>
+
+		<% else %>
+
+			<div class="row">
+				<div class="col-sm-12 form-group">
+					<%= f.label :email_confirmation, "Confirma tu correo electrónico" %>
+					<%= f.email_field :email_confirmation, :class => 'form-control form-control-black', :placeholder => "john@example.com",
+							:required => true, :maxlength => 50, "data-parsley-equalto"=>"#client_email" %>
+				</div>
+			</div><!-- .row -->
+
+			<div class="form-group <%if @client.errors.any?%>parsley-error<%end%>">
+				<div class="row">
+					<div class="col-sm-12 form-group">
+						<%= f.label :password, "Contraseña" %>
+						<%= f.password_field :password, :placeholder => '********', :class => 'form-control form-control-black',
+								:required => true, :minlength => 6, :maxlength => 20 %>
+						<span class="help-text">Mínimo 6 caracteres máximo 20.</span>
+					</div>
+				</div><!-- .row -->
+
+				<div class="row">
+					<div class="col-sm-12 form-group">
+						<%= f.label :password_confirmation, "Confirma contraseña" %>
+						<%= f.password_field :password_confirmation, :placeholder => '********', :class => 'form-control form-control-black',
+								:required => true, "data-parsley-equalto"=>"#client_password" %>
+					</div>
+				</div><!-- .row -->
+			</div>
+
+		<% end # if logged_in? # %>
+	</div>
+
+	<div class="col-md-6">
+	   <p>Teléfono y dirección a donde enviaremos tus productos</p>
+
+	   <div class="row">
+	     <div class="col-sm-12 form-group">
+	       <%= f.label :telephone, "Teléfono fijo" %> -
+
+				 <label>Lada: (<span id="client_lada_preview">
+					 <% if @city_id %>
+					 	 <%= @client.City.LADA %>
+					 <% else %>
+					 	 000
+					 <% end %>
+				 </span>)</label><br>
+
+	       <%= f.text_field :telephone, :class => 'form-control form-control-black', :placeholder => "0000 0000",
+					 		required: true, :minlength => 8, :maxlength => 20 %>
+	     </div>
+	   </div><!-- .row -->
+
+		 <div class="row">
+	     <div class="col-sm-12 form-group">
+	       <%= f.label :cellphone, "Teléfono celular a 10 dígitos" %>
+	       <%= f.text_field :cellphone, :class => 'form-control form-control-black', :placeholder => "000 000 00",
+					 		required: true, :minlength => 10, :maxlength => 25 %>
+	     </div>
+	   </div><!-- .row -->
+
+		 <div class="row">
+	     <div class="col-sm-12 form-group">
+	       <%= render :partial => "/shared/select_state", locals: { states: @states } %>
+	     </div>
+	   </div><!-- .row -->
+
+	   <div class="row">
+	     <div class="col-sm-12 form-group">
+	       <%= render :partial => "/shared/select_city", locals: { cities: @cities } %>
+	     </div>
+	   </div><!-- .row -->
+
+		 <div class="row">
+			 <div class="col-sm-12 form-group">
+				 <%= f.label :street, "Calle" %>
+				 <%= f.text_field :street, :class => 'form-control form-control-black',
+				 			:required => true, :maxlength => 50 %>
+			 </div>
+		 </div><!-- .row -->
+
+		 <div class="row">
+			 <div class="col-sm-12 form-group">
+				 <%= f.label :extnumber, "Número exterior" %>
+				 <%= f.number_field :extnumber, :class => 'form-control form-control-black',
+				 			:required => true, :maxlength => 5, :step => 1, :min => 0 %>
+			 </div>
+		 </div><!-- .row -->
+
+		 <div class="row">
+			 <div class="col-sm-12 form-group">
+				 <%= f.label :intnumber, "Número interior" %>
+				 <%= f.number_field :intnumber, :class => 'form-control form-control-black',
+				 			:maxlength => 4, :step => 1, :min => 0 %>
+			 </div>
+		 </div><!-- .row -->
+
+		 <div class="row">
+			 <div class="col-sm-12 form-group">
+				 <%= f.label :col, "Colonia" %>
+				 <%= f.text_field :col, :class => 'form-control form-control-black',
+				 			:required => true, :maxlength => 50 %>
+			 </div>
+		 </div><!-- .row -->
+
+		 <div class="row">
+			 <div class="col-sm-12 form-group">
+				 <%= f.label :cp, "Código postal" %>
+				 <%= f.text_field :cp, :class => 'form-control form-control-black',
+				 			:required => true, :maxlength => 5 %>
+			 </div>
+		 </div><!-- .row -->
+
+		 <div class="row">
+			 <div class="col-sm-12 form-group">
+				 <%= f.label :street_ref1, "Entre calle" %>
+				 <%= f.text_field :street_ref1, :class => 'form-control form-control-black',
+				 			:required => true, :maxlength => 50 %>
+			 </div>
+		 </div><!-- .row -->
+
+		 <div class="row">
+			 <div class="col-sm-12 form-group">
+				 <%= f.label :street_ref2, "Y calle" %>
+				 <%= f.text_field :street_ref2, :class => 'form-control form-control-black',
+				 			:required => true, :maxlength => 50 %>
+			 </div>
+		 </div><!-- .row -->
+
+		 <div class="row">
+			 <div class="col-sm-12 form-group">
+				 <a href="#" style="color:  #3f51b5;" onclick="openModal();">¿Cómo puedo agregar más sucursales o destinos para mis pedidos?</a>
+			 </div>
+		 </div><!-- .row -->
+
+	   <div class="row">
+	     <div class="col-sm-12 form-group">
+	       <label for="client_photo">Elegir foto de perfil</label>
+				 <img id="uploadPreview" class="img-rounded" style="margin-bottom:10px;max-height: 150px;float: right;"/>
+	       <%= f.file_field :photo, :multiple => false, :onchange => "PreviewImage();", :accept => "image/*" %>
+	     </div>
+	   </div><!-- .row --></br></br>
+
+		 <% if logged_in? %>
+			 <div class="row">
+				 <div class="col-sm-6">
+					 <%= link_to "Cancelar", products_path, :class => "btn btn-block btn-custom-1 m-b-sm" %>
+				 </div>
+				 <div class="col-sm-6">
+					 <%= f.submit "Guardar cambios", :class => "btn btn-block btn-custom-1 m-b-sm" %><br>
+				 </div>
+			 </div><!-- .row -->
+		 <% else %>
+		   <div class="row">
+		     <div class="col-sm-12">
+		       <%= f.submit "Guardar cambios", :class => "btn btn-block btn-custom-1 m-b-sm" %>
+		     </div>
+		   </div><!-- .row -->
+		 <% end %>
+
+	</div>
+
+<% end # form end # %>
+
+<div class="col-sm-12 long-up-2x">
+  <center>
+  	Al crear tu cuenta admites haber leído nuestra<strong>
+  	<%= link_to "Política de Privacidad", privacy_policy_path, target: "_blank" %></strong>
+  	y aceptas nuestros<strong>
+  	<%= link_to "Términos y Condiciones de Uso", terms_of_service_path, target: "_blank" %></strong>.
+  </center>
+</div>
+
+<%= render "shared/modal" %>
+
+<style media="screen">
+	input.parsley-success,
+	select.parsley-success,
+	textarea.parsley-success {
+		color: #468847 !important;
+		background-color: #DFF0D8 !important;
+		border: 1px solid #D6E9C6 !important;
+	}
+
+	input.parsley-error,
+	select.parsley-error,
+	textarea.parsley-error {
+		color: #B94A48 !important;
+		background-color: #F2DEDE !important;
+		border: 1px solid #EED3D7 !important;
+	}
+
+	.parsley-errors-list {
+		margin: 2px 0 3px;
+		padding: 0;
+		list-style-type: none;
+		font-size: 0.9em;
+		line-height: 0.9em;
+		opacity: 0;
+
+		transition: all .3s ease-in;
+		-o-transition: all .3s ease-in;
+		-moz-transition: all .3s ease-in;
+		-webkit-transition: all .3s ease-in;
+	}
+
+	.parsley-errors-list.filled {
+		opacity: 1;
+	}
+</style>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		// Init parsley to validate the formularie
+		$('#client_form').parsley();
+
+		telephone = $("#client_telephone");
+	  cellphone = $("#client_cellphone");
+
+		if(telephone.val() != ""){
+			cellphone.removeAttr('required');
+		}else if (cellphone.val() != "") {
+			telephone.removeAttr('required');
+		}
+
+	  telephone.on('change', function(){
+	    console.log("telephone");
+	    telephone.attr('required', true);
+	    cellphone.removeAttr('required')
+	    if (telephone.val() == ""){
+	      cellphone.attr('required', true)
+	    }
+	  });
+
+	  cellphone.on('change', function(){
+	    console.log("cellphone");
+	    cellphone.attr('required', true);
+	    telephone.removeAttr('required')
+	    if (cellphone.val() == ""){
+	      telephone.attr('required', true)
+	    }
+	  });
+
+		<% max_date = l(18.years.ago, :format => :form_date) %>
+		$('#datetimepicker').datetimepicker({
+				locale: 'es',
+				format: 'YYYY-MM-DD',
+				defaultDate: "<%= max_date %>",
+				viewMode: 'years',
+				icons: {
+						time: 'fa fa-clock-o',
+						date: 'fa fa-calendar',
+						up: 'fa fa-chevron-up',
+						down: 'fa fa-chevron-down',
+						previous: 'fa fa-chevron-left',
+						next: 'fa fa-chevron-right',
+						today: 'fa fa-arrows',
+						clear: 'fa fa-times'
+				}
+		});
+
+		$('#datetimepicker').data("DateTimePicker").maxDate("<%= max_date %>");
+	});
+
+	function PreviewImage() {
+			var oFReader = new FileReader();
+			oFReader.readAsDataURL(document.getElementById("client_photo").files[0]);
+
+			oFReader.onload = function (oFREvent) {
+					document.getElementById("uploadPreview").src = oFREvent.target.result;
+			};
+	};
+
+	function openModal(){
+		modal = $('#modal')
+    modal.find('.modal-title').html("Agregar sucursales y/o destinos");
+    modal.find('.modal-body').html('<%= j render "add_more_branches_or_destinations" %>');
+		modal.modal("show");
+	}
+</script>
+
+<%= stylesheet_link_tag 'bootstrap-datetimepicker.min', media: 'all' %>
+<%= javascript_include_tag 'bootstrap-datetimepicker-custom' %>
+<%= javascript_include_tag 'parsley-custom' %>

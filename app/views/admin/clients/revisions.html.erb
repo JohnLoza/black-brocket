@@ -1,0 +1,40 @@
+<% provide(:title, "Revisiones") %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Revisiones de cliente", labels: ['Clientes', 'Revisiones'], links: [admin_clients_path]} %>
+
+<div class="wrapper wrapper-content">
+  <div class="row animated fadeInRight">
+    <div class="row">
+
+      <div class="col-lg-12">
+        <%= render "/shared/client_head_bar" %>
+      </div>
+
+      <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+          <div class="ibox-title">
+            <h5>Listado de fechas de revisiones realizadas a <strong><%=@client.name%> <%=@client.lastname%></strong></h5>
+            <div class="ibox-tools">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+            </div>
+          </div>
+          <div class="ibox-content">
+            <% @revisions.each do |r| %>
+              <div class="alert alert-info">
+                  <a class="alert-link">Fecha:</a>  <%= l(r.created_at, format: :long) %>.
+              </div>
+            <% end %>
+
+            <div class="col-md-12">
+               <div class="pull-right">
+                 <%= will_paginate @revisions, renderer: BootstrapPagination::Rails %>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

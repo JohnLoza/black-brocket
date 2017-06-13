@@ -1,0 +1,32 @@
+<% provide(:title, "Visitas") %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Visitas", labels: ['Clientes', 'Visitas'], links: [distributor_clients_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="ibox">
+      <div class="ibox-content">
+        <%= link_to "<i class='fa fa-calendar-o'></i> Registrar la fecha de hoy como visita".html_safe,
+            distributor_client_visits_path(@client.alph_key),
+            {:class => "btn btn-primary btn-small m-t pull-right", method: :post}%>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+
+    <div class="ibox">
+      <div class="ibox-content text-center">
+          <h3 class="m-b-xxs">Listado de tus Visitas del cliente <%= @client.name %> <%= @client.lastname %></h3>
+          <small>Aquí encontrarás la lista de todas las visitas que ha recibido este cliente</small>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <%= render partial: "presentation_table" %>
+    </div>
+
+  </div>
+</div>
+<!--End content whit animation-->
+<br><br>

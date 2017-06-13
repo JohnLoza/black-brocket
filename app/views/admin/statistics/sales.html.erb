@@ -1,0 +1,50 @@
+<% provide(:title, "Estadísticas") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Estadísticas", labels: ['Estadísticas', 'Ventas'], links: [admin_statistics_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="ibox-content">
+      <% if !params[:from_date].blank? and !params[:to_date].blank? %>
+        <p class="text-center" style="font_size: 1.5em;">
+          Ventas de productos desde
+          <strong><%= l(Date.parse(params[:from_date]), format: :long) %></strong>
+          Hasta
+          <strong><%= l(Date.parse(params[:to_date]), format: :long) %></strong>
+        </p>
+      <% else %>
+        <h3 class="text-center">Ventas de toda la historia</h3></br>
+      <% end %>
+
+      <%# render "sales_with_distributors_table" %>
+      <h3 class="text-center">Distribuidores</h3>
+      <canvas id="chart_canvas" style="padding-right: 30px;padding-left: 10px;"></canvas>
+
+      <script type="text/javascript">
+        $(document).ready(function(){
+          var ctx = $("#chart_canvas");
+          var myNewChart = new Chart(ctx, {
+              type: "bar",
+              data:{
+                labels: <%= raw @products.map{|p| p.name }.to_json %>,
+                datasets: <%= raw @chartDataSets.to_json %>
+              },
+              options: {
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true
+                    }// ticks
+                  }]// yAxes
+                }// scales
+              }// options
+          });
+        });
+      </script>
+
+    </div>
+  </div>
+</div>
+</br></br>
+
+<%= javascript_include_tag 'Chart.min' %>

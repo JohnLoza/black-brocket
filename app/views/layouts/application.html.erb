@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= csrf_meta_tags %>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= yield(:title) %> | BlackBrocket</title>
+
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+
+</head>
+<body style="padding-top: 50px;">
+  <div id="container">
+
+    <%= render "shared/clients/navbar" %>
+
+    <div id="body">
+      <div class="container">
+        <!--Alerts-->
+        <div id="dismissible_alerts">
+          <!-- Should have only 1 flash at the same time -->
+          <% flash.each do |message_type, message| %>
+            <%= render partial: "/shared/dismissible_alert", locals: {message_type: message_type, message: message.html_safe} %>
+          <% end %>
+        </div>
+        <!--End Alerts-->
+
+        <%= yield %>
+        <% debug(params) if Rails.env.development? %>
+      </div>
+    </div>
+
+    <!-- Footer start -->
+    <footer id="footer">
+      <div class="container">
+        <div class="row" style="padding-bottom: 5px;">
+          <div class="col-sm-12">
+            <p class="copyright pull-left">
+             Copyright &copy; BlackBrocket <%=Time.now.year%>
+            </p>
+            <p class="pull-left" style="margin-left: 2em;">
+              <%= link_to "Quiero ser distribuidor", distributor_request_path %>
+            </p>
+            <ul class="social-links pull-right">
+              <% social = SocialNetwork.all %>
+              <% social.each do |s| %>
+                <li><a href="<%= s.url %>"><%= s.icon.html_safe %></a></li>
+              <% end %>
+            </ul>
+          </div>
+        </div><!-- .row -->
+      </div><!-- .container -->
+      <div class="row position-relative margin-0" style="border-top: 1px dashed #585858;padding-bottom: 10px;"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-4">
+            <ul class="pull-left" style="text-align: left;list-style-type: none;padding-left: 0px;">
+              <!--<li><%= link_to "Política de Privacidad", privacy_policy_path %></li>
+              <li><%= link_to "Términos y Condiciones de Uso", terms_of_service_path %></li>-->
+              <% details = FooterExtraDetail.all %>
+              <% details.each do |detail| %>
+                <li><%= detail.detail %></li>
+              <% end #details.each#%>
+            </ul>
+          </div>
+          <div class="col-sm-4">
+              <b class="pull-left">Legal:</b>
+              <ul class="pull-left" style="text-align: left;list-style-type: none;">
+                <li><%= link_to "Política de Privacidad", privacy_policy_path %></li>
+                <li><%= link_to "Términos y Condiciones de Uso", terms_of_service_path %></li>
+              </ul>
+          </div>
+        </div><!-- .row -->
+      </div><!-- .container -->
+    </footer>
+    <!-- Footer end -->
+
+  </div>
+</body>
+</html>

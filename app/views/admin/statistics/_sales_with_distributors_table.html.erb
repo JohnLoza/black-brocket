@@ -1,0 +1,33 @@
+<div class="table-responsive" style="border: dashed 1px #E2E2E2;">
+  <table class="table table-bordered" style="margin: 0px;">
+    <thead>
+      <th>
+        Distribuidor/Producto
+      </th>
+      <% params[:product_names].each do |p_name| %>
+        <th>
+          <%= p_name %>
+        </th>
+      <% end %>
+    </thead>
+
+    <tbody>
+      <% dist_cont = 0 %>
+      <% params[:distributor_names].each do |d_name| %>
+        <tr>
+          <td>
+            <%= d_name %>
+          </td>
+          <% params[:products].each do |p| %>
+            <td>
+              <%= @quantities[dist_cont][p] %>
+            </td>
+          <% end %>
+        </tr>
+
+        <% dist_cont += 1 %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+</br>

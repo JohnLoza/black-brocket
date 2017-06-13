@@ -1,0 +1,5 @@
+<%= form_for :order, url: admin_cancel_order_path(0), method: :delete, html: {id: "cancel_form"} do |f| %>
+  <%= f.label :cancel_description, "Descripción del por qué se cancela esta orden/pedido" %>
+  <%= f.text_area :cancel_description, :class => "form-control m-b", :placeholder => "Escribe la razón de la cancelación...", required: true %>
+  <%= f.submit "Cancelar la orden", :class => "btn btn-danger btn-sm", data:{confirm: "¿Seguro(a) de cancelar la orden?"} %>
+<% end %>

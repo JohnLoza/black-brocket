@@ -1,0 +1,5 @@
+  <%= form_for(:prod_question, url: product_ask_path(prod_id), remote: true) do |f| %>
+    <h3 class="iconbox-title">Realiza una pregunta aquí</h3>
+    <%= f.text_area :description, { :class => 'form-control form-control-black', maxlenght: 250, :placeholder => "Escribe tu pregunta...", style: "padding: 5px;margin-bottom: 10px;", :required => true } %>
+    <%= f.submit "Preguntar", { :class => "btn btn-custom-1 pull-right" } %>
+  <% end %>

@@ -1,0 +1,33 @@
+<%= form_for(:warehouse_product,
+    url: admin_prepare_product_for_shipment_path(@warehouse.alph_key, "0x0"),
+    remote: true, method: :post, :html => {:id => "existence-form"}) do |f| %>
+
+    <%= f.label :quantity, "Cantidad a agregar en existencia" %>
+    <%= f.number_field :quantity, { :class => "form-control", :placeholder => "0",
+                                    min: 0, max: 999999, step: 0, required: true} %></br>
+
+    <%= f.label :batch, "Número de lote" %>
+    <%= f.text_field :batch, :class => "form-control", maxlenght: 20, required: true,
+        onchange:"$('#product_qr_batch').val(this.value);" %></br>
+
+    <%= f.label :expiration_date, "Fecha de caducidad" %><small> - 2020-11-15 (año-mes-día)</small>
+    <%= f.text_field :expiration_date, { :class => "form-control",
+        :placeholder => "2020-11-15 (año-mes-día)", maxlenght: 20, required: "true",
+        onchange:"$('#product_qr_expiration_date').val(this.value);"} %></br>
+
+    <%= f.hidden_field :name %>
+    <%= f.submit "Agregar producto a los prepatativos de #{@warehouse.name}", :class => "btn btn-primary btn-sm" %>
+
+<% end %>
+
+<br>
+<%= form_for(:product_qr,
+    url: admin_print_qr_path,
+    method: :post, :html => {target: "_blank"}) do |f| %>
+
+    <%= f.hidden_field :warehouse, value: @warehouse.alph_key %>
+    <%= f.hidden_field :product %>
+    <%= f.hidden_field :batch %>
+    <%= f.hidden_field :expiration_date %>
+    <%= f.submit "Imprimir".html_safe, :class => "btn btn-info btn-sm" %>
+<% end %>

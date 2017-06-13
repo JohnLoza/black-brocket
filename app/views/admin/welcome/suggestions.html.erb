@@ -1,0 +1,37 @@
+<% provide(:title, "Comentarios y Sugerencias") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Comentarios y Sugerencias", labels: ['Comentarios y Sugerencias']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+
+  <div class="row">
+
+    <div class="ibox">
+        <div class="ibox-content text-center">
+            <h3 class="m-b-xxs">Listado de comentarios y sugerencias</h3>
+            <small>Aquí encontrarás todos los comentarios y sugerencias recibidos desde la página principal.</small>
+        </div>
+    </div>
+
+    <div class="ibox-content">
+      <h3>Comentarios y Sugerencias</h3>
+      <hr/>
+
+      <% @suggestions.each do |s| %>
+        <p><b>Nombre:</b> <%= s.name %></p>
+        <p><b>Mensaje:</b> <%= s.message %></p>
+        <p><b>E-mail:</b> <%= s.email %></p>
+        <div class="hr-line-dashed"></div>
+        <%= link_to "Establecer como respondido", admin_answer_suggestion_path(s.id), :class => "btn btn-primary", method: :post %>
+        <%#= form_tag(admin_answer_suggestion_path(s.id), method: :post) do %>
+          <%#= text_area_tag :response, "", { :class => "form-control", :placeholder => "Inserta tu respuesta a #{s.name} aquí...", :required => true } %></br>
+          <%#= submit_tag "Enviar respuesta", :class => "btn btn-primary btn-sm", data: { confirm: "Estás seguro de enviar tu respuesta? esta acción no se puede deshacer." } %>
+        <%# end %><br/><br/>
+      <% end %>
+
+      <%= will_paginate @suggestions, renderer: BootstrapPagination::Rails %>
+    </div>
+
+  </div>
+</div>
+<!--End content whit animation-->

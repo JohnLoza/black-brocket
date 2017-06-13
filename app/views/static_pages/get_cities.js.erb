@@ -1,0 +1,3 @@
+$('#select_city').html('<%= escape_javascript(
+                  render :partial => "/shared/select_city",
+                  locals: { cities: @cities } ) %>');

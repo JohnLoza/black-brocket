@@ -1,0 +1,41 @@
+<% provide(:title, "Dar de baja mi cuenta") %>
+<div class="show-tips-container">
+  <div class="row">
+    <div class="col-md-12">
+        <center>
+          <h1 class="module-title long-up-2x">Dar de baja mi cuenta</h1>
+      		<h2 class="module-subtitle">Está a punto de dar de baja su cuenta.</h2>
+        </center>
+        <br><br>
+    </div>
+  </div>
+
+  <div class="row text-center">
+    <span class="icon-user-unfollow" style="font-size: 140px;"></span><br><br>
+    <p>Para dar de baja su cuenta y con fines de seguridad es necesario que nos proporciones tu contraseña.</p><br>
+  </div>
+
+  <%= form_tag(client_destroy_account_path(@current_user.alph_key)) do %>
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+    <div class="col-sm-5">
+      <label style="pull-left">Contraseña:</label>
+      <%= password_field_tag :password, nil, :class => "input form-control", :maxlength => 20, :placeholder => "**********" %>
+    </div>
+    <div class="col-sm-3" style="padding-top: 37px;">
+      <%= submit_tag "Dar de baja mi cuenta", :class => "btn btn-danger btn-sm btn-block", data: {confirm: "Estas seguro(a)? esto es irreversible."} %>
+    </div>
+    <div class="col-sm-2">
+    </div>
+  </div>
+  <% end %>
+
+  <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="devider m-b-xxl">
+          <%= image_tag("divider-down.svg") %>
+        </div>
+      </div>
+  </div>
+</div>

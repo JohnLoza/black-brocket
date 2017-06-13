@@ -1,0 +1,49 @@
+<div class="social-feed-box">
+
+    <div class="pull-right social-action dropdown">
+        <button data-toggle="dropdown" class="dropdown-toggle btn-white">
+            <i class="fa fa-angle-down"></i>
+        </button>
+        <ul class="dropdown-menu m-t-xs">
+            <li class="disabled"><a href="#">Eliminar</a></li>
+        </ul>
+    </div>
+    <div class="social-avatar">
+    	<h3> <%= question.Product.name %> </h3>
+        <a href="" class="pull-left">
+          <% if !question.Client.photo.blank? %>
+            <%= image_tag question.Client.photo.url(:mini) %>
+          <% else %>
+            <%= image_tag("user_avatar.png") %>
+          <% end %>
+        </a>
+        <div class="media-body">
+            <a href="#">
+                <%= question.Client.username %>
+            </a>
+            <small class="text-muted"><%= l(question.created_at, format: :long) %></small>
+        </div>
+    </div>
+    <div class="social-body">
+        <p><%= question.description %></p>
+    </div>
+    <div class="social-footer">
+        <div class="social-comment">
+            <div class="social-comment">
+              <a href="" class="pull-left">
+                <% if !question.Answer.SiteWorker.photo.blank? %>
+                  <%= image_tag question.Answer.SiteWorker.photo.url(:mini) %>
+                <% else %>
+                  <%= image_tag("user_avatar.png") %>
+                <% end %>
+              </a>
+              <div class="media-body">
+                  <a href="#"><%= question.Answer.SiteWorker.username %></a>
+                     <%= question.Answer.description %>
+                  <br>- <small class="text-muted"><%= l(question.Answer.created_at, format: :long) %></small>
+              </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,23 @@
+<% provide(:title, "Preguntas respondidas") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Preguntas respondidas", labels: ['Preguntas de los productos', 'Preguntas respondidas'], links: [admin_product_questions_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeIn">
+  <div class="row">
+
+    <div class="ibox">
+        <div class="ibox-content text-center">
+            <h3 class="m-b-xxs">Lista de preguntas y respuestas</h3>
+            <small>Aquí verás las respuestas a las preguntas que han realizado los clientes.</small>
+        </div>
+    </div>
+
+    <% @questions.each do |q| %>
+      <%= render partial: "question_and_answer", locals: { question: q } %>
+    <% end %>
+    <br><br>
+
+    <%= will_paginate @questions, renderer: BootstrapPagination::Rails %>
+
+  </div>
+</div><br>

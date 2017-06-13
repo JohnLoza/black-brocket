@@ -1,0 +1,10 @@
+<div id="select_city">
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Población</label>
+    <div class="col-sm-10">
+      <%= select_tag :city_id, options_from_collection_for_select(
+          cities, "id", "name", :selected => @city_id),
+          prompt: "Selecciona...", :class => "input form-control", :required => true %>
+    </div>
+  </div>
+</div>

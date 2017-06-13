@@ -1,0 +1,77 @@
+<% provide(:title, "Órdenes") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Órdenes", labels: ['Órdenes', 'Captura de Detalles'], links: [admin_orders_path + "?type=CAPTURE_BATCHES"]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
+  <div class="row">
+
+    <!-- HEAD BAR -->
+      <div class="ibox-content" style="display: block;">
+        <div class="row">
+          <div class="col-sm-12">
+            <h3 class="m-t-none m-b"><strong>Orden:</strong> <%= @order.alph_key %></h3>
+            <div class="table-responsive">
+              <table class="table">
+                  <tr>
+                    <td><strong><i class="fa fa-key"></i> Identificador:</strong></td>
+                    <td><strong><i class="fa fa-user"></i> Cliente:</strong></td>
+                    <td><strong><i class="fa fa-usd"></i> Total a pagar: </strong></td>
+                    <td><strong><i class="fa fa-cube"></i> Status:</strong></td>
+                    <td><strong><i class="fa fa-calendar-o"></i> Creado el:</strong></td>
+                    <td><strong><i class="fa fa-wrench"></i> Acciones:</strong></td>
+                  </tr>
+                  <tr>
+                    <td><%= @order.alph_key %></td>
+                    <td><%= @order.Client.username %></td>
+                    <td><%= @order.total %></td>
+                    <td>
+                      <span class="<%=@label_styles[@order.state]%>">
+                        <%=t(@order.state)%>
+                      </span>
+                    </td>
+                    <td><%= l(@order.created_at, format: :long) %></td>
+                    <td>
+                      <%= link_to "<i class='fa fa-eye'></i> Ver pedido".html_safe,
+                          admin_order_details_path(@order.alph_key),
+                          :class => "btn btn-white btn-sm", target: "_blank" %>
+                    </td>
+                  </tr>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- HEAD BAR -->
+    <br>
+    <!-- CONTENT -->
+      <div class="ibox-content">
+
+        <%= form_tag(admin_capture_details_path(@order.alph_key)) do %>
+          <div id="form-content">
+            <%= render "detail_fields" %>
+          </div>
+
+          <a class="btn btn-white" onclick="add_fields_to_form();">
+            <i class="fa fa-plus"></i>
+            Añadir campos
+          </a>
+
+          <%= submit_tag :Guardar, :class => "btn btn-primary", data: {
+            confirm: "Estas seguro(a) de guardar esta información?"} %>
+        <% end # form_for # %>
+
+      </div>
+    <!-- CONTENT -->
+
+  </div>
+</div>
+<!--End content whit animation-->
+</br></br>
+
+<script type="text/javascript">
+  function add_fields_to_form(){
+    var form_content = $("#form-content");
+    form_content.append('<%= j render "detail_fields" %>');
+  }
+</script>

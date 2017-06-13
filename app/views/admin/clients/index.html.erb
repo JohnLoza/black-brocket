@@ -1,0 +1,33 @@
+<% provide(:title, "Clientes") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Clientes", labels: ['Clientes']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="ibox">
+      <div class="ibox-content">
+        <h3 class="m-b">Lista de clientes</h3>
+        <p>Aquí se te mostrará un listado de todos los clientes registrados en la página web.</p>
+        <p>En la búsqueda, separa los parámetros con "," ejemplo: Guadalajara, Querétaro, C0009 </p>
+
+
+        <%= form_for(:client, url: admin_clients_path, method: :get) do |f| %>
+          <div class="input-group">
+            <%= f.text_field :search, { :class => "input form-control", :placeholder => "Buscar cliente(s) en toda la lista...", :maxlength => 50 } %>
+            <span class="input-group-btn">
+            <%= f.submit "Buscar".html_safe, :class => "btn btn btn-success" %>
+            </span>
+          </div>
+       <% end %>
+      </div>
+    </div>
+
+    <div class="row">
+      <%= render partial: "presentation_table" %>
+    </div>
+
+  </div>
+</div>
+<!--End content whit animation-->
+<br><br>

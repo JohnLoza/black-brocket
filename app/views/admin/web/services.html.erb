@@ -1,0 +1,81 @@
+<% provide(:title, "Cuadros de servicios") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Servicios", labels: ['Web', 'Servicios'], links: [admin_web_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <!--Content-->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+          <div class="ibox-title">
+               <h5>Cambia los cuadros de servicios</h5>
+               <div class="ibox-tools">
+                   <a class="collapse-link">
+                       <i class="fa fa-chevron-up"></i>
+                   </a>
+               </div>
+          </div>
+          <div class="ibox-content">
+            <div class="row">
+              <div class="col-md-12">
+                <small>Aquí puedes editar los textos de servicios de la página de bienvenida (Máximo 110 caracteres)</small><br><br>
+              </div>
+
+              <% @infos.each do |info| %>
+                <%= form_for info, url: admin_web_service_path(info.id), :html => {:class => 'form-horizontal'}, method: :put do |f| %>
+
+                  <div class="col-md-6 col-lg-3" style="border-right: solid #E7EAEC 1px;">
+                    <br>
+                    <% case info.name
+                      when "HIGH_QUALITY"%>
+                        <h4>Alta calidad</h4>
+                    <%when "DISCOUNTS"%>
+                        <h4>Descuentos a cafeterías</h4>
+                    <%when "EASY_SHOPPING"%>
+                        <h4>Facilidad de compra</h4>
+                    <%else%>
+                        <h4>Distribuidores en varias zonas</h4>
+                    <%end%>
+                    <%# f.text_area :description, :class => "form-control summernote" %>
+                    <%= f.text_area :body, :class => "form-control", :maxlength => 110 %><br>
+                    <%= f.submit "Guardar", :class => "btn btn-primary pull-right" %>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="hr-line-dashed pro-mobile"></div>
+
+                <% end %>
+              <% end %>
+            </div>
+            <div class="hr-line-dashed no-mobile"></div>
+            <div class="form-group">
+                <div class="col-sm-4">
+                    <%= link_to "Regresar".html_safe, admin_web_path, :class => "btn btn-white" %>
+                </div>
+            </div>
+            <br><br>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!--End content whit animation-->
+<br><br>
+<style>
+  .navbar-default{ z-index: 0 !important; }
+  textarea{ min-height: 150px; }
+</style>
+
+<script type="text/javascript">
+/*$(document).ready(function() {
+ $('.summernote').summernote({
+    height: "250px"
+  });
+  $('.note-insert, .note-help').remove();
+});*/
+</script>
+
+<%# stylesheet_link_tag 'summernote', media: 'all' %>
+<%# javascript_include_tag 'summernote.min' %>

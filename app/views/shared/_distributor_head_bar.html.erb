@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-lg-12">
+
+      <div class="ibox-content" style="display: block;">
+        <div class="row">
+          <div class="col-sm-12">
+            <h3 class="m-t-none m-b"><strong>Distribuidor:</strong> <%= @distributor.name %> <%= @distributor.lastname %></h3>
+            <div class="table-responsive">
+              <table class="table">
+                  <tr>
+                    <td><strong><i class="fa fa-key"></i> Identificador:</strong></td>
+                    <td><strong><i class="fa fa-phone"></i> Teléfono:</strong></td>
+                    <td><strong><i class="fa fa-home"></i> Ubicación:</strong></td>
+                    <td><strong><i class="fa fa-calendar-o"></i> Creado el:</strong></td>
+                  </tr>
+                  <tr>
+                    <td><%= @distributor.alph_key %></td>
+                    <td>(<%=@distributor_city.LADA%>) <%= @distributor.telephone %></td>
+                    <td><%= @distributor_city.name %>, <%= @distributor_city.State.name %></td>
+                    <td><%= l(@distributor.created_at, format: :long) %></td>
+                  </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</div><br/>

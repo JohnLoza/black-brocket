@@ -1,0 +1,49 @@
+<!--Content-->
+<div class="row">
+ <div class="col-lg-12">
+
+   <div class="ibox-content">
+     <h3>Estadísticas del negocio</h3>
+   </div>
+
+    <%= link_to(admin_statistics_path+"?type=sales", style:"color: #fefefe;") do %>
+      <div class="col-md-6" style="padding: 15px; background-color: #33B5E5;">
+        <center>
+          <label>Historial de ventas</label><br/>
+          <i class="fa fa-bar-chart big-icon" style="color: #fefefe;"></i>
+        </center>
+      </div>
+    <% end %>
+
+    <a style="color: #fefefe;" data-toggle="modal" data-target="#modal">
+      <div class="col-md-6" style="padding: 15px; background-color: #99CC00;">
+        <center>
+          <label>Los mejores Clientes</label><br/>
+          <i class="fa fa-users big-icon" style="color: #fefefe;"></i>
+        </center>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Los mejores clientes</h4>
+      </div>
+      <%= form_tag(admin_best_clients_statistics_path, method: :post) do %>
+        <div class="modal-body">
+          <label>Quieres ver los mejores: </label>
+          <%= number_field_tag :client_quantity, 5, :min => 0, :class => "form-control" %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-white btn-sm" data-dismiss="modal">Cancelar</button>
+          <%= submit_tag "Gráficar", :class => "btn btn-primary"%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

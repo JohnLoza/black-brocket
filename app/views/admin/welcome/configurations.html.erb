@@ -1,0 +1,23 @@
+<% provide(:title, "Configuración") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Configuración", labels: ['Configuración']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="col-lg-12">
+      <div class="ibox ibox-content">
+        <h1>Configuración</h1>
+        <%= form_for @configuration, url: admin_configurations_path, method: :post do |f| %>
+          <%= f.label :IVA %>
+          <%= f.number_field :IVA, {:class => "form-control", min: 1, step: 0.01,
+              :placeholder => "ej. 16 (sin signo de %)" } %>
+
+          <%= f.submit :Guardar, :class => "btn btn-primary" %>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!--End content whit animation-->

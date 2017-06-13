@@ -1,0 +1,29 @@
+<% provide(:title, "Acciones") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Acciones", labels: ["Cierre de día", "Acciones"], links: [admin_orders_search_path(initial_hour: params[:initial_hour], end_hour: params[:end_hour])]} %>
+
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
+  <div class="row">
+    <div class="ibox ibox-content">
+      <h1>Acciones de la orden (historial)</h1>
+      <table class="footable table table-stripped toggle-arrow-tiny">
+        <thead>
+          <th>Trabajador</th>
+          <th>Acción</th>
+          <th>-</th>
+          <th>Fecha</th>
+        </thead>
+        <tbody>
+          <% @actions.each do |action| %>
+            <tr>
+              <% worker = action.Worker %>
+              <td><%= link_to worker.username, admin_worker_path(worker.alph_key), target: "_blank" %></td>
+              <td colspan="2"><%=action.description%></td>
+              <td><%= l(action.created_at, format: :long) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>

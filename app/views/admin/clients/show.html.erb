@@ -1,0 +1,174 @@
+<% provide(:title, "Clientes") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil de cliente", labels: ['Clientes', 'Perfil de cliente'], links: [admin_clients_path]} %>
+
+<div class="wrapper wrapper-content">
+  <div class="row animated fadeInRight">
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Detalles del perfil</h5>
+                </div>
+                <div class="ibox-content no-padding border-left-right">
+                  <% image = User.getImage(@client) %>
+        					<%= image_tag(image, { :class => "img-responsive full-width" }) %>
+                </div>
+                <div class="ibox-content profile-content">
+                    <h4><strong><%= @client.name %> <%= @client.lastname %> <%= @client.mother_lastname %></strong></h4>
+
+                    <% if @client.worker_id.nil? %>
+
+                      <% distributor = @client.City.Distributor %>
+                      <% if !distributor.nil? %>
+                        <h5>Distribuidor: <%= link_to distributor.username, admin_distributor_path(distributor.alph_key) %></h4>
+                      <% else %>
+                        <h5>Sin distribuidor</h5>
+                      <% end %>
+
+                    <% else %>
+
+                      <% worker = @client.Worker %>
+                      <h4>Trabajador: <%= link_to worker.email, admin_worker_path(worker.alph_key) %></h4>
+
+                    <% end %>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+          <!--Datos del distribuidor-->
+          <div class="ibox float-e-margins">
+              <div class="ibox-title">
+                  <h5>Información del cliente</h5>
+                  <div class="ibox-tools">
+                      <a class="collapse-link">
+                          <i class="fa fa-chevron-up"></i>
+                      </a>
+                      <a class="close-link">
+                          <i class="fa fa-times"></i>
+                      </a>
+                  </div>
+              </div>
+              <div class="ibox-content">
+                  <div class="table-responsive">
+                      <table class="table table-hover">
+                        <tr>
+                            <td><b>Clave:</b></td>
+                            <td><%= @client.alph_key %></td>
+                            <td><b>Fecha nacimiento:</b></td>
+                            <td><%= l(@client.birthday, format: :long) if @client.birthday %></td>
+                          </tr>
+                          <tr>
+                              <td><b>Nombre comercial o de usuario:</b></td>
+                              <td><%= @client.username %></td>
+                              <td><b>Nombre:</b></td>
+                              <td><%= @client.name %></td>
+                          </tr>
+                          <tr>
+                              <td><b>Apellido paterno:</b></td>
+                              <td><%= @client.lastname %></td>
+                              <td><b>Apellido materno:</b></td>
+                              <td><%= @client.mother_lastname %></td>
+                          </tr>
+                          <tr>
+                              <td><b>Ciudad:</b></td>
+                              <td><%= @client.City.name %></td>
+                              <td><b>Estado:</b></td>
+                              <td><%= @client.City.State.name %></td>
+                          </tr>
+                          <tr>
+                              <td><b>Colonia:</b></td>
+                              <td><%= @client.col %></td>
+                              <td><b>Calle:</b></td>
+                              <td><%= @client.street %></td>
+                          </tr>
+                          <tr>
+                            <td><b>Núm ext:</b></td>
+                            <td><%= @client.extnumber %></td>
+                            <td><b>Núm int:</b></td>
+                            <td><%= @client.intnumber %></td>
+                          </tr>
+                          <tr>
+                            <td><b>CP:</b></td>
+                            <td><%= @client.cp %></td>
+                            <td><b>Entre calles:</b></td>
+                            <td><%= @client.street_ref1 %> y <%= @client.street_ref2 %></td>
+                          </tr>
+                          <tr>
+                            <td><b>Teléfono:</b></td>
+                            <td>(<%=@client.City.LADA%>) <%= @client.telephone %></td>
+                            <td><b>Celular:</b></td>
+                            <td><%= @client.cellphone %></td>
+                          </tr>
+                          <tr>
+                            <td><b>Correo electrónico:</b></td>
+                            <td colspan="3"><%= @client.email %></td>
+                          </tr>
+                          <tr>
+                            <td><b>Fecha de creación:</b></td>
+                            <td><%= l(@client.created_at, format: :long) %></td>
+                            <td><b>Última modificación:</b></td>
+                            <td><%= l(@client.updated_at, format: :long) %></td>
+                          </tr>
+                      </table>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+
+
+
+        <% if @fiscal_data %>
+          <div class="col-md-4">
+          </div>
+          <div class="col-md-8">
+            <!--Datos del distribuidor-->
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Información fiscal</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr>
+                              <td><b>Clave:</b></td>
+                              <td colspan="3"><%= @fiscal_data.alph_key %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Nombre:</b></td>
+                                <td><%= @fiscal_data.name %> <%= @fiscal_data.lastname %> <%= @fiscal_data.mother_lastname %></td>
+                            </tr>
+                            <tr>
+                                <td><b>RFC:</b></td>
+                                <td><%= @fiscal_data.rfc %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Domicilio:</b></td>
+                                <td>
+                                  <%= @fiscal_data.street %>
+                                    #<%=@fiscal_data.extnumber%>(<%=@fiscal_data.intnumber%>),
+                                    col. <%=@fiscal_data.col%>,
+                                    <%=@fiscal_data.City.name%>, <%=@fiscal_data.City.State.name%></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+          </div>
+        <% end # if @fiscal_data # %>
+
+    </div>
+  </div>
+</div><br>

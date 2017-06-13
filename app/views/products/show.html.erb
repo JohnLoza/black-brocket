@@ -1,0 +1,215 @@
+<% provide(:title, "Productos") %>
+
+<div class="show-tips-container">
+  <h1 class="module-title long-up-2x">
+    <%= link_to(products_path, :class => "darklink") do %>
+      <small><span class="icon-arrow-left"></span></small>
+    <% end %>
+    <%= @product.name %></h1>
+  <div class="row divider-row-top">
+    <div class="col-sm-6">
+      <center>
+        <div class="thumbnail" style="border: 0;">
+          <% @photos.each do |photo| %>
+            <% if photo.is_principal %>
+              <%= link_to image_tag(photo.photo.url(:thumb), :class => "img-responsive",
+                  style: "max-height: 400px; max-width: 420px;margin-bottom:10px;"),
+                  image_path(photo.photo.url), :data => {:toggle => "lightbox", :gallery => "products", :title => @product.name } %>
+              <% break %>
+            <% end %>
+          <% end %>
+
+          <% @photos.each do |photo| %>
+            <% if !photo.is_principal %>
+              <%= link_to image_tag(photo.photo.url(:mini), :class => "img-thumbnail photo-gallery pull-left",
+                  style:"heigth: 90px; width: 90px; display: inline-block; margin-right:5px;"),
+                  image_path(photo.photo.url), :data => {:toggle => "lightbox", :gallery => "products", :title => @product.name } %>
+            <% end %>
+          <% end %>
+        </div>
+      </center>
+    </div>
+
+    <div class="col-sm-6">
+
+      <% if logged_in? and session[:user_type] == 'c' %>
+      <% else %>
+        <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <b>Regístrate o inicia sesión</b></br>
+        Para comprar nuestros productos necesitas registrarte, mientras tanto siéntete libre de explorar nuestros artículos.
+        </div>
+      <% end %>
+
+      <div class="caption-full">
+        <table class="table borderless" style="width: initial;">
+          <tbody>
+          <tr>
+            <td><b>Nombre:</b></td>
+            <td><%= @product.name %></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><b>Clave:</b></td>
+            <td><%= @product.alph_key %></td>
+            <td></td>
+          </tr>
+          <% if logged_in? and session[:user_type] == 'c' %>
+            <tr>
+              <td>
+                <p><b>Existencia: </b>
+                <% if @w_product.existence > 0 %>
+                  Producto Disponible
+                <% else %>
+                  <span style="color: #F44336;">Producto Agotado</span>
+                <% end %></p>
+              </td>
+              <td></td>
+            </tr>
+          <% end # if logged_in? and session[:user_type] == 'c' # %>
+          <tr>
+            <td><b>Categorías:</b></td>
+            <td>
+              <% if @product.cold %>
+                Frío /
+              <% end %>
+              <% if @product.hot %>
+                Caliente /
+              <% end %>
+              <% if @product.frappe %>
+              Frappé /
+              <% end %>
+              <% if @product.cold == false && @product.hot == false && @product.frappe == false%>
+              Sin especificar
+              <% end %>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><b>Presentación:</b></td>
+            <td><%= @product.presentation %></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><b>Precio:</b></td>
+            <td>$
+              <span class="money_format">
+                <% if !@product_price.blank? %>
+                  <%= @product_price.client_price %>
+                <% else %>
+                  <%= @product.price %>
+                <% end %>
+              </span>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="3"><b>Descripción:</b></td>
+          </tr>
+          <tr>
+            <td colspan="3"><%= render @product.description_render_path %></td>
+          </tr>
+          <%= render "add_to_cart" if logged_in? and session[:user_type] == 'c' and @w_product.existence > 0 %>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  </br>
+
+  <% if !@product.video.blank? %>
+    <div class="row divider-row-top">
+      <div class="col-md-12">
+        <br>
+        <h3 class="module-subtitle prep-font"><i class="icon-book-open menu-icon"></i> ~ Formas de preparación</h3>
+        <br>
+      </div>
+      <div class="col-sm-6">
+        <video controls style="width:100%;">
+          <source src="<%= @product.video.url %>" type="video/mp4">
+          Your browser does not support the video tag.
+        </video><br><br>
+      </div>
+      <div class="col-sm-6">
+        <%= render @product.preparation_render_path %>
+      </div>
+    </div><br>
+  <% else %>
+    <div class="row divider-row-top">
+      <div class="col-md-12">
+        <br>
+        <h3 class="module-subtitle prep-font"><i class="icon-book-open menu-icon"></i> ~ Formas de preparación</h3>
+        <br>
+      </div>
+      <div class="col-sm-12">
+        <%= render @product.preparation_render_path %>
+      </div>
+    </div><br>
+  <% end %>
+
+  <% if logged_in? and session[:user_type] == 'c' %>
+  <div class="row divider-row-top">
+    <div class="col-sm-12">
+        <div class="iconbox">
+    			<div class="iconbox-body equal-height text-left" style="padding:20px;">
+    				<div class="iconbox-text">
+              <%= render partial: "question_form", locals: { prod_id: @product.alph_key } %>
+    					<!--<div class="iconbox-desc">
+    						<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+    					</div>-->
+              <div class="col-md-12" id="questions">
+                <% @questions.each do |q| %>
+                  <%= render :partial => "question", locals: { question: q } %>
+                <% end %>
+              </div>
+              <div class="clearfix"></div>
+    				</div>
+    			</div>
+    		</div><br>
+    </div>
+  </div>
+  <% end %>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="devider m-b-xxl">
+        <%= image_tag("divider-down.svg") %>
+      </div>
+    </div>
+</div>
+
+<script>
+  // init ekko-lightbox
+  $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+    event.preventDefault();
+    $(this).ekkoLightbox();
+  });
+
+  function update_quantity(input, quantity) {
+    if(quantity == ""){
+      input.value = "";
+    }
+
+    var _href = $('#add_to_cart').attr('href');
+    $('#add_to_cart').attr('href',
+              _href.replace(/quantity=[^&]+/, 'quantity=' + quantity));
+  }
+
+  function money_format(number){
+    return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
+      return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
+    });
+  }
+
+  $(document).ready(function(){
+    numbers_to_format = $(".money_format");
+    numbers_to_format.each(function(){
+      $(this).html(money_format($(this).text()));
+    });
+  });
+</script>
+
+<%= stylesheet_link_tag 'ekko-lightbox.min', media: 'all' %>
+<%= javascript_include_tag 'ekko-lightbox.min' %>

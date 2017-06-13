@@ -1,0 +1,40 @@
+<% provide(:title, "Datos fiscales") %>
+<div class="row">
+  <div class="col-md-12">
+      <center>
+        <h1 class="module-title long-up-2x">Registro de tu información fiscal</h1>
+    		<h2 class="module-subtitle">Aquí puedes cambiar los datos de tu información fiscal.</h2>
+      </center>
+      <br>
+      <div class="alert alert-warning alert-dismissable">
+          <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+          Esta información se utilizará en la elaboración de tus
+          facturas en caso de que las requieras y estas serán enviadas a tu correo electrónico.
+      </div>
+      <br>
+  </div>
+</div>
+<div class="show-tips-container">
+  <div class="row">
+    <%= render 'form' %>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 long-up-2x">
+      <center>
+      	Al crear tu cuenta admites haber leído nuestra<strong>
+      	<%= link_to "Política de Privacidad", privacy_policy_path, target: "_blank" %></strong>
+      	y aceptas nuestros<strong>
+      	<%= link_to "Términos y Condiciones de Uso", terms_of_service_path, target: "_blank" %></strong>.
+      </center>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+		<div class="col-sm-6 col-sm-offset-3">
+      <div class="devider m-b-xxl">
+        <%= image_tag("divider-down.svg") %>
+      </div>
+		</div>
+</div>

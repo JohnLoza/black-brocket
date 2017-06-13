@@ -1,0 +1,59 @@
+<% provide(:title, "Alacenes") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Zonas de distribución", labels: ['Almacenes', 'Zonas de distribución'], links: [admin_warehouses_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+	<div class="row">
+	  <div class="col-lg-12">
+		  <div class="ibox-content" style="display: block;">
+		      <div class="row">
+		          <div class="col-sm-6 b-r margin-bot-resp">
+		          	<h3 class="m-t-none m-b"><strong>Almacén:</strong> <%= @warehouse.name %></h3>
+		          	<table>
+                    <tr>
+                    	<td class="table-padd"><strong><i class="fa fa-key"></i> Identificador:</strong></td>
+                    	<td><%= @warehouse.alph_key %></td>
+                    </tr>
+                    <tr>
+                    	<td><strong><i class="fa fa-home"></i> Dirección:</strong></td>
+                    	<td><%= @warehouse.address %></td>
+                    </tr>
+                    <tr>
+                    	<td><strong><i class="fa fa-phone"></i> Teléfono:</strong></td>
+                    	<td><%= @warehouse.telephone %></td>
+                    </tr>
+                    <tr>
+                    	<td><strong><i class="fa fa-calendar-o"></i> Creado el:</strong></td>
+                    	<td><%= l(@warehouse.created_at, format: :long) %></td>
+                    </tr>
+		          	</table>
+					<!--<div class="col-sm-12">
+					   <i class="fa fa-key"></i> Identificador: <%= @warehouse.alph_key %></br>
+					   <i class="fa fa-key"></i> Dirección: <%= @warehouse.address %></br>
+					   <i class="fa fa-key"></i> Teléfono: <%= @warehouse.telephone %></br>
+					   <i class="fa fa-key"></i> Creado el: <%= l(@warehouse.created_at, format: :long) %></br>
+					</div>-->
+				  </div>
+			      <div class="hr-line-dashed pro-mobile"></div>
+		          <div class="col-sm-6">
+		          	<h4>Agregar Nueva</h4>
+		            <%= render "form" %>
+		          </div>
+		      </div>
+		  </div>
+	  </div>
+
+
+	  <div id="warehouse_regions">
+	    <% @regions.each do |state| %>
+	      <%= render partial: "region", locals: { state: state, warehouse_id: @warehouse.alph_key } %>
+	    <% end %>
+	  </div>
+
+	</div></br></br>
+
+  </div>
+</div>
+<!--End content whit animation-->

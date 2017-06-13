@@ -1,0 +1,14 @@
+<div id="<%= state.id %>">
+	<div class="col-lg-3">
+	    <div class="widget style1 blue-bg">
+	        <div class="row vertical-align">
+		      <div class="col-xs-9">
+		      	<strong><%= state.name %></strong>
+		      </div>
+		      <div class="col-xs-3 text-right">
+		          <%= link_to "<i class='fa fa-trash f-size-18'></i>".html_safe, admin_warehouse_region_path(warehouse_id, state.id), method: :delete, data: { confirm: "Estas seguro(a) de eliminarla?" }, remote: true, :class => "white-link" %>
+		      </div>
+	        </div>
+	    </div>
+	</div>
+</div>

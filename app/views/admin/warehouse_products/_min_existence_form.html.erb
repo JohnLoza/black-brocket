@@ -1,0 +1,14 @@
+<%= form_for(:warehouse_product,
+    url: admin_update_product_min_stock_path(@warehouse.alph_key, "0x0"),
+    remote: true, method: :put, :html => {:id => "min-stock-form"}) do |f| %>
+
+    <table class="full-width">
+      <tr>
+          <td><%= f.label :min_stock, "Nuevo stock mínimo" %></td>
+          <td class="table-padd"><%= f.number_field :min_stock, :placeholder => "0", min: 0, max: 99999, :class => "form-control" %></td>
+          <td><%= f.submit "Modificar", data: { confirm: "Seguro(a) de modificar el stock mínimo?" },
+      :class => "btn btn-primary" %></td>
+      </tr>
+    </table>
+
+<% end %>

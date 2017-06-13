@@ -1,0 +1,178 @@
+/*!
+ * Start Bootstrap - Shop Item HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+.thumbnail img {
+    width: 100%;
+}
+
+.thumbnail {
+    padding: 0;
+    border: none;
+    border-bottom: 1px dotted #DDD;
+}
+
+.slide-image {
+    width: 100% !important;
+}
+
+.carousel-holder {
+    margin-bottom: 30px;
+}
+
+.carousel-control,
+.item {
+    border-radius: 4px;
+}
+
+.caption {
+    height: 130px;
+    overflow: hidden;
+}
+
+.caption h4 {
+    white-space: nowrap;
+}
+
+.thumbnail .caption-full {
+    padding: 9px;
+    color: #333;
+}
+
+.nowrap-10em {
+  white-space:nowrap;
+  width:10em;
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+
+/* navbar */
+.dropdown a {
+  padding-top: 13px !important;
+  padding-bottom: 12px !important;
+}
+.dropdown a img {
+  width: 25px;
+  border-radius: 4px;
+}
+.navbar-brand {
+  padding-top: 5px;
+  padding-bottom: 7px;
+}
+.navbar-brand img {
+  height: 41px;
+  width: 41px;
+}
+.navbar-default {
+  background: rgba(0, 0, 0, 0.9);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  /*background-color: rgba(0, 0, 0, 0.84);
+  border-color: #966e20;*/
+}
+.navbar-default .navbar-brand {
+  color: #666666;
+}
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: #333333;
+}
+.navbar-default .navbar-text {
+  color: #666666;
+}
+.navbar-default .navbar-nav > li > a {
+  color: whitesmoke!important;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  color: rgb(243, 223, 147)!important;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #fefefe;
+  background-color: #D6BC68;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  color: #fefefe;
+  background-color: #D6BC68;
+}
+.navbar-default .navbar-toggle {
+  border-color: #D6BC68;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background-color: #D6BC68;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #666666;
+}
+.navbar-default .navbar-toggle:hover .icon-bar,
+.navbar-default .navbar-toggle:focus .icon-bar {
+  background-color: #fefefe;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #666666;
+}
+.navbar-default .navbar-link {
+  color: #666666;
+}
+.navbar-default .navbar-link:hover {
+  color: #333333;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #666666;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #333333;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #fefefe;
+    background-color: #D6BC68;
+  }
+}
+
+html,
+body {
+   margin:0;
+   padding:0;
+   height:100%;
+}
+#container {
+   min-height:100%;
+   position:relative;
+}
+#body {
+   padding-bottom:220px;   /* Height of the footer */
+}
+#footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
+}
+.order-box{
+  border-bottom: 1px dotted #DDD;
+  padding-left:15px;
+  padding-right:15px;
+}
+.order-box-title{
+  border-bottom: 1px dotted #DDD;
+  background-color: #f9f9f9;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+.order-box-info{
+  border-bottom: 1px dotted #DDD;
+  background-color: rgb(251, 251, 251);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.order-box-foot{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.text-left{
+  text-align: left !important;
+}

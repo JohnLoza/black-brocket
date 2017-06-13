@@ -1,0 +1,102 @@
+<% if !orders.blank? %>
+  <%
+    sub_total = 0
+    sub_iva = 0
+    sub_ieps = 0
+    sub_sub_total = 0
+    sub_shipping_cost = 0
+    sub_commission = 0
+  %>
+  <% orders.each do |o| %>
+    <tr>
+      <td>
+        <%= l(o.created_at, format: :long)%>
+      </td>
+      <td>
+        <%= o.alph_key %>
+      </td>
+      <td>
+        <%= link_to o.Client.username, admin_client_path(o.Client.alph_key) %>
+      </td>
+      <td>
+        <% if totals %>
+          $ <span class="money_format total"><%= o.total %></span>
+        <% else %>
+          $ <span class="money_format"><%= o.total %></span>
+        <% end %>
+      </td>
+
+      <% iva = 0
+         ieps = 0
+         o.Details.each do |d|
+           iva += d.total_iva
+           ieps += d.total_ieps
+         end %>
+      <td>
+        $ <span class="money_format"><%= iva %></span>
+      </td>
+      <td>
+        $ <span class="money_format"><%= ieps %></span>
+      </td>
+      <td>
+        $ <span class="money_format"><%= o.total - iva - ieps %></span>
+      </td>
+      <td>
+        $ <span class="money_format"><%= o.shipping_cost %></span>
+      </td>
+      <td>
+        <% distributor = o.Distributor %>
+        <% commission = 0 %>
+        <% if !distributor.blank? %>
+          <% commission = o.total * (distributor.commission / 100) %>
+          <% if totals %>
+            $ <span class="money_format commission"><%= commission %></span> (<%= distributor.commission %>%)
+          <% else %>
+            $ <span class="money_format"><%= commission %></span> (<%= distributor.commission %>%)
+          <% end %>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to "<i class='fa fa-eye fa-2x'></i>".html_safe, admin_order_details_path(o.alph_key),
+            :class => "btn btn-white btn-sm", target: "_blank" %>
+
+        <%= link_to "<i class='fa fa-calendar fa-2x'></i>".html_safe, admin_show_order_activities_path(o.alph_key),
+            :class => "btn btn-white btn-sm", target: "_blank" %>
+      </td>
+
+      <%
+        sub_total += o.total
+        sub_iva += iva
+        sub_ieps += ieps
+        sub_sub_total += o.total - iva - ieps
+        sub_shipping_cost += o.shipping_cost
+        sub_commission += commission
+      %>
+
+    </tr>
+  <% end %>
+
+  <tr style="background-color: #1ab394; color: #fefefe;">
+    <td colspan=3 style="text-align: right;">
+      Subtotales:
+    </td>
+    <td>
+      $ <span class="money_format"> <%= sub_total %> </span>
+    </td>
+    <td>
+      $ <span class="money_format"> <%= sub_iva %> </span>
+    </td>
+    <td>
+      $ <span class="money_format"> <%= sub_ieps %> </span>
+    </td>
+    <td>
+      $ <span class="money_format"> <%= sub_sub_total %> </span>
+    </td>
+    <td>
+      $ <span class="money_format"> <%= sub_shipping_cost %> </span>
+    </td>
+    <td colspan="2">
+      $ <span class="money_format"> <%= sub_commission %> </span>
+    </td>
+  </tr>
+<% end %>

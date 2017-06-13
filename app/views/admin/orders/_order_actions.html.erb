@@ -1,0 +1,60 @@
+
+<% if @actions["SHOW"] %>
+  <%= link_to "<i class='fa fa-eye'></i> Ver pedido".html_safe,
+      admin_order_details_path(o.alph_key),
+      :class => "btn btn-white btn-sm m-b-xs", target: "_blank" %>
+<% end %>
+
+<% if @actions["CAPTURE_TRACKING_CODE"] and params[:type] == "CAPTURE_TRACKING_CODE" %>
+  <%= link_to "<i class='fa fa-truck'></i> Datos de entrega".html_safe,
+      admin_order_details_path(o.alph_key) + "?only_address=Y",
+      :class => "btn btn-white btn-sm m-b-xs", target: "_blank" %>
+<% end %>
+
+<% if @actions["INSPECTION"] and params[:type] == "INSPECTION" %>
+  <%= link_to "Inspeccionado", admin_inspection_order_path(o.alph_key),
+      :class => "btn btn-white btn-sm m-b-xs", method: :put,
+      data: {confirm: "Estas seguro(a) de que se surtió correctamente?"} %>
+
+  <%= link_to "<i class='fa fa-trash'></i> Volver a surtir".html_safe, admin_order_supply_error_path(o.alph_key),
+      :class => "btn btn-danger btn-sm m-b-xs", method: :put,
+      data: {confirm: "Estas seguro(a) de regresar el pedido?"} %>
+<% end %>
+
+<% if @actions["CAPTURE_BATCHES"] and params[:type] == "CAPTURE_BATCHES" %>
+  <%= link_to "Capturar números de lote", admin_capture_details_path(o.alph_key),
+      :class => "btn btn-white btn-sm m-b-xs" %>
+<% end %>
+
+<% if @actions["STABLISH_AS_DELIVERED"] and params[:type] == "SENT" %>
+  <%= link_to "<i class='fa fa-check-square-o'></i> Producto entregado".html_safe, admin_order_delivered_path(o.alph_key),
+      :class => "btn btn-white btn-sm m-b-xs", method: :put, data: {
+        confirm: "Estas seguro(a) de que ya se entregó el pedido?"
+        } %>
+<% end %>
+
+<%# if @actions["INVOICES"] and
+      o.invoice and !o.invoice_sent and params[:type] == "INVOICES" %>
+  <%# link_to "Factura enviada!", admin_order_invoice_delivered_path(o.alph_key),
+      :class => "btn btn-white btn-sm m-b-xs", method: :put, data: {
+        confirm: "Estas seguro(a) de que ya se entregó la factura?"
+        } %>
+<% if @actions["INVOICES"] and o.invoice_sent and params[:type] == "INVOICES" %>
+  <td>
+    <i class="fa fa-check-circle-o fa-3x"
+       style="color: #1d9d74"></i>
+  </td>
+<% end %>
+
+<% if @actions["CANCEL"] and (o.state == "WAITING_FOR_PAYMENT" or
+      o.state == "PAYMENT_REJECTED") and params[:type] != "INVOICES" %>
+  <a class="btn btn-white btn-sm m-b-xs"
+     onclick="update_cancel_form('<%=o.alph_key%>')">
+    Cancelar orden
+  </a>
+<% end %>
+
+<% if @actions["CREATE_COMMISION"] and params[:type] == "DELIVERED" and !params[:distributor].blank? and !o.commission_in_progress
+      o.distributor_id != 0 and !o.commission_in_progress %>&nbsp;&nbsp;&nbsp;
+  <%= check_box_tag "order_keys[]", o.alph_key %>
+<% end %>

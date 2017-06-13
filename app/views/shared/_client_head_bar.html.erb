@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-lg-12">
+
+      <div class="ibox-content" style="display: block;">
+        <div class="row">
+          <div class="col-sm-12">
+            <h3 class="m-t-none m-b"><strong>Cliente:</strong> <%= @client.name %> <%= @client.lastname %></h3>
+            <div class="table-responsive">
+              <table class="table">
+                  <tr>
+                    <td><strong><i class="fa fa-key"></i> Identificador:</strong></td>
+                    <td><strong><i class="fa fa-phone"></i> Teléfono:</strong></td>
+                    <td><strong><i class="fa fa-home"></i> Ubicación:</strong></td>
+                    <td><strong><i class="fa fa-calendar-o"></i> Creado el:</strong></td>
+                  </tr>
+                  <tr>
+                    <td><%= @client.alph_key %></td>
+                    <td>(<%=@client_city.LADA%>) <%= @client.telephone %></td>
+                    <td><%= @client_city.name %>, <%= @client_city.State.name %></td>
+                    <td><%= l(@client.created_at, format: :long) %></td>
+                  </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</div><br/>

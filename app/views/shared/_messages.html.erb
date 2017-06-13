@@ -1,0 +1,55 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+        Escribe un mensaje
+    </h4>
+  </div>
+
+  <div class="panel-body">
+    <%= form_tag(create_message_url) do %>
+      <%= text_area_tag :comment, nil, :class => "form-control form-control-black", :maxlength => 250 %><br>
+      <%= submit_tag :Enviar, :class => "btn btn-custom-1 pull-right" %>
+    <% end %>
+  </div>
+</div>
+
+
+<% messages.each do |message| %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <% if message.is_from_client %>
+          <% avatar = @client_image
+             username = @client_username %>
+        <% else %>
+          <% avatar = @distributor_image
+             username = @distributor_username %>
+        <% end %>
+        <%= image_tag avatar, style: "width: 35px;border-radius: 4px;" %>
+        <%= username %> -
+        <small>
+          <%= l(message.created_at, format: :long) %>
+        </small><br>
+      </h4>
+    </div>
+    <div class="panel-body" style="padding: 10px;padding-left: 15px;">
+      <%= message.comment %>
+    </div>
+  </div>
+<% end #messages.each# %>
+
+<div class="row">
+  <div class="col-md-12">
+     <div class="pull-right">
+       <%= will_paginate @messages, renderer: BootstrapPagination::Rails %>
+     </div>
+   </div>
+</div>
+
+<style media="screen">
+  .text-area{
+    border: solid 1px #888;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+</style>

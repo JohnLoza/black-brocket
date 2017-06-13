@@ -1,0 +1,129 @@
+<!-- Navigation start -->
+<!--Check-->
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation" style="min-height: 53px;">
+
+  <div class="container">
+
+    <div class="navbar-header">
+
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#custom-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <%= link_to image_tag("BBGLogo.png"), root_path, :class => "navbar-brand" %>
+
+    </div>
+    <!--Check end-->
+
+    <div class="collapse navbar-collapse" id="custom-collapse">
+      <ul class="nav navbar-nav navbar-right text-shadow-black">
+        <li>
+          <%= link_to "Quiénes somos", root_path(anchor: 'about') %>
+        </li>
+        <li>
+          <%= link_to "Servicios", root_path(anchor: 'services') %>
+        </li>
+        <li>
+          <%= link_to "Galería", root_path(anchor: 'gallery') %>
+        </li>
+        <li>
+          <%= link_to "Contacto", root_path(anchor: 'contact') %>
+        </li>
+        <li>
+          <%= link_to "Productos", products_path %>
+        </li>
+        <% if !logged_in?%>
+          <li class="yes-mobile">
+            <%= link_to "Iniciar sesión", log_in_path %>
+          </li>
+          <li>
+            <%= link_to "Regístrate", client_sign_up_path %>
+          </li>
+          <li class="no-mobile page-scroll">
+            <%= link_to "Iniciar sesión", log_in_path %>
+          </li>
+        <% else %>
+          <% notifications = @current_user.Notifications.order(created_at: :DESC).limit(5) %>
+          <!--Start Dropdown notifications-->
+          <li style="padding-bottom: 2px;">
+             <a class="count-info" data-toggle="dropdown" href="off_canvas_menu.html#">
+               <i class="icon-bell" style="font-size: 16px;"></i>
+               <% notifications_not_seen_count = @current_user.Notifications.where(:seen => false).size %>
+               <% if notifications_not_seen_count > 0 %>
+                 <span class="badge" style="background-color: #F44336;background-color: #F44336;position: absolute;top: 10px;left: 28px;">
+                   <%= notifications_not_seen_count %>
+                 </span>
+               <% end # if notifications_not_seen_count > 0 # %>
+             </a>
+             <ul class="dropdown-menu dropdown-alerts dropdown-version2" style="text-shadow: none;">
+               <% notifications.each do |n|%>
+                  <li>
+                     <a href="<%= n.url %>?notification=<%=n.id%>">
+                      <div style="overflow: auto;">
+                        <i class="<%= n.icon %>"></i>
+                        <%= n.description %>
+                        <% if n.seen %>
+                          <i class="fa fa-check" style="color: #8BC34A;"></i>
+                        <% end %>
+                      </div>
+                     </a>
+                  </li>
+                <% end %>
+                <li class="divider" style="margin: 0px;"></li>
+                <li>
+                  <%= link_to client_notifications_path(@current_user.alph_key) do %>
+                    <strong>Ver notificaciones ></strong>
+                  <% end %>
+                </li>
+             </ul>
+          </li>
+          <!--End Dropdown notifications-->
+          <!--Start Dropdown profile and cart-->
+          <li class="dropdown">
+            <a href="#" class="less_padding" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top: 14px !important;padding-bottom: 12px !important;">
+              <%= image_tag User.getImage(@current_user, :mini),
+                  style: "margin-right: 5px;width: 25px;border-radius: 4px;" %>
+              <%= @current_user.username %>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-alerts dropdown-version2" style="margin-top: 1px;text-shadow: none;">
+              <!--<li><%= link_to "Mi perfil", client_path(@current_user.alph_key) %></li>-->
+              <li><%= link_to "Tips y Recetas", tips_path %></li>
+              <!--<li><%= link_to "Mi carrito", client_ecart_path(@current_user.alph_key) %></li>-->
+              <li><%= link_to "Mis órdenes", client_orders_path(@current_user.alph_key) %></li>
+              <li><%= link_to "Editar perfil", edit_client_client_path(@current_user.alph_key) %></li>
+              <li><%= link_to "Editar información fiscal", edit_client_fiscal_datum_path(@current_user.alph_key) %></li>
+              <li><%= link_to "Distribuidores en la zona", client_my_distributor_path %></li>
+              <li role="separator" class="divider" style="margin: 0px;"></li>
+              <li><%= link_to "Dar de baja mi cuenta", client_destroy_account_path(@current_user.alph_key) %></li>
+              <li role="separator" class="divider" style="margin: 0px;"></li>
+              <li><%= link_to "Cerrar sesión", log_out_path, method: "delete" %></li>
+            </ul>
+          </li>
+          <li>
+            <%= link_to '<i class="icon-basket-loaded" style="font-size: 23px;"></i>'.html_safe,
+                client_ecart_path(@current_user.alph_key), style: "padding-top: 11px; padding-bottom: 10px;" %>
+            <span id="ecart-badge" style="background-color: #f0ad4e;position: absolute;top: 10px;left: 35px;"
+                  <%= "class=badge" if !session[:e_cart].nil? %>>
+              <%= session[:e_cart].size if !session[:e_cart].nil? %>
+            </span>
+          </li>
+          <!--End Dropdown profile and cart-->
+        <% end %>
+      </ul>
+    </div>
+
+  </div><!-- .container -->
+
+</nav>
+<!-- Navigation end -->
+
+<style>
+.dropdown a {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+</style>

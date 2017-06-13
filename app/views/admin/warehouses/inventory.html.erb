@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<h3>Inventario del almacén <%=@warehouse.name%></h3>
+<% @products_in_stock.each do |ps| %>
+  <p style="font-size: 12px;">
+    <b style="font-size: 14px;">Nombre del producto: <%= ps.Product.name %></b><br>
+      <% total = 0 %>
+      Disponible para venta: <%= ps.existence %> |
+      <% total += ps.existence %>
+
+
+      <% product = nil %>
+      <% @products_no_pay.each do |p_np| %>
+        <% product = p_np if p_np.product_id == ps.product_id %>
+      <% end %>
+      Apartados (No se ha recibido pago):
+      <% if product.nil? %>
+        0
+      <% else %>
+        <%= product.sum_quantity %>
+        <% total += product.sum_quantity %>
+      <% end %> |
+
+
+      <% product = nil %>
+      <% @products_paid.each do |p_np| %>
+        <% product = p_np if p_np.product_id == ps.product_id %>
+      <% end %>
+      Pagados (Sin enviar):
+      <% if product.nil? %>
+        0
+        <% total += 0 %>
+      <% else %>
+        <%= product.sum_quantity %>
+        <% total += product.sum_quantity %>
+      <% end %> |
+
+
+      Total en pzas: <%= total %> |
+      Conteo físico total en pzas:_____________________
+  </p>
+
+
+    <label>Complemento</label>
+    <% product = nil %>
+    <% @complement.each do |c| %>
+      <% if c.product_id == ps.product_id %>
+        <p>
+          Referencia: <%= c.Order.alph_key %>, cantidad: <%= c.quantity %>
+        </p>
+      <% end %>
+    <% end %>
+
+  <br>
+<% end %>
+
+<div class="col-lg-12">
+  <center>
+    <a onclick="window.print();" href="#" class="btn btn-default print-link pull-right">
+      Imprimir
+    </a>
+  </center>
+</div>
+
+<style>
+  .print-link, .print-link *
+  {
+    font-size: 1.3em;
+    padding: .5em;
+  }
+  @media print
+  {
+    .print-link, .print-link *
+    {
+        display: none !important;
+    }
+  }
+</style>

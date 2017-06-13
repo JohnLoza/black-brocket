@@ -1,0 +1,123 @@
+class Api::ProductsController < ApplicationController
+  @@base_file_path = "app/views"
+  @@replaceable_path = "/shared/products/"
+
+  def index
+    if params[:authentication_token].blank?
+      api_authentication_failed
+      return
+    end
+
+    current_user = Client.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
+      api_authentication_failed
+      return
+    end
+
+    warehouse = @current_user.City.State.Warehouse
+
+    if warehouse.blank?
+      render :status => 200,
+             :json => { :success => false, :info => "WE_DONT_SELL_IN_YOUR_ZONE_YET" }
+      return
+    end
+
+    if params[:category] and ["hot","cold","frappe"].include? params[:category]
+
+      products = warehouse.Products.joins(:Product)
+          .where(products:{
+              show:true, deleted: false, "#{params[:category]}" => true},
+              describes_total_stock: true)
+          .paginate(:page => params[:page], :per_page => 18).includes(:Product)
+
+    elsif !params[:search].blank?
+
+      products = warehouse.Products.joins(:Product)
+          .where(products:{
+              show:true, deleted: false},
+              describes_total_stock: true)
+          .where("products.name like '%#{params[:search]}%'")
+          .paginate(:page => params[:page], :per_page => 18).includes(:Product)
+
+    else
+
+      products = warehouse.Products.joins(:Product)
+          .where(products:{
+              show:true, deleted: false},
+              describes_total_stock: true)
+          .paginate(:page => params[:page], :per_page => 18).includes(:Product)
+
+    end
+
+    photos = ProdPhoto.where("product_id in (?) and is_principal=true", products.map{|p| p.product_id})
+    product_prices = @current_user.ProductPrices
+
+    data = Array.new
+    visit = @current_user.DistributorVisits.where(client_recognizes_visit: nil).take
+    if !visit.blank?
+      data<<{per_page: 18, new_visit: true, visit_id: visit.id, distributor_image: User.getImage(visit.Distributor, :mini), distributor_name: visit.Distributor.getName, visit_date: l(visit.visit_date, format: :long)}
+    else
+      data<<{per_page: 18, new_visit: false, visit_id: nil, distributor_image: nil, distributor_name: nil, visit_date: nil}
+    end
+
+    data << {user_data: {username: @current_user.username, photo: User.getImage(@current_user)}}
+
+    products.each do |w_product|
+      p = w_product.Product
+      sub_data = {alph_key: w_product.alph_key, name: p.name, price: p.price,
+                  existence: w_product.existence, category_cold: p.cold,
+                  category_hot: p.hot, category_frappe: p.frappe, p_key: p.alph_key}
+
+      # get the photo for the product #
+      photos.each do |photo|
+        if photo.product_id == p.id
+          sub_data[:photo] = photo.photo.url(:thumb)
+          break
+        end
+      end
+
+      # get the custom price if any #
+      product_prices.each do |custom_price|
+        if custom_price.product_id == p.id
+          sub_data[:price] = custom_price.client_price
+          break
+        end
+      end
+
+      data << sub_data
+    end
+
+    render :status => 200,
+           :json => { :success => true, :info => "PRODUCT_DATA", :data => data }
+  end
+
+  def show
+    if params[:authentication_token].blank?
+      api_authentication_failed
+      return
+    end
+
+    current_user = Client.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
+      api_authentication_failed
+      return
+    end
+
+    w_product = WarehouseProduct.find_by(alph_key: params[:id])
+    if w_product.blank?
+      render :status => 200,
+             :json => { :success => false, :info => "PRODUCT_NOT_FOUND", :data => data }
+      return
+    end
+
+    product = w_product.Product
+    description_file = @@base_file_path + product.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
+    preparation_file = @@base_file_path + product.preparation_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
+
+    description = File.open(description_file, "r"){|file| file.read }
+    preparation = File.open(preparation_file, "r"){|file| file.read }
+    render :status => 200,
+           :json => { :success => true, :info => "PRODUCT_DATA",
+                      :data => { description: description,preparation: preparation,presentation: product.presentation}}
+  end
+end

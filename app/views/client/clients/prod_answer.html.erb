@@ -1,0 +1,53 @@
+<% provide(:title, "Últimas respuestas") %>
+
+<div class="col-md-12">
+    <br><br>
+    <center>
+      <h1 class="module-title">Última respuesta</h1>
+  		<h2 class="module-subtitle">Aquí puedes ver la última respuesta relacionada a un producto.</h2>
+    </center>
+    <br><br>
+</div>
+
+<div class="row" style="border-top: 1px dotted #DDD;padding-top: 20px;">
+  <div class="col-sm-12">
+      <div class="iconbox">
+  			<div class="iconbox-body equal-height text-left" style="padding:20px;">
+  				<div class="iconbox-text">
+            <h3 class="iconbox-title">Producto</h3>
+
+            <div class="col-md-12" id="questions">
+                <div style="border-bottom: 1px dotted #DDD">
+                  <p>
+                    <i class="fa fa-comments-o"></i>
+                    <%= @question.description %>
+                    <small style="font-size: 65%;color: #919191;">-
+                      <%= l(@question.created_at, format: :long) %>
+                    </small>
+                  </p>
+                  <div style="margin-left: 2em;">
+                    <p>
+                      <i class="fa fa-comments"></i>
+                      <%= @answer.description %>
+                      <small style="font-size: 65%;color: #919191;">-
+                        <%= l(@answer.created_at, format: :long) %>
+                      </small>
+                    </p>
+                  </div>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+  				</div>
+  			</div>
+  		</div><br>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="devider m-b-xxl">
+        <%= image_tag("divider-down.svg") %>
+      </div>
+    </div>
+</div>

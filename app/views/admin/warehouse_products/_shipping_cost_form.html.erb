@@ -1,0 +1,5 @@
+<%= form_for(@warehouse, url: admin_update_shipping_cost_path(@warehouse.alph_key), method: :put) do |f| %>
+  <%= f.label :shipping_cost, "Coste de envío" %>
+  <%= f.number_field :shipping_cost, {:class => "form-control", min: 0, step: 0.1, required: true} %>
+  <%= f.submit "guardar", :class => "btn btn-primary" %>
+<% end %>

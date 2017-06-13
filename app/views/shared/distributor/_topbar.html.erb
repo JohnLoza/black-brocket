@@ -1,0 +1,69 @@
+<!--Top Bar-->
+<div class="row border-bottom">
+  <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0;">
+    <!--Top Bar Left-Items-->
+    <div class="navbar-header">
+      <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#"><i class="fa fa-bars"></i></a>
+      <!--form role="search" class="navbar-form-custom" action="search_results.html">
+        <div class="form-group">
+            <input type="text" placeholder="Buscar..." class="form-control" name="top-search" id="top-search" disabled>
+        </div>
+      </form-->
+    </div>
+    <!--End Top Bar Left-Items-->
+    <!--Top Bar Right-Items-->
+    <ul class="nav navbar-top-links navbar-right">
+       <!--Username-->
+       <li>
+          <span class="m-r-sm text-muted welcome-message"><b>Bienvenido</b> <%= @current_user.username %> </span>
+       </li>
+       <!--End Username-->
+       <!--Dropdown notifications-->
+       <% notifications = @current_user.Notifications.order(created_at: :DESC).limit(5) %>
+       <li class="dropdown">
+          <a class="dropdown-toggle count-info" data-toggle="dropdown" href="off_canvas_menu.html#">
+              <i class="fa fa-bell"></i>
+              <% notifications_not_seen_count = @current_user.Notifications.where(:seen => false).size %>
+              <% if notifications_not_seen_count > 0 %>
+                <span class="badge" style="background-color: #F44336; color: #FEFEFE;">
+                  <%= notifications_not_seen_count %>
+                </span>
+              <% end # if notifications_not_seen_count > 0 # %>
+          </a>
+          <ul class="dropdown-menu dropdown-alerts">
+            <% notifications.each do |n|%>
+               <li>
+                  <a href="<%= n.url %>?notification=<%=n.id%>">
+                   <div>
+                     <i class="<%= n.icon %>"></i>
+                     <%= n.description %>
+                     <% if n.seen %>
+                       <i class="fa fa-check" style="color: #8BC34A;"></i>
+                     <% else %>
+                       <i class="fa fa-close" style="color: #F44336;"></i>
+                     <% end %>
+                   </div>
+                  </a>
+               </li>
+             <% end %>
+             <li class="divider"></li>
+             <li>
+                <div class="text-center link-block">
+                    <%= link_to distributor_notifications_path do %>
+                      <strong>Ver notificaciones ></strong>
+                    <% end %>
+                </div>
+             </li>
+          </ul>
+       </li>
+       <!--End Dropdown notifications-->
+       <!--Logout-->
+       <li>
+          <%= link_to(log_out_path, method: "delete") do %> <i class="fa fa-sign-out"></i> Cerrar sesión <%end%>
+       </li>
+       <!--End Logout-->
+    </ul>
+    <!--End Top Bar Right-Items-->
+  </nav>
+</div>
+<!--End Top Bar-->

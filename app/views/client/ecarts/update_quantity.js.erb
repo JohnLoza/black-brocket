@@ -1,0 +1,60 @@
+<% if @updated %>
+
+  // save values into variables
+  var product = "<%=params[:product]%>";
+  var product_prev_cost = parseFloat($("#"+product+"-cost").text().replace(",",""));
+  var shipping_cost = parseFloat($("#shipping_cost").text());
+  var wholesale = parseFloat($("#wholesale").text());
+
+  // obtain the cost per unit of a product
+  var cost_per_unit = product_prev_cost/<%=@prev_quantity%>;
+  // obtain the new cost for that specific product when buying <%=params[:new_quantity]%> unit(s)
+  var product_new_cost = cost_per_unit*<%=params[:new_quantity]%>;
+
+  $("#"+product+"-cost").text(money_format(product_new_cost.toString()));
+
+  var difference = product_prev_cost - product_new_cost;
+  var current_grand_total = parseFloat($("#order-grand-total").text().replace(",",""));
+  console.log("current_grand_total: " + current_grand_total);
+
+  // obtain the current_sub_total
+  var current_sub_total = current_grand_total;
+  if($("#shipping_cost_is_present").text().trim() == "YES"){
+    current_sub_total = current_grand_total - shipping_cost;
+    console.log("take out the shipping_cost!!!");
+  } // if $("#shipping_cost_is_present").text() == "YES" end
+  console.log("current_sub_total: " + current_sub_total);
+
+  // calculate the new sub total, shipping_cost and new grand total
+  var new_sub_total = current_sub_total-difference;
+  console.log("new_sub_total: " + new_sub_total);
+  var new_shipping_cost = 0.00;
+  var new_grand_total = 0;
+  if(new_sub_total < wholesale){
+    $("#shipping_cost_is_present").text("YES");
+    new_shipping_cost = shipping_cost;
+  }else{
+    $("#shipping_cost_is_present").text("NO");
+  }
+  console.log("new_shipping_cost: " + new_shipping_cost);
+  new_grand_total = new_shipping_cost + new_sub_total;
+  console.log("new_grand_total: " + new_grand_total);
+
+  // update the view
+  $("#order-sub-total").text(money_format(new_sub_total.toString()));
+  $("#order-shipping-cost").text(money_format(new_shipping_cost.toString()));
+  $("#order-grand-total").text(money_format(new_grand_total.toString()));
+
+  <% if @reached_current_existence %>
+    var existence = <%=params[:current_existence]%>;
+    $("#"+product+"-quantity-input").val(existence);
+    <% message = "Solo contamos con "+existence+" unidad(es) de este producto." %>
+    $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: message} %>");
+  <% end %>
+
+<% elsif params[:new_quantity].to_i <= 0 %>
+  <% message = "Houston tenemos un problema!, no podemos enviar " + params[:new_quantity] + " producto(s)" %>
+  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: message} %>");
+
+  $("#<%=params[:product]%>-quantity-input").val(<%=session[:e_cart][params[:product]]%>);
+<% end %>

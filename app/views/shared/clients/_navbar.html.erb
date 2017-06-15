@@ -20,32 +20,20 @@
 
     <div class="collapse navbar-collapse" id="custom-collapse">
       <ul class="nav navbar-nav navbar-right text-shadow-black">
-        <li>
-          <%= link_to "Quiénes somos", root_path(anchor: 'about') %>
-        </li>
-        <li>
-          <%= link_to "Servicios", root_path(anchor: 'services') %>
-        </li>
-        <li>
-          <%= link_to "Galería", root_path(anchor: 'gallery') %>
-        </li>
-        <li>
-          <%= link_to "Contacto", root_path(anchor: 'contact') %>
-        </li>
-        <li>
-          <%= link_to "Productos", products_path %>
-        </li>
         <% if !logged_in?%>
-          <li class="yes-mobile">
-            <%= link_to "Iniciar sesión", log_in_path %>
-          </li>
-          <li>
-            <%= link_to "Regístrate", client_sign_up_path %>
-          </li>
-          <li class="no-mobile page-scroll">
-            <%= link_to "Iniciar sesión", log_in_path %>
-          </li>
+          <li><%= link_to "Quiénes somos", root_path(anchor: 'about') %></li>
+          <li><%= link_to "Servicios", root_path(anchor: 'services') %></li>
+          <li><%= link_to "Galería", root_path(anchor: 'gallery') %></li>
+          <li><%= link_to "Contacto", root_path(anchor: 'contact') %></li>
+          <li><%= link_to "Productos", products_path %></li>
+
+          <li><%= link_to "Regístrate", client_sign_up_path %></li>
+          <li><%= link_to "Iniciar sesión", log_in_path %></li>
         <% else %>
+          <li><%= link_to "Tips y Recetas", tips_path %></li>
+          <li><%= link_to "Distribuidor", client_my_distributor_path %></li>
+          <li><%= link_to "Órdenes", client_orders_path(@current_user.alph_key) %></li>
+          <li><%= link_to "Productos", products_path %></li>
           <% notifications = @current_user.Notifications.order(created_at: :DESC).limit(5) %>
           <!--Start Dropdown notifications-->
           <li style="padding-bottom: 2px;">
@@ -57,6 +45,7 @@
                    <%= notifications_not_seen_count %>
                  </span>
                <% end # if notifications_not_seen_count > 0 # %>
+               <span class="yes-mobile">Notificaciones</span>
              </a>
              <ul class="dropdown-menu dropdown-alerts dropdown-version2" style="text-shadow: none;">
                <% notifications.each do |n|%>
@@ -75,13 +64,14 @@
                 <li class="divider" style="margin: 0px;"></li>
                 <li>
                   <%= link_to client_notifications_path(@current_user.alph_key) do %>
-                    <strong>Ver notificaciones ></strong>
+                    <strong>Ver todas ></strong>
                   <% end %>
                 </li>
              </ul>
           </li>
           <!--End Dropdown notifications-->
-          <!--Start Dropdown profile and cart-->
+
+          <!--Start Dropdown profile-->
           <li class="dropdown">
             <a href="#" class="less_padding" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top: 14px !important;padding-bottom: 12px !important;">
               <%= image_tag User.getImage(@current_user, :mini),
@@ -90,28 +80,27 @@
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu dropdown-alerts dropdown-version2" style="margin-top: 1px;text-shadow: none;">
-              <!--<li><%= link_to "Mi perfil", client_path(@current_user.alph_key) %></li>-->
-              <li><%= link_to "Tips y Recetas", tips_path %></li>
-              <!--<li><%= link_to "Mi carrito", client_ecart_path(@current_user.alph_key) %></li>-->
-              <li><%= link_to "Mis órdenes", client_orders_path(@current_user.alph_key) %></li>
               <li><%= link_to "Editar perfil", edit_client_client_path(@current_user.alph_key) %></li>
               <li><%= link_to "Editar información fiscal", edit_client_fiscal_datum_path(@current_user.alph_key) %></li>
-              <li><%= link_to "Distribuidores en la zona", client_my_distributor_path %></li>
-              <li role="separator" class="divider" style="margin: 0px;"></li>
-              <li><%= link_to "Dar de baja mi cuenta", client_destroy_account_path(@current_user.alph_key) %></li>
               <li role="separator" class="divider" style="margin: 0px;"></li>
               <li><%= link_to "Cerrar sesión", log_out_path, method: "delete" %></li>
+              <li role="separator" class="divider" style="margin: 0px;"></li>
+              <li><%= link_to "Dar de baja mi cuenta", client_destroy_account_path(@current_user.alph_key) %></li>
             </ul>
           </li>
+          <!--End Dropdown profile-->
+          <!--Ecart-->
           <li>
-            <%= link_to '<i class="icon-basket-loaded" style="font-size: 23px;"></i>'.html_safe,
-                client_ecart_path(@current_user.alph_key), style: "padding-top: 11px; padding-bottom: 10px;" %>
+            <%= link_to client_ecart_path(@current_user.alph_key),
+                style: "padding-top: 11px; padding-bottom: 10px;" do %>
+                <i class="icon-basket-loaded" style="font-size: 20px;"></i>
+                <span class="yes-mobile"> Carrito </span>
+            <% end %>
             <span id="ecart-badge" style="background-color: #f0ad4e;position: absolute;top: 10px;left: 35px;"
-                  <%= "class=badge" if !session[:e_cart].nil? %>>
+                  <%= "class='badge'" if !session[:e_cart].nil? %>>
               <%= session[:e_cart].size if !session[:e_cart].nil? %>
             </span>
           </li>
-          <!--End Dropdown profile and cart-->
         <% end %>
       </ul>
     </div>

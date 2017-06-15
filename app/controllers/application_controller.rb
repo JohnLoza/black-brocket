@@ -16,7 +16,6 @@ class ApplicationController < ActionController::Base
   end
 
   def load_current_user
-    puts "--- loading current_user ---"
     @current_user = current_user
   end
 end

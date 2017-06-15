@@ -1,0 +1,63 @@
+<!-- Footer start -->
+<footer id="footer">
+  <div class="container">
+    <div class="row" style="padding-bottom: 5px;">
+      <div class="col-sm-12">
+        <p class="copyright pull-left">
+         Copyright &copy; BlackBrocket <%=Time.now.year%>
+        </p>
+        <ul class="social-links pull-right">
+          <% social = SocialNetwork.all %>
+          <% social.each do |s| %>
+            <li><a href="<%= s.url %>"><%= s.icon.html_safe %></a></li>
+          <% end %>
+        </ul>
+      </div>
+    </div><!-- .row -->
+  </div><!-- .container -->
+
+  <div class="row position-relative margin-0" style="border-top: 1px dashed #585858;padding-bottom: 10px;"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <ul class="pull-left" style="text-align: left;list-style-type: none;padding-left: 0px;">
+          <li> | <%= link_to "Quiénes somos", root_path(anchor: 'about') %></li>
+          <li> | <%= link_to "Servicios", root_path(anchor: 'services') %></li>
+          <li> | <%= link_to "Galería", root_path(anchor: 'gallery') %></li>
+          <li> | <%= link_to "Contacto", root_path(anchor: 'contact') %></li>
+          <li> | <%= link_to "Quiero ser distribuidor", distributor_request_path %> | </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row position-relative margin-0" style="border-top: 1px dashed #585858;padding-bottom: 10px;"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <ul class="pull-left" style="text-align: left;list-style-type: none;padding-left: 0px;">
+          <!--<li><%= link_to "Política de Privacidad", privacy_policy_path %></li>
+          <li><%= link_to "Términos y Condiciones de Uso", terms_of_service_path %></li>-->
+          <% details = FooterExtraDetail.all %>
+          <% details.each do |detail| %>
+            <li> | <%= detail.detail %> </li>
+          <% end #details.each#%>
+        </ul>
+      </div>
+      <div class="col-sm-12">
+          <b class="pull-left">Legal:</b>
+          <ul class="pull-left" style="text-align: left;list-style-type: none;">
+            <li> | <%= link_to "Política de Privacidad", privacy_policy_path %></li>
+            <li> | <%= link_to "Términos y Condiciones de Uso", terms_of_service_path %> | </li>
+          </ul>
+      </div>
+    </div><!-- .row -->
+  </div><!-- .container -->
+</footer>
+<!-- Footer end -->
+
+<style media="screen">
+  ul.pull-left li{
+    display: inline;
+  }
+</style>

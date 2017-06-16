@@ -1,4 +1,7 @@
-<% notifications = @current_user.Notifications.order(created_at: :DESC).limit(5) %>
+<% if logged_in?
+     notifications = @current_user.Notifications
+                      .order(created_at: :DESC).limit(5)
+   end %>
 
 <!-- Navigation start -->
 <!--Check-->
@@ -17,51 +20,53 @@
         <span class="icon-bar"></span>
       </button>
 
-      <!--Ecart-->
-      <button type="button" class="navbar-toggle pull-right" style="max-height: 34px;">
-        <%= link_to client_ecart_path(@current_user.alph_key) do %>
-            <i class="icon-basket-loaded" style="color: #fff;font-size: 20px;"></i>
-        <% end %>
-        <span id="ecart-badge" style="background-color: #f0ad4e;position: absolute;top: 10px;left: 35px;"
-              <%= "class='badge'" if !session[:e_cart].nil? %>>
-          <%= session[:e_cart].size if !session[:e_cart].nil? %>
-        </span>
-      </button>
-
-      <!--Start Dropdown notifications-->
-      <button type="button" class="navbar-toggle pull-right" style="max-height: 34px;">
-         <a class="count-info" data-toggle="dropdown" href="off_canvas_menu.html#">
-           <i class="icon-bell" style="color: #fff;font-size: 16px;"></i>
-           <% notifications_not_seen_count = @current_user.Notifications.where(:seen => false).size %>
-           <% if notifications_not_seen_count > 0 %>
-             <span class="badge" style="background-color: #F44336;position: absolute;top: 10px;left: 28px;">
-               <%= notifications_not_seen_count %>
-             </span>
-           <% end # if notifications_not_seen_count > 0 # %>
-         </a>
-         <ul class="dropdown-menu dropdown-alerts dropdown-version2" style="text-shadow: none;">
-           <% notifications.each do |n|%>
-              <li>
-                 <a href="<%= n.url %>?notification=<%=n.id%>">
-                  <div style="overflow: auto;">
-                    <i class="<%= n.icon %>"></i>
-                    <%= n.description %>
-                    <% if n.seen %>
-                      <i class="fa fa-check" style="color: #8BC34A;"></i>
-                    <% end %>
-                  </div>
-                 </a>
-              </li>
+      <% if logged_in? %>
+          <!--Ecart-->
+          <button type="button" class="navbar-toggle pull-right" style="max-height: 34px;">
+            <%= link_to client_ecart_path(@current_user.alph_key) do %>
+                <i class="icon-basket-loaded" style="color: #fff;font-size: 20px;"></i>
             <% end %>
-            <li class="divider" style="margin: 0px;"></li>
-            <li>
-              <%= link_to client_notifications_path(@current_user.alph_key) do %>
-                <strong>Ver todas ></strong>
-              <% end %>
-            </li>
-         </ul>
-      </button>
-      <!--End Dropdown notifications-->
+            <span class="ecart-badge <%= "badge" if !session[:e_cart].nil? %>"
+              style="background-color: #f0ad4e;position: absolute;top: 10px;left: 35px;">
+              <%= session[:e_cart].size if !session[:e_cart].nil? %>
+            </span>
+          </button>
+
+          <!--Start Dropdown notifications-->
+          <button type="button" class="navbar-toggle pull-right" style="max-height: 34px;">
+             <a class="count-info" data-toggle="dropdown" href="off_canvas_menu.html#">
+               <i class="icon-bell" style="color: #fff;font-size: 16px;"></i>
+               <% notifications_not_seen_count = @current_user.Notifications.where(:seen => false).size %>
+               <% if notifications_not_seen_count > 0 %>
+                 <span class="badge" style="background-color: #F44336;position: absolute;top: 10px;left: 28px;">
+                   <%= notifications_not_seen_count %>
+                 </span>
+               <% end # if notifications_not_seen_count > 0 # %>
+             </a>
+             <ul class="dropdown-menu dropdown-alerts dropdown-version2" style="text-shadow: none;">
+               <% notifications.each do |n|%>
+                  <li>
+                     <a href="<%= n.url %>?notification=<%=n.id%>">
+                      <div style="overflow: auto;">
+                        <i class="<%= n.icon %>"></i>
+                        <%= n.description %>
+                        <% if n.seen %>
+                          <i class="fa fa-check" style="color: #8BC34A;"></i>
+                        <% end %>
+                      </div>
+                     </a>
+                  </li>
+                <% end %>
+                <li class="divider" style="margin: 0px;"></li>
+                <li>
+                  <%= link_to client_notifications_path(@current_user.alph_key) do %>
+                    <strong>Ver todas ></strong>
+                  <% end %>
+                </li>
+             </ul>
+          </button>
+          <!--End Dropdown notifications-->
+      <% end %>
 
     </div>
     <!--Check end-->

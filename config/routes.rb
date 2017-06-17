@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post '/' => 'static_pages#create_suggestion'
 
   get '/get_cities' => 'static_pages#get_cities', :as => :get_cities
+  get '/get_city_lada' => 'static_pages#get_city_lada', :as => :get_city_lada
   get '/privacy_policy' => 'static_pages#privacy_policy', :as => :privacy_policy
   get '/terms_of_service' => 'static_pages#terms_of_service', :as => :terms_of_service
 

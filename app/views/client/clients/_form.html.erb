@@ -33,12 +33,11 @@
 				<%= f.label :birthday, "Fecha de nacimiento (yyyy-mm-dd)" %>
 				<div class='input-group date' id="datetimepicker">
 					<%= f.text_field :birthday, :class => 'form-control form-control-black',
-						:required => true, :maxlength => 10  %>
+						:maxlength => 10  %>
 					<span class="input-group-addon">
 						<span class="fa fa-calendar"></span>
 					</span>
 				</div>
-				<span class="help-text">Debes ser mayor de 18 años para usar el servicio.</span>
 			</div>
 		</div><!-- .row -->
 
@@ -122,6 +121,18 @@
 	</div>
 
 	<div class="col-md-6">
+		<div class="row">
+	     <div class="col-sm-12 form-group">
+	       <%= render :partial => "/shared/select_state", locals: { states: @states } %>
+	     </div>
+	   </div><!-- .row -->
+
+	   <div class="row">
+	     <div class="col-sm-12 form-group">
+	       <%= render :partial => "/shared/select_city", locals: { cities: @cities } %>
+	     </div>
+	   </div><!-- .row -->
+
 	   <p>Teléfono y dirección a donde enviaremos tus productos</p>
 
 	   <div class="row">
@@ -146,18 +157,6 @@
 	       <%= f.label :cellphone, "Teléfono celular a 10 dígitos" %>
 	       <%= f.text_field :cellphone, :class => 'form-control form-control-black', :placeholder => "000 000 00",
 					 		required: true, :minlength => 10, :maxlength => 25 %>
-	     </div>
-	   </div><!-- .row -->
-
-		 <div class="row">
-	     <div class="col-sm-12 form-group">
-	       <%= render :partial => "/shared/select_state", locals: { states: @states } %>
-	     </div>
-	   </div><!-- .row -->
-
-	   <div class="row">
-	     <div class="col-sm-12 form-group">
-	       <%= render :partial => "/shared/select_city", locals: { cities: @cities } %>
 	     </div>
 	   </div><!-- .row -->
 

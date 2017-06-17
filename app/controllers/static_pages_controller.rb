@@ -1,4 +1,5 @@
 class StaticPagesController < ApplicationController
+  require 'net/http'
   layout "static_pages.html.erb"
 
   @@base_file_path = "app/views"
@@ -24,6 +25,31 @@ class StaticPagesController < ApplicationController
     @photos = WebPhoto.where(name: "GALLERY")
     @offers = WebOffer.all
     @texts = WebInfo.where(name: "WELCOME_MESSAGE").take
+
+    # City.where(LADA: nil).each do |city|
+    #   state_name = city.State.name
+    #   state_name = "México" if state_name == "Edo. México"
+    #   if state_name == "Ciudad de México"
+    #     city.update_attributes(LADA: "55")
+    #     next
+    #   end
+    #
+    #   url = URI.parse("http://telmex.com/web/buscador?q=#{CGI.escape city.name}+#{CGI.escape state_name}&output=xml_no_dtd&oe=UTF-8&ie=UTF-8&client=_nuevo_telmex_claves_lada&proxystylesheet=_nuevo_telmex_claves_lada&entqr=3&entqrm=0&ud=1&getfields=*&site=claves_lada&filter=0&requiredfields=&giro=Mostrar+todo&estado=Seleccione+uno")
+    #   req = Net::HTTP::Get.new(url.to_s)
+    #   res = Net::HTTP.start(url.host, url.port) {|http|
+    #     http.request(req)
+    #   }
+    #
+    #   matches = res.body.match(/(cveLada).*\n.*\n.*div/)
+    #   if matches.nil?
+    #     puts "--- No lada found for #{city.name}, #{state_name} ---"
+    #     next
+    #   end
+    #   num = matches.to_s.match(/\d+/)
+    #
+    #   city.update_attributes(LADA: num.to_s)
+    #   puts "--- updating lada for #{city.name}, #{state_name}| lada: #{num.to_s}"
+    # end
   end
 
   def privacy_policy
@@ -76,6 +102,17 @@ class StaticPagesController < ApplicationController
 
     respond_to do |format|
       format.js { render :get_cities, :layout => false }
+    end
+  end
+
+  def get_city_lada
+    @city = nil
+    if (params[:city] != nil && params[:city] != '')
+      @city = City.find_by(id: params[:city])
+    end
+
+    respond_to do |format|
+      format.js { render :get_city_lada, :layout => false }
     end
   end
 

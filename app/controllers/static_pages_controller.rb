@@ -1,5 +1,5 @@
 class StaticPagesController < ApplicationController
-  require 'net/http'
+  # require 'net/http'
   layout "static_pages.html.erb"
 
   @@base_file_path = "app/views"

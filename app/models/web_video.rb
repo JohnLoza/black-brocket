@@ -7,7 +7,7 @@ class WebVideo < ActiveRecord::Base
   def getVideo()
     video = ""
     if !self.video.blank?
-      video = self.photo.url
+      video = self.video.url
     else
       video = "video.mp4"
     end # if !self.photo.blank? #

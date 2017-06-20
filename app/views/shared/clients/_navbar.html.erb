@@ -9,7 +9,9 @@
 
   <div class="container">
 
-    <%= link_to image_tag("BBGLogo.png"), root_path, :class => "navbar-brand pull-left" %>
+    <%= link_to root_path, :class => 'navbar-brand pull-left', :style => 'padding-top:16px !important;' do %>
+      <i class="icon-home" style="font-size: 20px;"></i>
+    <% end if logged_in? %>
 
     <div class="navbar-header">
 

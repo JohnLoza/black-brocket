@@ -1,9 +1,9 @@
-<tr class="no-mobile">
-  <td style="vertical-align: bottom;" align="right"><b>Cantidad:</b></td>
+<tr class="yes-mobile">
+  <td style="vertical-align: bottom;"><b>Cantidad:</b></td>
   <td><input type="number" placeholder="0" min="1" max="10000000000" step="1" class="form-control"
-         onchange="update_quantity(this, this.value, '')", id="input_quantity"/></td>
+         onchange="update_quantity(this, this.value, 'mobile')", id="input_quantity"/></td>
   <td><%= link_to "Añadir al carrito!",
       client_add_to_cart_path(@w_product.alph_key)+"?quantity=NAN",
       method: :put, remote: true, :class => "btn btn-custom-3 btn-block", :style => "font-size: 11.3px;",
-      id: "add_to_cart" %></td>
+      id: "add_to_cart_mobile" %></td>
 </tr>

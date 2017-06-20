@@ -4,6 +4,10 @@
 
 <section id="home" class="intro-module heightfull">
 
+  <center style="padding-top: 4em;">
+    <%= image_tag "BBLogo.png", style:"width:99px;"%>
+  </center>
+
   <div class="fullscreen-bg">
     <video loop muted autoplay poster="<%= image_url @bgImg.getImage() %>" class="fullscreen-bg__video">
         <source src="<%= video_url @bgVideo.getVideo() %>" type="video/mp4">
@@ -15,11 +19,10 @@
     <div class="intro-slider">
       <!-- Slide 1 -->
       <div class="owl-item">
-        <%= image_tag("BBGLogo.png", style:"width:160px;") %>
         <% if !logged_in?%>
           <div class="row">
             <%= link_to "Regístrate", client_sign_up_path,
-            :class => "btn btn-default btn-custom-4 text-shadow-black", style:"margin-top:1em;" %>
+            :class => "btn btn-default btn-custom-4 text-shadow-black", style:"margin-top:20em;" %>
           </div>
         <% end %>
       </div>

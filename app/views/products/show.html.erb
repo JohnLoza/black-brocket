@@ -44,72 +44,70 @@
       <div class="caption-full">
         <table class="table borderless" style="width: initial;">
           <tbody>
-          <tr>
-            <td><b>Nombre:</b></td>
-            <td><%= @product.name %></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td><b>Clave:</b></td>
-            <td><%= @product.alph_key %></td>
-            <td></td>
-          </tr>
-          <% if logged_in? and session[:user_type] == 'c' %>
+            <%= render "add_to_cart_mobile" if logged_in? and session[:user_type] == 'c' and @w_product.existence > 0 %>
             <tr>
-              <td>
-                <p><b>Existencia: </b>
-                <% if @w_product.existence > 0 %>
-                  Producto Disponible
-                <% else %>
-                  <span style="color: #F44336;">Producto Agotado</span>
-                <% end %></p>
+              <td><b>Nombre:</b></td>
+              <td colspan="2"><%= @product.name %></td>
+            </tr>
+            <tr>
+              <td><b>Clave:</b></td>
+              <td><%= @product.alph_key %></td>
+              <td></td>
+            </tr>
+            <% if logged_in? and session[:user_type] == 'c' %>
+              <tr>
+                <td>
+                  <% if @w_product.existence > 0
+                       var = 'Disponible'
+                     else
+                       var = '<span style="color: #F44336;">Agotado</span>'
+                     end %>
+                  <p><b>Existencia:</b></p>
+                </td>
+                <td colspan="2"><%= var.html_safe %></td>
+              </tr>
+            <% end # if logged_in? and session[:user_type] == 'c' # %>
+            <tr>
+              <td><b>Categorías:</b></td>
+              <td colspan="2">
+                <% var = ''
+                  if @product.cold
+                    var += 'Frío /'
+                  end
+                  if @product.hot
+                    var += 'Caliente /'
+                  end
+                  if @product.frappe
+                    var += 'Frappé /'
+                  end
+                  if @product.cold == false && @product.hot == false && @product.frappe == false
+                    var += 'Sin especificar'
+                  end %>
+                <span><%= var %></span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>Presentación:</b></td>
+              <td colspan="2"><%= @product.presentation %></td>
+            </tr>
+            <tr>
+              <td><b>Precio:</b></td>
+              <% if !@product_price.blank?
+                   price = @product_price.client_price
+                 else
+                  price = @product.price
+                 end %>
+              <td>$<span class="money_format"> <%= price %></span>
               </td>
               <td></td>
             </tr>
-          <% end # if logged_in? and session[:user_type] == 'c' # %>
-          <tr>
-            <td><b>Categorías:</b></td>
-            <td>
-              <% if @product.cold %>
-                Frío /
-              <% end %>
-              <% if @product.hot %>
-                Caliente /
-              <% end %>
-              <% if @product.frappe %>
-              Frappé /
-              <% end %>
-              <% if @product.cold == false && @product.hot == false && @product.frappe == false%>
-              Sin especificar
-              <% end %>
-            </td>
-            <td></td>
-          </tr>
-          <tr>
-            <td><b>Presentación:</b></td>
-            <td><%= @product.presentation %></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td><b>Precio:</b></td>
-            <td>$
-              <span class="money_format">
-                <% if !@product_price.blank? %>
-                  <%= @product_price.client_price %>
-                <% else %>
-                  <%= @product.price %>
-                <% end %>
-              </span>
-            </td>
-            <td></td>
-          </tr>
-          <tr>
-            <td colspan="3"><b>Descripción:</b></td>
-          </tr>
-          <tr>
-            <td colspan="3"><%= render @product.description_render_path %></td>
-          </tr>
-          <%= render "add_to_cart" if logged_in? and session[:user_type] == 'c' and @w_product.existence > 0 %>
+            <tr>
+              <td colspan="3"><b>Descripción:</b></td>
+            </tr>
+            <tr>
+              <td colspan="3"><%= render @product.description_render_path %></td>
+            </tr>
+            <%= render "add_to_cart" if logged_in? and session[:user_type] == 'c' and @w_product.existence > 0 %>
 
           </tbody>
         </table>
@@ -187,13 +185,18 @@
     $(this).ekkoLightbox();
   });
 
-  function update_quantity(input, quantity) {
+  function update_quantity(input, quantity, mobile) {
     if(quantity == ""){
       input.value = "";
     }
 
-    var _href = $('#add_to_cart').attr('href');
-    $('#add_to_cart').attr('href',
+    var link = '#add_to_cart';
+    if(mobile == 'mobile'){
+        link = '#add_to_cart_mobile'
+    }
+
+    var _href = $(link).attr('href');
+    $(link).attr('href',
               _href.replace(/quantity=[^&]+/, 'quantity=' + quantity));
   }
 

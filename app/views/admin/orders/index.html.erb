@@ -1,5 +1,10 @@
 <% provide(:title, "Órdenes") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Órdenes", labels: ['Órdenes']} %>
+<% if params[:distributor] %>
+  <%= render partial: "/shared/admin/header_band", locals:
+        {title: "Órdenes", labels: ['Distribuidores', 'Órdenes'], links: [admin_distributors_path]} %>
+<% else %>
+  <%= render partial: "/shared/admin/header_band", locals: {title: "Órdenes", labels: ['Órdenes']} %>
+<% end %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight ecommerce">

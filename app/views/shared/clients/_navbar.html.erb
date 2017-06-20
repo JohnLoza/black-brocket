@@ -46,7 +46,7 @@
              <ul class="dropdown-menu dropdown-alerts dropdown-version2" style="text-shadow: none;">
                <% notifications.each do |n|%>
                   <li>
-                     <a href="<%= n.url %>?notification=<%=n.id%>">
+                     <a href="<%= n.url %>?notification=<%=n.id%>" style="color: #FEFEFE;">
                       <div style="overflow: auto;">
                         <i class="<%= n.icon %>"></i>
                         <%= n.description %>
@@ -59,7 +59,7 @@
                 <% end %>
                 <li class="divider" style="margin: 0px;"></li>
                 <li>
-                  <%= link_to client_notifications_path(@current_user.alph_key) do %>
+                  <%= link_to client_notifications_path(@current_user.alph_key), style: 'color: #FEFEFE;' do %>
                     <strong>Ver todas ></strong>
                   <% end %>
                 </li>

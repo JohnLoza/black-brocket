@@ -252,6 +252,7 @@ Rails.application.routes.draw do
     post 'user/:user_id/orders/' => "orders#create", :as => :create_order
     delete 'user/:user_id/orders/:id' => "orders#cancel", :as => :cancel_order
     put 'user/:user_id/orders/:id' => "orders#upload_payment", :as => :upload_pay_order
+    get 'user/:user_id/orders/:id/get_payment' => 'orders#get_payment', :as => :get_order_payment 
 
     resources :fiscal_data, except: [ :index ]
   end

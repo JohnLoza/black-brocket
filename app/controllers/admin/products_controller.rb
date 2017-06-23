@@ -109,7 +109,7 @@ class Admin::ProductsController < ApplicationController
       redirect_to controller: "admin/products"
     else
       _new()
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, intentalo de nuevo por favor.'
+      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
       render :new
     end
   end
@@ -216,7 +216,7 @@ class Admin::ProductsController < ApplicationController
       return
     else
       _edit()
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, intentalo de nuevo por favor.'
+      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
       render :edit
     end # if @product.update_attributes(product_params) #
   end
@@ -235,7 +235,7 @@ class Admin::ProductsController < ApplicationController
     if @product.update_attributes(:deleted => true)
       redirect_to controller: "admin/products"
     else
-      flash[:danger] = 'Ocurrió un error al eliminar el trabajador, intentalo de nuevo por favor.'
+      flash[:danger] = 'Ocurrió un error al eliminar el trabajador, inténtalo de nuevo por favor.'
       redirect_to controller: "admin/products"
     end
   end

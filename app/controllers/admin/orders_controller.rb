@@ -141,7 +141,7 @@ class Admin::OrdersController < ApplicationController
     if @saved==true
       flash[:success]=t(@order.state)
     else
-      flash[:danger]="Ocurrió un error al procesar el pago, intentalo de nuevo por favor"
+      flash[:danger]="Ocurrió un error al procesar el pago, inténtalo de nuevo por favor"
     end
 
     redirect_to admin_orders_path(type: "ACCEPT_REJECT_PAYMENT")

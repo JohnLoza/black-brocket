@@ -185,8 +185,17 @@ class Client::OrdersController < ApplicationController
     redirect_to client_orders_path(@current_user.alph_key)
   end
 
-  def update_order_address
-
+  def get_payment
+    @order = @current_user.Orders.find_by(alph_key: params[:id])
+    if !@order.nil?
+      # if there is an image of the payment send it
+      if !@order.pay_photo.blank?
+        send_file @order.pay_photo.path
+      # else, if there is a pdf of the payment, send it
+      elsif !@order.pay_pdf.blank?
+        send_file @order.pay_pdf.path
+      end
+    end
   end
 
   private

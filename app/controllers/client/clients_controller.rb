@@ -97,7 +97,7 @@ class Client::ClientsController < ApplicationController
       @states = State.all.order(:name)
       @cities = City.where(state_id: @state_id)
 
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, intentalo de nuevo por favor.'
+      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
       render :new
     end
   end
@@ -127,7 +127,7 @@ class Client::ClientsController < ApplicationController
       redirect_to products_path
       return
     else
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, intentalo de nuevo por favor.'
+      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
       @url = client_client_path(params[:id])
 
       @city_id = params[:city_id]

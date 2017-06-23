@@ -104,7 +104,7 @@ class Admin::BankAccountsController < ApplicationController
     if @bank_account and @bank_account.destroy
       flash[:success] = "Cuenta de banco eliminada definitivamente"
     else
-      flash[:danger] = "Ocurrió un error al eliminar la cuenta, intentalo de nuevo por favor"
+      flash[:danger] = "Ocurrió un error al eliminar la cuenta, inténtalo de nuevo por favor"
     end # @bank_account and @bank_account.destroy #
 
     redirect_to admin_bank_accounts_path

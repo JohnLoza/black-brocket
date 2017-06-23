@@ -77,7 +77,7 @@ class Admin::WorkersController < ApplicationController
       @warehouse_id = params[:site_worker][:warehouse_id]
       @cities = City.where(state_id: @state_id)
 
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, intentalo de nuevo por favor.'
+      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
       render :new
     end
   end # def create end #
@@ -140,7 +140,7 @@ class Admin::WorkersController < ApplicationController
       @state_id = params[:state_id]
       @cities = City.where(state_id: @state_id)
 
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, intentalo de nuevo por favor.'
+      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
       render :edit
     end
   end # def update end #
@@ -153,7 +153,7 @@ class Admin::WorkersController < ApplicationController
     if @worker.update_attributes(:deleted => true)
       redirect_to controller: "admin/workers"
     else
-      flash[:danger] = 'Ocurrió un error al eliminar el trabajador, intentalo de nuevo por favor.'
+      flash[:danger] = 'Ocurrió un error al eliminar el trabajador, inténtalo de nuevo por favor.'
       redirect_to controller: "admin/workers"
     end
   end # def destroy end #

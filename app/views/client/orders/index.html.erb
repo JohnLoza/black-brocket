@@ -58,16 +58,16 @@
         <%= o.tracking_code %>
       </div>
       <div class="col-sm-2 text-center">
+
         <b>Comprobante:</b></br>
-        <% if !o.pay_photo.blank? %>
-          <%= link_to image_tag(o.pay_photo.url(:mini), :class => "img-rounded",:style =>"width:60px;"),
-              image_path(o.pay_photo.url), :data => {:toggle => "lightbox", :title => "Pago de la orden: " + o.alph_key } %>
-        <% elsif !o.pay_pdf.blank? %>
-          <%= link_to "<i class='fa fa-file-pdf-o fa-5x'></i>".html_safe,
-              o.pay_pdf.url, target: "_blank" %>
+        <% if !o.pay_photo.blank? or !o.pay_pdf.blank? %>
+          <%= link_to client_get_order_payment_path(@current_user.alph_key, o.alph_key), target: '_blank' do %>
+            <i class="fa fa-file fa-3x"></i>
+          <% end %>
         <% else %>
           <span class="label label-default">  No se ha subido ninguna foto.</span>
         <% end %>
+        
       </div>
       <div class="col-sm-2 text-center">
         <b>Ver pedido:</b></br>

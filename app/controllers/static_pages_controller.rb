@@ -25,31 +25,6 @@ class StaticPagesController < ApplicationController
     @photos = WebPhoto.where(name: "GALLERY")
     @offers = WebOffer.all
     @texts = WebInfo.where(name: "WELCOME_MESSAGE").take
-
-    # City.where(LADA: nil).each do |city|
-    #   state_name = city.State.name
-    #   state_name = "México" if state_name == "Edo. México"
-    #   if state_name == "Ciudad de México"
-    #     city.update_attributes(LADA: "55")
-    #     next
-    #   end
-    #
-    #   url = URI.parse("http://telmex.com/web/buscador?q=#{CGI.escape city.name}+#{CGI.escape state_name}&output=xml_no_dtd&oe=UTF-8&ie=UTF-8&client=_nuevo_telmex_claves_lada&proxystylesheet=_nuevo_telmex_claves_lada&entqr=3&entqrm=0&ud=1&getfields=*&site=claves_lada&filter=0&requiredfields=&giro=Mostrar+todo&estado=Seleccione+uno")
-    #   req = Net::HTTP::Get.new(url.to_s)
-    #   res = Net::HTTP.start(url.host, url.port) {|http|
-    #     http.request(req)
-    #   }
-    #
-    #   matches = res.body.match(/(cveLada).*\n.*\n.*div/)
-    #   if matches.nil?
-    #     puts "--- No lada found for #{city.name}, #{state_name} ---"
-    #     next
-    #   end
-    #   num = matches.to_s.match(/\d+/)
-    #
-    #   city.update_attributes(LADA: num.to_s)
-    #   puts "--- updating lada for #{city.name}, #{state_name}| lada: #{num.to_s}"
-    # end
   end
 
   def privacy_policy
@@ -77,16 +52,17 @@ class StaticPagesController < ApplicationController
     if candidate.save
       flash[:success] = "Tus datos fueron enviados, un representante se contactará contigo muy pronto."
     else
-      flash[:danger] = "Ocurrió un error al guardar tu información, intentalo de nuevo por favor."
+      flash[:danger] = "Ocurrió un error al guardar tu información, inténtalo de nuevo por favor."
     end
     redirect_to root_path
   end
 
   def create_suggestion
-    suggestion = Suggestion.new(suggestion_params)
-
     @saved = false
-    @saved = true if suggestion.save
+    if !params[:name].blank? and !params[:email].blank? and !params[:message].blank?
+      suggestion = Suggestion.new(suggestion_params)
+      @saved = true if suggestion.save
+    end
 
     respond_to do |format|
       format.js { render :create_suggestion, :layout => false }
@@ -126,5 +102,32 @@ class StaticPagesController < ApplicationController
        mother_lastname: params[:mother_lastname],
        telephone: params[:telephone], cellphone: params[:cellphone],
        city_id: params[:city_id], email: params[:email]}
+    end
+
+    def fill_ladas_in_database
+      City.where(LADA: nil).each do |city|
+        state_name = city.State.name
+        state_name = "México" if state_name == "Edo. México"
+        if state_name == "Ciudad de México"
+          city.update_attributes(LADA: "55")
+          next
+        end
+
+        url = URI.parse("http://telmex.com/web/buscador?q=#{CGI.escape city.name}+#{CGI.escape state_name}&output=xml_no_dtd&oe=UTF-8&ie=UTF-8&client=_nuevo_telmex_claves_lada&proxystylesheet=_nuevo_telmex_claves_lada&entqr=3&entqrm=0&ud=1&getfields=*&site=claves_lada&filter=0&requiredfields=&giro=Mostrar+todo&estado=Seleccione+uno")
+        req = Net::HTTP::Get.new(url.to_s)
+        res = Net::HTTP.start(url.host, url.port) {|http|
+          http.request(req)
+        }
+
+        matches = res.body.match(/(cveLada).*\n.*\n.*div/)
+        if matches.nil?
+          puts "--- No lada found for #{city.name}, #{state_name} ---"
+          next
+        end
+        num = matches.to_s.match(/\d+/)
+
+        city.update_attributes(LADA: num.to_s)
+        puts "--- updating lada for #{city.name}, #{state_name}| lada: #{num.to_s}"
+      end
     end
 end

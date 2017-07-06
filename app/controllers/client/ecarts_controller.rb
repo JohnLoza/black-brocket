@@ -16,17 +16,12 @@ class Client::EcartsController < ApplicationController
   def add_to_cart
     @product = WarehouseProduct.find_by(alph_key: params[:id])
 
-    session[:e_cart] = {} if !session[:e_cart]
+    @quantity_is_correct = true if params[:quantity].to_i > 0 and
+                                   @product.existence >= params[:quantity].to_i
 
-    @quantity_is_correct = false
-    @quantity_is_correct = true if params[:quantity].to_i > 0 and @product.existence >= params[:quantity].to_i
-
-    if @quantity_is_correct == true
+    if @quantity_is_correct
+      session[:e_cart] = {} if !session[:e_cart]
       session[:e_cart][params[:id]] = params[:quantity]
-    else
-      if !session[:e_cart].any?
-        session[:e_cart] = nil
-      end
     end
 
     respond_to do |format|
@@ -35,6 +30,7 @@ class Client::EcartsController < ApplicationController
   end
 
   def remove_from_cart
+    # remove the selected item from the cart #
     if session[:e_cart].has_key?(params[:product])
       session[:e_cart].delete(params[:product])
       session.delete(:e_cart) if session[:e_cart].empty?
@@ -67,6 +63,4 @@ class Client::EcartsController < ApplicationController
       format.js { render :update_quantity, :layout => false }
     end
   end
-
-  private
 end

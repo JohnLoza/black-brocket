@@ -20,7 +20,8 @@
                 <td colspan="3"><%= @distributor.name %> <%= @distributor.lastname %> <%= @distributor.mother_lastname %></td>
               </tr>
               <% distributor_city = @distributor.City %>
-              <% if @distributor.show_address %>
+              <% if (@distributor_is_a_worker == false and @distributor.show_address) or
+                    @distributor_is_a_worker == true %>
                 <tr>
                   <td><b>Ubicación:</b></td>
                   <td><%= distributor_city.name %>, <%= distributor_city.State.name %></td>

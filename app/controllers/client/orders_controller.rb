@@ -38,7 +38,6 @@ class Client::OrdersController < ApplicationController
 
   def create
     verify_fiscal_data # only if requires invoice #
-
     @order = Order.new
 
     # find the corresponding distributor #
@@ -61,7 +60,7 @@ class Client::OrdersController < ApplicationController
                 .where(describes_total_stock: true).includes(:Product)
 
     @products.each do |product|
-      puts "--- existence: #{product.existence}, buying: #{session[:e_cart][product.alph_key]}"
+      # puts "--- existence: #{product.existence}, buying: #{session[:e_cart][product.alph_key]}"
       if product.existence < session[:e_cart][product.alph_key].to_i
         flash[:danger] = "Lo sentimos pero no queda suficiente inventario del producto con clave #{product.Product.alph_key} su existencia actual es de: #{product.existence}"
         redirect_to client_ecart_path(@current_user.alph_key)

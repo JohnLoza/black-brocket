@@ -2,9 +2,6 @@ class StaticPagesController < ApplicationController
   # require 'net/http'
   layout "static_pages.html.erb"
 
-  @@base_file_path = "app/views"
-  @@replaceable_path = "/shared/products/"
-
   def index
     if !session[:user_type].blank?
       if session[:user_type] == 'w'
@@ -105,6 +102,7 @@ class StaticPagesController < ApplicationController
     end
 
     def fill_ladas_in_database
+      # need to uncomment require 'net/http' at the top of the file
       City.where(LADA: nil).each do |city|
         state_name = city.State.name
         state_name = "México" if state_name == "Edo. México"

@@ -25,10 +25,6 @@ class Client::FiscalDataController < ApplicationController
     @url = client_fiscal_datum_path
   end
 
-  def show
-
-  end
-
   def create
     @fiscal_data = FiscalData.new(fiscal_params)
     @fiscal_data.city_id = params[:city_id]

@@ -9,12 +9,9 @@ class Admin::DistributorWorkController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    regions = DistributorRegion.joins(:Distributor)
-              .where(distributors:{deleted: false}).includes(:City)
-    cities_with_distributor = regions.map(&:city_id)
-
-    @clients = Client.where("city_id not in (?)", cities_with_distributor)
-                     .where(worker_id: nil).paginate(page: params[:page], per_page: 25).includes(City: :State)
+    @clients = Client.joins(:City).where(cities: {distributor_id: nil})
+            .where(worker_id: nil)
+            .paginate(page: params[:page], per_page: 25).includes(City: :State)
   end
 
   def take_client

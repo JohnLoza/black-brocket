@@ -31,7 +31,7 @@ class ProductsController < ApplicationController
       @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.product_id})
 
     else
-      # when the user hasn't logged in#
+      # when the user hasn't logged in #
       if params[:category]
         if params[:category] == "hot" or params[:category] == "cold" or params[:category] == "frappe"
           @products = Product.where(show: true, deleted: false, "#{params[:category]}" => true).paginate(:page => params[:page], :per_page => 18)
@@ -54,7 +54,6 @@ class ProductsController < ApplicationController
       @w_product = WarehouseProduct.find_by(alph_key: params[:id])
 
       if @w_product.nil?
-        puts "--- Product with key: #{params[:id]} not found ---"
         flash[:info] = "No se encontró el producto con clave: #{params[:id]}."
         redirect_to products_path
         return
@@ -81,10 +80,9 @@ class ProductsController < ApplicationController
                 alph_key: SecureRandom.urlsafe_base64(6),
                 description: params[:prod_question][:description])
 
+    @saved = false
     if @question.save
       @saved = true
-    else
-      @saved = false
     end
 
     respond_to do |format|

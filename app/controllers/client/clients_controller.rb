@@ -9,26 +9,23 @@ class Client::ClientsController < ApplicationController
     end
 
     @distributor = @current_user.City.Distributor
+    @distributor_is_a_worker = false
     if !@distributor and !@current_user.worker_id.blank?
-      @worker = @current_user.Worker
+      # see if there is a worker that will attend this client
+      @distributor = @current_user.Worker
+      @distributor_is_a_worker = true if @distributor
     end
 
-    if @distributor or @worker
+    if @distributor
       @messages = @current_user.DistributorMessages.all.order(:created_at => :desc)
                     .paginate(page: params[:page], :per_page => 25)
-      @create_message_url = client_create_distributor_comment_path(@distributor.id) if @distributor
-      @create_message_url = client_create_distributor_comment_path(@worker.id) if @worker
+      @create_message_url = client_create_distributor_comment_path(@distributor.id)
 
       @client_image = User.getImage(@current_user, :mini)
       @client_username = @current_user.username
-      if @distributor
-        @distributor_image = User.getImage(@distributor, :mini)
-        @distributor_username = @distributor.username
-      end
-      if @worker
-        @distributor_image = User.getImage(@worker, :mini)
-        @distributor_username = @worker.username
-      end
+
+      @distributor_image = User.getImage(@distributor, :mini)
+      @distributor_username = @distributor.username
     end
   end
 
@@ -88,16 +85,10 @@ class Client::ClientsController < ApplicationController
       flash[:success] = "Bienvenido a Black Brocket, por ser su primera compra y para brindarle un mejor servicio, nuestro distribuidor de zona se pondrá en contacto o un representante de ventas se comunicará con usted. Si es una Pyme, dueño de una cafetería, tiene negocio relacionado con alimentos o es mayorista le ofrecemos precios y descuentos preferenciales bastante atractivos. Estos se los dará nuestro  representante de ventas, así como una demostración de nuestros productos. Una vez hecho el pago de su pedido los descuentos no se bonifican. Puede contactarnos en el menú en la opción \“distribuidores en la zona\”."
       redirect_to products_path
     else
-      @client.errors.each do |field, msg|
-        puts "--- #{field} #{msg} ---"
-      end
-
       @url = client_clients_path
-
       @states = State.all.order(:name)
       @cities = City.where(state_id: @state_id)
-
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
+      flash.now[:danger] = 'Ocurrió un error al guardar.'
       render :new
     end
   end
@@ -117,22 +108,15 @@ class Client::ClientsController < ApplicationController
     @client = current_user
     @client.city_id = params[:city_id]
 
-    # address_changed = false;
-    # if @client.street != params[:client][:street] or @client.col != params[:client][:col] or @client.extnumber != params[:client][:extnumber]
-    #   address_changed = true
-    # end
-
     if @client.update_attributes(client_params)
       flash[:success] = "Tu información ha sido actualizada!"
       redirect_to products_path
       return
     else
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
+      flash.now[:danger] = 'Ocurrió un error al guardar.'
       @url = client_client_path(params[:id])
-
       @city_id = params[:city_id]
       @state_id = params[:state_id]
-
       @states = State.all.order(:name)
       @cities = City.where(state_id: @state_id)
       render :edit
@@ -157,7 +141,7 @@ class Client::ClientsController < ApplicationController
 
     if @distributor
       message.distributor_id = @distributor.id
-      notification = Notification.create(distributor_id: @distributor.id, icon: "fa fa-comments-o",
+      Notification.create(distributor_id: @distributor.id, icon: "fa fa-comments-o",
                       description: "El usuario " + @current_user.username + " te envió un mensaje",
                       url: distributor_client_messages_path(@current_user.alph_key))
     elsif @worker
@@ -191,32 +175,4 @@ class Client::ClientsController < ApplicationController
       {client_id: @current_user.id, comment: params[:comment],
       is_from_client: true}
     end
-
-    def generate_bank_reference(city_id, alph_key)
-      city = City.find(city_id)
-      states = State.all.order(name: :asc)
-
-      cont = 1
-      state = nil
-      state_ref = nil
-
-      states.each do |s|
-        if s.id == city.state_id
-          state = s
-          if cont < 10
-            state_ref = "0"+cont.to_s
-          else
-            state_ref = cont.to_s
-          end
-        else
-          cont += 1
-        end
-      end
-
-      country = Country.find(state.country_id)
-      country_ref = country.name.at(0)
-
-      return country_ref + state_ref + alph_key.sub("-","0")
-    end
-
 end

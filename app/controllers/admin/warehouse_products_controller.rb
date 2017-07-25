@@ -130,7 +130,7 @@ class Admin::WarehouseProductsController < ApplicationController
     end
 
     @hash = Hash.new
-    @alph_key = SecureRandom.urlsafe_base64(6)
+    @alph_key = random_alph_key(12).upcase
 
     @hash[params[:id]] = {"name" => params[:warehouse_product][:name],
             @alph_key => {"quantity" => params[:warehouse_product][:quantity],
@@ -575,7 +575,7 @@ class Admin::WarehouseProductsController < ApplicationController
             existing_batch.update_attributes(existence: existing_batch.existence + quantity_to_add)
           else
             WarehouseProduct.create(warehouse_id: warehouse.id, product_id: product_id,
-                  describes_total_stock: false, alph_key: SecureRandom.urlsafe_base64(6),
+                  describes_total_stock: false, alph_key: random_alph_key(12).upcase,
                   existence: quantity_to_add, batch: d.batch, expiration_date: d.expiration_date)
           end
 

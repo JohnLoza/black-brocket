@@ -60,7 +60,7 @@ class Admin::CommissionsController < ApplicationController
     saved = false
     ActiveRecord::Base.transaction do
       commission = Commission.new()
-      commission.alph_key = SecureRandom.urlsafe_base64(6)
+      commission.alph_key = random_alph_key(12).upcase
       commission.distributor_id = @distributor.id
       commission.worker_id = @current_user.id
       commission.state = "WAITING_FOR_PAYMENT"

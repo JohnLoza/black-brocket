@@ -38,7 +38,7 @@ class Api::FiscalDataController < ApplicationController
     @fiscal_data = FiscalData.new(fiscal_params)
     @fiscal_data.city_id = params[:city_id]
     @fiscal_data.client_id = @current_user.id
-    @fiscal_data.alph_key = SecureRandom.urlsafe_base64(6)
+    @fiscal_data.alph_key = random_alph_key(12).upcase
 
     if @fiscal_data.save
       render :status => 200,

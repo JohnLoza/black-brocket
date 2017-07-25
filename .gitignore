@@ -18,6 +18,7 @@
 # Ignore the uploaded files and assets
 /public/uploads*
 /public/assets*
+/private/uploads*
 
 # Ignore the db configuration file
 /config/database.yml

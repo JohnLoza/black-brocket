@@ -1,4 +1,4 @@
-<% alph_key = SecureRandom.urlsafe_base64(6) %>
+<% alph_key = random_alph_key(12).upcase %>
 
 <div id="<%= alph_key %>">
   <%= label_tag :product, "Producto" %>

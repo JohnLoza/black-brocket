@@ -136,6 +136,7 @@ Rails.application.routes.draw do
     put 'order/:id/capture_tracking_code' => 'orders#save_tracking_code', :as => :capture_tracking_code
     put 'order/:id/delivered' => 'orders#save_as_delivered', :as => :order_delivered
     put 'order/:id/invoice' => 'orders#invoice_delivered', :as => :order_invoice_delivered
+    get 'order/:payment_key/download_payment_file' => 'orders#download_payment_file', :as => :download_payment
 
     # orders search #
     get 'orders/search' => 'orders#search', :as => :orders_search
@@ -252,7 +253,7 @@ Rails.application.routes.draw do
     post 'user/:user_id/orders/' => "orders#create", :as => :create_order
     delete 'user/:user_id/orders/:id' => "orders#cancel", :as => :cancel_order
     put 'user/:user_id/orders/:id' => "orders#upload_payment", :as => :upload_pay_order
-    get 'user/:user_id/orders/:id/get_payment' => 'orders#get_payment', :as => :get_order_payment 
+    get 'user/:user_id/orders/:id/get_payment' => 'orders#get_payment', :as => :get_order_payment
 
     resources :fiscal_data, except: [ :index ]
   end

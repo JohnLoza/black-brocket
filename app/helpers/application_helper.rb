@@ -13,6 +13,22 @@ module ApplicationHelper
     return letter + new_key
   end
 
+  def random_alph_key(number)
+    alph_key = Array.new
+    index = 0
+    while index < number
+      i = SecureRandom.random_number(alphanumericArray.size)
+      alph_key << alphanumericArray[i]
+      index += 1
+    end
+    return alph_key.join
+  end
+
+  def alphanumericArray
+    ['q','w','e','r','t','y','u','p','a','s','d','f','g','h','j','k','z',
+      'x','c','v','b','n','m','1','2','3','4','5','6','7','8','9','0']
+  end
+
   def process_authorization_result(authorization_result, redirect_to_admin_home_page = true)
     authorized = false
 

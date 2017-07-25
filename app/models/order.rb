@@ -15,6 +15,6 @@ class Order < ActiveRecord::Base
 
   validates :total, numericality: true, :on => :create
 
-  mount_uploader :pay_photo, PayUploader
+  mount_uploader :pay_img, PayUploader
   mount_uploader :pay_pdf, PdfUploader
 end

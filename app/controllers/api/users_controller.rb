@@ -101,7 +101,7 @@ class Api::UsersController < ApplicationController
     end
 
     @current_user.deleted=true
-    @current_user.delete_account_hash= SecureRandom.urlsafe_base64(6)
+    @current_user.delete_account_hash= random_alph_key(12).upcase
 
     if @current_user.save
       render :status => 200,

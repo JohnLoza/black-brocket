@@ -33,15 +33,15 @@
       </div>
       <div class="col-sm-2">
          <b>Status:</b></br>
-         <% case t(o.state)
-         when "Pedido cancelado"%>
+         <% case o.state %>
+         <%when "ORDER_CANCELED"%>
            <label class="label label-danger" style="font-size: 13px;"><%=t(o.state)%></label>
-         <%when "Pago rechazado"%>
+         <%when "PAYMENT_REJECTED"%>
            <label class="label label-warning" style="font-size: 13px;"><%=t(o.state)%></label>
-         <%when "Pedido entregado"%>
-           <label class="label label-success" style="font-size: 13px;"><%=t(o.state)%></label>
-         <%else%>
+         <%when "PAYMENT_DEPOSITED"%>
            <label class="label label-custom-2" style="font-size: 13px;"><%=t(o.state)%></label>
+         <%else%>
+           <label class="label label-success" style="font-size: 13px;"><%=t(o.state)%></label>
          <%end%>
       </div>
       <div class="col-sm-1">
@@ -60,14 +60,14 @@
       <div class="col-sm-2 text-center">
 
         <b>Comprobante:</b></br>
-        <% if !o.pay_photo.blank? or !o.pay_pdf.blank? %>
-          <%= link_to client_get_order_payment_path(@current_user.alph_key, o.alph_key), target: '_blank' do %>
-            <i class="fa fa-file fa-3x"></i>
+        <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
+          <%= link_to client_get_order_payment_path(@current_user.alph_key, o.download_payment_key), target: '_blank' do %>
+            <i class="fa fa-file-o fa-3x"></i>
           <% end %>
         <% else %>
           <span class="label label-default">  No se ha subido ninguna foto.</span>
         <% end %>
-        
+
       </div>
       <div class="col-sm-2 text-center">
         <b>Ver pedido:</b></br>
@@ -89,16 +89,16 @@
                       method: :put, html:{id:"form_photo_#{o.alph_key}"},
                       data:{confirm: "Seguro(a) de ser el archivo correcto?"}) do |f| %>
         <div class="col-sm-2 text-right">
-          <%= f.file_field :pay_photo, id: "field_#{o.alph_key}",
+          <%= f.file_field :pay_img, id: "field_#{o.alph_key}",
               :style =>"display: none;", :multiple => false,
-              :onchange => "$('#pay_photo_commit_#{o.alph_key}').click();" %></br>
+              :onchange => "$('#pay_img_commit_#{o.alph_key}').click();" %></br>
         </div>
         <div class="col-sm-4">
           <i onclick="$('#field_<%=o.alph_key%>').click();"
              class="btn btn-custom-1 btn-sm pull-right">Enviar comprobante de pago</i>
 
           <%= f.submit "Subir foto del pago".html_safe,
-              id: "pay_photo_commit_#{o.alph_key}", style: "display: none;" %>
+              id: "pay_img_commit_#{o.alph_key}", style: "display: none;" %>
         </div>
       <% end if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>
     </div>

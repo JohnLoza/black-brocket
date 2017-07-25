@@ -104,7 +104,7 @@ class Admin::WarehousesController < ApplicationController
         Product.all.each do |p|
           WarehouseProduct.create(warehouse_id: @warehouse.id,
                   describes_total_stock: true, product_id: p.id, existence: 0,
-                  min_stock: 50, alph_key: SecureRandom.urlsafe_base64(6))
+                  min_stock: 50, alph_key: random_alph_key(12).upcase)
         end
 
         redirect_to admin_warehouses_path

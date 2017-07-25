@@ -136,7 +136,7 @@ class CreateDbTables < ActiveRecord::Migration
       t.string :alph_key
       t.string :address
       t.decimal :total, precision: 8, scale: 2
-      t.string :pay_photo
+      t.string :pay_img
       t.string :pay_pdf, default: nil
       t.string :tracking_code
       t.string :state

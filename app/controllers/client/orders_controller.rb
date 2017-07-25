@@ -53,7 +53,7 @@ class Client::OrdersController < ApplicationController
     @order.invoice = params[:invoice] if params[:invoice]
     @order.state = "WAITING_FOR_PAYMENT"
 
-    @order.alph_key = SecureRandom.urlsafe_base64(6)
+    @order.alph_key = random_alph_key(12).upcase
 
     # find the products the client want to buy #
     @products = WarehouseProduct.where(alph_key: session[:e_cart].keys)
@@ -98,7 +98,7 @@ class Client::OrdersController < ApplicationController
       total_ieps = (current_product_price-total_iva)-((current_product_price-total_iva)*100/(p.Product.ieps+100))
 
       @order_details << OrderDetail.new(product_id: p.product_id,
-                  alph_key: SecureRandom.urlsafe_base64(6), iva: p.Product.iva,
+                  alph_key: random_alph_key(12).upcase, iva: p.Product.iva,
                   quantity: session[:e_cart][p.alph_key], sub_total: subtotal,
                   w_product_id: p.id, ieps: p.Product.ieps, price: current_product_price,
                   total_iva: total_iva * session[:e_cart][p.alph_key].to_i,
@@ -167,13 +167,16 @@ class Client::OrdersController < ApplicationController
   def upload_payment
     @order = Order.where(alph_key: params[:id]).take
     if params[:order] and @order
-        if params[:order][:pay_photo].content_type == "application/pdf"
-          @order.remove_pay_photo! if !@order.pay_photo.blank?
-          @saved = true if @order.update_attributes(pay_pdf: params[:order][:pay_photo], state: "PAYMENT_DEPOSITED")
+        if params[:order][:pay_img].content_type == "application/pdf"
+          @order.remove_pay_img! if !@order.pay_img.blank?
+          @order.pay_pdf = params[:order][:pay_img]
         else
           @order.remove_pay_pdf! if !@order.pay_pdf.blank?
-          @saved = true if @order.update_attributes(pay_photo: params[:order][:pay_photo], state: "PAYMENT_DEPOSITED")
+          @order.pay_img = params[:order][:pay_img]
         end
+        @order.state = "PAYMENT_DEPOSITED"
+        @order.download_payment_key = SecureRandom.urlsafe_base64 if @order.download_payment_key.nil?
+        @saved = true if @order.save!
     end
 
     if @saved
@@ -185,11 +188,11 @@ class Client::OrdersController < ApplicationController
   end
 
   def get_payment
-    @order = @current_user.Orders.find_by(alph_key: params[:id])
+    @order = @current_user.Orders.find_by(download_payment_key: params[:id])
     if !@order.nil?
       # if there is an image of the payment send it
-      if !@order.pay_photo.blank?
-        send_file @order.pay_photo.path
+      if !@order.pay_img.blank?
+        send_file @order.pay_img.path
       # else, if there is a pdf of the payment, send it
       elsif !@order.pay_pdf.blank?
         send_file @order.pay_pdf.path

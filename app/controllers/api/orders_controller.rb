@@ -153,7 +153,7 @@ class Api::OrdersController < ApplicationController
     order.invoice = params[:invoice] if !params[:invoice].blank?
     order.state = "WAITING_FOR_PAYMENT"
 
-    order.alph_key = SecureRandom.urlsafe_base64(6)
+    order.alph_key = random_alph_key(12).upcase
 
     # find the products the client want to buy #
     products = WarehouseProduct.where("alph_key in (?) and describes_total_stock = 1",
@@ -197,7 +197,7 @@ class Api::OrdersController < ApplicationController
       total_ieps = (current_product_price-total_iva)-((current_product_price-total_iva)*100/(p.Product.ieps+100))
 
       order_details << OrderDetail.new(product_id: p.product_id,
-                  alph_key: SecureRandom.urlsafe_base64(6), iva: p.Product.iva,
+                  alph_key: random_alph_key(12).upcase, iva: p.Product.iva,
                   quantity: params[:product_details][p.alph_key], sub_total: subtotal,
                   w_product_id: p.id, ieps: p.Product.ieps, price: current_product_price,
                   total_iva: total_iva * params[:product_details][p.alph_key].to_i,
@@ -301,11 +301,11 @@ class Api::OrdersController < ApplicationController
     end
 
     if params[:payment].content_type.include? "pdf"
-      order.remove_pay_photo! if !order.pay_photo.blank?
+      order.remove_pay_img! if !order.pay_img.blank?
       order.pay_pdf = params[:payment]
     elsif params[:payment].content_type.include? "image"
       order.remove_pay_pdf! if !order.pay_pdf.blank?
-      order.pay_photo = params[:payment]
+      order.pay_img = params[:payment]
     else
       render :status => 200,
              :json => { :success => false, :info => "FILE_FORMAT_ERROR" }

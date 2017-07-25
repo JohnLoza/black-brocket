@@ -77,7 +77,7 @@ class ProductsController < ApplicationController
   def ask
     product = Product.find_by(alph_key: params[:id])
     @question = ProdQuestion.new(product_id: product.id, client_id: @current_user.id,
-                alph_key: SecureRandom.urlsafe_base64(6),
+                alph_key: random_alph_key(12).upcase,
                 description: params[:prod_question][:description])
 
     @saved = false

@@ -84,20 +84,20 @@ class Admin::ProductsController < ApplicationController
       if params[:product][:principal_photo]
         ProdPhoto.where("product_id=#{@product.id} and is_principal=true").limit(1).update_all(is_principal: false)
         ProdPhoto.create(product_id: @product.id, is_principal: true,
-                         alph_key: SecureRandom.urlsafe_base64(6),
+                         alph_key: random_alph_key(12).upcase,
                          photo: params[:product][:principal_photo],)
       end
 
       image_params.each do |param|
         @new_photo = ProdPhoto.create(product_id: @product.id,
-                               alph_key: SecureRandom.urlsafe_base64(6),
+                               alph_key: random_alph_key(12).upcase,
                                photo: param)
       end if image_params
 
       Warehouse.all.each do |w|
         WarehouseProduct.create(warehouse_id: w.id, describes_total_stock: true,
                 product_id: @product.id, existence: 0, min_stock: 50,
-                alph_key: SecureRandom.urlsafe_base64(6))
+                alph_key: random_alph_key(12).upcase)
       end
 
       # set new custom_prices #
@@ -202,13 +202,13 @@ class Admin::ProductsController < ApplicationController
       if params[:product][:principal_photo]
         ProdPhoto.where(product_id: @product.id, is_principal: true).limit(1).update_all(is_principal: false)
         ProdPhoto.create(product_id: @product.id, is_principal: true,
-                         alph_key: SecureRandom.urlsafe_base64(6),
+                         alph_key: random_alph_key(12).upcase,
                          photo: params[:product][:principal_photo],)
       end
 
       image_params.each do |param|
         @new_photo = ProdPhoto.create(product_id: @product.id,
-                            alph_key: SecureRandom.urlsafe_base64(6),
+                            alph_key: random_alph_key(12).upcase,
                             photo: param)
       end if image_params
       flash[:success] = "El producto se actualizó."

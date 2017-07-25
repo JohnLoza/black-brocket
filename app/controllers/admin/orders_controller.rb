@@ -566,6 +566,24 @@ class Admin::OrdersController < ApplicationController
     send_file "doc/invoices.txt"
   end
 
+  def download_payment_file
+    authorization_result = @current_user.is_authorized?(@@category, "ACCEPT_REJECT_PAYMENT")
+    return if !process_authorization_result(authorization_result)
+
+    order = Order.find_by(download_payment_key: params[:payment_key])
+    if !order
+      redirect_to admin_welcome_path
+      flash[:waring] = "No se encontró la orden especificada."
+      return
+    end
+
+    if !order.pay_img.file.nil?
+      send_file order.pay_img.path
+    elsif !order.pay_pdf.file.nil?
+      send_file order.pay_pdf.path
+    end
+  end
+
   private
     def get_label_styles
       label_styles =

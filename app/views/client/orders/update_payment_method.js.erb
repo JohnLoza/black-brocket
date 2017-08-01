@@ -1,0 +1,4 @@
+<% if !params[:order][:payment_method].nil? %>
+  $('#dismissible_alerts').append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Método de pago actualizado.'} %>");
+  $('#modal').modal('hide');
+<% end %>

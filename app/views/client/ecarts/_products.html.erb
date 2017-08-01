@@ -96,6 +96,13 @@
   <div class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;margin-bottom: 40px;">
     <%= form_tag client_create_order_path(@current_user.alph_key), method: :post do %>
         <div class="col-sm-10 text-right">
+          <h3 class="iconbox-title">Método de pago</h3>
+          <% @banks.each do |bank| %>
+            <%= radio_button_tag 'payment_method', bank.id %>
+            <%= image_tag bank.image.url(:mini) %><br>
+          <% end %>
+        </div>
+        <div class="col-sm-10 text-right">
           <%= label_tag "invoice", "Requiero factura" %>&nbsp;&nbsp;
           <%= check_box_tag "invoice" %>
         </div>

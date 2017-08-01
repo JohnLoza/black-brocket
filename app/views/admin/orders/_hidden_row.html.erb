@@ -16,9 +16,12 @@
       <i class="fa fa-file-o fa-3x"></i>
     <% end %><br>
   <% end # if !o.pay_img.blank? # %>
-  <%= link_to "Aceptar", admin_accept_order_pay_path(o.alph_key,"true"),
-            :class => "btn btn-primary btn-sm m-t", method: :put,
-            data:{confirm: "Seguro(a) de aceptar el pago?"}%>
+  <%= form_tag admin_accept_order_pay_path(o.alph_key,"true"), method: :put do  %>
+    <%= label_tag :payment_folio, 'Folio del pago' %>
+    <%= text_field_tag :payment_folio, '', class: 'form-control', required: true %>
+    <%= submit_tag 'Aceptar', class: 'btn btn-primary btn-sm m-t',
+        data:{confirm: 'Seguro(a) de aceptar el pago?'} %>
+  <% end %>
 
   <%= link_to "Rechazar", "#", :class => "btn btn-danger btn-sm m-t" ,
             onclick: "update_reject_pay_form('#{o.alph_key}')" %>

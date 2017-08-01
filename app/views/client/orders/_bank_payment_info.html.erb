@@ -1,0 +1,10 @@
+<% accounts.each do |account| %>
+  <tr>
+    <td><%= bank_name %></td>
+    <td><%= account.account_number %></td>
+    <td><%= account.interbank_clabe %></td>
+    <td><%= account.owner %></td>
+    <td><%= account.email %></td>
+    <td><%= account.RFC %></td>
+  </tr>
+<% end %>

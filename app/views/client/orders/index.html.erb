@@ -24,14 +24,14 @@
     </div>
 
     <div class="row order-box-info">
-      <div class="col-sm-1">
+      <div class="col-sm-2">
         <b>Folio:</b></br>
         <%= o.alph_key %>
       </div>
       <div class="col-sm-2">
         <b>Fecha:</b></br> <%= l(o.created_at, format: :long) %>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-1">
          <b>Status:</b></br>
          <% case o.state %>
          <%when "ORDER_CANCELED"%>
@@ -79,7 +79,10 @@
     <div class="row order-box-foot">
       <div class="col-sm-6">
         <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>
-          <a class="darklink" data-toggle="modal" data-target="#myModal" style="cursor:pointer;"><span class="fa fa-exclamation fa-rotate-180"></span> Información para realizar el pago...</a>
+          <%= link_to client_get_bank_payment_info_path(@current_user.alph_key, o.alph_key), remote: true,
+                class: 'darklink label-custom-2', style: 'cursor:pointer; color: #FEFEFE;' do %>
+            <span class="fa fa-exclamation fa-rotate-180"></span> Información para realizar el pago...
+          <% end %>
         <% else %>
           <!--span class="icon-check" style="font-size: 20px;color: #F5D76E;"></span> <b>Orden pagada con exito</b-->
         <% end %>
@@ -143,17 +146,7 @@
                <th>RFC</th>
              </tr>
            </thead>
-           <tbody>
-             <% @bank_accounts.each do |b| %>
-               <tr>
-                 <td><%= b.bank_name %></td>
-                 <td><%= b.account_number %></td>
-                 <td><%= b.interbank_clabe %></td>
-                 <td><%= b.owner %></td>
-                 <td><%= b.email %></td>
-                 <td><%= b.RFC %></td>
-               </tr>
-             <% end %>
+           <tbody id="bank-payment-info">
            </tbody>
          </table>
          <p><b>Paso 2:</b> Tome una foto, escanee o guarde el archivo del comprobante de pago.</p>
@@ -169,6 +162,7 @@
     </div>
   </div>
 </div>
+<%= render '/shared/modal'%>
 
 <script type="text/javascript">
 $(document).ready(function(){

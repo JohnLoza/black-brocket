@@ -1,3 +1,5 @@
 class BankAccount < ActiveRecord::Base
-  validates :bank_name, :account_number, :owner, presence: true
+  belongs_to :Bank
+
+  validates :account_number, :interbank_clabe, :owner, :email, :RFC, presence: true
 end

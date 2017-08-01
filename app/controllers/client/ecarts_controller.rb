@@ -7,6 +7,7 @@ class Client::EcartsController < ApplicationController
       @products = WarehouseProduct.where("alph_key in (?)", session[:e_cart].keys).includes(:Product)
       @product_prices = @current_user.ProductPrices.where("product_id in (?)", @products.map(&:product_id))
       @warehouse = @products[0].Warehouse if @products.any?
+      @banks = Bank.all
 
       @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.product_id})
       @total = 0

@@ -173,7 +173,7 @@ class SiteWorker < ActiveRecord::Base
               "WEB"=>{link: admin_web_path, icon: "fa fa-desktop", label: "Contenido del Sitio"},
               "CLIENTS"=>{link: admin_clients_path, icon: "fa fa-users", label: "Clientes"},
               "COMMENTS_AND_SUGGESTIONS"=>{link: admin_suggestions_path, icon: "fa fa-comments", label: "Comentarios y sugerencias"},
-              "BANK_ACCOUNTS"=>{link: admin_bank_accounts_path, icon: "fa fa-bank", label: "Cuentas Bancarias"},
+              "BANK_ACCOUNTS"=>{link: admin_banks_path, icon: "fa fa-bank", label: "Cuentas Bancarias"},
               "MEXICO_DB"=>{link: admin_mexico_db_path, icon: "fa fa-map-marker", label: "Entidades de México"},
               "TIPS_&_RECIPES"=>{link: admin_tips_path, icon: "fa fa-book", label: "Tips y Recetas"}}
 

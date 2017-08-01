@@ -1,0 +1,11 @@
+<% provide(:title, "Bancos") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Bancos", labels: ['Bancos', 'Nuevo Banco'], links: [admin_banks_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+	  <%= render 'form' %>
+  </div>
+</div>
+<br>
+<!--End content whit animation-->

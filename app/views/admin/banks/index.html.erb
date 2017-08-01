@@ -1,5 +1,5 @@
 <% provide(:title, "Cuentas de banco") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Cuentas de banco", labels: [@bank.name,'Cuentas de banco'], links: [admin_banks_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Bancos", labels: ['Bancos']} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -10,15 +10,15 @@
   	    <div class="ibox-content" style="display: block;">
   	      <div class="row">
   	        <div class="col-sm-9 b-r margin-bot-resp">
-  	           <h3 class="m-t-none m-b">Lista de cuentas bancarias</h3>
-  	           <p>Aquí se visualizan las cuentas bancarias disponibles para los
-               clientes, donde estos podrán realizar los pagos de sus compras!!!</p>
+  	           <h3 class="m-t-none m-b">Lista de Bancos con cuentas de BlackBrocket</h3>
+  	           <p>Aquí se visualizan los bancos disponibles para los clientes,
+                 donde estos podrán realizar los pagos de sus compras!!!</p>
   		   	 </div>
   		     <div class="hr-line-dashed pro-mobile"></div>
              <% if @actions["CREATE"] %>
                <div class="col-sm-3 text-center">
                   <h4>Registrar Nuevo</h4>
-    	            <%= link_to "<i class='fa fa-bank med-icon'></i>".html_safe, new_admin_bank_account_path %>
+    	            <%= link_to "<i class='fa fa-bank med-icon'></i>".html_safe, new_admin_bank_path %>
     	         </div>
              <% end # if @actions["CREATE"] # %>
   	       </div>

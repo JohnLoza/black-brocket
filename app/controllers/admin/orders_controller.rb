@@ -124,20 +124,27 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "ACCEPT_REJECT_PAYMENT")
     return if !process_authorization_result(authorization_result)
 
-    if params[:accept] == "true" or params[:accept] == "false"
-      @order = Order.where(alph_key: params[:id]).take
-      if @order
-        if params[:accept] == "true"
-          @saved=true if @order.update_attributes(state:"PAYMENT_ACCEPTED", reject_description: nil)
-          OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Aceptó pago")
-        else
-          @saved=true if @order.update_attributes(state:"PAYMENT_REJECTED", reject_description: params[:order][:reject_description])
-          Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
-                          description: "El pago de tu pedido ha sido rechazado", url: client_order_path(@order.Client.alph_key, @order.alph_key))
-          OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Rechazó pago")
+    @order = Order.where(alph_key: params[:id]).take
+    if @order
+      if params[:accept] == "true"
+        if Order.find_by(payment_folio: params[:payment_folio])
+          #Duplicate folio
+          flash[:info] = "El folio del pago ya ha sido registrado previamente."
+          redirect_to admin_orders_path(type: 'ACCEPT_REJECT_PAYMENT')
+          return
         end
+        #Accept the payment
+        @saved=true if @order.update_attributes(state:"PAYMENT_ACCEPTED", reject_description: nil, payment_folio: params[:payment_folio])
+        OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Aceptó pago")
+      else
+        #Reject the payment and notify the user
+        @saved=true if @order.update_attributes(state:"PAYMENT_REJECTED", reject_description: params[:order][:reject_description])
+        Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
+                        description: "El pago de tu pedido ha sido rechazado", url: client_order_path(@order.Client.alph_key, @order.alph_key))
+        OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Rechazó pago")
       end
     end
+
     if @saved==true
       flash[:success]=t(@order.state)
     else

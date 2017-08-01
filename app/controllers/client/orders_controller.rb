@@ -51,6 +51,7 @@ class Client::OrdersController < ApplicationController
     @order.client_id = @current_user.id
     @order.city_id = @current_user.city_id
     @order.invoice = params[:invoice] if params[:invoice]
+    @order.payment_method = params[:payment_method]
     @order.state = "WAITING_FOR_PAYMENT"
 
     @order.alph_key = random_alph_key(12).upcase
@@ -197,6 +198,29 @@ class Client::OrdersController < ApplicationController
       elsif !@order.pay_pdf.blank?
         send_file @order.pay_pdf.path
       end
+    end
+  end
+
+  def get_bank_payment_info
+    @order = @current_user.Orders.find_by(alph_key: params[:id])
+    @bank = Bank.find_by(id: @order.payment_method) if @order
+    @bank_accounts = @bank.Accounts if @bank
+
+    respond_to do |format|
+      format.js { render :get_bank_payment_info, :layout => false }
+    end
+  end
+
+  def update_payment_method
+    return if params[:order][:payment_method].nil?
+    @order = @current_user.Orders.find_by(alph_key: params[:id])
+
+    if @order
+      @order.update_attributes(payment_method: params[:order][:payment_method])
+    end
+
+    respond_to do |format|
+      format.js { render :update_payment_method, :layout => false }
     end
   end
 

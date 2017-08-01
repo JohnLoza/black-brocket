@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
   # static_pages #
   root 'static_pages#index'
   get '/good_bye/:id' => 'static_pages#good_bye', :as => :good_bye
@@ -50,7 +52,9 @@ Rails.application.routes.draw do
     put 'mexico-db/states/cities/:id' => 'mexico_db#update_city', :as => :mexico_city
     post 'mexico-db/states/cities' => 'mexico_db#create_city', :as => :create_city
 
-    resources :bank_accounts
+    resources :banks, except: :show do
+      resources :bank_accounts, except: :show, :as => 'accounts'
+    end
 
     resources :workers
     get 'workers/:id/permissions' => 'workers#edit_permissions', :as => :show_worker_permissions
@@ -254,6 +258,8 @@ Rails.application.routes.draw do
     delete 'user/:user_id/orders/:id' => "orders#cancel", :as => :cancel_order
     put 'user/:user_id/orders/:id' => "orders#upload_payment", :as => :upload_pay_order
     get 'user/:user_id/orders/:id/get_payment' => 'orders#get_payment', :as => :get_order_payment
+    get 'user/:user_id/orders/:id/get_bank_payment_info' => 'orders#get_bank_payment_info', :as => :get_bank_payment_info
+    patch 'user/:user_id/orders/:id/update_payment_method' => 'orders#update_payment_method', :as => :update_payment_method
 
     resources :fiscal_data, except: [ :index ]
   end

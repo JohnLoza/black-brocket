@@ -1,0 +1,14 @@
+<% if @order and @bank %>
+  $('#bank-payment-info').html("<%= j render partial: 'bank_payment_info', locals: {accounts: @bank_accounts, bank_name: @bank.name} %>");
+  $('#update_payment_method_form').remove();
+  $('#myModal').find('.modal-footer').append('<%= link_to "Cambiar método de pago", "#", class: "btn btn-default", onclick: "place_payment_method_form();", id: "update_payment_method_form" %>');
+  $('#myModal').modal('show');
+<% end %>
+
+function place_payment_method_form(){
+  $('#myModal').modal('hide');
+  modal = $('#modal');
+  modal.find('.modal-title').html('Actualizar medio de pago para la órden <%= @order.alph_key %>');
+  modal.find('.modal-body').html("<%= j render partial:'update_payment_method_form', locals:{order: @order} %>");
+  modal.modal('show');
+}

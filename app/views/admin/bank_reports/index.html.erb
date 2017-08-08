@@ -1,0 +1,20 @@
+<% provide(:title, "Cuentas de banco") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Reporte bancario", labels: ['Reporte bancario']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="ibox">
+        <div class="ibox-content text-center">
+            <h3 class="m-b-xxs">Reporte Bancario</h3>
+        </div>
+    </div>
+
+    <%= render 'form' %>
+    <%= render 'report_history' %>
+
+  </div>
+</div>
+<!--End content whit animation-->
+<br><br>

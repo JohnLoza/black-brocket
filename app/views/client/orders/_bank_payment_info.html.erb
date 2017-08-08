@@ -3,8 +3,11 @@
     <td><%= bank_name %></td>
     <td><%= account.account_number %></td>
     <td><%= account.interbank_clabe %></td>
+    <td><%= reference %></td>
     <td><%= account.owner %></td>
-    <td><%= account.email %></td>
-    <td><%= account.RFC %></td>
   </tr>
 <% end %>
+<tr>
+  <td>Contacto:</td>
+  <td><%= accounts[0].email %></td>
+</tr>

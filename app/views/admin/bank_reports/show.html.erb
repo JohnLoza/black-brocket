@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<br>
+<div style="padding-left: 3em; padding-right: 3em;">
+  <input type="text" id="searchInput" class="search-input"
+          onkeyup="searchTables(); " placeholder="Buscar Folio/Referencia..." >
+</div>
+
+<% @banks.each do |bank| %>
+  <div class="bank-content">
+    <table class="table" id="bank<%=bank.id%>">
+      <thead>
+        <tr>
+          <th class="bank-label" colspan="5">
+            <h2><%= bank.name %></h2>
+          </th>
+        </tr>
+        <tr>
+          <th>Folio/Referencia de orden</th>
+          <th>Fecha de creación</th>
+          <th>Cliente</th>
+          <th>Monto</th>
+          <th>Folio del Pago</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @orders[bank.id].each do |order| %>
+          <tr>
+            <td><%= order.alph_key %></td>
+            <td><%= l(order.created_at, format: :short) %></td>
+            <td>
+              <% client = order.Client %>
+              <%= link_to client.username, admin_client_path(client.alph_key),
+                  target: '_blank'%>
+            </td>
+            <td>$<%= order.total %></td>
+            <td><%= order.payment_folio %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<script>
+function searchTables() {
+  // Declare variables
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("searchInput");
+  input.value = input.value.toUpperCase();
+  filter = input.value.toUpperCase();
+
+  <% @banks.each do |bank| %>
+    searchTable("bank<%=bank.id%>", filter);
+  <% end %>
+}
+
+function searchTable(table_id, filter){
+  table = document.getElementById(table_id);
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+<style media="screen">
+  .bank-label{
+    background-color: #1ab394;
+    border-color: #1ab394;
+    color: #fefefe;
+  }
+
+  .search-input {
+    background-image: url('<%= image_url "searchicon.png" %>'); /* Add a search icon to input */
+    background-position: 10px 12px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    width: 100%; /* Full-width */
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px; /* Add some space below the input */
+  }
+</style>

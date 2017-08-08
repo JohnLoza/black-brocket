@@ -149,6 +149,10 @@ Rails.application.routes.draw do
     # download orders info as txt #
     get 'orders/invoice/download' => 'orders#download_invoice_data', :as => :download_orders_invoice_data
 
+    # bank reports
+    get 'bank_report/' => 'bank_reports#index', :as => :bank_report
+    post 'bank_report/' => 'bank_reports#show'
+
     # supervisor #
     get "clients/:id/supervisor_visits/" => 'clients#supervisor_visits', :as => :supervisor_visits
     get "clients/:id/supervisor_visits/:visit_id/details" => 'clients#supervisor_visit_details', :as => :supervisor_visit_details

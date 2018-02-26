@@ -1,4 +1,4 @@
-class OrderDetail < ActiveRecord::Base
+class OrderDetail < ApplicationRecord
   belongs_to :Order, :foreign_key => :order_id
   belongs_to :Product, :foreign_key => :product_id
 

@@ -1,3 +1,3 @@
-class ClientProduct < ActiveRecord::Base
+class ClientProduct < ApplicationRecord
   
 end

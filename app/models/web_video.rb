@@ -1,4 +1,4 @@
-class WebVideo < ActiveRecord::Base
+class WebVideo < ApplicationRecord
   validates :video, presence: true
 
   mount_uploader :video, VideoUploader

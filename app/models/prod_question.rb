@@ -1,4 +1,4 @@
-class ProdQuestion < ActiveRecord::Base
+class ProdQuestion < ApplicationRecord
   belongs_to :Product, :foreign_key => :product_id
   belongs_to :Client, :foreign_key => :client_id
 

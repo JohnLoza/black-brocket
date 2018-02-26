@@ -4,7 +4,7 @@ class Api::UsersController < ApplicationController
     client.city_id = params[:city_id]
 
     if client.save
-      client.update_attributes(:alph_key => generateAlphKey("C", client.id), :authentication_token => SecureRandom.urlsafe_base64(16))
+      client.update_attributes(:hash_id => generateAlphKey("C", client.id), :authentication_token => SecureRandom.urlsafe_base64(16))
 
       render :status => 200,
              :json => { :success => true, :info => "SAVED",
@@ -101,7 +101,7 @@ class Api::UsersController < ApplicationController
     end
 
     @current_user.deleted=true
-    @current_user.delete_account_hash= random_alph_key(12).upcase
+    @current_user.delete_account_hash= random_hash_id(12).upcase
 
     if @current_user.save
       render :status => 200,

@@ -1,4 +1,4 @@
-class WebPhoto < ActiveRecord::Base
+class WebPhoto < ApplicationRecord
   validates :photo, presence: true
 
   mount_uploader :photo, ImageUploader

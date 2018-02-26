@@ -51,11 +51,11 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <strong>Cliente:</strong> <%= link_to client.username,
-                            admin_client_path(client.alph_key) %>
+                            admin_client_path(client.hash_id) %>
                 </div>
                 <div class="panel-body">
                   <p>
-                    <strong>Referencia: </strong> <%= ps.Order.alph_key %>
+                    <strong>Referencia: </strong> <%= ps.Order.hash_id %>
                   </p>
                   <p><strong>Cantidad:</strong> <%= ps.quantity %></p>
                 </div>
@@ -72,11 +72,11 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <strong>Cliente:</strong> <%= link_to client.username,
-                            admin_client_path(client.alph_key) %>
+                            admin_client_path(client.hash_id) %>
                 </div>
                 <div class="panel-body">
                   <p>
-                    <strong>Referencia: </strong> <%= ps.Order.alph_key %>
+                    <strong>Referencia: </strong> <%= ps.Order.hash_id %>
                   </p>
                   <p><strong>Cantidad:</strong> <%= ps.quantity %></p>
                 </div>

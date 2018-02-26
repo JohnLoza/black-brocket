@@ -1,4 +1,4 @@
-class TipRecipe < ActiveRecord::Base
+class TipRecipe < ApplicationRecord
   attr_accessor :body
   has_many :Comments, class_name: :TipRecipeComment, foreign_key: :tip_recipe_id
 

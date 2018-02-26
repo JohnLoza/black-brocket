@@ -41,11 +41,11 @@ class Client::ClientsController < ApplicationController
   def destroy_account
     if !@current_user.authenticate(params[:password])
       flash[:warning]="Contraseña incorrecta."
-      redirect_to client_destroy_account_path(@current_user.alph_key)
+      redirect_to client_destroy_account_path(@current_user.hash_id)
       return
     end
     @current_user.deleted=true
-    @current_user.delete_account_hash= random_alph_key(12).upcase
+    @current_user.delete_account_hash= random_hash_id(12).upcase
 
     if @current_user.save
       log_out
@@ -79,7 +79,7 @@ class Client::ClientsController < ApplicationController
     @state_id = params[:state_id]
 
     if @client.save
-      @client.update_attribute(:alph_key, generateAlphKey("C", @client.id))
+      @client.update_attribute(:hash_id, generateAlphKey("C", @client.id))
 
       log_in(@client, 'c')
       flash[:success] = "Bienvenido a Black Brocket, por ser su primera compra y para brindarle un mejor servicio, nuestro distribuidor de zona se pondrá en contacto o un representante de ventas se comunicará con usted. Si es una Pyme, dueño de una cafetería, tiene negocio relacionado con alimentos o es mayorista le ofrecemos precios y descuentos preferenciales bastante atractivos. Estos se los dará nuestro  representante de ventas, así como una demostración de nuestros productos. Una vez hecho el pago de su pedido los descuentos no se bonifican. Puede contactarnos en el menú en la opción \“distribuidores en la zona\”."
@@ -101,7 +101,7 @@ class Client::ClientsController < ApplicationController
 
     @states = State.all.order(:name)
     @cities = City.where(state_id: @state_id)
-    @url = client_client_path(@current_user.alph_key)
+    @url = client_client_path(@current_user.hash_id)
   end
 
   def update
@@ -143,12 +143,12 @@ class Client::ClientsController < ApplicationController
       message.distributor_id = @distributor.id
       Notification.create(distributor_id: @distributor.id, icon: "fa fa-comments-o",
                       description: "El usuario " + @current_user.username + " te envió un mensaje",
-                      url: distributor_client_messages_path(@current_user.alph_key))
+                      url: distributor_client_messages_path(@current_user.hash_id))
     elsif @worker
       message.worker_id = @worker.id
       Notification.create(worker_id: @worker.id, icon: "fa fa-comments-o",
                       description: "El usuario " + @current_user.username + " te envió un mensaje",
-                      url: admin_distributor_work_client_messages_path(@current_user.alph_key))
+                      url: admin_distributor_work_client_messages_path(@current_user.hash_id))
     end
 
     message.save

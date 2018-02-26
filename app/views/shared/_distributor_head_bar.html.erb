@@ -14,8 +14,8 @@
                     <td><strong><i class="fa fa-calendar-o"></i> Creado el:</strong></td>
                   </tr>
                   <tr>
-                    <td><%= @distributor.alph_key %></td>
-                    <td>(<%=@distributor_city.LADA%>) <%= @distributor.telephone %></td>
+                    <td><%= @distributor.hash_id %></td>
+                    <td>(<%=@distributor_city.lada%>) <%= @distributor.telephone %></td>
                     <td><%= @distributor_city.name %>, <%= @distributor_city.State.name %></td>
                     <td><%= l(@distributor.created_at, format: :long) %></td>
                   </tr>

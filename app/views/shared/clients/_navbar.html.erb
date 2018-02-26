@@ -25,7 +25,7 @@
       <% if logged_in? %>
           <!--Ecart-->
           <button type="button" class="navbar-toggle pull-right" style="max-height: 34px;">
-            <%= link_to client_ecart_path(@current_user.alph_key) do %>
+            <%= link_to client_ecart_path(@current_user.hash_id) do %>
                 <i class="icon-basket-loaded" style="color: #fff;font-size: 20px;"></i>
             <% end %>
             <span class="ecart-badge <%= "badge" if !session[:e_cart].nil? %>"
@@ -61,7 +61,7 @@
                 <% end %>
                 <li class="divider" style="margin: 0px;"></li>
                 <li>
-                  <%= link_to client_notifications_path(@current_user.alph_key), style: 'color: #FEFEFE;' do %>
+                  <%= link_to client_notifications_path(@current_user.hash_id), style: 'color: #FEFEFE;' do %>
                     <strong>Ver todas ></strong>
                   <% end %>
                 </li>

@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default :from => "Black Brocket <noreply.blackbrocket@gmail.com>"
+  default from: 'from@example.com'
   layout 'mailer'
 end

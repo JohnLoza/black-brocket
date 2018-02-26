@@ -43,11 +43,11 @@
               <tbody>
                 <% @commissions.each do |c| %>
                   <tr>
-                    <td><%= c.alph_key %></td>
+                    <td><%= c.hash_id %></td>
                     <td>$ <%= c.total %></td>
                     <% distributor = c.Distributor %>
                     <td><%= link_to distributor.username,
-                                    admin_distributor_path(distributor.alph_key) %></td>
+                                    admin_distributor_path(distributor.hash_id) %></td>
                     <td>
                       <% case t(c.state)
                         when "Por pagar"%>
@@ -63,7 +63,7 @@
                     <td class="text-center">
                       <% if !c.payment_img.blank? %>
                         <%= link_to image_tag(c.payment_img.url(:mini), :class => "img-rounded", :style =>"width:60px;"),
-                            image_path(c.payment_img.url), :data => {:toggle => "lightbox", :title => "Pago de la comisión: " + c.alph_key } %>
+                            image_path(c.payment_img.url), :data => {:toggle => "lightbox", :title => "Pago de la comisión: " + c.hash_id } %>
                       <% elsif !c.payment_pdf.blank? %>
                         <%= link_to "<i class='fa fa-file-pdf-o fa-5x'></i>".html_safe,
                             c.payment_pdf.url, target: "_blank" %>
@@ -73,7 +73,7 @@
                     <td class="text-center">
                       <% if !c.invoice.blank? %>
                         <%= link_to "<i class='fa fa-file-archive-o fa-5x'></i>".html_safe,
-                            admin_download_commission_invoice_path(c.alph_key), target: "_blank" %>
+                            admin_download_commission_invoice_path(c.hash_id), target: "_blank" %>
                         <% if c.invoice_downloaded %>
                           <i class="fa fa-download fa-3x" style="color: #8BC34A"></i>
                         <% end %>
@@ -81,18 +81,18 @@
                     </td>
                     <td>
                       <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
-                                  admin_commission_details_path(c.alph_key),
+                                  admin_commission_details_path(c.hash_id),
                                   :class => "btn btn-white btn-sm m-b-xs" %>
 
-                        <%= form_for(Commission.new, url: admin_upload_commission_payment_path(c.alph_key)) do |f| %>
-                          <a onclick="$('#payment_field_<%=c.alph_key%>').click();" class="btn btn-white btn-sm m-b-xs">
+                        <%= form_for(Commission.new, url: admin_upload_commission_payment_path(c.hash_id)) do |f| %>
+                          <a onclick="$('#payment_field_<%=c.hash_id%>').click();" class="btn btn-white btn-sm m-b-xs">
                             <i class="fa fa-upload"></i> Subir comprobante de pago
                           </a>
 
-                          <%= f.file_field :payment, id: "payment_field_#{c.alph_key}",
+                          <%= f.file_field :payment, id: "payment_field_#{c.hash_id}",
                               :style =>"display: none;", :multiple => false,
-                              :onchange => "$('#payment_commit_#{c.alph_key}').click();" %>
-                          <%= f.submit "commit", id: "payment_commit_#{c.alph_key}", style: "display: none;",
+                              :onchange => "$('#payment_commit_#{c.hash_id}').click();" %>
+                          <%= f.submit "commit", id: "payment_commit_#{c.hash_id}", style: "display: none;",
                               data: {confirm: "Estas seguro(a) de ser el archivo correcto?"} %>
                         <% end #form end# %>
                     </td>

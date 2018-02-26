@@ -1,3 +1,3 @@
-class FooterExtraDetail < ActiveRecord::Base
+class FooterExtraDetail < ApplicationRecord
 
 end

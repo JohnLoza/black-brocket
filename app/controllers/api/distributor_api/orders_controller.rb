@@ -15,7 +15,7 @@ class Api::DistributorApi::OrdersController < ApplicationController
       orders = @current_user.Orders.order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State).includes(:Client, City: :State)
     else
 
-      client = Client.find_by(alph_key: params[:client])
+      client = Client.find_by(hash_id: params[:client])
       if !client.blank?
         orders = Order.where(client_id: client.id).order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State)
         @current_user.updateRevision(client)
@@ -29,7 +29,7 @@ class Api::DistributorApi::OrdersController < ApplicationController
 
     data = Array.new
     orders.each do |order|
-      data << {alph_key: order.alph_key, client_username: order.Client.username, client_alph_key: order.Client.alph_key,
+      data << {hash_id: order.hash_id, client_username: order.Client.username, client_hash_id: order.Client.hash_id,
         date: l(order.created_at, format: :long), total: order.total, status: t(order.state), city: order.City.name, state: order.City.State.name }
     end
 
@@ -49,7 +49,7 @@ class Api::DistributorApi::OrdersController < ApplicationController
       return
     end
 
-    order = @current_user.Orders.where(alph_key: params[:id]).take
+    order = @current_user.Orders.where(hash_id: params[:id]).take
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }
@@ -65,7 +65,7 @@ class Api::DistributorApi::OrdersController < ApplicationController
 
     city = warehouse.City
     warehouse_data = {address: warehouse.address, city: city.name,
-      state: city.State.name, LADA: city.LADA, telephone: warehouse.telephone }
+      state: city.State.name, lada: city.lada, telephone: warehouse.telephone }
 
     data[:warehouse_data] = warehouse_data
     data[:fiscal_data] = fiscal_data

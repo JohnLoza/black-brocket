@@ -5,7 +5,7 @@ class Distributor::OrdersController < ApplicationController
 
   def index
     if params[:client]
-      @client = Client.find_by(alph_key: params[:client])
+      @client = Client.find_by(hash_id: params[:client])
       if @client
         @client_city = @client.City
         @orders = Order.where(client_id: @client.id).order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 10).includes(City: :State)
@@ -22,7 +22,7 @@ class Distributor::OrdersController < ApplicationController
   end
 
   def details
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
     if @order.nil?
       flash[:info] = "No se encontró la orden con clave: #{params[:id]}"
       redirect_to distributor_orders_path

@@ -1,4 +1,4 @@
-class Client < ActiveRecord::Base
+class Client < ApplicationRecord
   attr_accessor :remember_token
 
   before_save { self.email = email.downcase }
@@ -51,7 +51,7 @@ class Client < ActiveRecord::Base
       clients.username #{operator} :search or
       clients.email #{operator} :search or
       clients.name #{operator} :search or
-      clients.alph_key #{operator} :search)", search: search).order(created_at: :DESC).paginate(:page =>  page, :per_page => 20).includes(City: :State)
+      clients.hash_id #{operator} :search)", search: search).order(created_at: :DESC).paginate(:page =>  page, :per_page => 20).includes(City: :State)
     return clients
   end
 

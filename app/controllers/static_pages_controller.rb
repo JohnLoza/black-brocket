@@ -35,7 +35,7 @@ class StaticPagesController < ApplicationController
   end
 
   def good_bye
-    @client = Client.find_by(alph_key: params[:id])
+    @client = Client.find_by(hash_id: params[:id])
     render :good_bye, layout: false
   end
 
@@ -103,11 +103,11 @@ class StaticPagesController < ApplicationController
 
     def fill_ladas_in_database
       # need to uncomment require 'net/http' at the top of the file
-      City.where(LADA: nil).each do |city|
+      City.where(lada: nil).each do |city|
         state_name = city.State.name
         state_name = "México" if state_name == "Edo. México"
         if state_name == "Ciudad de México"
-          city.update_attributes(LADA: "55")
+          city.update_attributes(lada: "55")
           next
         end
 
@@ -124,7 +124,7 @@ class StaticPagesController < ApplicationController
         end
         num = matches.to_s.match(/\d+/)
 
-        city.update_attributes(LADA: num.to_s)
+        city.update_attributes(lada: num.to_s)
         puts "--- updating lada for #{city.name}, #{state_name}| lada: #{num.to_s}"
       end
     end

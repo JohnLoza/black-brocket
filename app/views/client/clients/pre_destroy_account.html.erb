@@ -15,7 +15,7 @@
     <p>Para dar de baja su cuenta y con fines de seguridad es necesario que nos proporciones tu contraseña.</p><br>
   </div>
 
-  <%= form_tag(client_destroy_account_path(@current_user.alph_key)) do %>
+  <%= form_tag(client_destroy_account_path(@current_user.hash_id)) do %>
   <div class="row">
     <div class="col-sm-2">
     </div>

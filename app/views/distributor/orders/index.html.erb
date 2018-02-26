@@ -41,8 +41,8 @@
                 </thead>
                 <tbody>
                   <% @orders.each do |o| %>
-                    <tr id="<%=o.alph_key%>">
-                      <td><%=o.alph_key%></td>
+                    <tr id="<%=o.hash_id%>">
+                      <td><%=o.hash_id%></td>
                       <td><%= l(o.created_at, format: :long) %></td>
                       <td><%= o.Client.username %></td>
                       <td><%= o.City.name %>, <%= o.City.State.name %></td>
@@ -75,7 +75,7 @@
                       </td>
                       <td>
                         <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
-                                    distributor_order_details_path(o.alph_key),
+                                    distributor_order_details_path(o.hash_id),
                                     :class => "btn btn-white btn-sm hidden-button" %>
                       </td>
                     </tr>

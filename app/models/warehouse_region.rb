@@ -1,4 +1,4 @@
-class WarehouseRegion < ActiveRecord::Base
+class WarehouseRegion < ApplicationRecord
   belongs_to :Warehouse, :foreign_key => :warehouse_id
   belongs_to :State, :foreign_key => :state_id
 

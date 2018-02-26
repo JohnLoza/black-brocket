@@ -67,7 +67,7 @@ class Admin::WorkersController < ApplicationController
     @worker.is_admin = false
 
     if @worker.save
-      @worker.update_attribute(:alph_key, generateAlphKey("T", @worker.id))
+      @worker.update_attribute(:hash_id, generateAlphKey("T", @worker.id))
       redirect_to controller: "admin/workers"
     else
       _new()
@@ -86,7 +86,7 @@ class Admin::WorkersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "SHOW")
     return if !process_authorization_result(authorization_result)
 
-    @worker = SiteWorker.find_by(alph_key: params[:id])
+    @worker = SiteWorker.find_by(hash_id: params[:id])
 
     if !@current_user.is_admin
 
@@ -107,7 +107,7 @@ class Admin::WorkersController < ApplicationController
 
     _edit()
 
-    @worker = SiteWorker.find_by(alph_key: params[:id])
+    @worker = SiteWorker.find_by(hash_id: params[:id])
     if @worker.nil? or (@worker.is_admin and @worker.id != @current_user.id)
       flash[:info] = "No se encontró el trabajador con clave: #{params[:id]}"
       redirect_to admin_workers_path
@@ -126,7 +126,7 @@ class Admin::WorkersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_INFORMATION", "UPDATE_WAREHOUSE"])
     return if !process_authorization_result(authorization_result)
 
-    @worker = SiteWorker.find_by(alph_key: params[:id])
+    @worker = SiteWorker.find_by(hash_id: params[:id])
     @worker.city_id = params[:city_id]
 
     if @worker.update_attributes(worker_params)
@@ -149,7 +149,7 @@ class Admin::WorkersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "DELETE")
     return if !process_authorization_result(authorization_result)
 
-    @worker = SiteWorker.find_by(alph_key: params[:id])
+    @worker = SiteWorker.find_by(hash_id: params[:id])
     if @worker.update_attributes(:deleted => true)
       redirect_to controller: "admin/workers"
     else
@@ -162,7 +162,7 @@ class Admin::WorkersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PERMISSIONS")
     return if !process_authorization_result(authorization_result)
 
-    @worker = SiteWorker.find_by(alph_key: params[:id])
+    @worker = SiteWorker.find_by(hash_id: params[:id])
     if @worker.nil? or @worker.is_admin
       flash[:info] = "No se encontró el trabajador con clave: #{params[:id]}"
       redirect_to admin_workers_path
@@ -190,7 +190,7 @@ class Admin::WorkersController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     saved = false
-    worker = SiteWorker.find_by(alph_key: params[:id])
+    worker = SiteWorker.find_by(hash_id: params[:id])
     if worker.nil?
       flash[:info] = "No se encontró el trabajador con clave: #{params[:id]}"
       redirect_to admin_workers_path

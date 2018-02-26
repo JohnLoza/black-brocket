@@ -1,4 +1,4 @@
-class FiscalData < ActiveRecord::Base
+class FiscalData < ApplicationRecord
   belongs_to :Client, :foreign_key => :client_id
   belongs_to :City, :foreign_key => :city_id
 

@@ -3,16 +3,16 @@
       <div class="thumbnail">
           <% @photos.each do |photo| %>
             <% if photo.product_id == p.id %>
-              <%= link_to image_tag(photo.photo.url(:thumb)), product_path(p.alph_key) %>
+              <%= link_to image_tag(photo.photo.url(:thumb)), product_path(p.hash_id) %>
               <% break %>
             <% end %>
           <% end %>
           <div class="caption" style="height:100px;">
               <h4 class="pull-right">$<%=p.price%></h4>
-              <%= link_to(product_path(p.alph_key), :class => "darklink") do %>
+              <%= link_to(product_path(p.hash_id), :class => "darklink") do %>
                 <i class="icon-info"></i>
               <% end %>
-              <h4 class="nowrap-10em slide-image menu-title text-left"><%=link_to p.name, product_path(p.alph_key), :class => "darklink"%></h4>
+              <h4 class="nowrap-10em slide-image menu-title text-left"><%=link_to p.name, product_path(p.hash_id), :class => "darklink"%></h4>
               <div class="menu-detail cortar text-left">
                 <% if p.cold %>
                   Frío /

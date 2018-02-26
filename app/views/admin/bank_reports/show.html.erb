@@ -26,11 +26,11 @@
       <tbody>
         <% @orders[bank.id].each do |order| %>
           <tr>
-            <td><%= order.alph_key %></td>
+            <td><%= order.hash_id %></td>
             <td><%= l(order.created_at, format: :short) %></td>
             <td>
               <% client = order.Client %>
-              <%= link_to client.username, admin_client_path(client.alph_key),
+              <%= link_to client.username, admin_client_path(client.hash_id),
                   target: '_blank'%>
             </td>
             <td>$<%= order.total %></td>

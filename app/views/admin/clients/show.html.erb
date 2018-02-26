@@ -21,7 +21,7 @@
 
                       <% distributor = @client.City.Distributor %>
                       <% if !distributor.nil? %>
-                        <h5>Distribuidor: <%= link_to distributor.username, admin_distributor_path(distributor.alph_key) %></h4>
+                        <h5>Distribuidor: <%= link_to distributor.username, admin_distributor_path(distributor.hash_id) %></h4>
                       <% else %>
                         <h5>Sin distribuidor</h5>
                       <% end %>
@@ -29,7 +29,7 @@
                     <% else %>
 
                       <% worker = @client.Worker %>
-                      <h4>Trabajador: <%= link_to worker.email, admin_worker_path(worker.alph_key) %></h4>
+                      <h4>Trabajador: <%= link_to worker.email, admin_worker_path(worker.hash_id) %></h4>
 
                     <% end %>
 
@@ -56,7 +56,7 @@
                       <table class="table table-hover">
                         <tr>
                             <td><b>Clave:</b></td>
-                            <td><%= @client.alph_key %></td>
+                            <td><%= @client.hash_id %></td>
                             <td><b>Fecha nacimiento:</b></td>
                             <td><%= l(@client.birthday, format: :long) if @client.birthday %></td>
                           </tr>
@@ -98,7 +98,7 @@
                           </tr>
                           <tr>
                             <td><b>Teléfono:</b></td>
-                            <td>(<%=@client.City.LADA%>) <%= @client.telephone %></td>
+                            <td>(<%=@client.City.lada%>) <%= @client.telephone %></td>
                             <td><b>Celular:</b></td>
                             <td><%= @client.cellphone %></td>
                           </tr>
@@ -143,7 +143,7 @@
                         <table class="table table-hover">
                             <tr>
                               <td><b>Clave:</b></td>
-                              <td colspan="3"><%= @fiscal_data.alph_key %></td>
+                              <td colspan="3"><%= @fiscal_data.hash_id %></td>
                             </tr>
                             <tr>
                                 <td><b>Nombre:</b></td>

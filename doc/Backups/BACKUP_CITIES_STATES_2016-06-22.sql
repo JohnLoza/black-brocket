@@ -25,13 +25,13 @@ DROP TABLE IF EXISTS `cities`;
 CREATE TABLE `cities` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `state_id` int(11) DEFAULT NULL,
-  `alph_key` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `hash_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `LADA` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_cities_on_alph_key` (`alph_key`)
+  UNIQUE KEY `index_cities_on_hash_id` (`hash_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24517 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -55,10 +55,10 @@ DROP TABLE IF EXISTS `states`;
 CREATE TABLE `states` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `country_id` int(11) DEFAULT NULL,
-  `alph_key` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `hash_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_states_on_alph_key` (`alph_key`)
+  UNIQUE KEY `index_states_on_hash_id` (`hash_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2558 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

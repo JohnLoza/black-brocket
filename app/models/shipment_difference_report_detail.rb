@@ -1,3 +1,3 @@
-class ShipmentDifferenceReportDetail < ActiveRecord::Base
+class ShipmentDifferenceReportDetail < ApplicationRecord
 
 end

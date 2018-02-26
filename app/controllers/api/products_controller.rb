@@ -64,9 +64,9 @@ class Api::ProductsController < ApplicationController
 
     products.each do |w_product|
       p = w_product.Product
-      sub_data = {alph_key: w_product.alph_key, name: p.name, price: p.price,
+      sub_data = {hash_id: w_product.hash_id, name: p.name, price: p.price,
                   existence: w_product.existence, category_cold: p.cold,
-                  category_hot: p.hot, category_frappe: p.frappe, p_key: p.alph_key}
+                  category_hot: p.hot, category_frappe: p.frappe, p_key: p.hash_id}
 
       # get the photo for the product #
       photos.each do |photo|
@@ -103,7 +103,7 @@ class Api::ProductsController < ApplicationController
       return
     end
 
-    w_product = WarehouseProduct.find_by(alph_key: params[:id])
+    w_product = WarehouseProduct.find_by(hash_id: params[:id])
     if w_product.blank?
       render :status => 200,
              :json => { :success => false, :info => "PRODUCT_NOT_FOUND", :data => data }

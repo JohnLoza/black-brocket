@@ -13,7 +13,7 @@ class Client::OrdersController < ApplicationController
       notification = Notification.find(params[:notification])
       notification.update_attribute(:seen, true)
     end
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
 
     if @order
       @details = @order.Details.includes(:Product)
@@ -31,7 +31,7 @@ class Client::OrdersController < ApplicationController
       return
     else
       flash[:info] = "No se encontró la orden con clave: #{params[:id]}"
-      redirect_to client_orders_path(@current_user.alph_key)
+      redirect_to client_orders_path(@current_user.hash_id)
       return
     end
   end
@@ -54,17 +54,17 @@ class Client::OrdersController < ApplicationController
     @order.payment_method = params[:payment_method]
     @order.state = "WAITING_FOR_PAYMENT"
 
-    @order.alph_key = random_alph_key(12).upcase
+    @order.hash_id = random_hash_id(12).upcase
 
     # find the products the client want to buy #
-    @products = WarehouseProduct.where(alph_key: session[:e_cart].keys)
+    @products = WarehouseProduct.where(hash_id: session[:e_cart].keys)
                 .where(describes_total_stock: true).includes(:Product)
 
     @products.each do |product|
-      # puts "--- existence: #{product.existence}, buying: #{session[:e_cart][product.alph_key]}"
-      if product.existence < session[:e_cart][product.alph_key].to_i
-        flash[:danger] = "Lo sentimos pero no queda suficiente inventario del producto con clave #{product.Product.alph_key} su existencia actual es de: #{product.existence}"
-        redirect_to client_ecart_path(@current_user.alph_key)
+      # puts "--- existence: #{product.existence}, buying: #{session[:e_cart][product.hash_id]}"
+      if product.existence < session[:e_cart][product.hash_id].to_i
+        flash[:danger] = "Lo sentimos pero no queda suficiente inventario del producto con clave #{product.Product.hash_id} su existencia actual es de: #{product.existence}"
+        redirect_to client_ecart_path(@current_user.hash_id)
         return
       end
     end
@@ -92,18 +92,18 @@ class Client::OrdersController < ApplicationController
         current_product_price = p.Product.price
       end # if product_prices.any? #
 
-      subtotal = session[:e_cart][p.alph_key].to_i*current_product_price
+      subtotal = session[:e_cart][p.hash_id].to_i*current_product_price
       total+=subtotal
 
       total_iva = current_product_price-(current_product_price*100/(p.Product.iva+100))
       total_ieps = (current_product_price-total_iva)-((current_product_price-total_iva)*100/(p.Product.ieps+100))
 
       @order_details << OrderDetail.new(product_id: p.product_id,
-                  alph_key: random_alph_key(12).upcase, iva: p.Product.iva,
-                  quantity: session[:e_cart][p.alph_key], sub_total: subtotal,
+                  hash_id: random_hash_id(12).upcase, iva: p.Product.iva,
+                  quantity: session[:e_cart][p.hash_id], sub_total: subtotal,
                   w_product_id: p.id, ieps: p.Product.ieps, price: current_product_price,
-                  total_iva: total_iva * session[:e_cart][p.alph_key].to_i,
-                  total_ieps: total_ieps * session[:e_cart][p.alph_key].to_i)
+                  total_iva: total_iva * session[:e_cart][p.hash_id].to_i,
+                  total_ieps: total_ieps * session[:e_cart][p.hash_id].to_i)
     end # @products.each do #
 
     shipping_cost = 0.0
@@ -119,7 +119,7 @@ class Client::OrdersController < ApplicationController
     ActiveRecord::Base.transaction do
       @order.save
       @products.each do |p|
-        p.update_attributes(existence: (p.existence-session[:e_cart][p.alph_key].to_i))
+        p.update_attributes(existence: (p.existence-session[:e_cart][p.hash_id].to_i))
       end
       @order_details.each do |detail|
         detail.order_id = @order.id
@@ -131,16 +131,16 @@ class Client::OrdersController < ApplicationController
     if @saved == true
       session.delete(:e_cart)
       flash[:success] = "Orden guardada"
-      redirect_to client_orders_path(@current_user.alph_key)
+      redirect_to client_orders_path(@current_user.hash_id)
       return
     else
       flash[:danger] = "Ocurrió un error al guardar tu pedido, vuelve a intentarlo por favor..."
-      redirect_to client_ecart_path(@current_user.alph_key)
+      redirect_to client_ecart_path(@current_user.hash_id)
     end
   end
 
   def cancel
-    @order = @current_user.Orders.where(alph_key: params[:id]).take
+    @order = @current_user.Orders.where(hash_id: params[:id]).take
 
     if !@order.blank?
       ActiveRecord::Base.transaction do
@@ -166,7 +166,7 @@ class Client::OrdersController < ApplicationController
   end
 
   def upload_payment
-    @order = Order.where(alph_key: params[:id]).take
+    @order = Order.where(hash_id: params[:id]).take
     if params[:order] and @order
         if params[:order][:pay_img].content_type == "application/pdf"
           @order.remove_pay_img! if !@order.pay_img.blank?
@@ -185,7 +185,7 @@ class Client::OrdersController < ApplicationController
     else
       flash[:danger] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: pdf, jpg y png."
     end
-    redirect_to client_orders_path(@current_user.alph_key)
+    redirect_to client_orders_path(@current_user.hash_id)
   end
 
   def get_payment
@@ -202,7 +202,7 @@ class Client::OrdersController < ApplicationController
   end
 
   def get_bank_payment_info
-    @order = @current_user.Orders.find_by(alph_key: params[:id])
+    @order = @current_user.Orders.find_by(hash_id: params[:id])
     @bank = Bank.find_by(id: @order.payment_method) if @order
     @bank_accounts = @bank.Accounts if @bank
 
@@ -213,7 +213,7 @@ class Client::OrdersController < ApplicationController
 
   def update_payment_method
     return if params[:order][:payment_method].nil?
-    @order = @current_user.Orders.find_by(alph_key: params[:id])
+    @order = @current_user.Orders.find_by(hash_id: params[:id])
 
     if @order
       @order.update_attributes(payment_method: params[:order][:payment_method])

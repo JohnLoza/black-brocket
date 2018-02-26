@@ -46,7 +46,7 @@ class Admin::WarehouseProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@manager_category, "UPDATE_STOCK")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(alph_key: params[:warehouse_id])
+    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
     @product = Product.find(params[:id])
     @stock_details = @warehouse.Products.where(product_id: params[:id], describes_total_stock: false)
   end # def stock_details #
@@ -55,7 +55,7 @@ class Admin::WarehouseProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@manager_category, "UPDATE_STOCK")
     return if !process_authorization_result(authorization_result)
 
-    warehouse = Warehouse.find_by(alph_key: params[:warehouse_id])
+    warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
     product = Product.find(params[:id])
 
     master_detail = WarehouseProduct.where(warehouse_id: warehouse.id,
@@ -78,7 +78,7 @@ class Admin::WarehouseProductsController < ApplicationController
 
     flash[:success] = "Stock modificado" if success
     flash[:danger] = "Ocurrió un error al modificar el stock." if !success
-    redirect_to admin_warehouse_products_stock_details_path(warehouse.alph_key, product.id)
+    redirect_to admin_warehouse_products_stock_details_path(warehouse.hash_id, product.id)
   end
 
   def chief_index
@@ -87,7 +87,7 @@ class Admin::WarehouseProductsController < ApplicationController
 
     session[:shipment_products] = Hash.new if !session[:shipment_products]
 
-    @warehouse = Warehouse.find_by(alph_key: params[:warehouse_id])
+    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
     if @warehouse.nil?
       flash[:info] = "No se encontró el almacén con clave: #{params[:id]}"
       redirect_to admin_warehouses_path
@@ -130,17 +130,17 @@ class Admin::WarehouseProductsController < ApplicationController
     end
 
     @hash = Hash.new
-    @alph_key = random_alph_key(12).upcase
+    @hash_id = random_hash_id(12).upcase
 
     @hash[params[:id]] = {"name" => params[:warehouse_product][:name],
-            @alph_key => {"quantity" => params[:warehouse_product][:quantity],
+            @hash_id => {"quantity" => params[:warehouse_product][:quantity],
                          "batch" => params[:warehouse_product][:batch],
                          "expiration_date" => params[:warehouse_product][:expiration_date]}}
 
     if session[:shipment_products][params[:id]].blank?
       session[:shipment_products][params[:id]] = {}
     end
-    session[:shipment_products][params[:id]][@alph_key] = @hash[params[:id]][@alph_key]
+    session[:shipment_products][params[:id]][@hash_id] = @hash[params[:id]][@hash_id]
     session[:shipment_products][params[:id]][:name] = params[:warehouse_product][:name]
 
     respond_to do |format|
@@ -184,7 +184,7 @@ class Admin::WarehouseProductsController < ApplicationController
     end
     return if !process_authorization_result(authorization_result)
 
-    warehouse = Warehouse.find_by(alph_key: params[:warehouse_id])
+    warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
     if warehouse.nil?
       flash[:info] = "No se encontró el almacén con clave: #{params[:warehouse_id]}"
       redirect_to admin_warehouses_path
@@ -205,7 +205,7 @@ class Admin::WarehouseProductsController < ApplicationController
     ActiveRecord::Base.transaction do
       session[:shipment_products].delete("warehouse")
       puts "--- loading products ---"
-      products = Product.select(:id, :alph_key).where("alph_key in (?)", session[:shipment_products].keys)
+      products = Product.select(:id, :hash_id).where("hash_id in (?)", session[:shipment_products].keys)
       puts "--- loading inventaries ---"
       warehouse_products = WarehouseProduct.where("product_id in (?)", products.map(&:id)).where(describes_total_stock: false)
 
@@ -214,7 +214,7 @@ class Admin::WarehouseProductsController < ApplicationController
         session[:shipment_products][k].keys.each do |s_k|
           product_id = 0
           products.each do |p|
-            if p.alph_key == k
+            if p.hash_id == k
               product_id = p.id
               break
             end
@@ -342,20 +342,20 @@ class Admin::WarehouseProductsController < ApplicationController
 
     shipment = Shipment.find(params[:id])
     if shipment.reviewed == false
-      warehouse = Warehouse.find_by(alph_key: params[:warehouse_id])
+      warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
       saved = update_stock_from_shipment(warehouse, shipment)
     end
 
     flash[:success] = "Se añadieron los productos al stock actual!" if saved
     flash[:danger] = "Ocurrió un error inesperado, por favor intentelo de nuevo" if !saved
-    redirect_to admin_shipments_path(warehouse.alph_key)
+    redirect_to admin_shipments_path(warehouse.hash_id)
   end
 
   def chief_shipments
     authorization_result = @current_user.is_authorized?(@@category, "SHOW_SHIPMENTS")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(alph_key: params[:warehouse_id])
+    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
     @shipments = @warehouse.IncomingShipments.includes(:Chief, :Worker, :OriginWarehouse).order(:created_at => :desc).paginate(page: params[:page], per_page: 20)
 
     # determine the actions the user can do, so we can display them in screen #
@@ -405,7 +405,7 @@ class Admin::WarehouseProductsController < ApplicationController
 
     shipment = Shipment.find(params[:id])
     if shipment.reviewed == false
-      warehouse = Warehouse.find_by(alph_key: params[:warehouse_id])
+      warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
       report = shipment.DifferenceReport
 
       saved = update_stock_from_shipment(warehouse, shipment, report)
@@ -413,14 +413,14 @@ class Admin::WarehouseProductsController < ApplicationController
 
     flash[:success] = "Se añadieron los productos al stock actual!" if saved
     flash[:danger] = "Ocurrió un error inesperado, por favor intentelo de nuevo" if !saved
-    redirect_to admin_warehouse_products_path(warehouse.alph_key)
+    redirect_to admin_warehouse_products_path(warehouse.hash_id)
   end
 
   def create_difference_report
     authorization_result = @current_user.is_authorized?(@@manager_category, "RECEIVE_SHIPMENTS")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(alph_key: params[:warehouse_id])
+    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
     @shipment = Shipment.find(params[:id])
     @saved = false
 
@@ -452,8 +452,8 @@ class Admin::WarehouseProductsController < ApplicationController
     if params[:warehouse_product][:min_stock].to_i > 0
       w_product = WarehouseProduct.joins(:Warehouse).joins(:Product)
             .where(
-                  warehouses: {alph_key: params[:warehouse_id]},
-                  products: {alph_key: params[:id]},
+                  warehouses: {hash_id: params[:warehouse_id]},
+                  products: {hash_id: params[:id]},
                   describes_total_stock: true).take
 
       w_product.min_stock = params[:warehouse_product][:min_stock].to_i if params[:warehouse_product][:min_stock]
@@ -469,7 +469,7 @@ class Admin::WarehouseProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @product = Product.find_by(alph_key: params[:product_qr][:product])
+    @product = Product.find_by(hash_id: params[:product_qr][:product])
     if @product.blank?
       flash[:danger] = "No se encontró el producto con clave #{params[:product_qr][:product]}."
       redirect_to admin_chief_warehouse_products_path(params[:product_qr][:warehouse])
@@ -575,7 +575,7 @@ class Admin::WarehouseProductsController < ApplicationController
             existing_batch.update_attributes(existence: existing_batch.existence + quantity_to_add)
           else
             WarehouseProduct.create(warehouse_id: warehouse.id, product_id: product_id,
-                  describes_total_stock: false, alph_key: random_alph_key(12).upcase,
+                  describes_total_stock: false, hash_id: random_hash_id(12).upcase,
                   existence: quantity_to_add, batch: d.batch, expiration_date: d.expiration_date)
           end
 

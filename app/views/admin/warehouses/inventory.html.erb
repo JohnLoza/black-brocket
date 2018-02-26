@@ -47,7 +47,7 @@
     <% @complement.each do |c| %>
       <% if c.product_id == ps.product_id %>
         <p>
-          Referencia: <%= c.Order.alph_key %>, cantidad: <%= c.quantity %>
+          Referencia: <%= c.Order.hash_id %>, cantidad: <%= c.quantity %>
         </p>
       <% end %>
     <% end %>

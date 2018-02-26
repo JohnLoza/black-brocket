@@ -95,7 +95,7 @@ class Admin::OrdersController < ApplicationController
       end # if ["CANCEL","ACCEPT_REJECT_PAYMENT","INVOICES"].include? params[:type] #
 
       if !params[:distributor].nil?
-        distributor = Distributor.find_by(:alph_key => params[:distributor])
+        distributor = Distributor.find_by(:hash_id => params[:distributor])
         if distributor.nil?
           flash[:info] = "No se encontró el distribuidor con clave: #{params[:distributor]}"
           redirect_to admin_distributors_path
@@ -103,7 +103,7 @@ class Admin::OrdersController < ApplicationController
         end
 
         @orders = Order.joins(:Distributor)
-            .where(distributors: {alph_key: params[:distributor]})
+            .where(distributors: {hash_id: params[:distributor]})
             .where(where_statement)
             .where(where_warehouse)
             .order(order_statement)
@@ -124,7 +124,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "ACCEPT_REJECT_PAYMENT")
     return if !process_authorization_result(authorization_result)
 
-    @order = Order.where(alph_key: params[:id]).take
+    @order = Order.where(hash_id: params[:id]).take
     if @order
       if params[:accept] == "true"
         if Order.find_by(payment_folio: params[:payment_folio])
@@ -140,7 +140,7 @@ class Admin::OrdersController < ApplicationController
         #Reject the payment and notify the user
         @saved=true if @order.update_attributes(state:"PAYMENT_REJECTED", reject_description: params[:order][:reject_description])
         Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
-                        description: "El pago de tu pedido ha sido rechazado", url: client_order_path(@order.Client.alph_key, @order.alph_key))
+                        description: "El pago de tu pedido ha sido rechazado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
         OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Rechazó pago")
       end
     end
@@ -158,7 +158,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "SHOW")
     return if !process_authorization_result(authorization_result)
 
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
 
     if @order
       if !params[:only_address] or params[:only_address] != "Y"
@@ -187,7 +187,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "CANCEL")
     return if !process_authorization_result(authorization_result)
 
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
 
     if @order
       ActiveRecord::Base.transaction do
@@ -202,7 +202,7 @@ class Admin::OrdersController < ApplicationController
 
         @order.update(state: "ORDER_CANCELED", cancel_description: params[:order][:cancel_description])
         Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
-                        description: "Pedido cancelado", url: client_order_path(@order.Client.alph_key, @order.alph_key))
+                        description: "Pedido cancelado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
         OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Canceló la orden")
       end
 
@@ -217,7 +217,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "INSPECTION")
     return if !process_authorization_result(authorization_result)
 
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
     success = false
     if @order
       success = true if @order.update_attribute(:state, "INSPECTIONED")
@@ -237,7 +237,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "INSPECTION")
     return if !process_authorization_result(authorization_result)
 
-    order = Order.find_by(alph_key: params[:id])
+    order = Order.find_by(hash_id: params[:id])
     shipment_details = OrderProductShipmentDetail.where(order_id: order.id)
 
     warehouse = order.Warehouse
@@ -264,7 +264,7 @@ class Admin::OrdersController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     @label_styles = get_label_styles
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
 
     if @order
       product_ids = Array.new
@@ -284,7 +284,7 @@ class Admin::OrdersController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     success = false
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
 
     if @order and @order.state == "PAYMENT_ACCEPTED"
       ActiveRecord::Base.transaction do
@@ -381,7 +381,7 @@ class Admin::OrdersController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     success = false
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
 
     if @order
       @order.tracking_code = params[:tracking_code]
@@ -404,7 +404,7 @@ class Admin::OrdersController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     success = false
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
     success = true if @order.update_attribute(:state, "DELIVERED")
 
     if success
@@ -421,7 +421,7 @@ class Admin::OrdersController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     success = false
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
     success = true if @order.update_attribute(:invoice_sent, true)
 
     if success
@@ -444,7 +444,7 @@ class Admin::OrdersController < ApplicationController
     end
 
     if !params[:reference].blank?
-      @order = Order.find_by(alph_key: params[:reference].strip)
+      @order = Order.find_by(hash_id: params[:reference].strip)
       if @order.blank?
         flash.now[:warning] = "Orden con referencia: #{params[:reference]} no encontrada :("
       end
@@ -482,7 +482,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "SEARCH")
     return if !process_authorization_result(authorization_result)
 
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
 
     # if non order was found redirect to other action #
     if @order.blank?
@@ -514,12 +514,12 @@ class Admin::OrdersController < ApplicationController
     # iterate the orders and put the data on the invoices file #
     orders.each do |order|
       last_folio += 1
-      #puts "--- #{last_folio}, #{order.alph_key}, order_id: #{order.id} ---"
+      #puts "--- #{last_folio}, #{order.hash_id}, order_id: #{order.id} ---"
 
       now = Time.now
       now = "#{now.year}-#{now.month}-#{now.day}"
       # writting the invoice data #
-      f.puts("#{last_folio}|1|#{order.Warehouse.alph_key}|#{now}|CONTADO||México||#{order.alph_key}|#{now}")
+      f.puts("#{last_folio}|1|#{order.Warehouse.hash_id}|#{now}|CONTADO||México||#{order.hash_id}|#{now}")
 
       # writting transmitter(Company) data #
       f.puts("#{last_folio}|2|BBM151218UI0|BLACK BROCKET DE MÉXICO S. de R.L. DE C.V.|Galeana|125||Centro|Guadalajara|Guadalajara|Jalisco|México|44100|RÉGIMEN GENERAL DE LEY PERSONAS MORALES")
@@ -528,12 +528,12 @@ class Admin::OrdersController < ApplicationController
       client = order.Client
       fiscal_data = client.FiscalData
       if !fiscal_data.blank?
-        f.puts("#{last_folio}|3|#{client.alph_key}|#{fiscal_data.rfc}|#{fiscal_data.name} "+
+        f.puts("#{last_folio}|3|#{client.hash_id}|#{fiscal_data.rfc}|#{fiscal_data.name} "+
         "#{fiscal_data.lastname} #{fiscal_data.mother_lastname}|#{fiscal_data.street}|"+
         "#{fiscal_data.extnumber}|#{fiscal_data.intnumber}|#{fiscal_data.col}||"+
         "#{fiscal_data.City.name}|#{fiscal_data.City.State.name}|México|#{fiscal_data.cp}|#{client.email}")
       else
-        f.puts("#{last_folio}|3|#{client.alph_key}||#{client.name} #{client.lastname} "+
+        f.puts("#{last_folio}|3|#{client.hash_id}||#{client.name} #{client.lastname} "+
         "#{client.mother_lastname}|#{client.street}|#{client.extnumber}|"+
         "#{client.intnumber}|#{client.col}||#{client.City.name}|"+
         "#{client.City.State.name}|México|#{client.cp}|#{client.email}")
@@ -546,7 +546,7 @@ class Admin::OrdersController < ApplicationController
         product = detail.Product
         total_iva += detail.total_iva
         total_ieps += detail.total_ieps
-        f.puts("#{last_folio}|4|#{product.alph_key}|#{detail.quantity}|#{product.presentation}|"+
+        f.puts("#{last_folio}|4|#{product.hash_id}|#{detail.quantity}|#{product.presentation}|"+
         "#{product.name}|#{detail.price}|0|0|||#{detail.total_iva}||#{detail.total_ieps}")
       end # order.Details.each #
 

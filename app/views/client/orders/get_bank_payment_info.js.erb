@@ -3,7 +3,7 @@
               onclick: "place_payment_method_form();",
               id: "update_payment_method_form" %>
   <% hash = {accounts: @bank_accounts, bank_name: @bank.name,
-              reference: @order.alph_key} %>
+              reference: @order.hash_id} %>
 
   $('#bank-payment-info').html("<%= j render partial: 'bank_payment_info', locals: hash %>");
   $('#update_payment_method_form').remove();
@@ -14,7 +14,7 @@
 function place_payment_method_form(){
   $('#myModal').modal('hide');
   modal = $('#modal');
-  modal.find('.modal-title').html('Actualizar medio de pago para la órden <%= @order.alph_key %>');
+  modal.find('.modal-title').html('Actualizar medio de pago para la órden <%= @order.hash_id %>');
   modal.find('.modal-body').html("<%= j render partial:'update_payment_method_form', locals:{order: @order} %>");
   modal.modal('show');
 }

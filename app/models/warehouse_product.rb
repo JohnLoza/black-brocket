@@ -1,4 +1,4 @@
-class WarehouseProduct < ActiveRecord::Base
+class WarehouseProduct < ApplicationRecord
   belongs_to :Warehouse, :foreign_key => :warehouse_id
   belongs_to :Product, :foreign_key => :product_id
 

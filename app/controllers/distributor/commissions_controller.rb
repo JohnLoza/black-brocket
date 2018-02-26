@@ -9,7 +9,7 @@ class Distributor::CommissionsController < ApplicationController
   end
 
   def details
-    commission = Commission.find_by(alph_key: params[:id])
+    commission = Commission.find_by(hash_id: params[:id])
     if commission.nil?
       flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
       redirect_to distributor_commissions_path
@@ -21,7 +21,7 @@ class Distributor::CommissionsController < ApplicationController
   end
 
   def upload_invoice
-    commission = Commission.find_by(alph_key: params[:id])
+    commission = Commission.find_by(hash_id: params[:id])
     if commission.nil?
       flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
       redirect_to distributor_commissions_path

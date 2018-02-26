@@ -2,7 +2,7 @@
 # rake db:migrate
 # rake db:migrate RAILS_ENV=production --trace
 
-class CreateDbTables < ActiveRecord::Migration
+class CreateDbTables < ActiveRecord::Migration[5.1]
   def change
     # bank_accounts #
     create_table :bank_accounts do |t|
@@ -14,21 +14,10 @@ class CreateDbTables < ActiveRecord::Migration
     end
     # bank_accounts #
 
-    # cities #
-    create_table :cities do |t|
-      t.integer :state_id
-      t.string :alph_key
-      t.string :name
-
-      t.timestamps
-    end
-    add_index :cities, :alph_key, unique: true
-    # cities #
-
     # clients #
     create_table :clients do |t|
       t.integer :city_id
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :email
       t.boolean :email_verified, default: false
       t.string :username, unique: true
@@ -47,27 +36,18 @@ class CreateDbTables < ActiveRecord::Migration
       t.string :recover_pass_digest
       t.string :validate_email_digest
       t.string :photo
-      t.boolean :deleted, :default => false
+      t.datetime :deleted_at
 
       t.timestamps
     end
-    add_index :clients, :alph_key, unique: true
+    add_index :clients, :hash_id, unique: true
+    add_index :clients, :deleted_at
     # clients #
-
-    # countries #
-    create_table :countries do |t|
-      t.string :alph_key
-      t.string :name
-
-      t.timestamps
-    end
-    add_index :countries, :alph_key, unique: true
-    # countries #
 
     # distributors #
     create_table :distributors do |t|
       t.integer :city_id
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :name
       t.string :lastname
       t.string :mother_lastname
@@ -82,25 +62,19 @@ class CreateDbTables < ActiveRecord::Migration
       t.string :remember_digest
       t.string :recover_pass_digest
       t.string :photo
-      t.boolean :deleted, :default => false
+      t.datetime :deleted_at
 
       t.timestamps
     end
-    add_index :distributors, :alph_key, unique: true
+    add_index :distributors, :hash_id, unique: true
+    add_index :distributors, :deleted_at
     # distributors #
-
-    # distributor_regions @deprecated #
-    create_table :distributor_regions, :id => false do |t|
-      t.integer :distributor_id
-      t.integer :city_id
-    end
-    # distributor_regions #
 
     # fiscal_data #
     create_table :fiscal_data do |t|
       t.integer :client_id
       t.integer :city_id
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :rfc
       t.string :name
       t.string :lastname
@@ -113,7 +87,7 @@ class CreateDbTables < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :fiscal_data, :alph_key, unique: true
+    add_index :fiscal_data, :hash_id, unique: true
     # fiscal_data #
 
     # notifications #
@@ -133,7 +107,7 @@ class CreateDbTables < ActiveRecord::Migration
       t.integer :client_id
       t.integer :city_id
       t.integer :distributor_id
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :address
       t.decimal :total, precision: 8, scale: 2
       t.string :pay_img
@@ -146,7 +120,7 @@ class CreateDbTables < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :orders, :alph_key, unique: true
+    add_index :orders, :hash_id, unique: true
     # orders #
 
     # order_details #
@@ -154,13 +128,13 @@ class CreateDbTables < ActiveRecord::Migration
       t.integer :order_id
       t.integer :product_id
       t.integer :w_product_id
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.integer :quantity
       t.decimal :sub_total, precision: 8, scale: 2
 
       t.timestamps
     end
-    add_index :order_details, :alph_key, unique: true
+    add_index :order_details, :hash_id, unique: true
     # order_details #
 
     # permissions #
@@ -185,31 +159,31 @@ class CreateDbTables < ActiveRecord::Migration
     # prod_photos #
     create_table :prod_photos do |t|
       t.integer :product_id
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :photo
       t.boolean :is_principal, :default => false
 
       t.timestamps
     end
-    add_index :prod_photos, :alph_key, unique: true
+    add_index :prod_photos, :hash_id, unique: true
     # prod_photos #
 
     # prod_questions #
     create_table :prod_questions do |t|
       t.integer :product_id
       t.integer :client_id
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.text :description
       t.boolean :answered, default: false
 
       t.timestamps
     end
-    add_index :prod_questions, :alph_key, unique: true
+    add_index :prod_questions, :hash_id, unique: true
     # prod_questions #
 
     # products #
     create_table :products do |t|
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :name
       t.text :description
       t.decimal :price, precision: 8, scale: 2
@@ -221,18 +195,19 @@ class CreateDbTables < ActiveRecord::Migration
       t.boolean :hot, :default => false
       t.boolean :cold, :default => false
       t.boolean :frappe, :default => false
-      t.boolean :deleted, :default => false
+      t.datetime :deleted_at
 
       t.timestamps
     end
-    add_index :products, :alph_key, unique: true
+    add_index :products, :hash_id, unique: true
+    add_index :products, :deleted_at
     # products #
 
     # site_workers #
     create_table :site_workers do |t|
       t.integer :city_id
       t.integer :warehouse_id
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :name
       t.string :lastname
       t.string :mother_lastname
@@ -248,11 +223,12 @@ class CreateDbTables < ActiveRecord::Migration
       t.string :remember_digest
       t.string :recover_pass_digest
       t.string :photo
-      t.boolean :deleted, :default => false
+      t.datetime :deleted_at
 
       t.timestamps
     end
-    add_index :site_workers, :alph_key, unique: true
+    add_index :site_workers, :hash_id, unique: true
+    add_index :site_workers, :deleted_at
     # site_workers #
 
     # social_networks #
@@ -313,46 +289,32 @@ class CreateDbTables < ActiveRecord::Migration
     end
     # suggestions #
 
-    # states #
-    create_table :states do |t|
-      t.integer :country_id
-      t.string :alph_key
-      t.string :name
-    end
-    add_index :states, :alph_key, unique: true
-    # states #
-
     # warehouses #
     create_table :warehouses do |t|
       t.integer :city_id
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :name
       t.string :address
       t.string :telephone
       t.boolean :is_central
-      t.boolean :deleted, :default => false
+      t.datetime :deleted_at
 
       t.timestamps
     end
-    add_index :warehouses, :alph_key, unique: true
+    add_index :warehouses, :hash_id, unique: true
+    add_index :warehouses, :deleted_at
     # warehouses #
 
     # warehouse_products #
     create_table :warehouse_products do |t|
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.integer :warehouse_id
       t.integer :product_id
       t.integer :existence, default: 0
       t.integer :min_stock
     end
+    add_index :warehouse_products, :hash_id, unique: true
     # warehouse_products #
-
-    # warehouse_regions @deprecated #
-    create_table :warehouse_regions, :id => false do |t|
-      t.integer :warehouse_id
-      t.integer :state_id
-    end
-    # warehouse_regions #
 
     # web_info #
     create_table :web_infos do |t|

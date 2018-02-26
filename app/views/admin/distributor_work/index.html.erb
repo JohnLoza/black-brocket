@@ -41,7 +41,7 @@
   					  <tr>
                 <td></td>
     						<%= render partial: "client_block_content", locals: {client: c} %>
-    						<td><%= link_to :Atender, admin_distributor_work_take_client_path(c.alph_key),
+    						<td><%= link_to :Atender, admin_distributor_work_take_client_path(c.hash_id),
                             :class => "btn btn-white btn-sm hidden-button", method: :put,
                             data: {confirm: "Seguro(a)? Esto no puede ser deshecho."} %></td>
   					  </tr>

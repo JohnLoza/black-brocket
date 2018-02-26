@@ -1,4 +1,4 @@
-class Warehouse < ActiveRecord::Base
+class Warehouse < ApplicationRecord
   belongs_to :City, :foreign_key => :city_id
   has_many :Regions, :class_name => 'State', :foreign_key => :warehouse_id
   has_many :Products, :class_name => 'WarehouseProduct', :foreign_key => :warehouse_id
@@ -25,7 +25,7 @@ class Warehouse < ActiveRecord::Base
       operator = "LIKE"
     end
 
-    where("(name #{operator} :search or alph_key #{operator} :search) and deleted=false", search: search)
+    where("(name #{operator} :search or hash_id #{operator} :search) and deleted=false", search: search)
         .order(created_at: :DESC).paginate(:page =>  page, :per_page => 20)
   end
 

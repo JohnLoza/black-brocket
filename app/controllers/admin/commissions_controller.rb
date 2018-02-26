@@ -15,7 +15,7 @@ class Admin::CommissionsController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     if params[:distributor]
-      distributor = Distributor.find_by(alph_key: params[:distributor])
+      distributor = Distributor.find_by(hash_id: params[:distributor])
       if distributor.nil?
         flash[:info] = "No se encontró el distribuidor con clave #{params[:distributor]}"
         redirect_to admin_distributors_path
@@ -36,18 +36,18 @@ class Admin::CommissionsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
-    @distributor = Distributor.find_by(alph_key: params[:distributor])
-    @orders = Order.where("alph_key in (?)", params[:order_keys]).where(commission_in_progress: false)
+    @distributor = Distributor.find_by(hash_id: params[:distributor])
+    @orders = Order.where("hash_id in (?)", params[:order_keys]).where(commission_in_progress: false)
     # verify if we found any order corresponding to the given params #
     if !@orders.any?
       flash[:warning] = "No se encontraron las órdenes especificadas"
-      redirect_to admin_orders_path(distributor: @distributor.alph_key, type: "DELIVERED")
+      redirect_to admin_orders_path(distributor: @distributor.hash_id, type: "DELIVERED")
       return
     end
     # verify that the distributor exists and he(she) has a commission value settled #
     if @distributor.nil? or @distributor.commission.nil?
       flash[:warning] = "El distribuidor no tiene definido su porcentaje de comisión"
-      redirect_to admin_orders_path(distributor: @distributor.alph_key, type: "DELIVERED")
+      redirect_to admin_orders_path(distributor: @distributor.hash_id, type: "DELIVERED")
       return
     end
 
@@ -60,7 +60,7 @@ class Admin::CommissionsController < ApplicationController
     saved = false
     ActiveRecord::Base.transaction do
       commission = Commission.new()
-      commission.alph_key = random_alph_key(12).upcase
+      commission.hash_id = random_hash_id(12).upcase
       commission.distributor_id = @distributor.id
       commission.worker_id = @current_user.id
       commission.state = "WAITING_FOR_PAYMENT"
@@ -76,14 +76,14 @@ class Admin::CommissionsController < ApplicationController
 
     flash[:success] = "Comisión creada!" if saved
     flash[:danger] = "Ocurrió un error al guardar la información" if !saved
-    redirect_to admin_orders_path(distributor: @distributor.alph_key, type: "DELIVERED")
+    redirect_to admin_orders_path(distributor: @distributor.hash_id, type: "DELIVERED")
   end
 
   def details
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    commission = Commission.find_by(alph_key: params[:id])
+    commission = Commission.find_by(hash_id: params[:id])
     if commission.nil?
       flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
       redirect_to admin_commissions_path
@@ -99,7 +99,7 @@ class Admin::CommissionsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "PAY")
     return if !process_authorization_result(authorization_result)
 
-    commission = Commission.find_by(alph_key: params[:id])
+    commission = Commission.find_by(hash_id: params[:id])
     if commission.nil?
       flash[:warning] = "No se encontró la comisión especificada"
       redirect_to admin_commissions_path
@@ -124,7 +124,7 @@ class Admin::CommissionsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    commission = Commission.find_by(alph_key: params[:id])
+    commission = Commission.find_by(hash_id: params[:id])
     if commission.nil?
       flash[:warning] = "No se encontró la comisión especificada"
       redirect_to admin_commissions_path

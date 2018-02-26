@@ -1,4 +1,4 @@
-class Commission < ActiveRecord::Base
+class Commission < ApplicationRecord
   belongs_to :Distributor, :class_name => :Distributor, :foreign_key => :distributor_id
   has_many :Details, :class_name => :CommissionDetail, :foreign_key => :commission_id
 

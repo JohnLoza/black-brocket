@@ -37,7 +37,7 @@
               <tr>
                 <td><%=l(v.created_at, format: :long)%></td>
                 <% supervisor = v.Supervisor %>
-                <td><%= link_to supervisor.name, admin_worker_path(supervisor.alph_key) %></td>
+                <td><%= link_to supervisor.name, admin_worker_path(supervisor.hash_id) %></td>
                 <td>
                   <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
                             admin_supervisor_visit_details_path(params[:id], v.id),

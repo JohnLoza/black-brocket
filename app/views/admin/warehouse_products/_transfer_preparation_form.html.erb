@@ -1,5 +1,5 @@
 <%= form_for(:warehouse_product,
-    url: admin_prepare_product_for_shipment_path(@warehouse.alph_key, "0x0"),
+    url: admin_prepare_product_for_shipment_path(@warehouse.hash_id, "0x0"),
     remote: true, method: :post, :html => {:id => "transfer_preparation_form"}) do |f| %>
 
     <%= f.label :quantity, "Cantidad a transferir" %>

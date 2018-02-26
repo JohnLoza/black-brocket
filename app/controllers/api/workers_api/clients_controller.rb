@@ -19,7 +19,7 @@ class Api::WorkersApi::ClientsController < ApplicationController
              :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
     end
 
-    order = Order.find_by(alph_key: params[:id])
+    order = Order.find_by(hash_id: params[:id])
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }

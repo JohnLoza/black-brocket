@@ -10,7 +10,7 @@ class Distributor::ClientsController < ApplicationController
 
   def show
     region_ids = @current_user.Regions.map(&:id)
-    @client = Client.where(city_id: region_ids).where(alph_key: params[:id]).take
+    @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
     if !@client
       flash[:info] = "No encontramos a tu cliente."
@@ -21,7 +21,7 @@ class Distributor::ClientsController < ApplicationController
 
   def prices
     region_ids = @current_user.Regions.map(&:id)
-    @client = Client.where(city_id: region_ids).where(alph_key: params[:id]).take
+    @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
     if !@client
       flash[:info] = "No encontramos a tu cliente."
@@ -39,7 +39,7 @@ class Distributor::ClientsController < ApplicationController
   end
 
   def create_prices
-    @client = Client.find_by(alph_key: params[:id])
+    @client = Client.find_by(hash_id: params[:id])
     success = false
     if @client
       ActiveRecord::Base.transaction do
@@ -60,7 +60,7 @@ class Distributor::ClientsController < ApplicationController
 
   def messages
     region_ids = @current_user.Regions.map(&:id)
-    @client = Client.where(city_id: region_ids).where(alph_key: params[:id]).take
+    @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
     if !@client
       flash[:info] = "No encontramos a tu cliente."
@@ -83,12 +83,12 @@ class Distributor::ClientsController < ApplicationController
     @distributor_image = User.getImage(@current_user, :mini)
     @distributor_username = @current_user.username
 
-    @create_message_url = distributor_client_messages_path(@client.alph_key)
+    @create_message_url = distributor_client_messages_path(@client.hash_id)
   end
 
   def create_message
     region_ids = @current_user.Regions.map(&:id)
-    @client = Client.where(city_id: region_ids).where(alph_key: params[:id]).take
+    @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
     if !@client
       flash[:info] = "No encontramos a tu cliente."
@@ -106,6 +106,6 @@ class Distributor::ClientsController < ApplicationController
                     url: client_my_distributor_path)
 
     flash[:success] = "Mensaje guardado."
-    redirect_to distributor_client_messages_path(@client.alph_key)
+    redirect_to distributor_client_messages_path(@client.hash_id)
   end
 end

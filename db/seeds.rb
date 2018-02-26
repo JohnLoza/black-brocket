@@ -10,13 +10,13 @@
 warehouses = Warehouse.all
 if !warehouses.any?
   Warehouse.create(name: "Almacén Guadalajara", address: "Some address",
-                   telephone: "xx xx xx xx", city_id: 19597, alph_key: "A0001",
+                   telephone: "xx xx xx xx", city_id: 19597, hash_id: "A0001",
                    shipping_cost: 250, wholesale: 1999)
 
 end
 
 if SiteWorker.where(is_admin: true).take.blank?
-  SiteWorker.create(city_id: 19597, warehouse_id: 1, alph_key: "T0001",
+  SiteWorker.create(city_id: 19597, warehouse_id: 1, hash_id: "T0001",
                    name: "Admin", lastname: "foo", mother_lastname: "bar",
                    password: "foobar", password_confirmation: "foobar",
                    email: "admin@example.com", rfc: "LA872ASD7783A",
@@ -150,7 +150,7 @@ end
 #     })
 #
 #   if client.save
-#     client.update_attribute(:alph_key, generateAlphKey("C", client.id))
+#     client.update_attribute(:hash_id, generateAlphKey("C", client.id))
 #   else
 #     puts "--- error ---"
 #     client.errors.each do |field, msg|
@@ -167,9 +167,9 @@ end
 #     })
 #
 #   if product.save
-#     product.update_attribute(:alph_key, generateAlphKey("P", product.id))
+#     product.update_attribute(:hash_id, generateAlphKey("P", product.id))
 #
-#     render_file_path = "/shared/products/" + "product_" + product.alph_key + "_description.html.erb"
+#     render_file_path = "/shared/products/" + "product_" + product.hash_id + "_description.html.erb"
 #         file_path = "app/views" + render_file_path.sub("/shared/products/", "/shared/products/" + "_")
 #
 #         file = File.open(file_path, "w")
@@ -178,7 +178,7 @@ end
 #
 #         product.update_attributes(:description_render_path => render_file_path)
 #
-#     render_file_path = "/shared/products/" + "product_" + product.alph_key + "_preparation.html.erb"
+#     render_file_path = "/shared/products/" + "product_" + product.hash_id + "_preparation.html.erb"
 #         file_path = "app/views" + render_file_path.sub("/shared/products/", "/shared/products/" + "_")
 #
 #         file = File.open(file_path, "w")

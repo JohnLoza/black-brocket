@@ -59,9 +59,9 @@ class Admin::ProductsController < ApplicationController
     @product.name.strip!
 
     if @product.save
-      @product.update_attribute(:alph_key, generateAlphKey("P", @product.id))
+      @product.update_attribute(:hash_id, generateAlphKey("P", @product.id))
       if params[:product][:description_body]
-        render_file_path = @@replaceable_path + "product_" + @product.alph_key + "_description.html.erb"
+        render_file_path = @@replaceable_path + "product_" + @product.hash_id + "_description.html.erb"
         file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
 
         file = File.open(file_path, "w")
@@ -71,7 +71,7 @@ class Admin::ProductsController < ApplicationController
         @product.update_attributes(:description_render_path => render_file_path)
       end
       if params[:product][:preparation_body]
-        render_file_path = @@replaceable_path + "product_" + @product.alph_key + "_preparation.html.erb"
+        render_file_path = @@replaceable_path + "product_" + @product.hash_id + "_preparation.html.erb"
         file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
 
         file = File.open(file_path, "w")
@@ -84,20 +84,20 @@ class Admin::ProductsController < ApplicationController
       if params[:product][:principal_photo]
         ProdPhoto.where("product_id=#{@product.id} and is_principal=true").limit(1).update_all(is_principal: false)
         ProdPhoto.create(product_id: @product.id, is_principal: true,
-                         alph_key: random_alph_key(12).upcase,
+                         hash_id: random_hash_id(12).upcase,
                          photo: params[:product][:principal_photo],)
       end
 
       image_params.each do |param|
         @new_photo = ProdPhoto.create(product_id: @product.id,
-                               alph_key: random_alph_key(12).upcase,
+                               hash_id: random_hash_id(12).upcase,
                                photo: param)
       end if image_params
 
       Warehouse.all.each do |w|
         WarehouseProduct.create(warehouse_id: w.id, describes_total_stock: true,
                 product_id: @product.id, existence: 0, min_stock: 50,
-                alph_key: random_alph_key(12).upcase)
+                hash_id: random_hash_id(12).upcase)
       end
 
       # set new custom_prices #
@@ -118,7 +118,7 @@ class Admin::ProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "SHOW")
     return if !process_authorization_result(authorization_result)
 
-    @product = Product.find_by(alph_key: params[:id])
+    @product = Product.find_by(hash_id: params[:id])
     if @product.nil?
       flash[:info] = "No se encontró el producto con clave: #{params[:id]}"
       redirect_to admin_products_path
@@ -133,7 +133,7 @@ class Admin::ProductsController < ApplicationController
                                       "UPDATE_PRICE", "UPDATE_SHOW_IN_WEB_PAGE"])
     return if !process_authorization_result(authorization_result)
 
-    @product = Product.find_by(alph_key: params[:id])
+    @product = Product.find_by(hash_id: params[:id])
     if !@product.nil?
       description_file = @@base_file_path + @product.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
       preparation_file = @@base_file_path + @product.preparation_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
@@ -154,7 +154,7 @@ class Admin::ProductsController < ApplicationController
                                       "UPDATE_PRICE", "UPDATE_SHOW_IN_WEB_PAGE"])
     return if !process_authorization_result(authorization_result)
 
-    @product = Product.find_by(alph_key: params[:id])
+    @product = Product.find_by(hash_id: params[:id])
     if @product.nil?
       flash[:info] = "No se encontró el producto con clave: #{params[:id]}"
       redirect_to admin_products_path
@@ -179,7 +179,7 @@ class Admin::ProductsController < ApplicationController
 
     if @product.update_attributes(product_params)
       if params[:product][:description_body]
-        render_file_path = @@replaceable_path + "product_" + @product.alph_key + "_description.html.erb"
+        render_file_path = @@replaceable_path + "product_" + @product.hash_id + "_description.html.erb"
         file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
 
         file = File.open(file_path, "w")
@@ -189,7 +189,7 @@ class Admin::ProductsController < ApplicationController
         @product.update_attributes(:description_render_path => render_file_path)
       end
       if params[:product][:preparation_body]
-        render_file_path = @@replaceable_path + "product_" + @product.alph_key + "_preparation.html.erb"
+        render_file_path = @@replaceable_path + "product_" + @product.hash_id + "_preparation.html.erb"
         file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
 
         file = File.open(file_path, "w")
@@ -202,13 +202,13 @@ class Admin::ProductsController < ApplicationController
       if params[:product][:principal_photo]
         ProdPhoto.where(product_id: @product.id, is_principal: true).limit(1).update_all(is_principal: false)
         ProdPhoto.create(product_id: @product.id, is_principal: true,
-                         alph_key: random_alph_key(12).upcase,
+                         hash_id: random_hash_id(12).upcase,
                          photo: params[:product][:principal_photo],)
       end
 
       image_params.each do |param|
         @new_photo = ProdPhoto.create(product_id: @product.id,
-                            alph_key: random_alph_key(12).upcase,
+                            hash_id: random_hash_id(12).upcase,
                             photo: param)
       end if image_params
       flash[:success] = "El producto se actualizó."
@@ -225,7 +225,7 @@ class Admin::ProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "DELETE")
     return if !process_authorization_result(authorization_result)
 
-    @product = Product.find_by(alph_key: params[:id])
+    @product = Product.find_by(hash_id: params[:id])
     if @product.nil?
       flash[:info] = "No se encontró el producto con clave: #{params[:id]}"
       redirect_to admin_products_path
@@ -244,10 +244,10 @@ class Admin::ProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PRODUCT_DATA")
     return if !process_authorization_result(authorization_result)
 
-    product_id = Product.find_by(alph_key: params[:id]).id
+    product_id = Product.find_by(hash_id: params[:id]).id
 
     ProdPhoto.where("product_id=#{product_id} and is_principal=true").limit(1).update_all(is_principal: false)
-    ProdPhoto.where("product_id=#{product_id} and alph_key='#{params[:photo_id]}'").limit(1).update_all(is_principal: true)
+    ProdPhoto.where("product_id=#{product_id} and hash_id='#{params[:photo_id]}'").limit(1).update_all(is_principal: true)
 
     respond_to do |format|
       format.js { render :set_principal_photo, layout: false}
@@ -258,7 +258,7 @@ class Admin::ProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PRODUCT_DATA")
     return if !process_authorization_result(authorization_result)
 
-    photo = ProdPhoto.find_by(alph_key: params[:photo_id])
+    photo = ProdPhoto.find_by(hash_id: params[:photo_id])
     photo.destroy
 
     respond_to do |format|

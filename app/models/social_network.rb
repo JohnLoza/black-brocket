@@ -1,3 +1,3 @@
-class SocialNetwork < ActiveRecord::Base
+class SocialNetwork < ApplicationRecord
   validates :url, presence: true
 end

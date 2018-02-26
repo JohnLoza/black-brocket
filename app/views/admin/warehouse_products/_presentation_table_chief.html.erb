@@ -21,7 +21,7 @@
           <div class="col-md-3">
           <% if @actions["INVENTORY"] %>
             <%= link_to "<i class='fa fa-file-text-o'></i> Impresión de inventario".html_safe,
-                    admin_inventory_path(@warehouse.alph_key), :class => "btn btn-white btn-sm full-width m-b-xs", target: "_blank" %>
+                    admin_inventory_path(@warehouse.hash_id), :class => "btn btn-white btn-sm full-width m-b-xs", target: "_blank" %>
           <% end %>
           </div>
   			</div>
@@ -43,17 +43,17 @@
                   <% p = wp.Product %>
       					  <tr>
                     <td></td>
-                    <td><%= p.alph_key %></td>
+                    <td><%= p.hash_id %></td>
         						<td><%= p.name %></td>
         						<td>
-                      <button id="stock-<%= p.alph_key %>" type="button" class="btn btn-primary btn-sm m-r-sm"
-                              onclick="update_shipment_preparations_form('<%= p.name %>', '<%= p.alph_key %>');">
+                      <button id="stock-<%= p.hash_id %>" type="button" class="btn btn-primary btn-sm m-r-sm"
+                              onclick="update_shipment_preparations_form('<%= p.name %>', '<%= p.hash_id %>');">
                               <%= wp.existence %>
                       </button>
                     </td>
         						<td>
-                      <button id="min-stock-<%= p.alph_key %>" type="button" class="btn btn-warning btn-sm m-r-sm"
-                              onclick="update_min_existence_form('<%= p.name %>', '<%= p.alph_key %>');">
+                      <button id="min-stock-<%= p.hash_id %>" type="button" class="btn btn-warning btn-sm m-r-sm"
+                              onclick="update_min_existence_form('<%= p.name %>', '<%= p.hash_id %>');">
                               <%= wp.min_stock %>
                       </button>
                     </td>

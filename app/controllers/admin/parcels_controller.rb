@@ -9,7 +9,7 @@ class Admin::ParcelsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(alph_key: params[:id])
+    @warehouse = Warehouse.find_by(hash_id: params[:id])
     @parcels = @warehouse.Parcels
 
     # determine the actions the user can do, so we can display them in screen #
@@ -39,13 +39,13 @@ class Admin::ParcelsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(alph_key: params[:id])
+    @warehouse = Warehouse.find_by(hash_id: params[:id])
 
     @parcel = Parcel.new(parcel_params)
     @parcel.warehouse_id = @warehouse.id
     if @parcel.save
       flash[:success] = "Paquetería creada..."
-      redirect_to admin_warehouse_parcels_path(@warehouse.alph_key)
+      redirect_to admin_warehouse_parcels_path(@warehouse.hash_id)
     else
       @url = admin_warehouse_parcels_path(params[:id])
       @method = :post
@@ -67,12 +67,12 @@ class Admin::ParcelsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "UPDATE")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(alph_key: params[:warehouse_id])
+    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
     @parcel = Parcel.find(params[:id])
 
     if @parcel.update_attributes(parcel_params)
       flash[:success] = "Paquetería actualizada..."
-      redirect_to admin_warehouse_parcels_path(@warehouse.alph_key)
+      redirect_to admin_warehouse_parcels_path(@warehouse.hash_id)
     else
       @url = admin_warehouse_parcel_path(params[:warehouse_id], params[:id])
       @method = :put

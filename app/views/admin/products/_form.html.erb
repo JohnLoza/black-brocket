@@ -19,7 +19,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_field :alph_key, { :class => 'form-control', :disabled => true } %>
+                  <%= f.text_field :hash_id, { :class => 'form-control', :disabled => true } %>
                 </div>
               </div>
             <% end # if @actions["UPDATE_NAME"] # %>
@@ -176,17 +176,17 @@
                     <tbody>
                       <% @photos.each do |p| %>
                         <% if p.is_principal %>
-                          <tr id="<%= p.alph_key %>" class="selected">
+                          <tr id="<%= p.hash_id %>" class="selected">
                         <% else %>
-                          <tr id="<%= p.alph_key %>">
+                          <tr id="<%= p.hash_id %>">
                         <% end %>
                         <td><%= image_tag p.photo.url(:mini), :class => "feed-photo" %></td>
                         <td>
-                          <%= link_to "Principal".html_safe, admin_products_set_principal_path(@product.alph_key, p.alph_key),
-                                remote: true, :class => "btn btn-primary btn-lg", id: p.alph_key %>
+                          <%= link_to "Principal".html_safe, admin_products_set_principal_path(@product.hash_id, p.hash_id),
+                                remote: true, :class => "btn btn-primary btn-lg", id: p.hash_id %>
                         </td>
                         <td>
-                            <%= link_to "<i class='fa fa-trash'></i> ".html_safe, admin_products_photo_destroy_path(@product.alph_key, p.alph_key),
+                            <%= link_to "<i class='fa fa-trash'></i> ".html_safe, admin_products_photo_destroy_path(@product.hash_id, p.hash_id),
                                   remote: true, :class => "btn btn-danger btn-lg", data: { confirm: "Estas seguro(a) de eliminarlo? esta será eliminada instantaneamente sin necesidad de presionar el botón de guardar."} %>
                         </td>
                         </tr>

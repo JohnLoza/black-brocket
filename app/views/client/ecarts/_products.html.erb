@@ -1,13 +1,13 @@
 <div id="ecart_content">
   <% @products.each do |wp| %>
-  <div id="<%=wp.alph_key%>" class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;">
+  <div id="<%=wp.hash_id%>" class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;">
     <% p = wp.Product %>
 
         <div class="col-sm-1">
           <center>
             <% @photos.each do |photo| %>
               <% if photo.product_id == p.id %>
-                <%= link_to image_tag(photo.photo.url(:mini),:class => "img-circle"), product_path(wp.alph_key) %>
+                <%= link_to image_tag(photo.photo.url(:mini),:class => "img-circle"), product_path(wp.hash_id) %>
                 <% break %>
               <% end %>
             <% end %>
@@ -19,13 +19,13 @@
         </div>
         <div class="col-sm-1">
           <label>Clave:</label><br>
-          <%=p.alph_key%>
+          <%=p.hash_id%>
         </div>
         <div class="col-sm-2">
           <label>Cantidad:</label>
-         <input type="number" min="1" value="<%= session[:e_cart][wp.alph_key] %>"
-         onchange="update_quantity('<%=wp.alph_key%>', this.value, <%=wp.existence%>)"
-         id="<%=wp.alph_key%>-quantity-input" class="form-control form-control-black text-center"/>
+         <input type="number" min="1" value="<%= session[:e_cart][wp.hash_id] %>"
+         onchange="update_quantity('<%=wp.hash_id%>', this.value, <%=wp.existence%>)"
+         id="<%=wp.hash_id%>-quantity-input" class="form-control form-control-black text-center"/>
         </div>
         <div class="col-sm-2">
           <label>Precio Unitario:</label><br>
@@ -34,12 +34,12 @@
               <% if @product_prices.any? %>
                 <% @product_prices.each do |pp| %>
                   <% if p.id == pp.product_id %>
-                    <% monto = pp.client_price * session[:e_cart][wp.alph_key].to_i %>
+                    <% monto = pp.client_price * session[:e_cart][wp.hash_id].to_i %>
                     <%= pp.client_price %>
                   <% end # if p.id == pp.product_id # %>
                 <% end # @product_prices.each # %>
               <% else %>
-                <% monto = p.price * session[:e_cart][wp.alph_key].to_i %>
+                <% monto = p.price * session[:e_cart][wp.hash_id].to_i %>
                 <%= p.price %>
               <% end # if @product_prices.any? # %>
             </span>
@@ -47,14 +47,14 @@
         <div class="col-sm-1">
           <% @total += monto %>
           <label>Importe: </label><br>
-            $<span id="<%=wp.alph_key%>-cost" class="individual-cost">
+            $<span id="<%=wp.hash_id%>-cost" class="individual-cost">
                <%= monto %>
             </span>
         </div>
         <div class="col-sm-1 text-center">
           <br>
           <%= link_to "<span class='icon-close' style='font-size: 34px;'></span>".html_safe,
-             client_remove_from_cart_path(@current_user.alph_key, wp.alph_key),
+             client_remove_from_cart_path(@current_user.hash_id, wp.hash_id),
              method: :put, data:{confirm: "Estas seguro(a) de quitarlo del carrito?"} %>
         </div>
   </div>
@@ -94,7 +94,7 @@
   </div>
 
   <div class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;margin-bottom: 40px;">
-    <%= form_tag client_create_order_path(@current_user.alph_key), method: :post do %>
+    <%= form_tag client_create_order_path(@current_user.hash_id), method: :post do %>
         <div class="col-sm-10 text-right">
           <h3 class="iconbox-title">Método de pago</h3>
           <% @banks.each do |bank| %>
@@ -145,7 +145,7 @@
 </div>
 
 <%= link_to ".",
-    client_ecart_update_quantity_path(@current_user.alph_key) + "?product=abc&new_quantity=123&current_existence=123",
+    client_ecart_update_quantity_path(@current_user.hash_id) + "?product=abc&new_quantity=123&current_existence=123",
     method: :put, remote: true, id: "update_quantity_link",
     style: "visibility: hidden;" %>
 

@@ -17,9 +17,9 @@ class Api::DistributorApi::ClientsController < ApplicationController
     data = Array.new
     data<<{per_page: 20}
     clients.each do |client|
-      data << {alph_key: client.alph_key, username: client.username, city: client.City.name, state: client.City.State.name,
+      data << {hash_id: client.hash_id, username: client.username, city: client.City.name, state: client.City.State.name,
                last_visit: client.last_distributor_visit, last_revision: client.last_distributor_revision, photo: User.getImage(client),
-               telephone: client.telephone, cellphone: client.cellphone, lada: client.City.LADA}
+               telephone: client.telephone, cellphone: client.cellphone, lada: client.City.lada}
     end
 
     render :status => 200,
@@ -38,7 +38,7 @@ class Api::DistributorApi::ClientsController < ApplicationController
       return
     end
 
-    client = Client.find_by(alph_key: params[:id])
+    client = Client.find_by(hash_id: params[:id])
     if client.blank?
       render :status => 200,
              :json => { :success => false, :info => "CLIENT_NOT_FOUND" }

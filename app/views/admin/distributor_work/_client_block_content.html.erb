@@ -1,11 +1,11 @@
 <td class="project-people">
-  <%= link_to admin_client_path(client.alph_key) do %>
+  <%= link_to admin_client_path(client.hash_id) do %>
     <%= image_tag User.getImage(client, :mini), { :class => "img-circle" } %>
   <% end %>
 </td>
 <% current_city = client.City %>
 <td><%=client.name%> <%=client.lastname%></td>
 <td><%=client.email%></td>
-<td>(<%=current_city.LADA%>) <%=client.telephone%></td>
+<td>(<%=current_city.lada%>) <%=client.telephone%></td>
 <td><%=client.cellphone%></td>
 <td> <%= current_city.name %>, <%= current_city.State.name %></td>

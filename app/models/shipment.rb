@@ -1,4 +1,4 @@
-class Shipment < ActiveRecord::Base
+class Shipment < ApplicationRecord
   belongs_to :OriginWarehouse, class_name: "Warehouse", :foreign_key => :origin_warehouse_id
   belongs_to :TargetWarehouse, class_name: "Warehouse", :foreign_key => :target_warehouse_id
 

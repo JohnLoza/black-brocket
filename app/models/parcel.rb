@@ -1,3 +1,3 @@
-class Parcel < ActiveRecord::Base
+class Parcel < ApplicationRecord
   mount_uploader :image, AvatarUploader
 end

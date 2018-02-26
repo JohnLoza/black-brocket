@@ -1,3 +1,3 @@
-class Suggestion < ActiveRecord::Base
+class Suggestion < ApplicationRecord
   
 end

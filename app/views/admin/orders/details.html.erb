@@ -22,7 +22,7 @@
 
           <% if !params[:only_address] or params[:only_address] != "Y"%>
               <h3>Pedido</h3>
-              <p><strong>Referencia:</strong> <span class="text-navy"><%= @order.alph_key %> <%if !@order.tracking_code.blank?%> - <strong>Código de envío:</strong> <%= @order.tracking_code %></span><%end%></p>
+              <p><strong>Referencia:</strong> <span class="text-navy"><%= @order.hash_id %> <%if !@order.tracking_code.blank?%> - <strong>Código de envío:</strong> <%= @order.tracking_code %></span><%end%></p>
               <p class="pull-right" style="font-size:12px;">
                 <span><strong>Fecha de creación:</strong> <%= l(@order.created_at, format: :long) %></span><br>
                 <span><strong>Última modificación:</strong> <%= l(@order.updated_at, format: :long) %></span><br>
@@ -35,7 +35,7 @@
                   <% city = warehouse.City %>
                   <%= city.name %>,
                   <%= city.State.name %>, México<br>
-                  Teléfono: (<%= city.LADA %>) <%= warehouse.telephone %>
+                  Teléfono: (<%= city.lada %>) <%= warehouse.telephone %>
               </p>
           <% end # if to not show when only want address for etiquette # %>
 

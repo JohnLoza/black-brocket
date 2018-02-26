@@ -16,7 +16,7 @@ class Api::DistributorApi::CommissionsController < ApplicationController
     data = Array.new
     data<<{per_page: 25}
     commissions.each do |commission|
-      data << {alph_key: commission.alph_key, total: commission.total,
+      data << {hash_id: commission.hash_id, total: commission.total,
         status: t(commission.state), date: l(commission.created_at, format: :long),
         payment_img: commission.payment_img.url, payment_pdf: commission.payment_pdf.url}
     end
@@ -37,7 +37,7 @@ class Api::DistributorApi::CommissionsController < ApplicationController
       return
     end
 
-    commission = @current_user.Commissions.find_by(alph_key: params[:id])
+    commission = @current_user.Commissions.find_by(hash_id: params[:id])
     if commission.blank?
       render :status => 200,
              :json => { :success => false, :info => "COMMISSION_NOT_FOUND" }
@@ -48,8 +48,8 @@ class Api::DistributorApi::CommissionsController < ApplicationController
     orders = Order.where(id: order_ids).includes(:Client)
     data = Array.new
     orders.each do |order|
-      data << {alph_key: order.alph_key, total: order.total, client_username: order.Client.username,
-        client_alph_key: order.Client.alph_key, status: t(order.state), payment_img: commission.payment_img.url, payment_pdf: commission.payment_pdf.url}
+      data << {hash_id: order.hash_id, total: order.total, client_username: order.Client.username,
+        client_hash_id: order.Client.hash_id, status: t(order.state), payment_img: commission.payment_img.url, payment_pdf: commission.payment_pdf.url}
     end
 
     render :status => 200,

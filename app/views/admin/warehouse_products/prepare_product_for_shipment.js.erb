@@ -3,7 +3,7 @@ if($("#<%=params[:id]%>").length == 0){
 }
 
 container = $("#<%=@hash.keys[0]%>");
-container.append("<%= j render partial: 'product_preparated', locals: {product: @hash[params[:id]][@alph_key], product_key: @alph_key} %>");
+container.append("<%= j render partial: 'product_preparated', locals: {product: @hash[params[:id]][@hash_id], product_key: @hash_id} %>");
 
 <% message = "Agregado el producto " + @hash[params[:id]]["name"] + " a los preparativos" %>
 $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: message} %>");

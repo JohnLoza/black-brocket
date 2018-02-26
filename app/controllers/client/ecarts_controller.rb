@@ -4,7 +4,7 @@ class Client::EcartsController < ApplicationController
 
   def show
     if session[:e_cart]
-      @products = WarehouseProduct.where("alph_key in (?)", session[:e_cart].keys).includes(:Product)
+      @products = WarehouseProduct.where("hash_id in (?)", session[:e_cart].keys).includes(:Product)
       @product_prices = @current_user.ProductPrices.where("product_id in (?)", @products.map(&:product_id))
       @warehouse = @products[0].Warehouse if @products.any?
       @banks = Bank.all
@@ -15,7 +15,7 @@ class Client::EcartsController < ApplicationController
   end
 
   def add_to_cart
-    @product = WarehouseProduct.find_by(alph_key: params[:id])
+    @product = WarehouseProduct.find_by(hash_id: params[:id])
 
     @quantity_is_correct = true if params[:quantity].to_i > 0 and
                                    @product.existence >= params[:quantity].to_i

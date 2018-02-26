@@ -1,5 +1,5 @@
 <% provide(:title, "Envíos de almacén") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Envíos de almacén", labels: ['Almacenes', @warehouse.name, "Envíos de almacén"], links: [admin_warehouses_path, admin_warehouse_products_path(@warehouse.alph_key)]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Envíos de almacén", labels: ['Almacenes', @warehouse.name, "Envíos de almacén"], links: [admin_warehouses_path, admin_warehouse_products_path(@warehouse.hash_id)]} %>
 
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">

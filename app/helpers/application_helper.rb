@@ -13,15 +13,15 @@ module ApplicationHelper
     return letter + new_key
   end
 
-  def random_alph_key(number)
-    alph_key = Array.new
+  def random_hash_id(number)
+    hash_id = Array.new
     index = 0
     while index < number
       i = SecureRandom.random_number(alphanumericArray.size)
-      alph_key << alphanumericArray[i]
+      hash_id << alphanumericArray[i]
       index += 1
     end
-    return alph_key.join
+    return hash_id.join
   end
 
   def alphanumericArray

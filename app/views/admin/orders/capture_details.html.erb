@@ -9,7 +9,7 @@
       <div class="ibox-content" style="display: block;">
         <div class="row">
           <div class="col-sm-12">
-            <h3 class="m-t-none m-b"><strong>Orden:</strong> <%= @order.alph_key %></h3>
+            <h3 class="m-t-none m-b"><strong>Orden:</strong> <%= @order.hash_id %></h3>
             <div class="table-responsive">
               <table class="table">
                   <tr>
@@ -21,7 +21,7 @@
                     <td><strong><i class="fa fa-wrench"></i> Acciones:</strong></td>
                   </tr>
                   <tr>
-                    <td><%= @order.alph_key %></td>
+                    <td><%= @order.hash_id %></td>
                     <td><%= @order.Client.username %></td>
                     <td><%= @order.total %></td>
                     <td>
@@ -32,7 +32,7 @@
                     <td><%= l(@order.created_at, format: :long) %></td>
                     <td>
                       <%= link_to "<i class='fa fa-eye'></i> Ver pedido".html_safe,
-                          admin_order_details_path(@order.alph_key),
+                          admin_order_details_path(@order.hash_id),
                           :class => "btn btn-white btn-sm", target: "_blank" %>
                     </td>
                   </tr>
@@ -47,7 +47,7 @@
     <!-- CONTENT -->
       <div class="ibox-content">
 
-        <%= form_tag(admin_capture_details_path(@order.alph_key)) do %>
+        <%= form_tag(admin_capture_details_path(@order.hash_id)) do %>
           <div id="form-content">
             <%= render "detail_fields" %>
           </div>

@@ -1,5 +1,6 @@
-class State < ActiveRecord::Base
-  belongs_to :Country, :foreign_key => :country_id
+class State < ApplicationRecord
+  include Searchable
+  
   belongs_to :Warehouse, :foreign_key => :warehouse_id
   has_many :Cities, :foreign_key => :state_id
 

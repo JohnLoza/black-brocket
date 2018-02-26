@@ -1,6 +1,6 @@
-<% alph_key = random_alph_key(12).upcase %>
+<% hash_id = random_hash_id(12).upcase %>
 
-<div id="<%= alph_key %>">
+<div id="<%= hash_id %>">
   <%= label_tag :product, "Producto" %>
   <%= select_tag "[product_id][]",
     options_from_collection_for_select(@products, "id", "name"),
@@ -14,7 +14,7 @@
   <%= text_field_tag "[batch][]", "",
       {:class => "form-control m-b", :maxlength => 50} %>
 
-  <a class="btn btn-danger btn-sm" onclick="$('#<%= alph_key %>').remove();">
+  <a class="btn btn-danger btn-sm" onclick="$('#<%= hash_id %>').remove();">
     <i class="fa fa-trash"></i>
     Eliminar Campos
   </a>

@@ -30,14 +30,14 @@ class Admin::StatisticsController < ApplicationController
 
       # fetch the products #
       if params[:products] and params[:products].any?
-        @products = Product.select(:id, :alph_key, :name).where(deleted: false, id: params[:products]).order(id: :ASC)
+        @products = Product.select(:id, :hash_id, :name).where(deleted: false, id: params[:products]).order(id: :ASC)
       else
-        @products = Product.select(:id, :alph_key, :name).where(deleted: false).order(id: :ASC)
+        @products = Product.select(:id, :hash_id, :name).where(deleted: false).order(id: :ASC)
       end
 
       # fetch the distributors #
       if params[:distributors] and params[:distributors].any?
-        @distributors = Distributor.select(:id, :alph_key, :username).where(deleted: false, id: params[:distributors]).order(id: :ASC)
+        @distributors = Distributor.select(:id, :hash_id, :username).where(deleted: false, id: params[:distributors]).order(id: :ASC)
       else
         @distributors = Array.new
       end

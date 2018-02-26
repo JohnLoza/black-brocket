@@ -51,7 +51,7 @@
             </tr>
             <tr>
               <td><b>Clave:</b></td>
-              <td><%= @product.alph_key %></td>
+              <td><%= @product.hash_id %></td>
               <td></td>
             </tr>
             <% if logged_in? and session[:user_type] == 'c' %>
@@ -152,7 +152,7 @@
         <div class="iconbox">
     			<div class="iconbox-body equal-height text-left" style="padding:20px;">
     				<div class="iconbox-text">
-              <%= render partial: "question_form", locals: { prod_id: @product.alph_key } %>
+              <%= render partial: "question_form", locals: { prod_id: @product.hash_id } %>
     					<!--<div class="iconbox-desc">
     						<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
     					</div>-->

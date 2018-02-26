@@ -7,13 +7,13 @@
             <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
           </div>
   				<div class="col-md-2">
-  					<%= link_to(admin_warehouse_products_path(@warehouse.alph_key), :class => "btn btn-white btn-sm full-width") do %>
+  					<%= link_to(admin_warehouse_products_path(@warehouse.hash_id), :class => "btn btn-white btn-sm full-width") do %>
   						<i class="fa fa-refresh"></i> Actualizar
   					<% end %>
   				</div>
           <div class="col-md-3">
             <% if @actions["RECEIVE_SHIPMENTS"] %>
-    					<%= link_to(admin_shipments_path(@warehouse.alph_key), :class => "btn btn-white btn-sm full-width") do %>
+    					<%= link_to(admin_shipments_path(@warehouse.hash_id), :class => "btn btn-white btn-sm full-width") do %>
     						<i class="fa fa-truck"></i> Envíos a mi almacén
     					<% end %>
             <% end %>
@@ -36,11 +36,11 @@
               <% p = wp.Product %>
   					  <tr>
                 <td></td>
-                <td><%= p.alph_key %></td>
+                <td><%= p.hash_id %></td>
     						<td><%= p.name %></td>
     						<td>
                   <button type="button" class="btn btn-primary btn-sm m-r-sm"
-                          onclick="update_shipment_preparations_form('<%=p.name%>', '<%=p.alph_key%>', <%=wp.id%>, <%=wp.existence%>);">
+                          onclick="update_shipment_preparations_form('<%=p.name%>', '<%=p.hash_id%>', <%=wp.id%>, <%=wp.existence%>);">
                           <%= wp.existence %>
                   </button>
                   <% if @actions["UPDATE_STOCK"] %>

@@ -71,7 +71,7 @@ class Admin::MexicoDbController < ApplicationController
 
     @state = State.find(params[:id]) if params[:id].to_i > 0
     if @state
-      City.where(:state_id => @state.id).update_all(LADA: params[:state][:LADA])
+      City.where(:state_id => @state.id).update_all(lada: params[:state][:lada])
       flash[:success] = "El LADA para el estado #{@state.name} se actualizó correctamente"
     else
       flash[:danger] = "Oops, algo no salió como esperabamos..."
@@ -100,7 +100,7 @@ class Admin::MexicoDbController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
-    city = City.create({LADA: params[:new_city][:LADA], name: params[:new_city][:name], state_id: params[:new_city][:state_id]})
+    city = City.create({lada: params[:new_city][:lada], name: params[:new_city][:name], state_id: params[:new_city][:state_id]})
     if city
       flash[:success] = "La ciudad " + city.name + " se creó correctamente."
     else
@@ -112,6 +112,6 @@ class Admin::MexicoDbController < ApplicationController
 
   private
     def city_params
-      params.require(:city).permit(:name, :LADA)
+      params.require(:city).permit(:name, :lada)
     end
 end

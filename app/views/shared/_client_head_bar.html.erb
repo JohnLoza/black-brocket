@@ -14,8 +14,8 @@
                     <td><strong><i class="fa fa-calendar-o"></i> Creado el:</strong></td>
                   </tr>
                   <tr>
-                    <td><%= @client.alph_key %></td>
-                    <td>(<%=@client_city.LADA%>) <%= @client.telephone %></td>
+                    <td><%= @client.hash_id %></td>
+                    <td>(<%=@client_city.lada%>) <%= @client.telephone %></td>
                     <td><%= @client_city.name %>, <%= @client_city.State.name %></td>
                     <td><%= l(@client.created_at, format: :long) %></td>
                   </tr>

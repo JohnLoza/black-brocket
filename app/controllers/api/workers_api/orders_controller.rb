@@ -48,7 +48,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
 
     data = Array.new
     orders.each do |order|
-      data << {folio: order.alph_key, date: order.created_at, client: order.client_id, distributor: order.distributor_id}
+      data << {folio: order.hash_id, date: order.created_at, client: order.client_id, distributor: order.distributor_id}
     end
 
     render :status => 200,
@@ -73,7 +73,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
              :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
     end
 
-    order = Order.find_by(alph_key: params[:id])
+    order = Order.find_by(hash_id: params[:id])
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }
@@ -88,7 +88,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
 
     city = warehouse.City
     warehouse_data = {address: warehouse.address, city: city.name,
-      state: city.State.name, LADA: city.LADA, telephone: warehouse.telephone }
+      state: city.State.name, lada: city.lada, telephone: warehouse.telephone }
 
     data[:warehouse_data] = warehouse_data
 
@@ -126,7 +126,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
     orders = Order.where(state: "BATCHES_CAPTURED", warehouse_id: @current_user.warehouse_id).order(created_at: :asc).paginate(page: params[:page], per_page: 25)
     data = Array.new
     orders.each do |order|
-      data << {folio: order.alph_key, date: order.created_at, client: order.client_id, distributor: order.distributor_id}
+      data << {folio: order.hash_id, date: order.created_at, client: order.client_id, distributor: order.distributor_id}
     end
 
     render :status => 200,
@@ -152,7 +152,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
     end
 
     success = false
-    @order = Order.find_by(alph_key: params[:id])
+    @order = Order.find_by(hash_id: params[:id])
 
     if @order.blank?
       render :status => 200,

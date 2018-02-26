@@ -12,7 +12,6 @@
 //Poner todos los que agregen en el orden que busco y quitar require tree
 //
 //= require jquery-2.1.1
-//= require jquery_ujs
 //= require bootstrap.min
 //= require switchery
 //= require jquery.metisMenu

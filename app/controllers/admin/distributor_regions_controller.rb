@@ -10,7 +10,7 @@ class Admin::DistributorRegionsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, @@permission_name)
     return if !process_authorization_result(authorization_result)
 
-    @distributor = Distributor.find_by(alph_key: params[:dist_id])
+    @distributor = Distributor.find_by(hash_id: params[:dist_id])
     if @distributor.nil?
       flash[:info] = "No se encontró el distribuidor con clave #{params[:dist_id]}"
       redirect_to admin_distributors_path
@@ -53,7 +53,7 @@ class Admin::DistributorRegionsController < ApplicationController
     @city = City.find_by(id: params[:id])
 
     if !@city.nil?
-      distributor = Distributor.find_by(alph_key: params[:dist_id])
+      distributor = Distributor.find_by(hash_id: params[:dist_id])
 
       if !distributor.nil?
 

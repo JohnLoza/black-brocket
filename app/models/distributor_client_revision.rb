@@ -1,2 +1,2 @@
-class DistributorClientRevision < ActiveRecord::Base
+class DistributorClientRevision < ApplicationRecord
 end

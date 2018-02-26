@@ -1,6 +1,6 @@
 <% @banks = Bank.all %>
 <%= form_for order, remote: true,
-    url: client_update_payment_method_path(@current_user.alph_key, order.alph_key) do |f| %>
+    url: client_update_payment_method_path(@current_user.hash_id, order.hash_id) do |f| %>
   <% @banks.each do |bank| %>
     <%= f.radio_button 'payment_method', bank.id %>
     <%= image_tag bank.image.url(:mini) %><br>

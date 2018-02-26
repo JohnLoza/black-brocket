@@ -32,8 +32,8 @@
           <% end %>
 
           <% if @actions["UPDATE_CITY_LADA"] %>
-            <%= f.label :LADA, "Registrar LADA de la población" %>
-            <%= f.number_field "LADA", { value: @cities[0].LADA, :class => "form-control m-b", min: 0, max: 99999, step: 1} %>
+            <%= f.label :lada, "Registrar LADA de la población" %>
+            <%= f.number_field "LADA", { value: @cities[0].lada, :class => "form-control m-b", min: 0, max: 99999, step: 1} %>
           <% end %>
 
           <%= f.submit "Modificar", :class => "btn btn-primary",

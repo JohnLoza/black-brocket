@@ -1,4 +1,4 @@
-<div id="<%= question.alph_key %>" class="social-feed-box">
+<div id="<%= question.hash_id %>" class="social-feed-box">
     <div class="pull-right social-action dropdown">
         <button data-toggle="dropdown" class="dropdown-toggle btn-white">
             <i class="fa fa-angle-down"></i>
@@ -36,7 +36,7 @@
             <div class="media-body">
             	<%= form_for :prod_answer, remote: true do |f| %>
 	                 <%= f.text_area :description, { :class => 'form-control', :placeholder => "Contesta esta pregunta...", :maxlength => 250, :required => true } %>
-	    			 <%= f.hidden_field :question_id, value: question.alph_key %>
+	    			 <%= f.hidden_field :question_id, value: question.hash_id %>
 	    			 <%= f.submit "Guardar respuesta", :class => 'btn btn-primary m-t-sm pull-right',
 	                  data: { confirm: '¿Estás seguro(a) de tu respuesta?' } %>
   				<% end %>

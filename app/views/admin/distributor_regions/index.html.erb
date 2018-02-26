@@ -24,7 +24,7 @@
 					    <table>
 				         <tr>
 				           <td class="table-padd"><strong><i class="fa fa-key"></i> Identificador:</strong></td>
-				           <td><%= @distributor.alph_key %></td>
+				           <td><%= @distributor.hash_id %></td>
 				         </tr>
 				         <tr>
 				           <td><strong><i class="fa fa-map-marker"></i> Ubicación:</strong></td>
@@ -32,7 +32,7 @@
 				         </tr>
 				         <tr>
 				           <td><strong><i class="fa fa-phone"></i> Teléfono:</strong></td>
-				           <td>(<%= @distributor_city.LADA %>) <%= @distributor.telephone %></td>
+				           <td>(<%= @distributor_city.lada %>) <%= @distributor.telephone %></td>
 				         </tr>
 				         <tr>
 				           <td><strong><i class="fa fa-calendar-o"></i> Creado el:</strong></td>
@@ -53,7 +53,7 @@
 
 	  <div id="distributor_regions">
 	    <% @regions.each do |city| %>
-	      <%= render partial: "region", locals: { city: city, dist_id: @distributor.alph_key } %>
+	      <%= render partial: "region", locals: { city: city, dist_id: @distributor.hash_id } %>
 	    <% end %>
 	  </div>
 

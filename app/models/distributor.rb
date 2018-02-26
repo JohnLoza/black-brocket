@@ -1,4 +1,4 @@
-class Distributor < ActiveRecord::Base
+class Distributor < ApplicationRecord
   attr_accessor :remember_token
 
   before_save { self.email = email.downcase }
@@ -59,7 +59,7 @@ class Distributor < ActiveRecord::Base
       distributors.name #{operator} :search or
       distributors.lastname #{operator} :search or
       distributors.mother_lastname #{operator} :search or
-      distributors.alph_key #{operator} :search)", search: search).order(created_at: :DESC).paginate(:page =>  page, :per_page => 20).includes(City: :State)
+      distributors.hash_id #{operator} :search)", search: search).order(created_at: :DESC).paginate(:page =>  page, :per_page => 20).includes(City: :State)
   end
 
   def self.show_admin(params_page)

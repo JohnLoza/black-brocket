@@ -1,4 +1,4 @@
-class SiteWorker < ActiveRecord::Base
+class SiteWorker < ApplicationRecord
   include Rails.application.routes.url_helpers
   attr_accessor :remember_token
 
@@ -53,7 +53,7 @@ class SiteWorker < ActiveRecord::Base
       site_workers.name #{operator} :search or
       site_workers.lastname #{operator} :search or
       site_workers.mother_lastname #{operator} :search or
-      site_workers.alph_key #{operator} :search) and
+      site_workers.hash_id #{operator} :search) and
       site_workers.id <> #{current_user_id}", search: search).order(created_at: :DESC).paginate(:page =>  page, :per_page => 20).includes(City: :State)
   end
 

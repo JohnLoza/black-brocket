@@ -36,8 +36,8 @@
         </thead>
         <tbody>
           <% @orders.each do |o| %>
-            <tr id="<%=o.alph_key%>">
-              <td><%=o.alph_key%></td>
+            <tr id="<%=o.hash_id%>">
+              <td><%=o.hash_id%></td>
               <td><%= o.Client.email %></td>
               <% o_city = o.City %>
               <td><%= o_city.name %>, <%= o_city.State.name %></td>
@@ -46,7 +46,7 @@
               <td>$ <%= o.total %></td>
               <td>
                 <% if o.distributor_id != 0 %>
-                  <%= link_to o.Distributor.username, admin_distributor_path(o.Distributor.alph_key) %>
+                  <%= link_to o.Distributor.username, admin_distributor_path(o.Distributor.hash_id) %>
                 <% else %>
                   <strong> Sin distribuidor en la zona </strong>
                 <% end # if o.distributor_id != 0 # %>

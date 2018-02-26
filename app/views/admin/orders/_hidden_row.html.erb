@@ -16,7 +16,7 @@
       <i class="fa fa-file-o fa-3x"></i>
     <% end %><br>
   <% end # if !o.pay_img.blank? # %>
-  <%= form_tag admin_accept_order_pay_path(o.alph_key,"true"), method: :put do  %>
+  <%= form_tag admin_accept_order_pay_path(o.hash_id,"true"), method: :put do  %>
     <%= label_tag :payment_folio, 'Folio del pago' %>
     <%= text_field_tag :payment_folio, '', class: 'form-control', required: true %>
     <%= submit_tag 'Aceptar', class: 'btn btn-primary btn-sm m-t',
@@ -24,11 +24,11 @@
   <% end %>
 
   <%= link_to "Rechazar", "#", :class => "btn btn-danger btn-sm m-t" ,
-            onclick: "update_reject_pay_form('#{o.alph_key}')" %>
+            onclick: "update_reject_pay_form('#{o.hash_id}')" %>
 <% end # if o.state == "PAYMENT_DEPOSITED" # %>
 
 <% if @actions["CAPTURE_TRACKING_CODE"] and params[:type] == "CAPTURE_TRACKING_CODE" %>
-  <%= form_tag(admin_capture_tracking_code_path(o.alph_key), method: :put) do %>
+  <%= form_tag(admin_capture_tracking_code_path(o.hash_id), method: :put) do %>
     <br>
     <%= label_tag :parcel_id, "Paquetería" %>
     <%= select_tag :parcel_id, options_from_collection_for_select(

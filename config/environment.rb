@@ -1,6 +1,8 @@
 # Load the Rails application.
+require_relative 'application'
+
+# Load rqrcode for qr code creation #
 require 'rqrcode'
-require File.expand_path('../application', __FILE__)
 
 # Initialize the Rails application.
 Rails.application.initialize!

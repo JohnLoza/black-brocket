@@ -17,11 +17,11 @@ class Api::OrdersController < ApplicationController
     orders.each do |order|
 
       if !order.parcel_id.blank?
-        extra_data = {alph_key: order.alph_key, date: l(order.created_at, format: :long),
+        extra_data = {hash_id: order.hash_id, date: l(order.created_at, format: :long),
           total: order.total, status: t(order.state), tracking_code: order.tracking_code, parcel: order.Parcel.image.url(:mini),
           parcel_url: order.Parcel.tracking_url}
       else
-        extra_data = {alph_key: order.alph_key, date: l(order.created_at, format: :long),
+        extra_data = {hash_id: order.hash_id, date: l(order.created_at, format: :long),
           total: order.total, status: t(order.state), tracking_code: order.tracking_code, parcel: "",
           parcel_url: ""}
       end
@@ -80,7 +80,7 @@ class Api::OrdersController < ApplicationController
       notification.update_attributes(seen: true)
     end
 
-    order = @current_user.Orders.where(alph_key: params[:id]).take
+    order = @current_user.Orders.where(hash_id: params[:id]).take
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }
@@ -98,7 +98,7 @@ class Api::OrdersController < ApplicationController
 
     city = warehouse.City
     warehouse_data = {address: warehouse.address, city: city.name,
-      state: city.State.name, LADA: city.LADA, telephone: warehouse.telephone }
+      state: city.State.name, lada: city.lada, telephone: warehouse.telephone }
 
     data[:warehouse_data] = warehouse_data
     data[:fiscal_data] = fiscal_data
@@ -153,16 +153,16 @@ class Api::OrdersController < ApplicationController
     order.invoice = params[:invoice] if !params[:invoice].blank?
     order.state = "WAITING_FOR_PAYMENT"
 
-    order.alph_key = random_alph_key(12).upcase
+    order.hash_id = random_hash_id(12).upcase
 
     # find the products the client want to buy #
-    products = WarehouseProduct.where("alph_key in (?) and describes_total_stock = 1",
+    products = WarehouseProduct.where("hash_id in (?) and describes_total_stock = 1",
                       params[:product_details].keys).includes(:Product)
 
     products.each do |product|
-      if product.existence < params[:product_details][product.alph_key].to_i
+      if product.existence < params[:product_details][product.hash_id].to_i
         render :status => 200,
-               :json => { :success => false, :info => "NO_ENOUGH_EXISTENCE", :data => {product: product.alph_key, existence: product.existence} }
+               :json => { :success => false, :info => "NO_ENOUGH_EXISTENCE", :data => {product: product.hash_id, existence: product.existence} }
         return
       end
     end
@@ -190,18 +190,18 @@ class Api::OrdersController < ApplicationController
         current_product_price = p.Product.price
       end # if product_prices.any? #
 
-      subtotal = params[:product_details][p.alph_key].to_i*current_product_price
+      subtotal = params[:product_details][p.hash_id].to_i*current_product_price
       total+=subtotal
 
       total_iva = current_product_price-(current_product_price*100/(p.Product.iva+100))
       total_ieps = (current_product_price-total_iva)-((current_product_price-total_iva)*100/(p.Product.ieps+100))
 
       order_details << OrderDetail.new(product_id: p.product_id,
-                  alph_key: random_alph_key(12).upcase, iva: p.Product.iva,
-                  quantity: params[:product_details][p.alph_key], sub_total: subtotal,
+                  hash_id: random_hash_id(12).upcase, iva: p.Product.iva,
+                  quantity: params[:product_details][p.hash_id], sub_total: subtotal,
                   w_product_id: p.id, ieps: p.Product.ieps, price: current_product_price,
-                  total_iva: total_iva * params[:product_details][p.alph_key].to_i,
-                  total_ieps: total_ieps * params[:product_details][p.alph_key].to_i)
+                  total_iva: total_iva * params[:product_details][p.hash_id].to_i,
+                  total_ieps: total_ieps * params[:product_details][p.hash_id].to_i)
     end # products.each do #
 
     shipping_cost = 0.0
@@ -217,7 +217,7 @@ class Api::OrdersController < ApplicationController
     ActiveRecord::Base.transaction do
       order.save
       products.each do |p|
-        p.update_attributes(existence: (p.existence-params[:product_details][p.alph_key].to_i))
+        p.update_attributes(existence: (p.existence-params[:product_details][p.hash_id].to_i))
       end
       order_details.each do |detail|
         detail.order_id = order.id
@@ -247,7 +247,7 @@ class Api::OrdersController < ApplicationController
       return
     end
 
-    order = @current_user.Orders.where(alph_key: params[:id]).take
+    order = @current_user.Orders.where(hash_id: params[:id]).take
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }
@@ -287,7 +287,7 @@ class Api::OrdersController < ApplicationController
       return
     end
 
-    order = @current_user.Orders.find_by(alph_key: params[:id])
+    order = @current_user.Orders.find_by(hash_id: params[:id])
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }

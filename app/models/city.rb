@@ -1,4 +1,6 @@
-class City < ActiveRecord::Base
+class City < ApplicationRecord
+  include Searchable
+
   belongs_to :State, :foreign_key => :state_id
   belongs_to :Distributor, :foreign_key => :distributor_id
   has_many :Clients, :class_name => 'Client', :foreign_key => :city_id

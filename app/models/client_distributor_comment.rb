@@ -1,3 +1,3 @@
-class ClientDistributorComment < ActiveRecord::Base
+class ClientDistributorComment < ApplicationRecord
 
 end

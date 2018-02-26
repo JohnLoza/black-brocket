@@ -11,7 +11,7 @@ class Api::DistributorApi::PricesController < ApplicationController
       return
     end
 
-    client = Client.find_by(alph_key: params[:id])
+    client = Client.find_by(hash_id: params[:id])
     if client.blank?
       render :status => 200,
              :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
@@ -54,7 +54,7 @@ class Api::DistributorApi::PricesController < ApplicationController
       return
     end
 
-    client = Client.find_by(alph_key: params[:id])
+    client = Client.find_by(hash_id: params[:id])
     if client.blank?
       render :status => 200,
              :json => { :success => false, :info => "CLIENT_NOT_FOUND" }

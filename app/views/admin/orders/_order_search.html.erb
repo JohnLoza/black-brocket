@@ -13,10 +13,10 @@
         <%= l(o.created_at, format: :long)%>
       </td>
       <td>
-        <%= o.alph_key %>
+        <%= o.hash_id %>
       </td>
       <td>
-        <%= link_to o.Client.username, admin_client_path(o.Client.alph_key) %>
+        <%= link_to o.Client.username, admin_client_path(o.Client.hash_id) %>
       </td>
       <td>
         <% if totals %>
@@ -57,10 +57,10 @@
         <% end %>
       </td>
       <td>
-        <%= link_to "<i class='fa fa-eye fa-2x'></i>".html_safe, admin_order_details_path(o.alph_key),
+        <%= link_to "<i class='fa fa-eye fa-2x'></i>".html_safe, admin_order_details_path(o.hash_id),
             :class => "btn btn-white btn-sm", target: "_blank" %>
 
-        <%= link_to "<i class='fa fa-calendar fa-2x'></i>".html_safe, admin_show_order_activities_path(o.alph_key),
+        <%= link_to "<i class='fa fa-calendar fa-2x'></i>".html_safe, admin_show_order_activities_path(o.hash_id),
             :class => "btn btn-white btn-sm", target: "_blank" %>
       </td>
 

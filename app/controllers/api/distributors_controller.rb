@@ -106,12 +106,12 @@ class Api::DistributorsController < ApplicationController
       message.distributor_id = distributor.id
       Notification.create(distributor_id: distributor.id, icon: "fa fa-comments-o",
                       description: "El usuario " + @current_user.username + " te envió un mensaje",
-                      url: distributor_client_messages_path(@current_user.alph_key))
+                      url: distributor_client_messages_path(@current_user.hash_id))
     else
       message.worker_id = distributor.id
       Notification.create(worker_id: distributor.id, icon: "fa fa-comments-o",
                       description: "El usuario " + @current_user.username + " te envió un mensaje",
-                      url: admin_distributor_work_client_messages_path(@current_user.alph_key))
+                      url: admin_distributor_work_client_messages_path(@current_user.hash_id))
     end
 
     if message.save

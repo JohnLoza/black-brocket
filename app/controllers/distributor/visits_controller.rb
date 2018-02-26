@@ -5,7 +5,7 @@ class Distributor::VisitsController < ApplicationController
 
   def index
     region_ids = @current_user.Regions.map(&:id)
-    @client = Client.where(city_id: region_ids).where(alph_key: params[:id]).take
+    @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
     if !@client
       flash[:info] = "No encontramos a tu cliente."
@@ -18,7 +18,7 @@ class Distributor::VisitsController < ApplicationController
   end
 
   def create
-    @client = Client.find_by(alph_key: params[:id])
+    @client = Client.find_by(hash_id: params[:id])
 
     success = false
     today = Time.now.year.to_s+"-"+Time.now.month.to_s+"-"+Time.now.day.to_s
@@ -34,7 +34,7 @@ class Distributor::VisitsController < ApplicationController
       redirect_to distributor_clients_path
     else
       flash[:danger] = "Ocurrió un error al guardar la visita"
-      redirect_to distributor_client_visits_path(@client.alph_key)
+      redirect_to distributor_client_visits_path(@client.hash_id)
     end
   end
 end

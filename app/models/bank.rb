@@ -1,4 +1,4 @@
-class Bank < ActiveRecord::Base
+class Bank < ApplicationRecord
   has_many :Accounts, :class_name => 'BankAccount', dependent: :destroy
 
   mount_uploader :image, AvatarUploader

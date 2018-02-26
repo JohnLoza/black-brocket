@@ -1,4 +1,4 @@
-class ChangeFieldsStoringHtmlToFilePath < ActiveRecord::Migration
+class ChangeFieldsStoringHtmlToFilePath < ActiveRecord::Migration[5.1]
   def change
     # this fields containt html, we're moving out that html to files #
     WebInfo.all.update_all(description: "")
@@ -25,7 +25,7 @@ class ChangeFieldsStoringHtmlToFilePath < ActiveRecord::Migration
       base_file_path = "app/views"
       replaceable_path = "/shared/products/"
 
-      render_file_path = replaceable_path + "product_" + product.alph_key + "_description.html.erb"
+      render_file_path = replaceable_path + "product_" + product.hash_id + "_description.html.erb"
       file_path = base_file_path + render_file_path.sub(replaceable_path, replaceable_path + "_")
 
       file = File.open(file_path, "w")
@@ -34,7 +34,7 @@ class ChangeFieldsStoringHtmlToFilePath < ActiveRecord::Migration
 
       product.update_attributes(:description_render_path => render_file_path)
 
-      render_file_path = replaceable_path + "product_" + product.alph_key + "_preparation.html.erb"
+      render_file_path = replaceable_path + "product_" + product.hash_id + "_preparation.html.erb"
       file_path = base_file_path + render_file_path.sub(replaceable_path, replaceable_path + "_")
 
       file = File.open(file_path, "w")

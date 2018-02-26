@@ -1,4 +1,4 @@
-class DistributorCandidate < ActiveRecord::Base
+class DistributorCandidate < ApplicationRecord
   belongs_to :City, class_name: :City, foreign_key: :city_id
 
   validates :name, :lastname, :city_id, :email, presence: true

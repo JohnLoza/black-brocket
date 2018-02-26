@@ -1,8 +1,8 @@
-class CreateTables2Version < ActiveRecord::Migration
+class CreateTables2Version < ActiveRecord::Migration[5.1]
   def change
   # Commissions #
     create_table :commissions do |t|
-      t.string :alph_key
+      t.string :hash_id, null: false, collation: "utf8_bin"
       t.integer :distributor_id
       t.integer :worker_id
       t.decimal :total, precision: 8, scale: 2
@@ -11,10 +11,12 @@ class CreateTables2Version < ActiveRecord::Migration
       t.string :invoice
       t.string :payment_day
       t.string :state
-      t.boolean :deleted, :default => false
+      t.datetime :deleted_at
 
       t.timestamps
     end
+    add_index :commissions, :hash_id, unique: true
+    add_index :commissions, :deleted_at
 
     create_table :commission_details do |t|
       t.integer :commission_id
@@ -260,8 +262,6 @@ class CreateTables2Version < ActiveRecord::Migration
     add_column :products, :recommended_price, :decimal, :precision => 8, :scale => 2
     add_column :products, :ieps, :decimal, :precision => 5, :scale => 2
     add_column :products, :iva, :decimal, :precision => 5, :scale => 2
-
-    add_column :cities, :LADA, :string
 
     add_column :warehouse_products, :describes_total_stock, :boolean, :default => false
     add_column :permissions, :warehouse_chief, :boolean, :default => false

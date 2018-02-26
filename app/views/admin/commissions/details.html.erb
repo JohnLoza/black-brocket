@@ -42,17 +42,17 @@
               <tbody>
                 <% @orders.each do |o| %>
                   <tr>
-                    <td><%= o.alph_key %></td>
+                    <td><%= o.hash_id %></td>
                     <td><%= o.total %></td>
                     <td><%= link_to @distributor.username,
-                                    admin_distributor_path(@distributor.alph_key) %></td>
+                                    admin_distributor_path(@distributor.hash_id) %></td>
                     <% client = o.Client %>
                     <td><%= link_to client.username,
-                                    admin_client_path(client.alph_key) %></td>
+                                    admin_client_path(client.hash_id) %></td>
                     <td><%= t(o.state) %></td>
                     <td>
                       <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
-                                  admin_order_details_path(o.alph_key),
+                                  admin_order_details_path(o.hash_id),
                                   :class => "btn btn-white btn-sm" %>
                     </td>
                   </tr>

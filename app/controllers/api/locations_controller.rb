@@ -15,7 +15,7 @@ class Api::LocationsController < ApplicationController
     cities = City.where(state_id: params[:id]).order(:name)
     data = Array.new
     cities.each do |city|
-      data << {id: city.id, name: city.name, lada: city.LADA}
+      data << {id: city.id, name: city.name, lada: city.lada}
     end
 
     render :status => 200,

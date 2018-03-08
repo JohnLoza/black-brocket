@@ -17,7 +17,7 @@ class Admin::OrdersController < ApplicationController
   @@category = "ORDERS"
 
   def index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @label_styles = get_label_styles
@@ -30,7 +30,7 @@ class Admin::OrdersController < ApplicationController
                 "STABLISH_AS_SENT"=>false,"STABLISH_AS_DELIVERED"=>false,
                 "INVOICES"=>false,"CREATE_COMMISION"=>false,"SEARCH"=>false}
 
-    if !@current_user.is_admin
+    if !current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -45,7 +45,7 @@ class Admin::OrdersController < ApplicationController
                   "CAPTURE_BATCHES"=>true,"CAPTURE_TRACKING_CODE"=>true,
                   "STABLISH_AS_SENT"=>true,"STABLISH_AS_DELIVERED"=>true,
                   "INVOICES"=>true,"CREATE_COMMISION"=>true,"SEARCH"=>true}
-    end # if !@current_user.is_admin end #
+    end # if !current_user.is_admin end #
 
     type_of_order_is_correct = true
     where_statement = "state="
@@ -84,14 +84,14 @@ class Admin::OrdersController < ApplicationController
 
       if @actions["CAPTURE_TRACKING_CODE"] and
         !params[:type].blank? and params[:type] == "CAPTURE_TRACKING_CODE"
-        @parcels = Parcel.where(warehouse_id: @current_user.warehouse_id)
+        @parcels = Parcel.where(warehouse_id: current_user.warehouse_id)
       end # if @actions["CAPTURE_TRACKING_CODE"] #
 
       where_warehouse = {}
       if ["CANCEL","ACCEPT_REJECT_PAYMENT","INVOICES"].include? params[:type]
         where_warehouse = "true"
       else
-        where_warehouse = {warehouse_id: @current_user.warehouse_id}
+        where_warehouse = {warehouse_id: current_user.warehouse_id}
       end # if ["CANCEL","ACCEPT_REJECT_PAYMENT","INVOICES"].include? params[:type] #
 
       if !params[:distributor].nil?
@@ -121,7 +121,7 @@ class Admin::OrdersController < ApplicationController
   end # def index #
 
   def accept_pay
-    authorization_result = @current_user.is_authorized?(@@category, "ACCEPT_REJECT_PAYMENT")
+    authorization_result = current_user.is_authorized?(@@category, "ACCEPT_REJECT_PAYMENT")
     return if !process_authorization_result(authorization_result)
 
     @order = Order.where(hash_id: params[:id]).take
@@ -135,13 +135,13 @@ class Admin::OrdersController < ApplicationController
         end
         #Accept the payment
         @saved=true if @order.update_attributes(state:"PAYMENT_ACCEPTED", reject_description: nil, payment_folio: params[:payment_folio])
-        OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Aceptó pago")
+        OrderAction.create(order_id: @order.id, worker_id: current_user.id, description: "Aceptó pago")
       else
         #Reject the payment and notify the user
         @saved=true if @order.update_attributes(state:"PAYMENT_REJECTED", reject_description: params[:order][:reject_description])
         Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
                         description: "El pago de tu pedido ha sido rechazado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
-        OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Rechazó pago")
+        OrderAction.create(order_id: @order.id, worker_id: current_user.id, description: "Rechazó pago")
       end
     end
 
@@ -155,7 +155,7 @@ class Admin::OrdersController < ApplicationController
   end # def accept_pay #
 
   def details
-    authorization_result = @current_user.is_authorized?(@@category, "SHOW")
+    authorization_result = current_user.is_authorized?(@@category, "SHOW")
     return if !process_authorization_result(authorization_result)
 
     @order = Order.find_by(hash_id: params[:id])
@@ -171,7 +171,7 @@ class Admin::OrdersController < ApplicationController
         @state = @city.State
       end
 
-      @client_city = @current_user.City
+      @client_city = current_user.City
       @client_state = State.where(id: @client_city.state_id).take
 
       render :details, layout: false
@@ -184,7 +184,7 @@ class Admin::OrdersController < ApplicationController
   end # def details #
 
   def cancel
-    authorization_result = @current_user.is_authorized?(@@category, "CANCEL")
+    authorization_result = current_user.is_authorized?(@@category, "CANCEL")
     return if !process_authorization_result(authorization_result)
 
     @order = Order.find_by(hash_id: params[:id])
@@ -203,7 +203,7 @@ class Admin::OrdersController < ApplicationController
         @order.update(state: "ORDER_CANCELED", cancel_description: params[:order][:cancel_description])
         Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
                         description: "Pedido cancelado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
-        OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Canceló la orden")
+        OrderAction.create(order_id: @order.id, worker_id: current_user.id, description: "Canceló la orden")
       end
 
       flash[:success] = "La orden se canceló correctamente."
@@ -214,7 +214,7 @@ class Admin::OrdersController < ApplicationController
   end # def cancel #
 
   def inspection
-    authorization_result = @current_user.is_authorized?(@@category, "INSPECTION")
+    authorization_result = current_user.is_authorized?(@@category, "INSPECTION")
     return if !process_authorization_result(authorization_result)
 
     @order = Order.find_by(hash_id: params[:id])
@@ -225,7 +225,7 @@ class Admin::OrdersController < ApplicationController
 
     if success
       flash[:success] = "Estado de orden guardado"
-      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Inspeccionó la orden")
+      OrderAction.create(order_id: @order.id, worker_id: current_user.id, description: "Inspeccionó la orden")
     else
       flash[:danger] = "Ocurrió un error al guardar la información"
     end
@@ -234,7 +234,7 @@ class Admin::OrdersController < ApplicationController
   end # def supplied #
 
   def supply_error
-    authorization_result = @current_user.is_authorized?(@@category, "INSPECTION")
+    authorization_result = current_user.is_authorized?(@@category, "INSPECTION")
     return if !process_authorization_result(authorization_result)
 
     order = Order.find_by(hash_id: params[:id])
@@ -254,13 +254,13 @@ class Admin::OrdersController < ApplicationController
 
     shipment_details.destroy_all
     order.update_attribute(:state, "PAYMENT_ACCEPTED")
-    OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Regresó la orden a volver a surtir")
+    OrderAction.create(order_id: order.id, worker_id: current_user.id, description: "Regresó la orden a volver a surtir")
     flash[:success] = "Pedido regresado"
     redirect_to admin_orders_path(type: "INSPECTION")
   end
 
   def capture_details
-    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
+    authorization_result = current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
     return if !process_authorization_result(authorization_result)
 
     @label_styles = get_label_styles
@@ -280,7 +280,7 @@ class Admin::OrdersController < ApplicationController
   end # def capture_details #
 
   def save_details
-    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
+    authorization_result = current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
     return if !process_authorization_result(authorization_result)
 
     success = false
@@ -368,7 +368,7 @@ class Admin::OrdersController < ApplicationController
 
     if success
       flash[:success] = "Números de lote y cantidades guardadas"
-      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
+      OrderAction.create(order_id: @order.id, worker_id: current_user.id, description: "Capturó lotes y cantidades")
     else
       flash[:danger] = "Ocurrió un error al guardar, verifica la información introducida" if flash[:danger].blank?
     end
@@ -377,7 +377,7 @@ class Admin::OrdersController < ApplicationController
   end # def save_details #
 
   def save_tracking_code
-    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_TRACKING_CODE")
+    authorization_result = current_user.is_authorized?(@@category, "CAPTURE_TRACKING_CODE")
     return if !process_authorization_result(authorization_result)
 
     success = false
@@ -392,7 +392,7 @@ class Admin::OrdersController < ApplicationController
 
     if success
       flash[:success] = "Orden actualizada correctamente"
-      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Capturó código de rastreo")
+      OrderAction.create(order_id: @order.id, worker_id: current_user.id, description: "Capturó código de rastreo")
     else
       flash[:danger] = "Ocurrió un error al guardar la información"
     end
@@ -400,7 +400,7 @@ class Admin::OrdersController < ApplicationController
   end
 
   def save_as_delivered
-    authorization_result = @current_user.is_authorized?(@@category, "STABLISH_AS_DELIVERED")
+    authorization_result = current_user.is_authorized?(@@category, "STABLISH_AS_DELIVERED")
     return if !process_authorization_result(authorization_result)
 
     success = false
@@ -409,7 +409,7 @@ class Admin::OrdersController < ApplicationController
 
     if success
       flash[:success]="Status de la orden actualizado"
-      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Estableció como entregado")
+      OrderAction.create(order_id: @order.id, worker_id: current_user.id, description: "Estableció como entregado")
     else
       flash[:danger]="Ocurrió un error al guardar la información"
     end
@@ -417,7 +417,7 @@ class Admin::OrdersController < ApplicationController
   end # def save_as_delivered #
 
   def invoice_delivered
-    authorization_result = @current_user.is_authorized?(@@category, "INVOICES")
+    authorization_result = current_user.is_authorized?(@@category, "INVOICES")
     return if !process_authorization_result(authorization_result)
 
     success = false
@@ -426,7 +426,7 @@ class Admin::OrdersController < ApplicationController
 
     if success
       flash[:success]="Status de la orden actualizado"
-      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Facturó")
+      OrderAction.create(order_id: @order.id, worker_id: current_user.id, description: "Facturó")
     else
       flash[:danger]="Ocurrió un error al guardar la información"
     end
@@ -434,7 +434,7 @@ class Admin::OrdersController < ApplicationController
   end # def invoice_delivered #
 
   def search
-    authorization_result = @current_user.is_authorized?("ORDERS", "SEARCH")
+    authorization_result = current_user.is_authorized?("ORDERS", "SEARCH")
     return if !process_authorization_result(authorization_result)
 
     @warehouses = Warehouse.all.order(:name)
@@ -479,7 +479,7 @@ class Admin::OrdersController < ApplicationController
   end
 
   def show_activities
-    authorization_result = @current_user.is_authorized?(@@category, "SEARCH")
+    authorization_result = current_user.is_authorized?(@@category, "SEARCH")
     return if !process_authorization_result(authorization_result)
 
     @order = Order.find_by(hash_id: params[:id])
@@ -495,7 +495,7 @@ class Admin::OrdersController < ApplicationController
   end
 
   def download_invoice_data
-    authorization_result = @current_user.is_authorized?(@@category, "INVOICES")
+    authorization_result = current_user.is_authorized?(@@category, "INVOICES")
     return if !process_authorization_result(authorization_result)
 
     orders = Order.where(invoice_sent: false).where.not(state: ['WAITING_FOR_PAYMENT','ORDER_CANCELED','PAYMENT_REJECTED','PAYMENT_DEPOSITED']).includes(Client: [:FiscalData], Details: [:Product])
@@ -567,14 +567,14 @@ class Admin::OrdersController < ApplicationController
 
     Order.where(id: orders.map { |o| o.id }).update_all(invoice_sent: true)
     orders.each do |o|
-      OrderAction.create(order_id: o.id, worker_id: @current_user.id, description: "Facturó")
+      OrderAction.create(order_id: o.id, worker_id: current_user.id, description: "Facturó")
     end
     # send the file #
     send_file "doc/invoices.txt"
   end
 
   def download_payment_file
-    authorization_result = @current_user.is_authorized?(@@category, "ACCEPT_REJECT_PAYMENT")
+    authorization_result = current_user.is_authorized?(@@category, "ACCEPT_REJECT_PAYMENT")
     return if !process_authorization_result(authorization_result)
 
     order = Order.find_by(download_payment_key: params[:payment_key])

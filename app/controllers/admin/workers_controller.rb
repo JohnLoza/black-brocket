@@ -1,4 +1,4 @@
-class Admin::WorkersController < ApplicationController
+class Admin::WorkersController < AdminController
   before_action :logged_in?
   before_action :current_user_is_a_worker?
   layout "admin_layout.html.erb"
@@ -8,22 +8,22 @@ class Admin::WorkersController < ApplicationController
   # In these action we show a list of workers and the respective actions,
   # depending on the permissions the current_user has or if it's the admin
   def index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     if search_params
-      @workers = SiteWorker.search(search_params, params[:page], @current_user.id)
+      @workers = SiteWorker.search(search_params, params[:page], current_user.id)
     else
-      if @current_user.is_admin
-        @workers = SiteWorker.getWorkers(params[:page], @current_user.id)
+      if current_user.is_admin
+        @workers = SiteWorker.getWorkers(params[:page], current_user.id)
       else
-        @workers = SiteWorker.getWorkers(params[:page], @current_user.id, @current_user.warehouse_id)
-      end # if @current_user.is_admin end #
+        @workers = SiteWorker.getWorkers(params[:page], current_user.id, current_user.warehouse_id)
+      end # if current_user.is_admin end #
     end # if search_params end #
 
     # determine the actions the user can do, so we can display them in screen #
     @actions = {"SHOW"=>false,"CREATE"=>false,"DELETE"=>false,"UPDATE"=>false,"UPDATE_PERMISSIONS"=>false}
-    if !@current_user.is_admin
+    if !current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -43,11 +43,11 @@ class Admin::WorkersController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"SHOW"=>true,"CREATE"=>true,"DELETE"=>true,"UPDATE"=>true,"UPDATE_PERMISSIONS"=>true}
-    end # if !@current_user.is_admin end #
+    end # if !current_user.is_admin end #
   end # def index end #
 
   def new
-    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     _new()
@@ -57,7 +57,7 @@ class Admin::WorkersController < ApplicationController
   end # def new end #
 
   def create
-    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     @worker = SiteWorker.new(worker_params)
@@ -83,32 +83,32 @@ class Admin::WorkersController < ApplicationController
   end # def create end #
 
   def show
-    authorization_result = @current_user.is_authorized?(@@category, "SHOW")
+    authorization_result = current_user.is_authorized?(@@category, "SHOW")
     return if !process_authorization_result(authorization_result)
 
     @worker = SiteWorker.find_by(hash_id: params[:id])
 
-    if !@current_user.is_admin
+    if !current_user.is_admin
 
-      if @worker.deleted or @worker.is_admin or @worker.warehouse_id != @current_user.warehouse_id
+      if @worker.deleted or @worker.is_admin or @worker.warehouse_id != current_user.warehouse_id
         flash[:info] = "No se encontró el trabajador con clave: #{params[:id]}"
         redirect_to admin_workers_path
         return
       end
 
-    end # if !@current_user.is_admin #
+    end # if !current_user.is_admin #
 
     @worker_city = @worker.City
   end # def show end #
 
   def edit
-    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_INFORMATION", "UPDATE_WAREHOUSE"])
+    authorization_result = current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_INFORMATION", "UPDATE_WAREHOUSE"])
     return if !process_authorization_result(authorization_result)
 
     _edit()
 
     @worker = SiteWorker.find_by(hash_id: params[:id])
-    if @worker.nil? or (@worker.is_admin and @worker.id != @current_user.id)
+    if @worker.nil? or (@worker.is_admin and @worker.id != current_user.id)
       flash[:info] = "No se encontró el trabajador con clave: #{params[:id]}"
       redirect_to admin_workers_path
       return
@@ -123,7 +123,7 @@ class Admin::WorkersController < ApplicationController
   end # def edit end #
 
   def update
-    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_INFORMATION", "UPDATE_WAREHOUSE"])
+    authorization_result = current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_INFORMATION", "UPDATE_WAREHOUSE"])
     return if !process_authorization_result(authorization_result)
 
     @worker = SiteWorker.find_by(hash_id: params[:id])
@@ -146,7 +146,7 @@ class Admin::WorkersController < ApplicationController
   end # def update end #
 
   def destroy
-    authorization_result = @current_user.is_authorized?(@@category, "DELETE")
+    authorization_result = current_user.is_authorized?(@@category, "DELETE")
     return if !process_authorization_result(authorization_result)
 
     @worker = SiteWorker.find_by(hash_id: params[:id])
@@ -159,7 +159,7 @@ class Admin::WorkersController < ApplicationController
   end # def destroy end #
 
   def edit_permissions
-    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PERMISSIONS")
+    authorization_result = current_user.is_authorized?(@@category, "UPDATE_PERMISSIONS")
     return if !process_authorization_result(authorization_result)
 
     @worker = SiteWorker.find_by(hash_id: params[:id])
@@ -169,15 +169,15 @@ class Admin::WorkersController < ApplicationController
       return
     end
 
-    if !@current_user.is_admin
+    if !current_user.is_admin
 
-      if @worker.deleted or @worker.is_admin or @worker.warehouse_id != @current_user.warehouse_id
+      if @worker.deleted or @worker.is_admin or @worker.warehouse_id != current_user.warehouse_id
         flash[:info] = "No se encontró el trabajador con clave: #{params[:id]}"
         redirect_to admin_workers_path
         return
       end
 
-    end # if !@current_user.is_admin #
+    end # if !current_user.is_admin #
 
     @worker_city = @worker.City
     @user_permissions = @worker.Permissions
@@ -186,7 +186,7 @@ class Admin::WorkersController < ApplicationController
   end # def edit_permissions end #
 
   def update_permissions
-    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PERMISSIONS")
+    authorization_result = current_user.is_authorized?(@@category, "UPDATE_PERMISSIONS")
     return if !process_authorization_result(authorization_result)
 
     saved = false
@@ -256,7 +256,7 @@ class Admin::WorkersController < ApplicationController
       @url = admin_workers_path
 
       @actions = {"CREATE"=>false}
-      if !@current_user.is_admin
+      if !current_user.is_admin
         @user_permissions.each do |p|
           # see if the permission category is equal to the one we need in these controller #
           if p.category == @@category and p.name == "CREATE"
@@ -266,7 +266,7 @@ class Admin::WorkersController < ApplicationController
         end # @user_permissions.each end #
       else
         @actions = {"CREATE"=>true}
-      end # if !@current_user.is_admin end #
+      end # if !current_user.is_admin end #
     end
 
     def _edit
@@ -276,7 +276,7 @@ class Admin::WorkersController < ApplicationController
 
       # determine the actions the user can do, so we can display them in screen #
       @actions = {"UPDATE_PERSONAL_INFORMATION"=>false, "UPDATE_WAREHOUSE"=>false}
-      if !@current_user.is_admin
+      if !current_user.is_admin
         @user_permissions.each do |p|
           # see if the permission category is equal to the one we need in these controller #
           if p.category == @@category
@@ -287,7 +287,7 @@ class Admin::WorkersController < ApplicationController
         end # @user_permissions.each end #
       else
         @actions = {"UPDATE_PERSONAL_INFORMATION"=>true, "UPDATE_WAREHOUSE"=>true}
-      end # if !@current_user.is_admin end #
+      end # if !current_user.is_admin end #
     end
 
     def build_up_permission_arrays

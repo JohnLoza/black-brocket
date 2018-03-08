@@ -7,8 +7,8 @@ class Admin::WarehouseProductsController < ApplicationController
   @@category = "WAREHOUSE_PRODUCTS"
 
   def index
-    manager_authorization_result = @current_user.is_authorized?(@@manager_category, nil)
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    manager_authorization_result = current_user.is_authorized?(@@manager_category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
 
     session[:shipment_products] = Hash.new if !session[:shipment_products]
 
@@ -20,13 +20,13 @@ class Admin::WarehouseProductsController < ApplicationController
       return
     end
 
-    @warehouse = @current_user.Warehouse
+    @warehouse = current_user.Warehouse
 
     @products = @warehouse.Products.joins(:Product).where(:describes_total_stock => true, products: {deleted: false}).includes(:Product).order("products.name asc").paginate(page: params[:page], per_page: 20)
 
     # determine the actions the user can do, so we can display them in screen #
     @actions = {"RECEIVE_SHIPMENTS"=>false,"TRANSFER_MERCANCY"=>false,"UPDATE_STOCK"=>false}
-    if !@current_user.is_admin
+    if !current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@manager_category
@@ -35,15 +35,15 @@ class Admin::WarehouseProductsController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"RECEIVE_SHIPMENTS"=>true,"TRANSFER_MERCANCY"=>true,"UPDATE_STOCK"=>true}
-    end # if !@current_user.is_admin end #
+    end # if !current_user.is_admin end #
 
     if @actions["TRANSFER_MERCANCY"]
-      @warehouses = Warehouse.where.not(id: @current_user.warehouse_id).where(deleted: false)
+      @warehouses = Warehouse.where.not(id: current_user.warehouse_id).where(deleted: false)
     end
   end # def index #
 
   def stock_details
-    authorization_result = @current_user.is_authorized?(@@manager_category, "UPDATE_STOCK")
+    authorization_result = current_user.is_authorized?(@@manager_category, "UPDATE_STOCK")
     return if !process_authorization_result(authorization_result)
 
     @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
@@ -52,7 +52,7 @@ class Admin::WarehouseProductsController < ApplicationController
   end # def stock_details #
 
   def update_stock
-    authorization_result = @current_user.is_authorized?(@@manager_category, "UPDATE_STOCK")
+    authorization_result = current_user.is_authorized?(@@manager_category, "UPDATE_STOCK")
     return if !process_authorization_result(authorization_result)
 
     warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
@@ -82,7 +82,7 @@ class Admin::WarehouseProductsController < ApplicationController
   end
 
   def chief_index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     session[:shipment_products] = Hash.new if !session[:shipment_products]
@@ -97,7 +97,7 @@ class Admin::WarehouseProductsController < ApplicationController
     @actions = {"SHOW"=>false,"CREATE_SHIPMENTS"=>false,"DELETE_SHIPMENTS"=>false,
       "REJECT_SHIPMENT_STOCK"=>false,"UPDATE_MIN_STOCK"=>false,
       "SHOW_SHIPMENTS"=>false,"INVENTORY"=>false}
-    if !@current_user.is_admin
+    if !current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -108,7 +108,7 @@ class Admin::WarehouseProductsController < ApplicationController
       @actions = {"SHOW"=>true,"CREATE_SHIPMENTS"=>true,"DELETE_SHIPMENTS"=>true,
         "REJECT_SHIPMENT_STOCK"=>true,"UPDATE_MIN_STOCK"=>true,
         "SHOW_SHIPMENTS"=>true,"INVENTORY"=>true}
-    end # if !@current_user.is_admin end #
+    end # if !current_user.is_admin end #
 
     if @actions["SHOW"]
       @products = @warehouse.Products.joins(:Product).where(:describes_total_stock => true, products: {deleted: false}).includes(:Product).order("products.name asc").paginate(page: params[:page], per_page: 20)
@@ -116,9 +116,9 @@ class Admin::WarehouseProductsController < ApplicationController
   end
 
   def prepare_product_for_shipment
-    authorization_result = @current_user.is_authorized?(@@category, "CREATE_SHIPMENTS")
+    authorization_result = current_user.is_authorized?(@@category, "CREATE_SHIPMENTS")
     if !authorization_result.any?
-      authorization_result = @current_user.is_authorized?(@@manager_category, "TRANSFER_MERCANCY")
+      authorization_result = current_user.is_authorized?(@@manager_category, "TRANSFER_MERCANCY")
     end
     return if !process_authorization_result(authorization_result)
 
@@ -149,9 +149,9 @@ class Admin::WarehouseProductsController < ApplicationController
   end
 
   def discard_shipment_preparation
-    authorization_result = @current_user.is_authorized?(@@category, "CREATE_SHIPMENTS")
+    authorization_result = current_user.is_authorized?(@@category, "CREATE_SHIPMENTS")
     if !authorization_result.any?
-      authorization_result = @current_user.is_authorized?(@@manager_category, "TRANSFER_MERCANCY")
+      authorization_result = current_user.is_authorized?(@@manager_category, "TRANSFER_MERCANCY")
     end
     return if !process_authorization_result(authorization_result)
 
@@ -177,10 +177,10 @@ class Admin::WarehouseProductsController < ApplicationController
   end
 
   def create_shipment
-    authorization_result = @current_user.is_authorized?(@@category, "CREATE_SHIPMENTS")
+    authorization_result = current_user.is_authorized?(@@category, "CREATE_SHIPMENTS")
     if !authorization_result.any?
       puts "--- going to check if the user can TRANSFER_MERCANCY ---"
-      authorization_result = @current_user.is_authorized?(@@manager_category, "TRANSFER_MERCANCY")
+      authorization_result = current_user.is_authorized?(@@manager_category, "TRANSFER_MERCANCY")
     end
     return if !process_authorization_result(authorization_result)
 
@@ -194,11 +194,11 @@ class Admin::WarehouseProductsController < ApplicationController
     if params[:shipment] and params[:shipment][:type] == "TRANSFER"
       puts "--- the shipment is a transfer ---"
       shipment = Shipment.new(target_warehouse_id: params[:shipment][:target_warehouse_id],
-      origin_warehouse_id: warehouse.id, chief_id: @current_user.id, shipment_type: "TRANSFER")
+      origin_warehouse_id: warehouse.id, chief_id: current_user.id, shipment_type: "TRANSFER")
     else
       puts "--- the shipment is not a transfer ---"
       shipment = Shipment.new(target_warehouse_id: warehouse.id,
-      chief_id: @current_user.id, shipment_type: "NEW_BATCHES")
+      chief_id: current_user.id, shipment_type: "NEW_BATCHES")
     end
 
     success = true
@@ -282,7 +282,7 @@ class Admin::WarehouseProductsController < ApplicationController
   end
 
   def destroy_shipment
-    authorization_result = @current_user.is_authorized?(@@category, "DELETE_SHIPMENTS")
+    authorization_result = current_user.is_authorized?(@@category, "DELETE_SHIPMENTS")
     return if !process_authorization_result(authorization_result)
 
     @shipment = Shipment.find(params[:id])
@@ -315,15 +315,15 @@ class Admin::WarehouseProductsController < ApplicationController
   end
 
   def shipments
-    authorization_result = @current_user.is_authorized?(@@manager_category, "RECEIVE_SHIPMENTS")
+    authorization_result = current_user.is_authorized?(@@manager_category, "RECEIVE_SHIPMENTS")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = @current_user.Warehouse
+    @warehouse = current_user.Warehouse
     @shipments = @warehouse.IncomingShipments.includes(:Chief, :Worker, :OriginWarehouse).order(:created_at => :desc).paginate(page: params[:page], per_page: 20)
   end
 
   def shipment_details
-    authorization_result = @current_user.is_authorized?(@@manager_category, "RECEIVE_SHIPMENTS")
+    authorization_result = current_user.is_authorized?(@@manager_category, "RECEIVE_SHIPMENTS")
     return if !process_authorization_result(authorization_result)
 
     @shipment = Shipment.find(params[:id])
@@ -337,7 +337,7 @@ class Admin::WarehouseProductsController < ApplicationController
   end
 
   def receive_complete_shipment
-    authorization_result = @current_user.is_authorized?(@@manager_category, "RECEIVE_SHIPMENTS")
+    authorization_result = current_user.is_authorized?(@@manager_category, "RECEIVE_SHIPMENTS")
     return if !process_authorization_result(authorization_result)
 
     shipment = Shipment.find(params[:id])
@@ -352,7 +352,7 @@ class Admin::WarehouseProductsController < ApplicationController
   end
 
   def chief_shipments
-    authorization_result = @current_user.is_authorized?(@@category, "SHOW_SHIPMENTS")
+    authorization_result = current_user.is_authorized?(@@category, "SHOW_SHIPMENTS")
     return if !process_authorization_result(authorization_result)
 
     @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
@@ -360,7 +360,7 @@ class Admin::WarehouseProductsController < ApplicationController
 
     # determine the actions the user can do, so we can display them in screen #
     @actions = {"DELETE_SHIPMENTS"=>false}
-    if !@current_user.is_admin
+    if !current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category and p.name == "DELETE_SHIPMENTS"
@@ -369,11 +369,11 @@ class Admin::WarehouseProductsController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"DELETE_SHIPMENTS"=>true}
-    end # if !@current_user.is_admin end #
+    end # if !current_user.is_admin end #
   end
 
   def chief_shipment_details
-    authorization_result = @current_user.is_authorized?(@@category, "SHOW_SHIPMENTS")
+    authorization_result = current_user.is_authorized?(@@category, "SHOW_SHIPMENTS")
     return if !process_authorization_result(authorization_result)
 
     @shipment = Shipment.find(params[:id])
@@ -387,7 +387,7 @@ class Admin::WarehouseProductsController < ApplicationController
 
     # determine the actions the user can do, so we can display them in screen #
     @actions = {"REJECT_SHIPMENT_STOCK"=>false}
-    if !@current_user.is_admin
+    if !current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category and p.name == "REJECT_SHIPMENT_STOCK"
@@ -396,11 +396,11 @@ class Admin::WarehouseProductsController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"REJECT_SHIPMENT_STOCK"=>true}
-    end # if !@current_user.is_admin end #
+    end # if !current_user.is_admin end #
   end
 
   def add_report_quantity_to_stock
-    authorization_result = @current_user.is_authorized?(@@category, "REJECT_SHIPMENT_STOCK")
+    authorization_result = current_user.is_authorized?(@@category, "REJECT_SHIPMENT_STOCK")
     return if !process_authorization_result(authorization_result)
 
     shipment = Shipment.find(params[:id])
@@ -417,7 +417,7 @@ class Admin::WarehouseProductsController < ApplicationController
   end
 
   def create_difference_report
-    authorization_result = @current_user.is_authorized?(@@manager_category, "RECEIVE_SHIPMENTS")
+    authorization_result = current_user.is_authorized?(@@manager_category, "RECEIVE_SHIPMENTS")
     return if !process_authorization_result(authorization_result)
 
     @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
@@ -425,9 +425,9 @@ class Admin::WarehouseProductsController < ApplicationController
     @saved = false
 
     ActiveRecord::Base.transaction do
-      @shipment.update_attributes(:got_safe_to_destination => false, :worker_id => @current_user.id, :reviewed => false)
+      @shipment.update_attributes(:got_safe_to_destination => false, :worker_id => current_user.id, :reviewed => false)
       @report = ShipmentDifferenceReport.create(shipment_id: @shipment.id,
-      worker_id: @current_user.id, observations: params[:observations])
+      worker_id: current_user.id, observations: params[:observations])
 
       params.each do |p|
         if p[0].include?("difference_")
@@ -446,7 +446,7 @@ class Admin::WarehouseProductsController < ApplicationController
   end
 
   def update_min_stock
-    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_MIN_STOCK")
+    authorization_result = current_user.is_authorized?(@@category, "UPDATE_MIN_STOCK")
     return if !process_authorization_result(authorization_result)
 
     if params[:warehouse_product][:min_stock].to_i > 0
@@ -466,7 +466,7 @@ class Admin::WarehouseProductsController < ApplicationController
   end
 
   def print_qr
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @product = Product.find_by(hash_id: params[:product_qr][:product])
@@ -491,9 +491,9 @@ class Admin::WarehouseProductsController < ApplicationController
         return false
       end
 
-      return if @current_user.is_admin
+      return if current_user.is_admin
 
-      @curr_permission = @current_user.Permission
+      @curr_permission = current_user.Permission
       if !@curr_permission.warehouses
         redirect_to admin_welcome_path
         return false
@@ -508,9 +508,9 @@ class Admin::WarehouseProductsController < ApplicationController
         return
       end
 
-      return if @current_user.is_admin
+      return if current_user.is_admin
 
-      @curr_permission = @current_user.Permission
+      @curr_permission = current_user.Permission
       if !@curr_permission.warehouse_chief
         redirect_to admin_welcome_path
         return
@@ -583,7 +583,7 @@ class Admin::WarehouseProductsController < ApplicationController
 
         update_principal_warehouse_product_stock(warehouse.id, product_id, total)
 
-        shipment.update_attributes(:got_safe_to_destination => true, :worker_id => @current_user.id, :reviewed => true) if !report
+        shipment.update_attributes(:got_safe_to_destination => true, :worker_id => current_user.id, :reviewed => true) if !report
         shipment.update_attributes(:reviewed => true) if report
         saved = true
       end # transaction end #

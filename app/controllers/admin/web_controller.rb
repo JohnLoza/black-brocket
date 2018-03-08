@@ -9,12 +9,12 @@ class Admin::WebController < ApplicationController
   @@replaceable_path = "/shared/web/"
 
   def index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     # determine the actions the user can do, so we can display them in screen #
     @actions = {"VIDEO"=>false,"GALLERY_IMAGES"=>false,"OFFERS"=>false,"TEXTS"=>false,"SOCIAL_NETWORKS"=>false,"PRIVACY_POLICY"=>false,"TERMS_OF_SERVICE"=>false,"FOOTER_DETAILS"=>false}
-    if !@current_user.is_admin
+    if !current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -23,11 +23,11 @@ class Admin::WebController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"VIDEO"=>true,"GALLERY_IMAGES"=>true,"OFFERS"=>true,"TEXTS"=>true,"SOCIAL_NETWORKS"=>true,"PRIVACY_POLICY"=>true,"TERMS_OF_SERVICE"=>true,"FOOTER_DETAILS"=>true}
-    end # if !@current_user.is_admin end #
+    end # if !current_user.is_admin end #
   end
 
   def photos
-    authorization_result = @current_user.is_authorized?(@@category, "GALLERY_IMAGES")
+    authorization_result = current_user.is_authorized?(@@category, "GALLERY_IMAGES")
     return if !process_authorization_result(authorization_result)
 
     @photos = WebPhoto.where(name: "GALLERY")
@@ -36,7 +36,7 @@ class Admin::WebController < ApplicationController
   end
 
   def upload_photos
-    authorization_result = @current_user.is_authorized?(@@category, "GALLERY_IMAGES")
+    authorization_result = current_user.is_authorized?(@@category, "GALLERY_IMAGES")
     return if !process_authorization_result(authorization_result)
 
     success = true
@@ -72,7 +72,7 @@ class Admin::WebController < ApplicationController
   end
 
   def destroy_photo
-    authorization_result = @current_user.is_authorized?(@@category, "GALLERY_IMAGES")
+    authorization_result = current_user.is_authorized?(@@category, "GALLERY_IMAGES")
     return if !process_authorization_result(authorization_result)
 
     photo = WebPhoto.find(params[:id])
@@ -86,7 +86,7 @@ class Admin::WebController < ApplicationController
   end
 
   def offers
-    authorization_result = @current_user.is_authorized?(@@category, "OFFERS")
+    authorization_result = current_user.is_authorized?(@@category, "OFFERS")
     return if !process_authorization_result(authorization_result)
 
     @offers = WebOffer.all
@@ -94,7 +94,7 @@ class Admin::WebController < ApplicationController
   end
 
   def upload_offers
-    authorization_result = @current_user.is_authorized?(@@category, "OFFERS")
+    authorization_result = current_user.is_authorized?(@@category, "OFFERS")
     return if !process_authorization_result(authorization_result)
 
     photo = WebOffer.new({ photo: params[:web_offer][:offer],
@@ -114,7 +114,7 @@ class Admin::WebController < ApplicationController
   end
 
   def destroy_offer
-    authorization_result = @current_user.is_authorized?(@@category, "OFFERS")
+    authorization_result = current_user.is_authorized?(@@category, "OFFERS")
     return if !process_authorization_result(authorization_result)
 
     photo = WebOffer.find(params[:id])
@@ -131,7 +131,7 @@ class Admin::WebController < ApplicationController
     permission_name = params[:name]
     permission_name = "TEXTS" if permission_name == "WELCOME_MESSAGE" or permission_name == "ECART_NOTICE"
 
-    authorization_result = @current_user.is_authorized?(@@category, permission_name)
+    authorization_result = current_user.is_authorized?(@@category, permission_name)
     return if !process_authorization_result(authorization_result)
 
     @web_info = WebInfo.where(name: params[:name]).take
@@ -146,7 +146,7 @@ class Admin::WebController < ApplicationController
     permission_name = params[:name]
     permission_name = "TEXTS" if permission_name == "WELCOME_MESSAGE" or permission_name == "ECART_NOTICE"
 
-    authorization_result = @current_user.is_authorized?(@@category, permission_name)
+    authorization_result = current_user.is_authorized?(@@category, permission_name)
     return if !process_authorization_result(authorization_result)
 
     web_info = WebInfo.where(name: params[:name]).take
@@ -170,7 +170,7 @@ class Admin::WebController < ApplicationController
   end
 
   def videos
-    authorization_result = @current_user.is_authorized?(@@category, "VIDEO")
+    authorization_result = current_user.is_authorized?(@@category, "VIDEO")
     return if !process_authorization_result(authorization_result)
 
     @video = WebVideo.first
@@ -178,7 +178,7 @@ class Admin::WebController < ApplicationController
   end
 
   def upload_video
-    authorization_result = @current_user.is_authorized?(@@category, "VIDEO")
+    authorization_result = current_user.is_authorized?(@@category, "VIDEO")
     return if !process_authorization_result(authorization_result)
 
     @video = WebVideo.first
@@ -206,7 +206,7 @@ class Admin::WebController < ApplicationController
   end
 
   def reset_videos
-    authorization_result = @current_user.is_authorized?(@@category, "VIDEO")
+    authorization_result = current_user.is_authorized?(@@category, "VIDEO")
     return if !process_authorization_result(authorization_result)
 
     video = WebVideo.first
@@ -216,14 +216,14 @@ class Admin::WebController < ApplicationController
   end
 
   def social_networks
-    authorization_result = @current_user.is_authorized?(@@category, "SOCIAL_NETWORKS")
+    authorization_result = current_user.is_authorized?(@@category, "SOCIAL_NETWORKS")
     return if !process_authorization_result(authorization_result)
 
     @networks = SocialNetwork.all
   end
 
   def update_social_networks
-    authorization_result = @current_user.is_authorized?(@@category, "SOCIAL_NETWORKS")
+    authorization_result = current_user.is_authorized?(@@category, "SOCIAL_NETWORKS")
     return if !process_authorization_result(authorization_result)
 
     @network = SocialNetwork.find(params[:id])
@@ -239,14 +239,14 @@ class Admin::WebController < ApplicationController
   end
 
   def footer_details
-    authorization_result = @current_user.is_authorized?(@@category, "FOOTER_DETAILS")
+    authorization_result = current_user.is_authorized?(@@category, "FOOTER_DETAILS")
     return if !process_authorization_result(authorization_result)
 
     @details = FooterExtraDetail.all
   end
 
   def create_footer_detail
-    authorization_result = @current_user.is_authorized?(@@category, "FOOTER_DETAILS")
+    authorization_result = current_user.is_authorized?(@@category, "FOOTER_DETAILS")
     return if !process_authorization_result(authorization_result)
 
     detail = FooterExtraDetail.new(footer_params)
@@ -261,7 +261,7 @@ class Admin::WebController < ApplicationController
   end
 
   def delete_footer_detail
-    authorization_result = @current_user.is_authorized?(@@category, "FOOTER_DETAILS")
+    authorization_result = current_user.is_authorized?(@@category, "FOOTER_DETAILS")
     return if !process_authorization_result(authorization_result)
 
     detail = FooterExtraDetail.find(params[:id])
@@ -277,7 +277,7 @@ class Admin::WebController < ApplicationController
   end
 
   def services
-    authorization_result = @current_user.is_authorized?(@@category, "TEXTS")
+    authorization_result = current_user.is_authorized?(@@category, "TEXTS")
     return if !process_authorization_result(authorization_result)
 
     @infos = WebInfo.where(name: ["HIGH_QUALITY","DISCOUNTS","EASY_SHOPPING","DISTRIBUTORS"])
@@ -289,7 +289,7 @@ class Admin::WebController < ApplicationController
   end
 
   def update_services
-    authorization_result = @current_user.is_authorized?(@@category, "TEXTS")
+    authorization_result = current_user.is_authorized?(@@category, "TEXTS")
     return if !process_authorization_result(authorization_result)
 
     web_info = WebInfo.find(params[:id])

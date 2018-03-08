@@ -63,7 +63,7 @@
 			<div class="row">
 				<div class="col-sm-12 form-group">
 		      <%= f.label :email_confirmation, "Confirma tu correo electrónico" %>
-		      <%= f.email_field :email_confirmation, :value => @current_user.email,
+		      <%= f.email_field :email_confirmation, :value => current_user.email,
 							:class => 'form-control form-control-black', :placeholder => "john@example.com",
 							:required => true, :maxlength => 50, "data-parsley-equalto"=>"#client_email" %>
 				</div>

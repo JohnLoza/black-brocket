@@ -6,7 +6,7 @@ class Admin::ClientsController < ApplicationController
   @@category = "CLIENTS"
 
   def index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     if search_params
@@ -33,7 +33,7 @@ class Admin::ClientsController < ApplicationController
 
     # determine the actions the user can do, so we can display them in screen #
     @actions = {"SUPERVISOR_VISIT"=>false}
-    if !@current_user.is_admin
+    if !current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -42,11 +42,11 @@ class Admin::ClientsController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"SUPERVISOR_VISIT"=>true}
-    end # if !@current_user.is_admin end #
+    end # if !current_user.is_admin end #
   end
 
   def show
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @client = Client.find_by(hash_id: params[:id])
@@ -55,7 +55,7 @@ class Admin::ClientsController < ApplicationController
   end
 
   def orders
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @client = Client.find_by(hash_id: params[:id])
@@ -71,7 +71,7 @@ class Admin::ClientsController < ApplicationController
   end
 
   def revisions
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @client = Client.find_by(hash_id: params[:id])
@@ -87,7 +87,7 @@ class Admin::ClientsController < ApplicationController
   end
 
   def visits
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @client = Client.find_by(hash_id: params[:id])
@@ -103,7 +103,7 @@ class Admin::ClientsController < ApplicationController
   end
 
   def prices
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @client = Client.find_by(hash_id: params[:id])
@@ -120,7 +120,7 @@ class Admin::ClientsController < ApplicationController
   end
 
   def supervisor_visits
-    authorization_result = @current_user.is_authorized?(@@category, "SUPERVISOR_VISIT")
+    authorization_result = current_user.is_authorized?(@@category, "SUPERVISOR_VISIT")
     return if !process_authorization_result(authorization_result)
 
     @client = Client.find_by(hash_id: params[:id])
@@ -136,7 +136,7 @@ class Admin::ClientsController < ApplicationController
   end
 
   def supervisor_visit_details
-    authorization_result = @current_user.is_authorized?(@@category, "SUPERVISOR_VISIT")
+    authorization_result = current_user.is_authorized?(@@category, "SUPERVISOR_VISIT")
     return if !process_authorization_result(authorization_result)
 
     @detail = SupervisorVisitDetail.where(visit_id: params[:visit_id]).take
@@ -148,14 +148,14 @@ class Admin::ClientsController < ApplicationController
   end
 
   def new_supervisor_visit
-    authorization_result = @current_user.is_authorized?(@@category, "SUPERVISOR_VISIT")
+    authorization_result = current_user.is_authorized?(@@category, "SUPERVISOR_VISIT")
     return if !process_authorization_result(authorization_result)
 
     @visit_detail = SupervisorVisitDetail.new
   end
 
   def create_supervisor_visit
-    authorization_result = @current_user.is_authorized?(@@category, "SUPERVISOR_VISIT")
+    authorization_result = current_user.is_authorized?(@@category, "SUPERVISOR_VISIT")
     return if !process_authorization_result(authorization_result)
 
     client = Client.find_by(hash_id: params[:id])
@@ -165,7 +165,7 @@ class Admin::ClientsController < ApplicationController
       return
     end
 
-    visit = SupervisorVisit.new(worker_id: @current_user.id, client_id: client.id)
+    visit = SupervisorVisit.new(worker_id: current_user.id, client_id: client.id)
     @visit_detail = SupervisorVisitDetail.new(visit_params)
 
     saved = false

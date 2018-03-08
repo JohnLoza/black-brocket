@@ -6,12 +6,12 @@ class Api::DistributorApi::ClientsController < ApplicationController
     end
 
     current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    regions = @current_user.Regions.map(&:id)
+    regions = current_user.Regions.map(&:id)
     clients = Client.where(id: regions).order(updated_at: :DESC).paginate(:page => params[:page], :per_page => 20).includes(City: :State)
 
     data = Array.new
@@ -33,7 +33,7 @@ class Api::DistributorApi::ClientsController < ApplicationController
     end
 
     current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end

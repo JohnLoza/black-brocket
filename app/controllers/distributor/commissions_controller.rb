@@ -4,7 +4,7 @@ class Distributor::CommissionsController < ApplicationController
   layout "distributor_layout.html.erb"
 
   def index
-    @commissions = @current_user.Commissions.order(created_at: :desc)
+    @commissions = current_user.Commissions.order(created_at: :desc)
                     .limit(100).paginate(page: params[:page], per_page: 25)
   end
 

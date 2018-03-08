@@ -15,8 +15,8 @@
 
     <% if logged_in?%>
       <center>
-       <%= image_tag User.getImage(@current_user, :mini), :class => "img-rounded", :style => "width:130px;" %><br>
-       <h5 style="margin-top: 10px;margin-bottom: 15px;"><%= @current_user.username %></h5>
+       <%= image_tag User.getImage(current_user, :mini), :class => "img-rounded", :style => "width:130px;" %><br>
+       <h5 style="margin-top: 10px;margin-bottom: 15px;"><%= current_user.username %></h5>
       </center>
     <% end %>
 

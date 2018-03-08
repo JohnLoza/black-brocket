@@ -9,7 +9,7 @@ class Admin::ProductsController < ApplicationController
   @@replaceable_path = "/shared/products/"
 
   def index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     if search_params
@@ -22,7 +22,7 @@ class Admin::ProductsController < ApplicationController
 
     # determine the actions the user can do, so we can display them in screen #
     @actions = {"SHOW"=>false,"CREATE"=>false,"DELETE"=>false,"UPDATE"=>false}
-    if !@current_user.is_admin
+    if !current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -40,11 +40,11 @@ class Admin::ProductsController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"SHOW"=>true,"CREATE"=>true,"DELETE"=>true,"UPDATE"=>true}
-    end # if !@current_user.is_admin end #
+    end # if !current_user.is_admin end #
   end
 
   def new
-    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     _new()
@@ -52,7 +52,7 @@ class Admin::ProductsController < ApplicationController
   end
 
   def create
-    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     @product = Product.new(product_params)
@@ -115,7 +115,7 @@ class Admin::ProductsController < ApplicationController
   end
 
   def show
-    authorization_result = @current_user.is_authorized?(@@category, "SHOW")
+    authorization_result = current_user.is_authorized?(@@category, "SHOW")
     return if !process_authorization_result(authorization_result)
 
     @product = Product.find_by(hash_id: params[:id])
@@ -129,7 +129,7 @@ class Admin::ProductsController < ApplicationController
   end
 
   def edit
-    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_NAME", "UPDATE_PRODUCT_DATA",
+    authorization_result = current_user.is_authorized?(@@category, ["UPDATE_NAME", "UPDATE_PRODUCT_DATA",
                                       "UPDATE_PRICE", "UPDATE_SHOW_IN_WEB_PAGE"])
     return if !process_authorization_result(authorization_result)
 
@@ -150,7 +150,7 @@ class Admin::ProductsController < ApplicationController
   end
 
   def update
-    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_NAME", "UPDATE_PRODUCT_DATA",
+    authorization_result = current_user.is_authorized?(@@category, ["UPDATE_NAME", "UPDATE_PRODUCT_DATA",
                                       "UPDATE_PRICE", "UPDATE_SHOW_IN_WEB_PAGE"])
     return if !process_authorization_result(authorization_result)
 
@@ -222,7 +222,7 @@ class Admin::ProductsController < ApplicationController
   end
 
   def destroy
-    authorization_result = @current_user.is_authorized?(@@category, "DELETE")
+    authorization_result = current_user.is_authorized?(@@category, "DELETE")
     return if !process_authorization_result(authorization_result)
 
     @product = Product.find_by(hash_id: params[:id])
@@ -241,7 +241,7 @@ class Admin::ProductsController < ApplicationController
   end
 
   def set_principal_photo
-    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PRODUCT_DATA")
+    authorization_result = current_user.is_authorized?(@@category, "UPDATE_PRODUCT_DATA")
     return if !process_authorization_result(authorization_result)
 
     product_id = Product.find_by(hash_id: params[:id]).id
@@ -255,7 +255,7 @@ class Admin::ProductsController < ApplicationController
   end
 
   def destroy_photo
-    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PRODUCT_DATA")
+    authorization_result = current_user.is_authorized?(@@category, "UPDATE_PRODUCT_DATA")
     return if !process_authorization_result(authorization_result)
 
     photo = ProdPhoto.find_by(hash_id: params[:photo_id])
@@ -286,7 +286,7 @@ class Admin::ProductsController < ApplicationController
       @url = admin_products_path
 
       @actions = {"CREATE"=>false}
-      if !@current_user.is_admin
+      if !current_user.is_admin
         @user_permissions.each do |p|
           # see if the permission category is equal to the one we need in these controller #
           if p.category == @@category and p.name == "CREATE"
@@ -296,7 +296,7 @@ class Admin::ProductsController < ApplicationController
         end # @user_permissions.each end #
       else
         @actions = {"CREATE"=>true}
-      end # if !@current_user.is_admin end #
+      end # if !current_user.is_admin end #
     end
 
     def _edit
@@ -305,7 +305,7 @@ class Admin::ProductsController < ApplicationController
 
       # see if has permission to update #
       @actions = {"UPDATE_NAME"=>false, "UPDATE_PRODUCT_DATA"=>false, "UPDATE_PRICE"=>false, "UPDATE_SHOW_IN_WEB_PAGE"=>false}
-      if !@current_user.is_admin
+      if !current_user.is_admin
         @user_permissions.each do |p|
           # see if the permission category is equal to the one we need in these controller #
           if p.category == @@category
@@ -317,6 +317,6 @@ class Admin::ProductsController < ApplicationController
         end # @user_permissions.each end #
       else
         @actions = {"UPDATE_NAME"=>true, "UPDATE_PRODUCT_DATA"=>true, "UPDATE_PRICE"=>true, "UPDATE_SHOW_IN_WEB_PAGE"=>true}
-      end # if !@current_user.is_admin end #
+      end # if !current_user.is_admin end #
     end
 end

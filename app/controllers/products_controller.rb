@@ -3,8 +3,8 @@ class ProductsController < ApplicationController
   def index
     if logged_in? and session[:user_type] == 'c'
       # when the user logged in #
-      @visit = @current_user.DistributorVisits.where(client_recognizes_visit: nil).take
-      @warehouse = @current_user.City.State.Warehouse
+      @visit = current_user.DistributorVisits.where(client_recognizes_visit: nil).take
+      @warehouse = current_user.City.State.Warehouse
 
       if @warehouse.nil?
         flash[:warning] = "Lo sentimos pero no distribuimos nuestros productos en tu zona ¡aún!."
@@ -26,7 +26,7 @@ class ProductsController < ApplicationController
         @products = @warehouse.Products.joins(:Product).where(products:{show:true, deleted: false}, describes_total_stock: true).paginate(:page => params[:page], :per_page => 18).includes(:Product)
       end
 
-      @product_prices = @current_user.ProductPrices
+      @product_prices = current_user.ProductPrices
 
       @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.product_id})
 
@@ -61,7 +61,7 @@ class ProductsController < ApplicationController
 
       @warehouse = @w_product.Warehouse
       @product = @w_product.Product
-      @product_price = @current_user.ProductPrices.where(product_id: @product.id).take
+      @product_price = current_user.ProductPrices.where(product_id: @product.id).take
     else
       @product = Product.find_by(hash_id: params[:id])
     end
@@ -76,7 +76,7 @@ class ProductsController < ApplicationController
 
   def ask
     product = Product.find_by(hash_id: params[:id])
-    @question = ProdQuestion.new(product_id: product.id, client_id: @current_user.id,
+    @question = ProdQuestion.new(product_id: product.id, client_id: current_user.id,
                 hash_id: random_hash_id(12).upcase,
                 description: params[:prod_question][:description])
 

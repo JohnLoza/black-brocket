@@ -1,5 +1,6 @@
 class SiteWorker < ApplicationRecord
   include Rails.application.routes.url_helpers
+  include Searchable
   attr_accessor :remember_token
 
   before_save { self.email = email.downcase }

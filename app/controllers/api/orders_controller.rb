@@ -6,12 +6,12 @@ class Api::OrdersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    orders = @current_user.Orders.where.not(state: "ORDER_CANCELED").order(created_at: :desc).paginate(:page => params[:page], :per_page => 10).includes(City: :State)
+    orders = current_user.Orders.where.not(state: "ORDER_CANCELED").order(created_at: :desc).paginate(:page => params[:page], :per_page => 10).includes(City: :State)
     data = Array.new
     data<<{per_page: 10}
     orders.each do |order|
@@ -40,7 +40,7 @@ class Api::OrdersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
@@ -70,7 +70,7 @@ class Api::OrdersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
@@ -80,7 +80,7 @@ class Api::OrdersController < ApplicationController
       notification.update_attributes(seen: true)
     end
 
-    order = @current_user.Orders.where(hash_id: params[:id]).take
+    order = current_user.Orders.where(hash_id: params[:id]).take
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }
@@ -89,7 +89,7 @@ class Api::OrdersController < ApplicationController
 
     warehouse = order.Warehouse
     details = order.Details
-    fiscal_data = @current_user.FiscalData
+    fiscal_data = current_user.FiscalData
 
     data = Hash.new
     data[:shipping_cost] = order.shipping_cost
@@ -127,12 +127,12 @@ class Api::OrdersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    if params[:invoice]=="1" and @current_user.FiscalData.nil?
+    if params[:invoice]=="1" and current_user.FiscalData.nil?
       render :status => 200,
              :json => { :success => false, :info => "FISCAL_DATA_NOT_FOUND" }
       return
@@ -142,14 +142,14 @@ class Api::OrdersController < ApplicationController
 
     # find the corresponding distributor #
     order.distributor_id = 0
-    distributor = @current_user.City.Distributor
+    distributor = current_user.City.Distributor
     if !distributor.nil?
       order.distributor_id = distributor.id
     end
 
     # save some order values #
-    order.client_id = @current_user.id
-    order.city_id = @current_user.city_id
+    order.client_id = current_user.id
+    order.city_id = current_user.city_id
     order.invoice = params[:invoice] if !params[:invoice].blank?
     order.state = "WAITING_FOR_PAYMENT"
 
@@ -167,7 +167,7 @@ class Api::OrdersController < ApplicationController
       end
     end
 
-    product_prices = @current_user.ProductPrices.where("product_id in (?)", products.map(&:product_id))
+    product_prices = current_user.ProductPrices.where("product_id in (?)", products.map(&:product_id))
 
     # get the warehouse he belogs to #
     warehouse = products[0].Warehouse
@@ -242,12 +242,12 @@ class Api::OrdersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    order = @current_user.Orders.where(hash_id: params[:id]).take
+    order = current_user.Orders.where(hash_id: params[:id]).take
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }
@@ -282,12 +282,12 @@ class Api::OrdersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    order = @current_user.Orders.find_by(hash_id: params[:id])
+    order = current_user.Orders.find_by(hash_id: params[:id])
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }

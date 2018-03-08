@@ -6,7 +6,7 @@ class Admin::DistributorsController < ApplicationController
   @@category = "DISTRIBUTORS"
 
   def index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @states = State.all.order(name: :ASC)
@@ -37,7 +37,7 @@ class Admin::DistributorsController < ApplicationController
 
     # determine the actions the user can do, so we can display them in screen #
     @actions = {"REQUESTS"=>false,"SHOW"=>false,"CREATE"=>false,"DELETE"=>false,"UPDATE"=>false,"UPDATE_DISTRIBUTION_REGIONS"=>false}
-    if !@current_user.is_admin
+    if !current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -59,11 +59,11 @@ class Admin::DistributorsController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"REQUESTS"=>true,"SHOW"=>true,"CREATE"=>true,"DELETE"=>true,"UPDATE"=>true,"UPDATE_DISTRIBUTION_REGIONS"=>true}
-    end # if !@current_user.is_admin end #
+    end # if !current_user.is_admin end #
   end # def index end #
 
   def new
-    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     _new()
@@ -73,7 +73,7 @@ class Admin::DistributorsController < ApplicationController
   end
 
   def create
-    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     @distributor = Distributor.new(distributor_params)
@@ -96,7 +96,7 @@ class Admin::DistributorsController < ApplicationController
   end
 
   def show
-    authorization_result = @current_user.is_authorized?(@@category,
+    authorization_result = current_user.is_authorized?(@@category,
       ["SHOW_PERSONAL_DATA", "SHOW_FISCAL_DATA",
       "SHOW_BANK_DATA", "SHOW_DISTRIBUTION_REGIONS", "SHOW_COMMISSION"])
     return if !process_authorization_result(authorization_result)
@@ -113,7 +113,7 @@ class Admin::DistributorsController < ApplicationController
 
     # determine what the user can see #
     @actions = {"SHOW_PERSONAL_DATA"=>false, "SHOW_FISCAL_DATA"=>false, "SHOW_BANK_DATA"=>false, "SHOW_DISTRIBUTION_REGIONS"=>false, "SHOW_COMMISSION"=>false}
-    if !@current_user.is_admin
+    if !current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -125,11 +125,11 @@ class Admin::DistributorsController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"SHOW_PERSONAL_DATA"=>true, "SHOW_FISCAL_DATA"=>true, "SHOW_BANK_DATA"=>true, "SHOW_DISTRIBUTION_REGIONS"=>true, "SHOW_COMMISSION"=>true}
-    end # if !@current_user.is_admin end #
+    end # if !current_user.is_admin end #
   end
 
   def edit
-    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_DATA", "UPDATE_FISCAL_DATA",
+    authorization_result = current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_DATA", "UPDATE_FISCAL_DATA",
       "UPDATE_BANK_DATA", "UPDATE_SHOW_ADDRESS", "UPDATE_PHOTO", "UPDATE_COMMISSION"])
     return if !process_authorization_result(authorization_result)
 
@@ -149,7 +149,7 @@ class Admin::DistributorsController < ApplicationController
   end
 
   def update
-    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_DATA", "UPDATE_FISCAL_DATA",
+    authorization_result = current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_DATA", "UPDATE_FISCAL_DATA",
       "UPDATE_BANK_DATA", "UPDATE_SHOW_ADDRESS", "UPDATE_PHOTO"])
     return if !process_authorization_result(authorization_result)
 
@@ -177,7 +177,7 @@ class Admin::DistributorsController < ApplicationController
   end
 
   def destroy
-    authorization_result = @current_user.is_authorized?(@@category, "DELETE")
+    authorization_result = current_user.is_authorized?(@@category, "DELETE")
     return if !process_authorization_result(authorization_result)
 
     @distributor = Distributor.find_by(hash_id: params[:id])
@@ -199,7 +199,7 @@ class Admin::DistributorsController < ApplicationController
 
   # @deprecated
   def clients
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @distributor = Distributor.find_by(hash_id: params[:id])
@@ -217,7 +217,7 @@ class Admin::DistributorsController < ApplicationController
   end
 
   def candidates
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @candidates = DistributorCandidate.all.order(created_at: :desc)
@@ -250,7 +250,7 @@ class Admin::DistributorsController < ApplicationController
       @url = admin_distributors_path
 
       @actions = {"CREATE"=>false}
-      if !@current_user.is_admin
+      if !current_user.is_admin
         @user_permissions.each do |p|
           # see if the permission category is equal to the one we need in these controller #
           if p.category == @@category and p.name == "CREATE"
@@ -260,7 +260,7 @@ class Admin::DistributorsController < ApplicationController
         end # @user_permissions.each end #
       else
         @actions = {"CREATE"=>true}
-      end # if !@current_user.is_admin end #
+      end # if !current_user.is_admin end #
     end
 
     def _edit
@@ -270,7 +270,7 @@ class Admin::DistributorsController < ApplicationController
       # determine the actions the user can do, so we can display them in screen #
       @actions = {"UPDATE_PERSONAL_DATA"=>false, "UPDATE_FISCAL_DATA"=>false,
         "UPDATE_BANK_DATA"=>false, "UPDATE_SHOW_ADDRESS"=>false, "UPDATE_PHOTO"=>false,"UPDATE_COMMISSION"=>false}
-      if !@current_user.is_admin
+      if !current_user.is_admin
         @user_permissions.each do |p|
           # see if the permission category is equal to the one we need in these controller #
           if p.category == @@category
@@ -283,7 +283,7 @@ class Admin::DistributorsController < ApplicationController
       else
         @actions = {"UPDATE_PERSONAL_DATA"=>true, "UPDATE_FISCAL_DATA"=>true,
           "UPDATE_BANK_DATA"=>true, "UPDATE_SHOW_ADDRESS"=>true, "UPDATE_PHOTO"=>true,"UPDATE_COMMISSION"=>true}
-      end # if !@current_user.is_admin end #
+      end # if !current_user.is_admin end #
 
     end
 

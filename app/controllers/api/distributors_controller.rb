@@ -17,15 +17,15 @@ class Api::DistributorsController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
     distributor_is_a_worker = false
-    distributor = @current_user.City.Distributor
-    if !distributor and !@current_user.worker_id.blank?
-      distributor = @current_user.Worker
+    distributor = current_user.City.Distributor
+    if !distributor and !current_user.worker_id.blank?
+      distributor = current_user.Worker
       distributor_is_a_worker = true
     end
 
@@ -58,7 +58,7 @@ class Api::DistributorsController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
@@ -68,7 +68,7 @@ class Api::DistributorsController < ApplicationController
       notification.update_attributes(seen: true)
     end
 
-    messages = @current_user.DistributorMessages.all.order(:created_at => :desc)
+    messages = current_user.DistributorMessages.all.order(:created_at => :desc)
                   .paginate(page: params[:page], :per_page => 50)
 
     data = Array.new
@@ -87,31 +87,31 @@ class Api::DistributorsController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
     distributor_is_a_worker = false
     distributor = nil
-    if !@current_user.worker_id.blank?
-      distributor = @current_user.Worker
+    if !current_user.worker_id.blank?
+      distributor = current_user.Worker
       distributor_is_a_worker = true
     else
-      distributor = @current_user.City.Distributor
+      distributor = current_user.City.Distributor
     end
 
-    message = ClientDistributorComment.new({client_id: @current_user.id, comment: params[:comment], is_from_client: true})
+    message = ClientDistributorComment.new({client_id: current_user.id, comment: params[:comment], is_from_client: true})
     if !distributor_is_a_worker
       message.distributor_id = distributor.id
       Notification.create(distributor_id: distributor.id, icon: "fa fa-comments-o",
-                      description: "El usuario " + @current_user.username + " te envió un mensaje",
-                      url: distributor_client_messages_path(@current_user.hash_id))
+                      description: "El usuario " + current_user.username + " te envió un mensaje",
+                      url: distributor_client_messages_path(current_user.hash_id))
     else
       message.worker_id = distributor.id
       Notification.create(worker_id: distributor.id, icon: "fa fa-comments-o",
-                      description: "El usuario " + @current_user.username + " te envió un mensaje",
-                      url: admin_distributor_work_client_messages_path(@current_user.hash_id))
+                      description: "El usuario " + current_user.username + " te envió un mensaje",
+                      url: admin_distributor_work_client_messages_path(current_user.hash_id))
     end
 
     if message.save

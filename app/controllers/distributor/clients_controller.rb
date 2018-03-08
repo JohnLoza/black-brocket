@@ -4,12 +4,12 @@ class Distributor::ClientsController < ApplicationController
   layout "distributor_layout.html.erb"
 
   def index
-    region_ids = @current_user.Regions.map(&:id)
+    region_ids = current_user.Regions.map(&:id)
     @clients = Client.where(city_id: region_ids).order(updated_at: :DESC).paginate(:page => params[:page], :per_page => 20).includes(City: :State)
   end
 
   def show
-    region_ids = @current_user.Regions.map(&:id)
+    region_ids = current_user.Regions.map(&:id)
     @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
     if !@client
@@ -20,7 +20,7 @@ class Distributor::ClientsController < ApplicationController
   end
 
   def prices
-    region_ids = @current_user.Regions.map(&:id)
+    region_ids = current_user.Regions.map(&:id)
     @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
     if !@client
@@ -34,7 +34,7 @@ class Distributor::ClientsController < ApplicationController
       @client_city = @client.City
       @products = Product.where(deleted: false).order(name: :asc)
 
-      @current_user.updateRevision(@client)
+      current_user.updateRevision(@client)
     end # if @client #
   end
 
@@ -59,7 +59,7 @@ class Distributor::ClientsController < ApplicationController
   end
 
   def messages
-    region_ids = @current_user.Regions.map(&:id)
+    region_ids = current_user.Regions.map(&:id)
     @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
     if !@client
@@ -74,20 +74,20 @@ class Distributor::ClientsController < ApplicationController
     end
 
     @client_city = @client.City
-    @messages = @current_user.ClientMessages.where(client_id: @client.id)
+    @messages = current_user.ClientMessages.where(client_id: @client.id)
                   .order(created_at: :desc).paginate(page: params[:page], per_page: 50)
 
     @client_image = User.getImage(@client, :mini)
     @client_username = @client.username
 
-    @distributor_image = User.getImage(@current_user, :mini)
-    @distributor_username = @current_user.username
+    @distributor_image = User.getImage(current_user, :mini)
+    @distributor_username = current_user.username
 
     @create_message_url = distributor_client_messages_path(@client.hash_id)
   end
 
   def create_message
-    region_ids = @current_user.Regions.map(&:id)
+    region_ids = current_user.Regions.map(&:id)
     @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
     if !@client
@@ -97,7 +97,7 @@ class Distributor::ClientsController < ApplicationController
     end # if @client and @client.is_new #
 
     message = ClientDistributorComment.new(
-            {client_id: @client.id, distributor_id: @current_user.id,
+            {client_id: @client.id, distributor_id: current_user.id,
              comment: params[:comment], is_from_client: false})
     message.save
 

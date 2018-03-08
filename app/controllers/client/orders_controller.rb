@@ -4,7 +4,7 @@ class Client::OrdersController < ApplicationController
   before_action :verify_fiscal_data, only: [:create]
 
   def index
-    @orders = @current_user.Orders.where.not(state: "ORDER_CANCELED").order(created_at: :desc).paginate(:page => params[:page], :per_page => 10).includes(City: :State)
+    @orders = current_user.Orders.where.not(state: "ORDER_CANCELED").order(created_at: :desc).paginate(:page => params[:page], :per_page => 10).includes(City: :State)
     @bank_accounts = BankAccount.all
   end
 
@@ -24,14 +24,14 @@ class Client::OrdersController < ApplicationController
         @state = @city.State
       end
 
-      @client_city = @current_user.City
+      @client_city = current_user.City
       @client_state = State.where(id: @client_city.state_id).take
 
       render :show, layout: false
       return
     else
       flash[:info] = "No se encontró la orden con clave: #{params[:id]}"
-      redirect_to client_orders_path(@current_user.hash_id)
+      redirect_to client_orders_path(current_user.hash_id)
       return
     end
   end
@@ -42,14 +42,14 @@ class Client::OrdersController < ApplicationController
 
     # find the corresponding distributor #
     @order.distributor_id = 0
-    @distributor = @current_user.City.Distributor
+    @distributor = current_user.City.Distributor
     if !@distributor.nil?
       @order.distributor_id = @distributor.id
     end
 
     # save some order values #
-    @order.client_id = @current_user.id
-    @order.city_id = @current_user.city_id
+    @order.client_id = current_user.id
+    @order.city_id = current_user.city_id
     @order.invoice = params[:invoice] if params[:invoice]
     @order.payment_method = params[:payment_method]
     @order.state = "WAITING_FOR_PAYMENT"
@@ -64,12 +64,12 @@ class Client::OrdersController < ApplicationController
       # puts "--- existence: #{product.existence}, buying: #{session[:e_cart][product.hash_id]}"
       if product.existence < session[:e_cart][product.hash_id].to_i
         flash[:danger] = "Lo sentimos pero no queda suficiente inventario del producto con clave #{product.Product.hash_id} su existencia actual es de: #{product.existence}"
-        redirect_to client_ecart_path(@current_user.hash_id)
+        redirect_to client_ecart_path(current_user.hash_id)
         return
       end
     end
 
-    product_prices = @current_user.ProductPrices.where("product_id in (?)", @products.map(&:product_id))
+    product_prices = current_user.ProductPrices.where("product_id in (?)", @products.map(&:product_id))
 
     # get the warehouse he belogs to #
     @warehouse = @products[0].Warehouse
@@ -131,16 +131,16 @@ class Client::OrdersController < ApplicationController
     if @saved == true
       session.delete(:e_cart)
       flash[:success] = "Orden guardada"
-      redirect_to client_orders_path(@current_user.hash_id)
+      redirect_to client_orders_path(current_user.hash_id)
       return
     else
       flash[:danger] = "Ocurrió un error al guardar tu pedido, vuelve a intentarlo por favor..."
-      redirect_to client_ecart_path(@current_user.hash_id)
+      redirect_to client_ecart_path(current_user.hash_id)
     end
   end
 
   def cancel
-    @order = @current_user.Orders.where(hash_id: params[:id]).take
+    @order = current_user.Orders.where(hash_id: params[:id]).take
 
     if !@order.blank?
       ActiveRecord::Base.transaction do
@@ -185,11 +185,11 @@ class Client::OrdersController < ApplicationController
     else
       flash[:danger] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: pdf, jpg y png."
     end
-    redirect_to client_orders_path(@current_user.hash_id)
+    redirect_to client_orders_path(current_user.hash_id)
   end
 
   def get_payment
-    @order = @current_user.Orders.find_by(download_payment_key: params[:id])
+    @order = current_user.Orders.find_by(download_payment_key: params[:id])
     if !@order.nil?
       # if there is an image of the payment send it
       if !@order.pay_img.blank?
@@ -202,7 +202,7 @@ class Client::OrdersController < ApplicationController
   end
 
   def get_bank_payment_info
-    @order = @current_user.Orders.find_by(hash_id: params[:id])
+    @order = current_user.Orders.find_by(hash_id: params[:id])
     @bank = Bank.find_by(id: @order.payment_method) if @order
     @bank_accounts = @bank.Accounts if @bank
 
@@ -213,7 +213,7 @@ class Client::OrdersController < ApplicationController
 
   def update_payment_method
     return if params[:order][:payment_method].nil?
-    @order = @current_user.Orders.find_by(hash_id: params[:id])
+    @order = current_user.Orders.find_by(hash_id: params[:id])
 
     if @order
       @order.update_attributes(payment_method: params[:order][:payment_method])
@@ -226,7 +226,7 @@ class Client::OrdersController < ApplicationController
 
   private
     def verify_fiscal_data
-      if params[:invoice]=="1" and @current_user.FiscalData.nil?
+      if params[:invoice]=="1" and current_user.FiscalData.nil?
         flash[:danger] = 'Llena tus datos fiscales primero por favor.'
         redirect_to new_client_fiscal_datum_path
         return

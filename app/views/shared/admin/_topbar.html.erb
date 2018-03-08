@@ -15,15 +15,15 @@
     <ul class="nav navbar-top-links navbar-right">
        <!--Username-->
        <li>
-          <span class="m-r-sm text-muted welcome-message"><b>Bienvenido</b> <%= @current_user.username %> </span>
+          <span class="m-r-sm text-muted welcome-message"><b>Bienvenido</b> <%= current_user.username %> </span>
        </li>
        <!--End Username-->
        <!--Dropdown notifications-->
-       <% notifications = @current_user.Notifications.order(created_at: :DESC).limit(5) %>
+       <% notifications = current_user.Notifications.order(created_at: :DESC).limit(5) %>
        <li class="dropdown">
           <a class="dropdown-toggle count-info" data-toggle="dropdown" href="off_canvas_menu.html#">
               <i class="fa fa-bell"></i>
-              <% notifications_not_seen_count = @current_user.Notifications.where(:seen => false).size %>
+              <% notifications_not_seen_count = current_user.Notifications.where(:seen => false).size %>
               <% if notifications_not_seen_count > 0 %>
                 <span class="badge" style="background-color: #F44336; color: #FEFEFE;">
                   <%= notifications_not_seen_count %>

@@ -9,14 +9,14 @@ class Admin::TipsController < ApplicationController
   @@replaceable_path = "/shared/tips_recipes/"
 
   def index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @tips = TipRecipe.all.order(created_at: :desc).paginate(page: params[:page], per_page: 15)
   end
 
   def new
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @tip = TipRecipe.new
@@ -24,7 +24,7 @@ class Admin::TipsController < ApplicationController
   end
 
   def create
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @tip =  TipRecipe.new(tip_recipe_params)
@@ -59,7 +59,7 @@ class Admin::TipsController < ApplicationController
   end
 
   def edit
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @tip = TipRecipe.find_by(id: params[:id])
@@ -80,7 +80,7 @@ class Admin::TipsController < ApplicationController
   end
 
   def update
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @tip = TipRecipe.find_by(id: params[:id])

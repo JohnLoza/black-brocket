@@ -26,7 +26,7 @@ class Api::UsersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
@@ -36,11 +36,11 @@ class Api::UsersController < ApplicationController
             colony: u.col, intnumber: u.intnumber, extnumber: u.extnumber,
             zipcode: u.cp, street_ref1: u.street_ref1, street_ref2: u.street_ref2,
             telephone: u.telephone, birthday: u.birthday, cellphone: u.cellphone,
-            name: u.name, lastname: u.lastname, mother_lastname: u.mother_lastname, city: @current_user.City.id }
+            name: u.name, lastname: u.lastname, mother_lastname: u.mother_lastname, city: current_user.City.id }
 
     render :status => 200,
            :json => { :success => true, :info => "USER_DATA",
-                      :data => data, :state => @current_user.City.state_id  }
+                      :data => data, :state => current_user.City.state_id  }
   end
 
   def get_username_n_photo
@@ -50,14 +50,14 @@ class Api::UsersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
     render :status => 200,
            :json => { :success => true, :info => "USER_DATA",
-                      :data => {username: @current_user.username, photo: User.getImage(@current_user) }}
+                      :data => {username: current_user.username, photo: User.getImage(current_user) }}
   end
 
   def update
@@ -67,13 +67,13 @@ class Api::UsersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    @current_user.city_id = params[:city_id]
-    if @current_user.update_attributes(user_params)
+    current_user.city_id = params[:city_id]
+    if current_user.update_attributes(user_params)
       render :status => 200,
              :json => { :success => true, :info => "SAVED" }
     else
@@ -89,23 +89,23 @@ class Api::UsersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    if !@current_user.authenticate(params[:password])
+    if !current_user.authenticate(params[:password])
       render :status => 200,
              :json => { :success => false, :info => "PASSWORD_NOT_MATCH" }
       return
     end
 
-    @current_user.deleted=true
-    @current_user.delete_account_hash= random_hash_id(12).upcase
+    current_user.deleted=true
+    current_user.delete_account_hash= random_hash_id(12).upcase
 
-    if @current_user.save
+    if current_user.save
       render :status => 200,
-             :json => { :success => true, :info => "SAVED", delete_folio: @current_user.delete_account_hash }
+             :json => { :success => true, :info => "SAVED", delete_folio: current_user.delete_account_hash }
     else
       render :status => 200,
              :json => { :success => false, :info => "SAVE_ERROR" }
@@ -120,12 +120,12 @@ class Api::UsersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    notifications = @current_user.Notifications
+    notifications = current_user.Notifications
     data = Array.new
     notifications.each do |notification|
       if notification.url.include? "/client/my_distributor"
@@ -148,7 +148,7 @@ class Api::UsersController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end

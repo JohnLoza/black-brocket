@@ -6,7 +6,7 @@ class Admin::DistributorWorkController < ApplicationController
   @@category = "DISTRIBUTOR_WORK"
 
   def index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @clients = Client.joins(:City).where(cities: {distributor_id: nil})
@@ -15,12 +15,12 @@ class Admin::DistributorWorkController < ApplicationController
   end
 
   def take_client
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     client = Client.find_by(hash_id: params[:id])
     if client
-      client.update_attribute(:worker_id, @current_user.id)
+      client.update_attribute(:worker_id, current_user.id)
     end
 
     flash[:success] = "Cliente añadido a tu repertorio."
@@ -28,14 +28,14 @@ class Admin::DistributorWorkController < ApplicationController
   end
 
   def my_clients
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @clients = @current_user.Clients
+    @clients = current_user.Clients
   end
 
   def prices
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @client = Client.find_by(hash_id: params[:id])
@@ -48,7 +48,7 @@ class Admin::DistributorWorkController < ApplicationController
   end
 
   def create_prices
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @client = Client.find_by(hash_id: params[:id])
@@ -71,7 +71,7 @@ class Admin::DistributorWorkController < ApplicationController
   end
 
   def messages
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @client = Client.find_by(hash_id: params[:id])
@@ -86,20 +86,20 @@ class Admin::DistributorWorkController < ApplicationController
     end
 
     @client_city = @client.City
-    @messages = @current_user.ClientMessages.where(client_id: @client.id)
+    @messages = current_user.ClientMessages.where(client_id: @client.id)
                   .order(created_at: :desc).paginate(page: params[:page], per_page: 25)
 
     @client_image = User.getImage(@client, :mini)
     @client_username = @client.username
 
-    @distributor_image = User.getImage(@current_user, :mini)
-    @distributor_username = @current_user.username
+    @distributor_image = User.getImage(current_user, :mini)
+    @distributor_username = current_user.username
 
     @create_message_url = admin_distributor_work_client_messages_path(@client.hash_id)
   end
 
   def create_message
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @client = Client.find_by(hash_id: params[:id])
@@ -109,7 +109,7 @@ class Admin::DistributorWorkController < ApplicationController
     end
 
     message = ClientDistributorComment.new(
-            {client_id: @client.id, worker_id: @current_user.id,
+            {client_id: @client.id, worker_id: current_user.id,
              comment: params[:comment], is_from_client: false})
     message.save
 
@@ -122,10 +122,10 @@ class Admin::DistributorWorkController < ApplicationController
   end
 
   def orders
-    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result = current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @orders = Order.joins(:Client).where(clients: {worker_id: @current_user.id})
+    @orders = Order.joins(:Client).where(clients: {worker_id: current_user.id})
               .order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 

@@ -6,14 +6,14 @@ class Api::DistributorApi::DistributorsController < ApplicationController
     end
 
     current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    regions = @current_user.Regions
-    home_img = @current_user.home_img.url
-    avatar = User.getImage(@current_user)
+    regions = current_user.Regions
+    home_img = current_user.home_img.url
+    avatar = User.getImage(current_user)
 
     data = Hash.new
     data[:avatar] = avatar
@@ -35,13 +35,13 @@ class Api::DistributorApi::DistributorsController < ApplicationController
     end
 
     current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
     if !params[:distributor][:home_img].blank?
-      if @current_user.update_attribute(:home_img, params[:distributor][:home_img])
+      if current_user.update_attribute(:home_img, params[:distributor][:home_img])
         render :status => 200,
                :json => { :success => true, :info => "SAVED" }
         return
@@ -64,14 +64,14 @@ class Api::DistributorApi::DistributorsController < ApplicationController
     end
 
     current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
     render :status => 200,
            :json => { :success => true, :info => "USER_DATA",
-                      :data => {username: @current_user.username, photo: User.getImage(@current_user) }}
+                      :data => {username: current_user.username, photo: User.getImage(current_user) }}
   end
 
   def notifications
@@ -81,12 +81,12 @@ class Api::DistributorApi::DistributorsController < ApplicationController
     end
 
     current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    notifications = @current_user.Notifications
+    notifications = current_user.Notifications
     data = Array.new
     notifications.each do |notification|
       if notification.url.include? "/distributor/client" and notification.url.include? "/messages"

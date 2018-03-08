@@ -4,7 +4,7 @@ class Distributor::VisitsController < ApplicationController
   layout "distributor_layout.html.erb"
 
   def index
-    region_ids = @current_user.Regions.map(&:id)
+    region_ids = current_user.Regions.map(&:id)
     @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
     if !@client
@@ -23,7 +23,7 @@ class Distributor::VisitsController < ApplicationController
     success = false
     today = Time.now.year.to_s+"-"+Time.now.month.to_s+"-"+Time.now.day.to_s
     visit = DistributorVisit.new(
-                      distributor_id: @current_user.id,
+                      distributor_id: current_user.id,
                       client_id: @client.id,
                       visit_date: today)
 

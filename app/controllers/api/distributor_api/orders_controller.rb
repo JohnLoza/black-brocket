@@ -6,19 +6,19 @@ class Api::DistributorApi::OrdersController < ApplicationController
     end
 
     current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
     if params[:client].blank?
-      orders = @current_user.Orders.order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State).includes(:Client, City: :State)
+      orders = current_user.Orders.order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State).includes(:Client, City: :State)
     else
 
       client = Client.find_by(hash_id: params[:client])
       if !client.blank?
         orders = Order.where(client_id: client.id).order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State)
-        @current_user.updateRevision(client)
+        current_user.updateRevision(client)
       else
         render :status => 200,
                :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
@@ -44,12 +44,12 @@ class Api::DistributorApi::OrdersController < ApplicationController
     end
 
     current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    order = @current_user.Orders.where(hash_id: params[:id]).take
+    order = current_user.Orders.where(hash_id: params[:id]).take
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }

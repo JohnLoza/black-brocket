@@ -16,7 +16,7 @@
         <% if o.state == "WAITING_FOR_PAYMENT" %>
           <!-- to cancel an order -->
           <%= link_to "<span class='icon-close' style='font-size: 30px;'></span>".html_safe,
-                      client_cancel_order_path(@current_user.hash_id, o.hash_id),
+                      client_cancel_order_path(current_user.hash_id, o.hash_id),
                       data:{confirm: "Seguro(a) de cancelar el pedido?"},
                       remote: true, method: :delete %>
         <% end %>
@@ -61,7 +61,7 @@
 
         <b>Comprobante:</b></br>
         <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
-          <%= link_to client_get_order_payment_path(@current_user.hash_id, o.download_payment_key), target: '_blank' do %>
+          <%= link_to client_get_order_payment_path(current_user.hash_id, o.download_payment_key), target: '_blank' do %>
             <i class="fa fa-file-o fa-3x"></i>
           <% end %>
         <% else %>
@@ -71,7 +71,7 @@
       </div>
       <div class="col-sm-2 text-center">
         <b>Ver pedido:</b></br>
-        <%= link_to "<span class='icon-eye'></span>".html_safe, client_order_path(@current_user.hash_id, o.hash_id),
+        <%= link_to "<span class='icon-eye'></span>".html_safe, client_order_path(current_user.hash_id, o.hash_id),
             :class => "darklink", style: "font-size: 32px;", target: "_blank" %>
       </div>
     </div>
@@ -79,7 +79,7 @@
     <div class="row order-box-foot">
       <div class="col-sm-6">
         <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>
-          <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id), remote: true,
+          <%= link_to client_get_bank_payment_info_path(current_user.hash_id, o.hash_id), remote: true,
                 class: 'darklink label-custom-2', style: 'cursor:pointer; color: #FEFEFE;' do %>
             <span class="fa fa-exclamation fa-rotate-180"></span> Información para realizar el pago...
           <% end %>
@@ -88,7 +88,7 @@
         <% end %>
       </div>
 
-      <%= form_for(o, url: client_upload_pay_order_path(@current_user.hash_id, o.hash_id),
+      <%= form_for(o, url: client_upload_pay_order_path(current_user.hash_id, o.hash_id),
                       method: :put, html:{id:"form_photo_#{o.hash_id}"},
                       data:{confirm: "Seguro(a) de ser el archivo correcto?"}) do |f| %>
         <div class="col-sm-2 text-right">

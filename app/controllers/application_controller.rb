@@ -6,11 +6,27 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
   include SessionsHelper
 
-  before_action :load_current_user
   # before_action :set_locale
 
-  def load_current_user
-    @current_user = current_user
+  # rescue_from Exception, with: :method not working somehow
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render_404
+  end
+  rescue_from ActionController::UnknownFormat do |e|
+    render_404
+  end
+  rescue_from ActionController::UnknownController do |e|
+    render_404
+  end
+  rescue_from ActionController::RoutingError do |e|
+    render_404
+  end
+
+  def render_404
+    respond_to do |format|
+      format.html { render file: Rails.root.join("public", "404"), layout: false, status: 404 }
+      format.any { head :not_found }
+    end
   end
 
   # def set_locale

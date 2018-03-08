@@ -7,7 +7,7 @@ class Admin::DistributorRegionsController < ApplicationController
   @@permission_name = "UPDATE_DISTRIBUTION_REGIONS"
 
   def index
-    authorization_result = @current_user.is_authorized?(@@category, @@permission_name)
+    authorization_result = current_user.is_authorized?(@@category, @@permission_name)
     return if !process_authorization_result(authorization_result)
 
     @distributor = Distributor.find_by(hash_id: params[:dist_id])
@@ -25,7 +25,7 @@ class Admin::DistributorRegionsController < ApplicationController
   end
 
   def create
-    authorization_result = @current_user.is_authorized?(@@category, @@permission_name)
+    authorization_result = current_user.is_authorized?(@@category, @@permission_name)
     return if !process_authorization_result(authorization_result)
 
     @saved = false
@@ -46,7 +46,7 @@ class Admin::DistributorRegionsController < ApplicationController
   end
 
   def destroy
-    authorization_result = @current_user.is_authorized?(@@category, @@permission_name)
+    authorization_result = current_user.is_authorized?(@@category, @@permission_name)
     return if !process_authorization_result(authorization_result)
 
     @deleted = false

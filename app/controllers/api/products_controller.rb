@@ -9,12 +9,12 @@ class Api::ProductsController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end
 
-    warehouse = @current_user.City.State.Warehouse
+    warehouse = current_user.City.State.Warehouse
 
     if warehouse.blank?
       render :status => 200,
@@ -50,17 +50,17 @@ class Api::ProductsController < ApplicationController
     end
 
     photos = ProdPhoto.where("product_id in (?) and is_principal=true", products.map{|p| p.product_id})
-    product_prices = @current_user.ProductPrices
+    product_prices = current_user.ProductPrices
 
     data = Array.new
-    visit = @current_user.DistributorVisits.where(client_recognizes_visit: nil).take
+    visit = current_user.DistributorVisits.where(client_recognizes_visit: nil).take
     if !visit.blank?
       data<<{per_page: 18, new_visit: true, visit_id: visit.id, distributor_image: User.getImage(visit.Distributor, :mini), distributor_name: visit.Distributor.getName, visit_date: l(visit.visit_date, format: :long)}
     else
       data<<{per_page: 18, new_visit: false, visit_id: nil, distributor_image: nil, distributor_name: nil, visit_date: nil}
     end
 
-    data << {user_data: {username: @current_user.username, photo: User.getImage(@current_user)}}
+    data << {user_data: {username: current_user.username, photo: User.getImage(current_user)}}
 
     products.each do |w_product|
       p = w_product.Product
@@ -98,7 +98,7 @@ class Api::ProductsController < ApplicationController
     end
 
     current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if @current_user.blank?
+    if current_user.blank?
       api_authentication_failed
       return
     end

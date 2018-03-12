@@ -27,8 +27,8 @@
     <div class="social-footer">
         <div class="social-comment">
             <a href="" class="pull-left">
-              <% if !current_user.photo.blank? %>
-                <%= image_tag current_user.photo.url(:mini) %>
+              <% if !@current_user.photo.blank? %>
+                <%= image_tag @current_user.photo.url(:mini) %>
               <% else %>
                 <%= image_tag("user_avatar.png") %>
               <% end %>

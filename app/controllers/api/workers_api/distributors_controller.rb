@@ -7,13 +7,13 @@ class Api::WorkersApi::DistributorsController < ApplicationController
       return
     end
 
-    current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    authorization_result = current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
+    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
     if !authorization_result.any?
       render :status => 200,
              :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }

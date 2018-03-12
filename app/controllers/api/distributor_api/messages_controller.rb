@@ -5,8 +5,8 @@ class Api::DistributorApi::MessagesController < ApplicationController
       return
     end
 
-    current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
@@ -23,15 +23,15 @@ class Api::DistributorApi::MessagesController < ApplicationController
       return
     end
 
-    messages = current_user.ClientMessages.where(client_id: client.id)
+    messages = @current_user.ClientMessages.where(client_id: client.id)
                   .order(created_at: :desc).paginate(page: params[:page], per_page: 50)
 
     data = Hash.new
     data[:per_page] = 50
     data[:client_image] = User.getImage(client)
     data[:client_username] = client.username
-    data[:distributor_image] = User.getImage(current_user)
-    data[:distributor_username] = current_user.username
+    data[:distributor_image] = User.getImage(@current_user)
+    data[:distributor_username] = @current_user.username
 
     array = Array.new
     messages.each do |msg|
@@ -49,8 +49,8 @@ class Api::DistributorApi::MessagesController < ApplicationController
       return
     end
 
-    current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
@@ -63,7 +63,7 @@ class Api::DistributorApi::MessagesController < ApplicationController
     end
 
     message = ClientDistributorComment.new(
-            {client_id: client.id, distributor_id: current_user.id,
+            {client_id: client.id, distributor_id: @current_user.id,
              comment: params[:comment], is_from_client: false})
     message.save
 

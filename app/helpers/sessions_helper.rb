@@ -27,11 +27,11 @@ module SessionsHelper
       user_type = session[:user_type]
 
       if user_type == 'w'
-        user = SiteWorker.find_by(id: user_id)
+        @current_user ||= SiteWorker.find_by(id: user_id)
       elsif  user_type == 'd'
-        user = Distributor.find_by(id: user_id)
+        @current_user ||= Distributor.find_by(id: user_id)
       elsif  user_type == 'c'
-        user = Client.find_by(id: user_id)
+        @current_user ||= Client.find_by(id: user_id)
       end
 
     elsif !cookies.signed[:user_id].nil?
@@ -52,8 +52,6 @@ module SessionsHelper
       end
 
     end
-
-    return user
   end
 
   # Returns true if the user is logged in, false otherwise.

@@ -10,7 +10,7 @@ class Client::FiscalDataController < ApplicationController
   end
 
   def edit
-    @fiscal_data = current_user.FiscalData
+    @fiscal_data = @current_user.FiscalData
     if !@fiscal_data
       redirect_to new_client_fiscal_datum_path
       return
@@ -28,12 +28,12 @@ class Client::FiscalDataController < ApplicationController
   def create
     @fiscal_data = FiscalData.new(fiscal_params)
     @fiscal_data.city_id = params[:city_id]
-    @fiscal_data.client_id = current_user.id
+    @fiscal_data.client_id = @current_user.id
     @fiscal_data.hash_id = random_hash_id(12).upcase
 
     if @fiscal_data.save
       flash[:success] = "Información fiscal guardada."
-      redirect_to client_ecart_path(current_user.hash_id)
+      redirect_to client_ecart_path(@current_user.hash_id)
       return
     else
       @state_id = params[:state_id]
@@ -47,14 +47,14 @@ class Client::FiscalDataController < ApplicationController
   end
 
   def update
-    @fiscal_data = current_user.FiscalData
+    @fiscal_data = @current_user.FiscalData
     @fiscal_data.city_id = params[:city_id]
     @fiscal_data.lastname = params[:fiscal_data][:lastname]==""
     @fiscal_data.mother_lastname = params[:fiscal_data][:mother_lastname]==""
 
     if @fiscal_data.update_attributes(fiscal_params)
       flash[:success] = "Información fiscal guardada."
-      redirect_to products_path(current_user.hash_id)
+      redirect_to products_path(@current_user.hash_id)
     else
       city = @fiscal_data.City
       @city_id = city.id

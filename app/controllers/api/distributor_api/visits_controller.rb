@@ -5,8 +5,8 @@ class Api::DistributorApi::VisitsController < ApplicationController
       return
     end
 
-    current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
@@ -37,8 +37,8 @@ class Api::DistributorApi::VisitsController < ApplicationController
       return
     end
 
-    current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
@@ -53,7 +53,7 @@ class Api::DistributorApi::VisitsController < ApplicationController
     success = false
     today = Time.now.year.to_s+"-"+Time.now.month.to_s+"-"+Time.now.day.to_s
     visit = DistributorVisit.new(
-                      distributor_id: current_user.id,
+                      distributor_id: @current_user.id,
                       client_id: client.id,
                       visit_date: today)
 

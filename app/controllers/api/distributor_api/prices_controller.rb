@@ -5,8 +5,8 @@ class Api::DistributorApi::PricesController < ApplicationController
       return
     end
 
-    current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
@@ -20,7 +20,7 @@ class Api::DistributorApi::PricesController < ApplicationController
 
     product_prices = client.ProductPrices
     products = Product.where(deleted: false).order(name: :asc)
-    current_user.updateRevision(client)
+    @current_user.updateRevision(client)
 
     data = Array.new
     products.each do |product|
@@ -48,8 +48,8 @@ class Api::DistributorApi::PricesController < ApplicationController
       return
     end
 
-    current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end

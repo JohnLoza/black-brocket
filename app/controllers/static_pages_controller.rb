@@ -67,14 +67,11 @@ class StaticPagesController < ApplicationController
   end
 
   def get_cities
-    if (params[:state] == nil || params[:state] == '')
-      @cities = Array.new
-    else
-      @cities = City.where(:state_id => params[:state]).order(:name);
-    end
+    @cities = City.where(:state_id => params[:state_id]).order(:name)
 
     respond_to do |format|
-      format.js { render :get_cities, :layout => false }
+      format.json{ render json: @cities.as_json(only: [:id, :name, :LADA]), status: 200 }
+      format.any{ head :not_found }
     end
   end
 
@@ -103,7 +100,7 @@ class StaticPagesController < ApplicationController
 
     def fill_ladas_in_database
       # need to uncomment require 'net/http' at the top of the file
-      City.where(lada: nil).each do |city|
+      City.where(lada: nil).includes(:State).each do |city|
         state_name = city.State.name
         state_name = "México" if state_name == "Edo. México"
         if state_name == "Ciudad de México"

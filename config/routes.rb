@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get 'log_in/' => 'sessions#new'
   post   'log_in/'   => 'sessions#create'
   delete 'log_out/'  => 'sessions#destroy'
+  get 'log_out/' => 'sessions#destroy'
 
   # product paths (what the client sees) #
   get '/products' => 'products#index', :as => :products
@@ -56,9 +57,10 @@ Rails.application.routes.draw do
       resources :bank_accounts, except: :show, :as => 'accounts'
     end
 
-    resources :workers
-    get 'workers/:id/permissions' => 'workers#edit_permissions', :as => :show_worker_permissions
-    put 'workers/:id/permissions/' => 'workers#update_permissions', :as => :update_worker_permissions
+    resources :site_workers do
+      get 'permissions/edit', action: :edit_permissions, on: :member, :as => :edit_permissions
+      put 'permissions', action: :update_permissions, on: :member, :as => :update_permissions
+    end
 
     # distributors #
     resources :distributors

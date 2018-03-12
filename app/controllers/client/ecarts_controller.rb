@@ -5,7 +5,7 @@ class Client::EcartsController < ApplicationController
   def show
     if session[:e_cart]
       @products = WarehouseProduct.where("hash_id in (?)", session[:e_cart].keys).includes(:Product)
-      @product_prices = current_user.ProductPrices.where("product_id in (?)", @products.map(&:product_id))
+      @product_prices = @current_user.ProductPrices.where("product_id in (?)", @products.map(&:product_id))
       @warehouse = @products[0].Warehouse if @products.any?
       @banks = Bank.all
 

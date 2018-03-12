@@ -5,21 +5,21 @@
         <li class="nav-header fixed-image-bg">
           <center>
             <div class="dropdown profile-element">
-              <%= image_tag User.getImage(current_user, :mini), :class => "img-responsive img-rounded img-50" %>
+              <%= image_tag User.getImage(@current_user, :mini), :class => "img-responsive img-rounded img-50" %>
 
-              <% if current_user.is_admin %>
+              <% if @current_user.is_admin %>
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                  <span class="clear"> <span class="block m-t-xs"><strong class="font-bold"><%= current_user.username %></strong></span>
+                  <span class="clear"> <span class="block m-t-xs"><strong class="font-bold"><%= @current_user.username %></strong></span>
                   <span class="text-muted text-xs block">Opciones <b class="caret"></b></span>
                 </a>
                 <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                  <li><%= link_to "Editar mi perfil", edit_admin_worker_path(current_user.hash_id) %></li>
+                  <li><%= link_to "Editar mi perfil", edit_admin_site_worker_path(@current_user.hash_id) %></li>
                   <!--li><%#= link_to "Configuración", admin_configurations_path %></li-->
                   <li class="divider"></li>
                   <li><%= link_to(log_out_path, method: "delete") do %>Cerrar sesión<% end %></li>
                 </ul>
               <% else %>
-                <a><span class="clear"> <span class="block m-t-xs"><strong class="font-bold"><%= current_user.username %></strong></span></a>
+                <a><span class="clear"> <span class="block m-t-xs"><strong class="font-bold"><%= @current_user.username %></strong></span></a>
               <% end %>
             </div>
           </center>
@@ -27,27 +27,113 @@
         <!--Menu Items-->
 
         <li><%= link_to(admin_welcome_path) do %><i class="fa fa-home"></i> <span class="nav-label">Inicio</span><% end %></li>
-        <% @links.each do |link| %>
-          <li>
-            <%= link_to(link[:link]) do %>
-              <i class="<%= link[:icon] %>"></i>
-              <span class="nav-label">
-                <%= link[:label] %>
-              </span>
+        <li>
+          <%= link_to admin_site_workers_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-users') %>
+            <%= content_tag(:span, 'Trabajadores', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('site_workers') %>
+        </li>
 
-              <% if link[:label]=="Preguntas de prod." %>
-                <% question_count = ProdQuestion.where(answered: false).size %>
-                <% if question_count > 0 %>
-                  <span class="label label-danger pull-right"><%= question_count %></span>
-                  <!--<span class="badge" style="background-color: #F44336; color: #FEFEFE;">
-                    <%= question_count %>
-                  </span>-->
-                <% end %>
-              <% end %>
+        <li>
+          <%= link_to admin_distributors_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-street-view') %>
+            <%= content_tag(:span, 'Distribuidores', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('distributors') %>
+        </li>
 
-            <% end %>
-          </li>
-        <% end %>
+        <li>
+          <%= link_to admin_clients_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-users') %>
+            <%= content_tag(:span, 'Clientes', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('clients') %>
+        </li>
+
+        <li>
+          <%= link_to admin_distributor_work_clients_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-male') %>
+            <%= content_tag(:span, 'Clientes sin Distribuidor', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('distributor_work') %>
+        </li>
+
+        <li>
+          <%= link_to admin_warehouses_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-cubes') %>
+            <%= content_tag(:span, 'Almacenes', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('warehouses') %>
+        </li>
+
+        <li>
+          <%= link_to admin_products_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-cube') %>
+            <%= content_tag(:span, 'Productos', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('products') %>
+        </li>
+
+        <li>
+          <%= link_to admin_orders_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-truck') %>
+            <%= content_tag(:span, 'Órdenes', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('orders') %>
+        </li>
+
+        <li>
+          <%= link_to admin_commissions_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-money') %>
+            <%= content_tag(:span, 'Comisiones', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('commissions') %>
+        </li>
+
+        <li>
+          <%= link_to admin_product_questions_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-question-circle') %>
+            <%= content_tag(:span, 'Preguntas de Prod.', class: 'nav-label') %>
+            <% count = ProdQuestion.unanswered.size %>
+            <%= content_tag(:span, count, class: 'label label-danger pull-right') if count > 0 %>
+          <% end if @current_user.has_permission_category?('product_questions') %>
+        </li>
+
+        <li>
+          <%= link_to admin_suggestions_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-comments') %>
+            <%= content_tag(:span, 'Comentarios y Sugerencias', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('comments_and_suggestions') %>
+        </li>
+
+        <li>
+          <%= link_to admin_statistics_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-area-chart') %>
+            <%= content_tag(:span, 'Estadísticas', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('statistics') %>
+        </li>
+
+        <li>
+          <%= link_to admin_web_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-desktop') %>
+            <%= content_tag(:span, 'Contenido del Sitio', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('web') %>
+        </li>
+
+        <li>
+          <%= link_to admin_banks_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-bank') %>
+            <%= content_tag(:span, 'Cuentas Bancarias', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('bank_accounts') %>
+        </li>
+
+        <li>
+          <%= link_to admin_mexico_db_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-map-marker') %>
+            <%= content_tag(:span, 'Entidades de México', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('mexico_db') %>
+        </li>
+
+        <li>
+          <%= link_to admin_tips_path do %>
+            <%= content_tag(:i, nil, class: 'fa fa-book') %>
+            <%= content_tag(:span, 'Consejos y Recetas', class: 'nav-label') %>
+          <% end if @current_user.has_permission_category?('tips_&_recipes') %>
+        </li>
+
         <li style="margin-bottom: 40px;"><%= link_to(log_out_path, method: "delete") do %><i class="fa fa-sign-out"></i> <span class="nav-label">Cerrar Sesión</span><% end %></li>
         <!--End Menu Items-->
       </ul>

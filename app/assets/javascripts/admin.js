@@ -22,6 +22,5 @@
 //= require inspinia
 //= require pace.min
 //= require classie
-//= require shared
 //= require modernizr-2.5.3.min
 //

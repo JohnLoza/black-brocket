@@ -128,68 +128,68 @@ def sample_coffe_names
 end
 
 # Generate arbitraty clients in the database for testing purposes
-# sample_names.each do |name|
-#   username = ('a'..'z').to_a.shuffle[0..7].join
-#   email = username+'@client.com'
-#
-#   client = Client.new({
-#       birthday: '1999-06-12', name: name, city_id: 19597,
-#       username: username,
-#       email: email, email_confirmation: email,
-#       password: 'foobar', password_confirmation: 'foobar',
-#       lastname: sample_last_names.shuffle[0],
-#       mother_lastname: sample_last_names.shuffle[0],
-#       telephone: '33-80-25-63',
-#       cellphone: '33-14-52-12-56',
-#       street: sample_street_names.shuffle[0],
-#       col: sample_colony_names.shuffle[0],
-#       extnumber: (0..9).to_a.shuffle[0..3].join.to_s,
-#       cp: (0..9).to_a.shuffle[0..3].join.to_s,
-#       street_ref1: sample_street_names.shuffle[0],
-#       street_ref2: sample_street_names.shuffle[0]
-#     })
-#
-#   if client.save
-#     client.update_attribute(:hash_id, generateAlphKey("C", client.id))
-#   else
-#     puts "--- error ---"
-#     client.errors.each do |field, msg|
-#       puts "--- #{field}: #{msg} ---"
-#     end
-#   end
-# end
-#
-# sample_coffe_names.each do |coffe_name|
-#   product = Product.new({
-#       name: coffe_name, show: true, iva: '16', ieps: '8',
-#       price: '350.00', recommended_price: '280.000', lowest_price: '250.00',
-#       presentation: 'Bolsa de 500grs.', hot: true, cold: true
-#     })
-#
-#   if product.save
-#     product.update_attribute(:hash_id, generateAlphKey("P", product.id))
-#
-#     render_file_path = "/shared/products/" + "product_" + product.hash_id + "_description.html.erb"
-#         file_path = "app/views" + render_file_path.sub("/shared/products/", "/shared/products/" + "_")
-#
-#         file = File.open(file_path, "w")
-#         file.puts('Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id gravida libero. Donec imperdiet dui vitae turpis egestas tristique. Maecenas varius, ex quis ultrices rutrum, diam lacus ornare magna, nec molestie mauris nibh vel orci. In convallis nulla nisl, vel aliquam dolor fermentum et. In euismod, velit ut laoreet sodales, ipsum purus ultrices enim, a luctus nulla neque sit amet purus. Curabitur posuere vulputate interdum. Donec lacinia et ligula vitae auctor. Nunc ultrices placerat quam quis auctor. Sed quis dui non felis consectetur dictum ut ut massa. Vivamus velit ipsum, porta at quam eget, fermentum porttitor purus. Duis nec egestas leo, nec sodales lacus. Fusce vulputate mi tempus nisi congue tincidunt. Integer lacus nibh, fermentum porttitor lobortis ut, venenatis in erat. Donec metus dolor, tempus in dolor vitae, mattis interdum lacus. Pellentesque eu finibus felis. Etiam id odio leo.')
-#         file.flush
-#
-#         product.update_attributes(:description_render_path => render_file_path)
-#
-#     render_file_path = "/shared/products/" + "product_" + product.hash_id + "_preparation.html.erb"
-#         file_path = "app/views" + render_file_path.sub("/shared/products/", "/shared/products/" + "_")
-#
-#         file = File.open(file_path, "w")
-#         file.puts('Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id gravida libero. Donec imperdiet dui vitae turpis egestas tristique. Maecenas varius, ex quis ultrices rutrum, diam lacus ornare magna, nec molestie mauris nibh vel orci. In convallis nulla nisl, vel aliquam dolor fermentum et. In euismod, velit ut laoreet sodales, ipsum purus ultrices enim, a luctus nulla neque sit amet purus. Curabitur posuere vulputate interdum. Donec lacinia et ligula vitae auctor. Nunc ultrices placerat quam quis auctor. Sed quis dui non felis consectetur dictum ut ut massa. Vivamus velit ipsum, porta at quam eget, fermentum porttitor purus. Duis nec egestas leo, nec sodales lacus. Fusce vulputate mi tempus nisi congue tincidunt. Integer lacus nibh, fermentum porttitor lobortis ut, venenatis in erat. Donec metus dolor, tempus in dolor vitae, mattis interdum lacus. Pellentesque eu finibus felis. Etiam id odio leo.')
-#         file.flush
-#
-#         product.update_attributes(:preparation_render_path => render_file_path)
-#   else
-#     puts "--- error ---"
-#     product.errors.each do |field, msg|
-#       puts "--- #{field}: #{msg} ---"
-#     end
-#   end
-# end
+sample_names.each do |name|
+  username = ('a'..'z').to_a.shuffle[0..7].join
+  email = username+'@client.com'
+
+  client = Client.new({
+      birthday: '1999-06-12', name: name, city_id: 19597,
+      username: username,
+      email: email, email_confirmation: email,
+      password: 'foobar', password_confirmation: 'foobar',
+      lastname: sample_last_names.shuffle[0],
+      mother_lastname: sample_last_names.shuffle[0],
+      telephone: '33-80-25-63',
+      cellphone: '33-14-52-12-56',
+      street: sample_street_names.shuffle[0],
+      col: sample_colony_names.shuffle[0],
+      extnumber: (0..9).to_a.shuffle[0..3].join.to_s,
+      cp: (0..9).to_a.shuffle[0..3].join.to_s,
+      street_ref1: sample_street_names.shuffle[0],
+      street_ref2: sample_street_names.shuffle[0]
+    })
+
+  if client.save
+    client.update_attribute(:hash_id, generateAlphKey("C", client.id))
+  else
+    puts "--- error ---"
+    client.errors.each do |field, msg|
+      puts "--- #{field}: #{msg} ---"
+    end
+  end
+end
+
+sample_coffe_names.each do |coffe_name|
+  product = Product.new({
+      name: coffe_name, show: true, iva: '16', ieps: '8',
+      price: '350.00', recommended_price: '280.000', lowest_price: '250.00',
+      presentation: 'Bolsa de 500grs.', hot: true, cold: true
+    })
+
+  if product.save
+    product.update_attribute(:hash_id, generateAlphKey("P", product.id))
+
+    render_file_path = "/shared/products/" + "product_" + product.hash_id + "_description.html.erb"
+        file_path = "app/views" + render_file_path.sub("/shared/products/", "/shared/products/" + "_")
+
+        file = File.open(file_path, "w")
+        file.puts('Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id gravida libero. Donec imperdiet dui vitae turpis egestas tristique. Maecenas varius, ex quis ultrices rutrum, diam lacus ornare magna, nec molestie mauris nibh vel orci. In convallis nulla nisl, vel aliquam dolor fermentum et. In euismod, velit ut laoreet sodales, ipsum purus ultrices enim, a luctus nulla neque sit amet purus. Curabitur posuere vulputate interdum. Donec lacinia et ligula vitae auctor. Nunc ultrices placerat quam quis auctor. Sed quis dui non felis consectetur dictum ut ut massa. Vivamus velit ipsum, porta at quam eget, fermentum porttitor purus. Duis nec egestas leo, nec sodales lacus. Fusce vulputate mi tempus nisi congue tincidunt. Integer lacus nibh, fermentum porttitor lobortis ut, venenatis in erat. Donec metus dolor, tempus in dolor vitae, mattis interdum lacus. Pellentesque eu finibus felis. Etiam id odio leo.')
+        file.flush
+
+        product.update_attributes(:description_render_path => render_file_path)
+
+    render_file_path = "/shared/products/" + "product_" + product.hash_id + "_preparation.html.erb"
+        file_path = "app/views" + render_file_path.sub("/shared/products/", "/shared/products/" + "_")
+
+        file = File.open(file_path, "w")
+        file.puts('Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id gravida libero. Donec imperdiet dui vitae turpis egestas tristique. Maecenas varius, ex quis ultrices rutrum, diam lacus ornare magna, nec molestie mauris nibh vel orci. In convallis nulla nisl, vel aliquam dolor fermentum et. In euismod, velit ut laoreet sodales, ipsum purus ultrices enim, a luctus nulla neque sit amet purus. Curabitur posuere vulputate interdum. Donec lacinia et ligula vitae auctor. Nunc ultrices placerat quam quis auctor. Sed quis dui non felis consectetur dictum ut ut massa. Vivamus velit ipsum, porta at quam eget, fermentum porttitor purus. Duis nec egestas leo, nec sodales lacus. Fusce vulputate mi tempus nisi congue tincidunt. Integer lacus nibh, fermentum porttitor lobortis ut, venenatis in erat. Donec metus dolor, tempus in dolor vitae, mattis interdum lacus. Pellentesque eu finibus felis. Etiam id odio leo.')
+        file.flush
+
+        product.update_attributes(:preparation_render_path => render_file_path)
+  else
+    puts "--- cant save product, error(s): ---"
+    product.errors.each do |field, msg|
+      puts "--- #{field}: #{msg} ---"
+    end
+  end
+end

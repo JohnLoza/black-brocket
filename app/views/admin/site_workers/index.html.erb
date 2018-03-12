@@ -13,7 +13,7 @@
   	           <p>Aquí puedes realizar diversas acciones como dar de alta un trabajador, modificar, eliminarlo o simplemente ver su información!!!</p>
                <p>En la búsqueda, separa los parámetros con "," ejemplo: Guadalajara, Querétaro, T0009 </p>
 
-  	           <%= form_for(:site_worker, url: admin_workers_path, method: :get) do |f| %>
+  	           <%= form_for(:site_worker, url: admin_site_workers_path, method: :get) do |f| %>
       				   <div class="input-group">
                    
                    <% if params[:site_worker] %>
@@ -32,7 +32,7 @@
              <% if @actions["CREATE"] %>
                <div class="col-sm-3 text-center">
                   <h4>Registrar Nuevo</h4>
-    	            <%= link_to "<i class='fa fa-user-plus med-icon'></i>".html_safe, new_admin_worker_path %>
+    	            <%= link_to "<i class='fa fa-user-plus med-icon'></i>".html_safe, new_admin_site_worker_path %>
     	         </div>
              <% end %>
   	       </div>

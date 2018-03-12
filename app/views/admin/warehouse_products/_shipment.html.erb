@@ -20,7 +20,7 @@
     </tr>
     <tr>
       <td><b>Jefe de almacén que autorizó el envío:</b></td>
-      <td><%= link_to s.Chief.name, admin_worker_path(s.Chief.hash_id) %></td>
+      <td><%= link_to s.Chief.name, admin_site_worker_path(s.Chief.hash_id) %></td>
     </tr>
     <% if !s.origin_warehouse_id.nil? %>
       <tr><td><strong>almacén que traspasó: </strong></td>
@@ -41,7 +41,7 @@
     <% if s.got_safe_to_destination or s.got_safe_to_destination == false %>
       <tr>
         <td><b>Trabajador que recibió el envío:</b></td>
-        <td><%= link_to s.Worker.name, admin_worker_path(s.Worker.hash_id) %></td>
+        <td><%= link_to s.Worker.name, admin_site_worker_path(s.Worker.hash_id) %></td>
       </tr>
     <% end %>
   </table>

@@ -14,7 +14,7 @@ class AdminController < ApplicationController
 
   def deny_access!
     respond_to do |format|
-      format.html { redirect_to root_path, flash: {info: t(:access_denied)} }
+      format.html { redirect_to admin_welcome_path, flash: {info: 'Acceso denegado, no tienes permiso para acceder a esta página'} }
       format.any { head :not_found }
     end
   end

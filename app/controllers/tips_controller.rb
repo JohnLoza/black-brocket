@@ -11,7 +11,7 @@ class TipsController < ApplicationController
     @tip_id = params[:id]
     @comment = TipRecipeComment.new(
               tip_recipe_id: @tip_id,
-              client_id: current_user.id,
+              client_id: @current_user.id,
               description: params[:tip_recipe_comment][:description])
 
     @comment.save

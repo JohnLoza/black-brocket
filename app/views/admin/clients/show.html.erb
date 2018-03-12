@@ -29,7 +29,7 @@
                     <% else %>
 
                       <% worker = @client.Worker %>
-                      <h4>Trabajador: <%= link_to worker.email, admin_worker_path(worker.hash_id) %></h4>
+                      <h4>Trabajador: <%= link_to worker.email, admin_site_worker_path(worker.hash_id) %></h4>
 
                     <% end %>
 

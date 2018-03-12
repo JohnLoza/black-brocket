@@ -7,19 +7,19 @@ class Api::WorkersApi::OrdersController < ApplicationController
       return
     end
 
-    current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    authorization_result = current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
+    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
     if !authorization_result.any?
       render :status => 200,
              :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
     end
 
-    orders_count = Order.where(state: "PAYMENT_ACCEPTED", warehouse_id: current_user.warehouse_id).size
+    orders_count = Order.where(state: "PAYMENT_ACCEPTED", warehouse_id: @current_user.warehouse_id).size
 
     render :status => 200,
            :json => { :success => true, :info => "DATA_RETURNED", :data => orders_count }
@@ -31,19 +31,19 @@ class Api::WorkersApi::OrdersController < ApplicationController
       return
     end
 
-    current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    authorization_result = current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
+    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
     if !authorization_result.any?
       render :status => 200,
              :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
     end
 
-    orders = Order.where(state: "PAYMENT_ACCEPTED", warehouse_id: current_user.warehouse_id)
+    orders = Order.where(state: "PAYMENT_ACCEPTED", warehouse_id: @current_user.warehouse_id)
               .order(created_at: :asc).paginate(page: params[:page], per_page: 25)
 
     data = Array.new
@@ -61,13 +61,13 @@ class Api::WorkersApi::OrdersController < ApplicationController
       return
     end
 
-    current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    authorization_result = current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
+    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
     if !authorization_result.any?
       render :status => 200,
              :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
@@ -111,19 +111,19 @@ class Api::WorkersApi::OrdersController < ApplicationController
       return
     end
 
-    current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    authorization_result = current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
+    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
     if !authorization_result.any?
       render :status => 200,
              :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
     end
 
-    orders = Order.where(state: "BATCHES_CAPTURED", warehouse_id: current_user.warehouse_id).order(created_at: :asc).paginate(page: params[:page], per_page: 25)
+    orders = Order.where(state: "BATCHES_CAPTURED", warehouse_id: @current_user.warehouse_id).order(created_at: :asc).paginate(page: params[:page], per_page: 25)
     data = Array.new
     orders.each do |order|
       data << {folio: order.hash_id, date: order.created_at, client: order.client_id, distributor: order.distributor_id}
@@ -139,13 +139,13 @@ class Api::WorkersApi::OrdersController < ApplicationController
       return
     end
 
-    current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    authorization_result = current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
+    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
     if !authorization_result.any?
       render :status => 200,
              :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
@@ -241,7 +241,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
     end # if @order #
 
     if success
-      OrderAction.create(order_id: @order.id, worker_id: current_user.id, description: "Capturó lotes y cantidades")
+      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
       render :status => 200,
              :json => { :success => true, :info => "BATCHES_CAPTURED" }
       return

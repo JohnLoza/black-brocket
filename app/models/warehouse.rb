@@ -1,4 +1,8 @@
 class Warehouse < ApplicationRecord
+  include HashId
+  include Searchable
+  include SoftDeletable
+
   belongs_to :City, :foreign_key => :city_id
   has_many :Regions, :class_name => 'State', :foreign_key => :warehouse_id
   has_many :Products, :class_name => 'WarehouseProduct', :foreign_key => :warehouse_id
@@ -11,23 +15,29 @@ class Warehouse < ApplicationRecord
   validates :city_id, :name, :address, :telephone, presence: true
   validates :city_id, numericality: { only_integer: true }
 
+  scope :recent, -> { order(created_at: :desc) }
+  scope :order_by_name, -> (way = nil) {
+    way = :asc unless way.present?
+    order(name: way)
+  }
+
   # When have search params
-  def self.search(search, params_page)
-    page = params_page
-    page = 1 if !page
-
-    if search.at(",") == ","
-      search=search.gsub(/\s+/, "")
-      search=search.gsub(',','|')
-      operator = "REGEXP"
-    else
-      search = "%"+search+"%"
-      operator = "LIKE"
-    end
-
-    where("(name #{operator} :search or hash_id #{operator} :search) and deleted=false", search: search)
-        .order(created_at: :DESC).paginate(:page =>  page, :per_page => 20)
-  end
+  # def self.search(search, params_page)
+  #   page = params_page
+  #   page = 1 if !page
+  #
+  #   if search.at(",") == ","
+  #     search=search.gsub(/\s+/, "")
+  #     search=search.gsub(',','|')
+  #     operator = "REGEXP"
+  #   else
+  #     search = "%"+search+"%"
+  #     operator = "LIKE"
+  #   end
+  #
+  #   where("(name #{operator} :search or hash_id #{operator} :search) and deleted=false", search: search)
+  #       .order(created_at: :DESC).paginate(:page =>  page, :per_page => 20)
+  # end
 
   def self.find_active_ones(params_page)
     page = params_page

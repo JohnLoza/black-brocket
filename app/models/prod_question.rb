@@ -7,4 +7,7 @@ class ProdQuestion < ApplicationRecord
   validates :product_id, :client_id, presence: true,
                                    numericality: { only_integer: true }
   validates :description, presence: true
+
+  scope :unanswered, -> { where(answered: false) }
+  scope :answered,   -> { where(answered: true) }
 end

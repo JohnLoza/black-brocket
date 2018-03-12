@@ -5,13 +5,13 @@ class Api::FiscalDataController < ApplicationController
       return
     end
 
-    current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    fiscal_data = current_user.FiscalData
+    fiscal_data = @current_user.FiscalData
 
     if !fiscal_data.blank?
       render :status => 200,
@@ -29,15 +29,15 @@ class Api::FiscalDataController < ApplicationController
       return
     end
 
-    current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
     @fiscal_data = FiscalData.new(fiscal_params)
     @fiscal_data.city_id = params[:city_id]
-    @fiscal_data.client_id = current_user.id
+    @fiscal_data.client_id = @current_user.id
     @fiscal_data.hash_id = random_hash_id(12).upcase
 
     if @fiscal_data.save
@@ -55,13 +55,13 @@ class Api::FiscalDataController < ApplicationController
       return
     end
 
-    current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    @fiscal_data = current_user.FiscalData
+    @fiscal_data = @current_user.FiscalData
     @fiscal_data.city_id = params[:city_id]
     @fiscal_data.lastname = params[:fiscal_data][:lastname]==""
     @fiscal_data.mother_lastname = params[:fiscal_data][:mother_lastname]==""

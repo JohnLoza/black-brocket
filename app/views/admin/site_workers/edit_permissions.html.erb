@@ -1,5 +1,5 @@
 <% provide(:title, "Trabajadores") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del trabajador", labels: ['Trabajadores', 'Perfil del trabajador'], links: [admin_workers_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del trabajador", labels: ['Trabajadores', 'Perfil del trabajador'], links: [admin_site_workers_path]} %>
 
 <div class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
@@ -56,7 +56,7 @@
 
           <div class="ibox-content">
           <%= form_for(:permission,
-              url: admin_update_worker_permissions_path(@worker.hash_id),
+              url: update_permissions_admin_site_worker_path(@worker.hash_id),
               method: :put, :class => "form") do |f| %>
 
             <div id="workers-permissions">

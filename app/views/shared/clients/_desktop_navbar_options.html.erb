@@ -1,13 +1,13 @@
 <li><%= link_to "Tips y Recetas", tips_path, class: 'no-mobile' %></li>
 <li><%= link_to "Distribuidor", client_my_distributor_path, class: 'no-mobile' %></li>
-<li><%= link_to "Órdenes", client_orders_path(current_user.hash_id), class: 'no-mobile' %></li>
+<li><%= link_to "Órdenes", client_orders_path(@current_user.hash_id), class: 'no-mobile' %></li>
 <li><%= link_to "Productos", products_path, class: 'no-mobile' %></li>
 
 <!--Start Dropdown notifications-->
 <li style="padding-bottom: 2px;", class='no-mobile' >
    <a class="count-info" data-toggle="dropdown" href="off_canvas_menu.html#">
      <i class="icon-bell" style="font-size: 16px;"></i>
-     <% notifications_not_seen_count = current_user.Notifications.where(:seen => false).size %>
+     <% notifications_not_seen_count = @current_user.Notifications.where(:seen => false).size %>
      <% if notifications_not_seen_count > 0 %>
        <span class="badge" style="background-color: #F44336;position: absolute;top: 10px;left: 28px;">
          <%= notifications_not_seen_count %>
@@ -31,7 +31,7 @@
       <% end %>
       <li class="divider" style="margin: 0px;"></li>
       <li>
-        <%= link_to client_notifications_path(current_user.hash_id), class: 'no-mobile' do %>
+        <%= link_to client_notifications_path(@current_user.hash_id), class: 'no-mobile' do %>
           <strong>Ver todas ></strong>
         <% end %>
       </li>
@@ -42,24 +42,24 @@
 <!--Start Dropdown profile-->
 <li class="dropdown no-mobile">
   <a href="#" class="less_padding" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top: 14px !important;padding-bottom: 12px !important;">
-    <%= image_tag User.getImage(current_user, :mini),
+    <%= image_tag User.getImage(@current_user, :mini),
         style: "margin-right: 5px;width: 25px;border-radius: 4px;" %>
-    <%= current_user.username %>
+    <%= @current_user.username %>
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu dropdown-alerts dropdown-version2" style="margin-top: 1px;text-shadow: none;">
-    <li><%= link_to "Editar perfil", edit_client_client_path(current_user.hash_id) %></li>
-    <li><%= link_to "Editar información fiscal", edit_client_fiscal_datum_path(current_user.hash_id) %></li>
+    <li><%= link_to "Editar perfil", edit_client_client_path(@current_user.hash_id) %></li>
+    <li><%= link_to "Editar información fiscal", edit_client_fiscal_datum_path(@current_user.hash_id) %></li>
     <li role="separator" class="divider" style="margin: 0px;"></li>
     <li><%= link_to "Cerrar sesión", log_out_path, method: "delete" %></li>
     <li role="separator" class="divider" style="margin: 0px;"></li>
-    <li><%= link_to "Dar de baja mi cuenta", client_destroy_account_path(current_user.hash_id) %></li>
+    <li><%= link_to "Dar de baja mi cuenta", client_destroy_account_path(@current_user.hash_id) %></li>
   </ul>
 </li>
 <!--End Dropdown profile-->
 <!--Ecart-->
 <li>
-  <%= link_to client_ecart_path(current_user.hash_id),
+  <%= link_to client_ecart_path(@current_user.hash_id),
       style: "padding-top: 11px; padding-bottom: 10px;", class: 'no-mobile' do %>
       <i class="icon-basket-loaded" style="font-size: 20px;"></i>
       <span class="yes-mobile"> Carrito </span>

@@ -1,53 +1,21 @@
-class Admin::WorkersController < AdminController
+class Admin::SiteWorkersController < AdminController
   before_action :logged_in?
   before_action :current_user_is_a_worker?
   layout "admin_layout.html.erb"
 
-  @@category = "WORKERS"
-
   # In these action we show a list of workers and the respective actions,
-  # depending on the permissions the current_user has or if it's the admin
+  # depending on the permissions the @current_user has or if it's the admin
   def index
-    authorization_result = current_user.is_authorized?(@@category, nil)
-    return if !process_authorization_result(authorization_result)
+    deny_access! unless @current_user.has_permission_category?('site_workers')
 
-    if search_params
-      @workers = SiteWorker.search(search_params, params[:page], current_user.id)
-    else
-      if current_user.is_admin
-        @workers = SiteWorker.getWorkers(params[:page], current_user.id)
-      else
-        @workers = SiteWorker.getWorkers(params[:page], current_user.id, current_user.warehouse_id)
-      end # if current_user.is_admin end #
-    end # if search_params end #
-
-    # determine the actions the user can do, so we can display them in screen #
-    @actions = {"SHOW"=>false,"CREATE"=>false,"DELETE"=>false,"UPDATE"=>false,"UPDATE_PERMISSIONS"=>false}
-    if !current_user.is_admin
-      @user_permissions.each do |p|
-        # see if the permission category is equal to the one we need in these controller #
-        if p.category == @@category
-          case p.name
-          when "SHOW"
-            @actions[p.name]=true
-          when "CREATE"
-            @actions[p.name]=true
-          when "DELETE"
-            @actions[p.name]=true
-          when "UPDATE_PERSONAL_INFORMATION", "UPDATE_WAREHOUSE"
-            @actions["UPDATE"]=true
-          when "UPDATE_PERMISSIONS"
-            @actions[p.name]=true
-          end # case p.name end #
-        end # if p.category == @@category #
-      end # @user_permissions.each end #
-    else
-      @actions = {"SHOW"=>true,"CREATE"=>true,"DELETE"=>true,"UPDATE"=>true,"UPDATE_PERMISSIONS"=>true}
-    end # if !current_user.is_admin end #
+    @workers =
+      SiteWorker.non_admin.not(@current_user.id).active.order_by_name
+        .search(key_words: search_params, joins: {City: :State}, fields: fields_to_search)
+        .paginate(page: params[:page], per_page: 20).includes(City: :State)
   end # def index end #
 
   def new
-    authorization_result = current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     _new()
@@ -57,18 +25,15 @@ class Admin::WorkersController < AdminController
   end # def new end #
 
   def create
-    authorization_result = current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     @worker = SiteWorker.new(worker_params)
     @worker.city_id = params[:city_id]
 
-    @worker.name.strip!
-    @worker.is_admin = false
-
     if @worker.save
       @worker.update_attribute(:hash_id, generateAlphKey("T", @worker.id))
-      redirect_to controller: "admin/workers"
+      redirect_to admin_site_workers_path
     else
       _new()
 
@@ -83,34 +48,34 @@ class Admin::WorkersController < AdminController
   end # def create end #
 
   def show
-    authorization_result = current_user.is_authorized?(@@category, "SHOW")
+    authorization_result = @current_user.is_authorized?(@@category, "SHOW")
     return if !process_authorization_result(authorization_result)
 
     @worker = SiteWorker.find_by(hash_id: params[:id])
 
-    if !current_user.is_admin
+    if !@current_user.is_admin
 
-      if @worker.deleted or @worker.is_admin or @worker.warehouse_id != current_user.warehouse_id
+      if @worker.deleted or @worker.is_admin or @worker.warehouse_id != @current_user.warehouse_id
         flash[:info] = "No se encontró el trabajador con clave: #{params[:id]}"
-        redirect_to admin_workers_path
+        redirect_to admin_site_workers_path
         return
       end
 
-    end # if !current_user.is_admin #
+    end # if !@current_user.is_admin #
 
     @worker_city = @worker.City
   end # def show end #
 
   def edit
-    authorization_result = current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_INFORMATION", "UPDATE_WAREHOUSE"])
+    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_INFORMATION", "UPDATE_WAREHOUSE"])
     return if !process_authorization_result(authorization_result)
 
     _edit()
 
     @worker = SiteWorker.find_by(hash_id: params[:id])
-    if @worker.nil? or (@worker.is_admin and @worker.id != current_user.id)
+    if @worker.nil? or (@worker.is_admin and @worker.id != @current_user.id)
       flash[:info] = "No se encontró el trabajador con clave: #{params[:id]}"
-      redirect_to admin_workers_path
+      redirect_to admin_site_workers_path
       return
     end
 
@@ -123,7 +88,7 @@ class Admin::WorkersController < AdminController
   end # def edit end #
 
   def update
-    authorization_result = current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_INFORMATION", "UPDATE_WAREHOUSE"])
+    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_PERSONAL_INFORMATION", "UPDATE_WAREHOUSE"])
     return if !process_authorization_result(authorization_result)
 
     @worker = SiteWorker.find_by(hash_id: params[:id])
@@ -146,7 +111,7 @@ class Admin::WorkersController < AdminController
   end # def update end #
 
   def destroy
-    authorization_result = current_user.is_authorized?(@@category, "DELETE")
+    authorization_result = @current_user.is_authorized?(@@category, "DELETE")
     return if !process_authorization_result(authorization_result)
 
     @worker = SiteWorker.find_by(hash_id: params[:id])
@@ -159,25 +124,25 @@ class Admin::WorkersController < AdminController
   end # def destroy end #
 
   def edit_permissions
-    authorization_result = current_user.is_authorized?(@@category, "UPDATE_PERMISSIONS")
+    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PERMISSIONS")
     return if !process_authorization_result(authorization_result)
 
     @worker = SiteWorker.find_by(hash_id: params[:id])
     if @worker.nil? or @worker.is_admin
       flash[:info] = "No se encontró el trabajador con clave: #{params[:id]}"
-      redirect_to admin_workers_path
+      redirect_to admin_site_workers_path
       return
     end
 
-    if !current_user.is_admin
+    if !@current_user.is_admin
 
-      if @worker.deleted or @worker.is_admin or @worker.warehouse_id != current_user.warehouse_id
+      if @worker.deleted or @worker.is_admin or @worker.warehouse_id != @current_user.warehouse_id
         flash[:info] = "No se encontró el trabajador con clave: #{params[:id]}"
-        redirect_to admin_workers_path
+        redirect_to admin_site_workers_path
         return
       end
 
-    end # if !current_user.is_admin #
+    end # if !@current_user.is_admin #
 
     @worker_city = @worker.City
     @user_permissions = @worker.Permissions
@@ -186,49 +151,27 @@ class Admin::WorkersController < AdminController
   end # def edit_permissions end #
 
   def update_permissions
-    authorization_result = current_user.is_authorized?(@@category, "UPDATE_PERMISSIONS")
+    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PERMISSIONS")
     return if !process_authorization_result(authorization_result)
 
-    saved = false
-    worker = SiteWorker.find_by(hash_id: params[:id])
-    if worker.nil?
-      flash[:info] = "No se encontró el trabajador con clave: #{params[:id]}"
-      redirect_to admin_workers_path
-      return
-    end
+    worker = SiteWorker.find_by!(hash_id: params[:id])
 
     ActiveRecord::Base.transaction do
-      Permission.where(:worker_id => worker.id).delete_all
-
-      query = "INSERT INTO permissions (worker_id, category, name) VALUES "
-      array = Array.new
-
-      params[:permission].each do |p|
-        if p[1] == "1"
-          category = p[0].split("-")[0].upcase
-          permission_name = p[0].split("-")[1].upcase
-
-          # put in an array the values that are going to be inserted on the db #
-          array << "(#{worker.id},'#{category}','#{permission_name}')"
-        end
-      end # params[:permission].each do #
-
-      array_size = array.size
-      indx = 1
-      # finish up building the sql query #
-      array.each do |element|
-        query += element
-        query += "," if indx < array_size
-        indx += 1
+      worker.Permissions.destroy_all
+      params[:permission].keys.each do |key|
+        next unless params[:permission][key] == "1"
+        category = key.split("-")[0].upcase
+        permission_name = key.split("-")[1].upcase
+        worker.Permissions << Permission.new(category: category, name: permission_name)
       end
-      # Execute the query only if there were permissions to be added #
-      ActiveRecord::Base.connection.execute(query) if array_size > 0
-      saved = true
     end
 
-    flash[:success] = "Permisos guardados" if saved
-    flash[:danger] = "Ocurrió un error inesperado" if !saved
-    redirect_to admin_workers_path
+    if worker.save
+      flash[:success] = "Permisos guardados"
+    else
+      flash[:danger] = "Ocurrió un error inesperado"
+    end
+    redirect_to admin_site_workers_path
   end # def update_permissions end #
 
   private
@@ -246,17 +189,22 @@ class Admin::WorkersController < AdminController
                             :invoices, :verify_delivery, :web)
     end
 
+    def fields_to_search
+      return ['cities.name','states.name','site_workers.name',
+        'site_workers.lastname','site_workers.mother_lastname',
+        'site_workers.hash_id']
+    end
+
     def search_params
       params[:site_worker][:search] if params[:site_worker]
     end
 
     def _new
-      @states = State.all.order(:name)
-      @warehouses = Warehouse.where(deleted: false).order(:name)
-      @url = admin_workers_path
+      @states = State.all.order_by_name
+      @warehouses = Warehouse.active
 
       @actions = {"CREATE"=>false}
-      if !current_user.is_admin
+      if !@current_user.is_admin
         @user_permissions.each do |p|
           # see if the permission category is equal to the one we need in these controller #
           if p.category == @@category and p.name == "CREATE"
@@ -266,17 +214,16 @@ class Admin::WorkersController < AdminController
         end # @user_permissions.each end #
       else
         @actions = {"CREATE"=>true}
-      end # if !current_user.is_admin end #
+      end # if !@current_user.is_admin end #
     end
 
     def _edit
-      @url = admin_worker_path(params[:id])
-      @warehouses = Warehouse.where(deleted: false).order(:name)
+      @warehouses = Warehouse.active.order_by_name
       @states = State.all.order(:name)
 
       # determine the actions the user can do, so we can display them in screen #
       @actions = {"UPDATE_PERSONAL_INFORMATION"=>false, "UPDATE_WAREHOUSE"=>false}
-      if !current_user.is_admin
+      if !@current_user.is_admin
         @user_permissions.each do |p|
           # see if the permission category is equal to the one we need in these controller #
           if p.category == @@category
@@ -287,18 +234,18 @@ class Admin::WorkersController < AdminController
         end # @user_permissions.each end #
       else
         @actions = {"UPDATE_PERSONAL_INFORMATION"=>true, "UPDATE_WAREHOUSE"=>true}
-      end # if !current_user.is_admin end #
+      end # if !@current_user.is_admin end #
     end
 
     def build_up_permission_arrays
       # These are the current permissions available in the system#
       @worker_category = []
-      @worker_category << {category: "workers", name: "show", description: "Ver información de los trabajadores"}
-      @worker_category << {category: "workers", name: "create", description: "Dar de alta trabajador"}
-      @worker_category << {category: "workers", name: "delete", description: "Eliminar (dar de baja un trabajador)"}
-      @worker_category << {category: "workers", name: "update_personal_information", description: "Modificar información personal"}
-      @worker_category << {category: "workers", name: "update_warehouse", description: "Modificar almacén al que está asignado"}
-      @worker_category << {category: "workers", name: "update_permissions", description: "Modificar permisos"}
+      @worker_category << {category: "site_workers", name: "show", description: "Ver información de los trabajadores"}
+      @worker_category << {category: "site_workers", name: "create", description: "Dar de alta trabajador"}
+      @worker_category << {category: "site_workers", name: "delete", description: "Eliminar (dar de baja un trabajador)"}
+      @worker_category << {category: "site_workers", name: "update_personal_information", description: "Modificar información personal"}
+      @worker_category << {category: "site_workers", name: "update_warehouse", description: "Modificar almacén al que está asignado"}
+      @worker_category << {category: "site_workers", name: "update_permissions", description: "Modificar permisos"}
 
       @distributor_category = []
       @distributor_category << {category: "distributor_work", name: "all", description: "Fungir como distribuidor"}

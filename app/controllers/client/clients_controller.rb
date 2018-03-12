@@ -8,21 +8,21 @@ class Client::ClientsController < ApplicationController
       notification.update_attribute(:seen, true)
     end
 
-    @distributor = current_user.City.Distributor
+    @distributor = @current_user.City.Distributor
     @distributor_is_a_worker = false
-    if !@distributor and !current_user.worker_id.blank?
+    if !@distributor and !@current_user.worker_id.blank?
       # see if there is a worker that will attend this client
-      @distributor = current_user.Worker
+      @distributor = @current_user.Worker
       @distributor_is_a_worker = true if @distributor
     end
 
     if @distributor
-      @messages = current_user.DistributorMessages.all.order(:created_at => :desc)
+      @messages = @current_user.DistributorMessages.all.order(:created_at => :desc)
                     .paginate(page: params[:page], :per_page => 25)
       @create_message_url = client_create_distributor_comment_path(@distributor.id)
 
-      @client_image = User.getImage(current_user, :mini)
-      @client_username = current_user.username
+      @client_image = User.getImage(@current_user, :mini)
+      @client_username = @current_user.username
 
       @distributor_image = User.getImage(@distributor, :mini)
       @distributor_username = @distributor.username
@@ -30,7 +30,7 @@ class Client::ClientsController < ApplicationController
   end
 
   def notifications
-    @notifications = current_user.Notifications.order(created_at: :desc)
+    @notifications = @current_user.Notifications.order(created_at: :desc)
                       .limit(50).paginate(page: params[:page], per_page: 15)
   end
 
@@ -39,15 +39,15 @@ class Client::ClientsController < ApplicationController
   end
 
   def destroy_account
-    if !current_user.authenticate(params[:password])
+    if !@current_user.authenticate(params[:password])
       flash[:warning]="Contraseña incorrecta."
-      redirect_to client_destroy_account_path(current_user.hash_id)
+      redirect_to client_destroy_account_path(@current_user.hash_id)
       return
     end
-    current_user.deleted=true
-    current_user.delete_account_hash= random_hash_id(12).upcase
+    @current_user.deleted=true
+    @current_user.delete_account_hash= random_hash_id(12).upcase
 
-    if current_user.save
+    if @current_user.save
       log_out
       session.delete(:e_cart)
     end
@@ -94,18 +94,18 @@ class Client::ClientsController < ApplicationController
   end
 
   def edit
-    @client = current_user
+    @client = @current_user
     client_city = @client.City
     @city_id = client_city.id
     @state_id = client_city.state_id
 
     @states = State.all.order(:name)
     @cities = City.where(state_id: @state_id)
-    @url = client_client_path(current_user.hash_id)
+    @url = client_client_path(@current_user.hash_id)
   end
 
   def update
-    @client = current_user
+    @client = @current_user
     @client.city_id = params[:city_id]
 
     if @client.update_attributes(client_params)
@@ -132,9 +132,9 @@ class Client::ClientsController < ApplicationController
   end
 
   def create_distributor_comment
-    @distributor = current_user.City.Distributor
-    if !@distributor and !current_user.worker_id.blank?
-      @worker = current_user.Worker
+    @distributor = @current_user.City.Distributor
+    if !@distributor and !@current_user.worker_id.blank?
+      @worker = @current_user.Worker
     end
 
     message = ClientDistributorComment.new(message_params)
@@ -142,13 +142,13 @@ class Client::ClientsController < ApplicationController
     if @distributor
       message.distributor_id = @distributor.id
       Notification.create(distributor_id: @distributor.id, icon: "fa fa-comments-o",
-                      description: "El usuario " + current_user.username + " te envió un mensaje",
-                      url: distributor_client_messages_path(current_user.hash_id))
+                      description: "El usuario " + @current_user.username + " te envió un mensaje",
+                      url: distributor_client_messages_path(@current_user.hash_id))
     elsif @worker
       message.worker_id = @worker.id
       Notification.create(worker_id: @worker.id, icon: "fa fa-comments-o",
-                      description: "El usuario " + current_user.username + " te envió un mensaje",
-                      url: admin_distributor_work_client_messages_path(current_user.hash_id))
+                      description: "El usuario " + @current_user.username + " te envió un mensaje",
+                      url: admin_distributor_work_client_messages_path(@current_user.hash_id))
     end
 
     message.save
@@ -172,7 +172,7 @@ class Client::ClientsController < ApplicationController
     end
 
     def message_params
-      {client_id: current_user.id, comment: params[:comment],
+      {client_id: @current_user.id, comment: params[:comment],
       is_from_client: true}
     end
 end

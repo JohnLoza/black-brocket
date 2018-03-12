@@ -41,13 +41,13 @@ class Api::InformationController < ApplicationController
       return
     end
 
-    current_user = Client.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    warehouse = current_user.City.State.Warehouse
+    warehouse = @current_user.City.State.Warehouse
     if warehouse.blank?
       render :status => 200,
              :json => { :success => false, :info => "WAREHOUSE_NOT_FOUND" }

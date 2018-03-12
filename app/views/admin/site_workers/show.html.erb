@@ -1,5 +1,5 @@
 <% provide(:title, "Trabajadores") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del trabajador", labels: ['Trabajadores', 'Perfil del trabajador'], links: [admin_workers_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del trabajador", labels: ['Trabajadores', 'Perfil del trabajador'], links: [admin_site_workers_path]} %>
 
 <div class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
@@ -37,7 +37,7 @@
                           <i class="fa fa-wrench"></i>
                       </a>
                       <ul class="dropdown-menu dropdown-user">
-                          <li><%#= link_to "Editar".html_safe, edit_admin_worker_path(@worker.hash_id) %></li>
+                          <li><%#= link_to "Editar".html_safe, edit_admin_site_worker_path(@worker.hash_id) %></li>
                       </ul-->
                       <a class="close-link">
                           <i class="fa fa-times"></i>

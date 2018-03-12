@@ -6,13 +6,13 @@ class Admin::WarehousesController < ApplicationController
   @@category = "WAREHOUSES"
 
   def index
-    authorization_result = current_user.is_authorized?(@@category, nil)
-    authorization_result2 = current_user.is_authorized?("PARCELS", nil)
-    authorization_result3 = current_user.is_authorized?("WAREHOUSE_PRODUCTS", nil)
-    authorization_result4 = current_user.is_authorized?("WAREHOUSE_MANAGER", nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
+    authorization_result2 = @current_user.is_authorized?("PARCELS", nil)
+    authorization_result3 = @current_user.is_authorized?("WAREHOUSE_PRODUCTS", nil)
+    authorization_result4 = @current_user.is_authorized?("WAREHOUSE_MANAGER", nil)
 
-    if process_authorization_result(authorization_result4, false) and !current_user.is_admin
-      warehouse_key = current_user.Warehouse.hash_id
+    if process_authorization_result(authorization_result4, false) and !@current_user.is_admin
+      warehouse_key = @current_user.Warehouse.hash_id
       redirect_to admin_warehouse_products_path(warehouse_key)
       return
     elsif !process_authorization_result(authorization_result, false) and
@@ -33,7 +33,7 @@ class Admin::WarehousesController < ApplicationController
     @actions = {"SHOW"=>false,"CREATE"=>false,"DELETE"=>false,"UPDATE"=>false,
              "UPDATE_REGIONS"=>false,"WAREHOUSE_PRODUCTS"=>false,"PARCELS"=>false,
              "BATCH_SEARCH"=>false}
-    if !current_user.is_admin
+    if !@current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -60,12 +60,12 @@ class Admin::WarehousesController < ApplicationController
       @actions = {"SHOW"=>true,"CREATE"=>true,"DELETE"=>true,"UPDATE"=>true,
               "UPDATE_REGIONS"=>true,"WAREHOUSE_PRODUCTS"=>true,"PARCELS"=>true,
               "BATCH_SEARCH"=>true}
-    end # if !current_user.is_admin end #
+    end # if !@current_user.is_admin end #
 
   end
 
   def show
-    authorization_result = current_user.is_authorized?(@@category, "SHOW")
+    authorization_result = @current_user.is_authorized?(@@category, "SHOW")
     return if !process_authorization_result(authorization_result)
 
     @warehouse = Warehouse.find_by(hash_id: params[:id])
@@ -79,7 +79,7 @@ class Admin::WarehousesController < ApplicationController
   end
 
   def new
-    authorization_result = current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     _new()
@@ -89,7 +89,7 @@ class Admin::WarehousesController < ApplicationController
   end
 
   def create
-    authorization_result = current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     @warehouse = Warehouse.new(warehouse_params)
@@ -122,7 +122,7 @@ class Admin::WarehousesController < ApplicationController
   end
 
   def edit
-    authorization_result = current_user.is_authorized?(@@category, ["UPDATE_WAREHOUSE_DATA","UPDATE_WHOLESALE","UPDATE_SHIPPING_COST"])
+    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_WAREHOUSE_DATA","UPDATE_WHOLESALE","UPDATE_SHIPPING_COST"])
     return if !process_authorization_result(authorization_result)
 
     _edit()
@@ -135,7 +135,7 @@ class Admin::WarehousesController < ApplicationController
   end
 
   def update
-    authorization_result = current_user.is_authorized?(@@category, ["UPDATE_WAREHOUSE_DATA","UPDATE_WHOLESALE","UPDATE_SHIPPING_COST"])
+    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_WAREHOUSE_DATA","UPDATE_WHOLESALE","UPDATE_SHIPPING_COST"])
     return if !process_authorization_result(authorization_result)
 
     @warehouse = Warehouse.find_by(hash_id: params[:id])
@@ -166,7 +166,7 @@ class Admin::WarehousesController < ApplicationController
   end
 
   def batch_search
-    authorization_result = current_user.is_authorized?("WAREHOUSE_PRODUCTS", "BATCH_SEARCH")
+    authorization_result = @current_user.is_authorized?("WAREHOUSE_PRODUCTS", "BATCH_SEARCH")
     return if !process_authorization_result(authorization_result)
 
     if params[:batch]
@@ -183,7 +183,7 @@ class Admin::WarehousesController < ApplicationController
   end
 
   def inventory
-    authorization_result = current_user.is_authorized?("WAREHOUSE_PRODUCTS", "INVENTORY")
+    authorization_result = @current_user.is_authorized?("WAREHOUSE_PRODUCTS", "INVENTORY")
     return if !process_authorization_result(authorization_result)
 
     @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
@@ -227,7 +227,7 @@ class Admin::WarehousesController < ApplicationController
       @url = admin_warehouses_path
 
       @actions = {"CREATE"=>false}
-      if !current_user.is_admin
+      if !@current_user.is_admin
         @user_permissions.each do |p|
           # see if the permission category is equal to the one we need in these controller #
           if p.category == @@category and p.name == "CREATE"
@@ -237,7 +237,7 @@ class Admin::WarehousesController < ApplicationController
         end # @user_permissions.each end #
       else
         @actions = {"CREATE"=>true}
-      end # if !current_user.is_admin end #
+      end # if !@current_user.is_admin end #
     end
 
     def _edit
@@ -246,7 +246,7 @@ class Admin::WarehousesController < ApplicationController
 
       # determine the actions the user can do, so we can display them in screen #
       @actions = {"UPDATE_WAREHOUSE_DATA"=>false,"UPDATE_WHOLESALE"=>false,"UPDATE_SHIPPING_COST"=>false}
-      if !current_user.is_admin
+      if !@current_user.is_admin
         @user_permissions.each do |p|
           # see if the permission category is equal to the one we need in these controller #
           if p.category == @@category
@@ -257,6 +257,6 @@ class Admin::WarehousesController < ApplicationController
         end # @user_permissions.each end #
       else
         @actions = {"UPDATE_WAREHOUSE_DATA"=>true,"UPDATE_WHOLESALE"=>true,"UPDATE_SHIPPING_COST"=>true}
-      end # if !current_user.is_admin end #
+      end # if !@current_user.is_admin end #
     end
 end

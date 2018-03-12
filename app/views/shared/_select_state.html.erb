@@ -5,9 +5,38 @@
     <%= link_to 'get_cities_link', get_cities_path + "?state=null", :remote => true, id: "get_cities_link", style: "display:none;"%>
     <%= select_tag :state_id, options_from_collection_for_select(
       states, "id", "name", :selected => @state_id), prompt: "Selecciona...",
-      onchange: " update_state_ref(this.value);
-                  $('#get_cities_link').click(); ",
+      onchange: "fetchCities(this.value);",
       :class => "form-control m-b", :required => true %>
     </div>
   </div>
 </div>
+
+
+<script type="text/javascript">
+function fetchCities(state){
+  original_target = "<%= get_cities_path(state_id: '0x0', format: :json) %>";
+  new_target = original_target.replace("0x0", state);
+  $.ajax({
+    url: new_target,
+    context: document.body
+  }).done(function(body) {
+    updateCities(body);
+  });
+}
+
+function updateCities(cities){
+  select = $("#city_id");
+  select.html("");
+
+  select.append(selectOption("", ""));
+  for (var i = 0; i < cities.length; i++) {
+    obj = cities[i];
+    select.append(selectOption(obj.name, obj.id, "LADA=\""+obj.LADA+"\""))
+  }
+}
+
+function selectOption(label, value, attrs = null){
+  option = "<option value=\""+value+"\" "+attrs+" >"+label+"</option>"
+  return option;
+}
+</script>

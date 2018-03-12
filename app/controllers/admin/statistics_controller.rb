@@ -7,7 +7,7 @@ class Admin::StatisticsController < ApplicationController
   @@noProcessableOrders = ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED","ORDER_CANCELED"]
 
   def index
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     if params[:type] and params[:type]=="sales"
@@ -17,7 +17,7 @@ class Admin::StatisticsController < ApplicationController
   end
 
   def sales
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
     # params[:products].sort! { |x,y| x.to_i <=> y.to_i } if params[:products]
 
@@ -48,7 +48,7 @@ class Admin::StatisticsController < ApplicationController
   end
 
   def best_distributors
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     selection = "sum(order_details.quantity) as sum_q, orders.distributor_id as dist_id, distributors.username as dist_username"
@@ -61,7 +61,7 @@ class Admin::StatisticsController < ApplicationController
   end
 
   def best_clients
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     selection = "sum(order_details.quantity) as sum_q, orders.client_id as client_id, clients.username as client_username"

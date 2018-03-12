@@ -10,14 +10,14 @@ class Distributor::OrdersController < ApplicationController
         @client_city = @client.City
         @orders = Order.where(client_id: @client.id).order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 10).includes(City: :State)
 
-        current_user.updateRevision(@client)
+        @current_user.updateRevision(@client)
       else
         flash[:info]="No encontramos a tu cliente."
         redirect_to distributor_clients_path
         return
       end
     else
-      @orders = current_user.Orders.order(updated_at: :desc).limit(150).paginate(:page => params[:page], :per_page => 10).includes(City: :State).includes(:Client)
+      @orders = @current_user.Orders.order(updated_at: :desc).limit(150).paginate(:page => params[:page], :per_page => 10).includes(City: :State).includes(:Client)
     end
   end
 
@@ -38,7 +38,7 @@ class Distributor::OrdersController < ApplicationController
         @state = @city.State
       end
 
-      @client_city = current_user.City
+      @client_city = @current_user.City
       @client_state = State.where(id: @client_city.state_id).take
 
       render :details, layout: false

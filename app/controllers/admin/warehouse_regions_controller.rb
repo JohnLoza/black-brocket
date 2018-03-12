@@ -6,7 +6,7 @@ class Admin::WarehouseRegionsController < ApplicationController
   @@category = "WAREHOUSES"
 
   def index
-    authorization_result = current_user.is_authorized?(@@category, "UPDATE_REGIONS")
+    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_REGIONS")
     return if !process_authorization_result(authorization_result)
 
     @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
@@ -22,7 +22,7 @@ class Admin::WarehouseRegionsController < ApplicationController
   end
 
   def create
-    authorization_result = current_user.is_authorized?(@@category, "UPDATE_REGIONS")
+    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_REGIONS")
     return if !process_authorization_result(authorization_result)
 
     @saved = false
@@ -43,7 +43,7 @@ class Admin::WarehouseRegionsController < ApplicationController
   end
 
   def destroy
-    authorization_result = current_user.is_authorized?(@@category, "UPDATE_REGIONS")
+    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_REGIONS")
     return if !process_authorization_result(authorization_result)
 
     @deleted = false

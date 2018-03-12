@@ -6,14 +6,14 @@ class Admin::MexicoDbController < ApplicationController
   @@category = "MEXICO_DB"
 
   def index
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @states = State.all.order(name: :ASC)
 
     # determine the actions the user can do, so we can display them in screen #
     @actions = {"CREATE"=>false,"UPDATE"=>false,"UPDATE_STATE_LADA"=>false}
-    if !current_user.is_admin
+    if !@current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -29,11 +29,11 @@ class Admin::MexicoDbController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"CREATE"=>true,"UPDATE"=>true,"UPDATE_STATE_LADA"=>true}
-    end # if !current_user.is_admin end #
+    end # if !@current_user.is_admin end #
   end
 
   def state
-    authorization_result = current_user.is_authorized?(@@category, ["CREATE", "UPDATE_CITY_NAME", "UPDATE_CITY_LADA"])
+    authorization_result = @current_user.is_authorized?(@@category, ["CREATE", "UPDATE_CITY_NAME", "UPDATE_CITY_LADA"])
     return if !process_authorization_result(authorization_result)
 
     @state = State.find_by(id: params[:id])
@@ -51,7 +51,7 @@ class Admin::MexicoDbController < ApplicationController
 
     # determine the actions the user can do, so we can display them in screen #
     @actions = {"CREATE"=>false,"UPDATE_CITY_NAME"=>false,"UPDATE_CITY_LADA"=>false}
-    if !current_user.is_admin
+    if !@current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -62,11 +62,11 @@ class Admin::MexicoDbController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"CREATE"=>true,"UPDATE_CITY_NAME"=>true,"UPDATE_CITY_LADA"=>true}
-    end # if !current_user.is_admin end #
+    end # if !@current_user.is_admin end #
   end
 
   def update_state_lada
-    authorization_result = current_user.is_authorized?(@@category, "UPDATE_STATE_LADA")
+    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_STATE_LADA")
     return if !process_authorization_result(authorization_result)
 
     @state = State.find(params[:id]) if params[:id].to_i > 0
@@ -81,7 +81,7 @@ class Admin::MexicoDbController < ApplicationController
   end
 
   def update_city
-    authorization_result = current_user.is_authorized?(@@category, ["UPDATE_CITY_NAME", "UPDATE_CITY_LADA"])
+    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_CITY_NAME", "UPDATE_CITY_LADA"])
     return if !process_authorization_result(authorization_result)
 
     @city = City.find(params[:id])
@@ -97,7 +97,7 @@ class Admin::MexicoDbController < ApplicationController
   end
 
   def create_city
-    authorization_result = current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     city = City.create({lada: params[:new_city][:lada], name: params[:new_city][:name], state_id: params[:new_city][:state_id]})

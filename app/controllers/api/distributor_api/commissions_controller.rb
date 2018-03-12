@@ -5,13 +5,13 @@ class Api::DistributorApi::CommissionsController < ApplicationController
       return
     end
 
-    current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    commissions = current_user.Commissions.order(created_at: :desc)
+    commissions = @current_user.Commissions.order(created_at: :desc)
                     .limit(100).paginate(page: params[:page], per_page: 25)
     data = Array.new
     data<<{per_page: 25}
@@ -31,13 +31,13 @@ class Api::DistributorApi::CommissionsController < ApplicationController
       return
     end
 
-    current_user = Distributor.find_by(authentication_token: params[:authentication_token])
-    if current_user.blank?
+    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    commission = current_user.Commissions.find_by(hash_id: params[:id])
+    commission = @current_user.Commissions.find_by(hash_id: params[:id])
     if commission.blank?
       render :status => 200,
              :json => { :success => false, :info => "COMMISSION_NOT_FOUND" }

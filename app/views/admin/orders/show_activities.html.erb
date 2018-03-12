@@ -16,7 +16,7 @@
           <% @actions.each do |action| %>
             <tr>
               <% worker = action.Worker %>
-              <td><%= link_to worker.username, admin_worker_path(worker.hash_id), target: "_blank" %></td>
+              <td><%= link_to worker.username, admin_site_worker_path(worker.hash_id), target: "_blank" %></td>
               <td colspan="2"><%=action.description%></td>
               <td><%= l(action.created_at, format: :long) %></td>
             </tr>

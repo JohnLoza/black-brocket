@@ -13,6 +13,5 @@
 //
 //= require jquery-2.1.1
 //= require bootstrap.min
-//= require shared
 //= require classie
 //

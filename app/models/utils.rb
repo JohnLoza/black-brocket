@@ -23,15 +23,15 @@ class Utils
       return token
     end
 
-    def self.format_search_keywords(keywords)
-      if keywords.at(SEPARATOR).present?
+    def self.format_search_key_words(key_words)
+      if key_words.at(SEPARATOR).present?
 
-        keywords = keywords.split(SEPARATOR)
-        keywords.each{ |keyword| keyword.strip! }
-        keywords = keywords.join(REGEXP_SPLITTER)
+        key_words = key_words.split(SEPARATOR)
+        key_words.each{ |keyword| keyword.strip! }
+        key_words = key_words.join(REGEXP_SPLITTER)
 
       else
-        keywords = "%#{keywords.strip}%"
+        key_words = "%#{key_words.strip}%"
       end
     end
 

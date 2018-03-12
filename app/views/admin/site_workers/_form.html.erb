@@ -11,7 +11,7 @@
               </div>
           </div>
           <div class="ibox-content">
-            <%= form_for @worker, url: @url, :html => {:id => "worker_form", :class => 'form-horizontal'} do |f| %>
+            <%= form_for [:admin, @worker], :html => {:id => "worker_form", :class => 'form-horizontal'} do |f| %>
               <%= render :partial=>'/shared/error_messages', locals:{entity: @worker} %>
 
               <% if @actions["UPDATE_PERSONAL_INFORMATION"] %>

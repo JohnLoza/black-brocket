@@ -11,7 +11,7 @@ class Admin::CommissionsController < ApplicationController
   # PAID_&_INVOICE #
 
   def index
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     if params[:distributor]
@@ -33,7 +33,7 @@ class Admin::CommissionsController < ApplicationController
   end
 
   def create
-    authorization_result = current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     @distributor = Distributor.find_by(hash_id: params[:distributor])
@@ -62,7 +62,7 @@ class Admin::CommissionsController < ApplicationController
       commission = Commission.new()
       commission.hash_id = random_hash_id(12).upcase
       commission.distributor_id = @distributor.id
-      commission.worker_id = current_user.id
+      commission.worker_id = @current_user.id
       commission.state = "WAITING_FOR_PAYMENT"
       commission.total = total
       commission.save
@@ -80,7 +80,7 @@ class Admin::CommissionsController < ApplicationController
   end
 
   def details
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     commission = Commission.find_by(hash_id: params[:id])
@@ -96,7 +96,7 @@ class Admin::CommissionsController < ApplicationController
   end
 
   def upload_payment
-    authorization_result = current_user.is_authorized?(@@category, "PAY")
+    authorization_result = @current_user.is_authorized?(@@category, "PAY")
     return if !process_authorization_result(authorization_result)
 
     commission = Commission.find_by(hash_id: params[:id])
@@ -121,7 +121,7 @@ class Admin::CommissionsController < ApplicationController
   end
 
   def download_invoice
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     commission = Commission.find_by(hash_id: params[:id])

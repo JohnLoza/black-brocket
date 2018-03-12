@@ -6,7 +6,7 @@ class Admin::ProductQuestionsController < ApplicationController
   @@category = "PRODUCT_QUESTIONS"
 
   def index
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @questions = ProdQuestion.where(answered: false).order(created_at: :DESC)
@@ -14,7 +14,7 @@ class Admin::ProductQuestionsController < ApplicationController
   end
 
   def answered
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @questions = ProdQuestion.where(answered: true).order(updated_at: :DESC)
@@ -22,10 +22,10 @@ class Admin::ProductQuestionsController < ApplicationController
   end
 
   def create
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @answer = ProdAnswer.new(site_worker_id: current_user.id,
+    @answer = ProdAnswer.new(site_worker_id: @current_user.id,
                              description: params[:prod_answer][:description])
 
     @question = ProdQuestion.find_by(hash_id: params[:prod_answer][:question_id])

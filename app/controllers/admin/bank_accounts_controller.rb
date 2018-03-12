@@ -6,7 +6,7 @@ class Admin::BankAccountsController < ApplicationController
   @@category = "BANK_ACCOUNTS"
 
   def index
-    authorization_result = current_user.is_authorized?(@@category, nil)
+    authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
     @bank = Bank.find_by(id: params[:bank_id])
@@ -20,7 +20,7 @@ class Admin::BankAccountsController < ApplicationController
 
     # determine the actions the user can do, so we can display them in screen #
     @actions = {"SHOW"=>false,"CREATE"=>false,"DELETE"=>false,"UPDATE"=>false}
-    if !current_user.is_admin
+    if !@current_user.is_admin
       @user_permissions.each do |p|
         # see if the permission category is equal to the one we need in these controller #
         if p.category == @@category
@@ -29,11 +29,11 @@ class Admin::BankAccountsController < ApplicationController
       end # @user_permissions.each end #
     else
       @actions = {"SHOW"=>true,"CREATE"=>true,"DELETE"=>true,"UPDATE"=>true}
-    end # if !current_user.is_admin end #
+    end # if !@current_user.is_admin end #
   end # def index #
 
   def new
-    authorization_result = current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     @bank = Bank.find_by(id: params[:bank_id])
@@ -48,7 +48,7 @@ class Admin::BankAccountsController < ApplicationController
   end # def new #
 
   def create
-    authorization_result = current_user.is_authorized?(@@category, "CREATE")
+    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
     @bank = Bank.find_by(id: params[:bank_id])
@@ -73,7 +73,7 @@ class Admin::BankAccountsController < ApplicationController
   end # def create #
 
   def edit
-    authorization_result = current_user.is_authorized?(@@category, "UPDATE")
+    authorization_result = @current_user.is_authorized?(@@category, "UPDATE")
     return if !process_authorization_result(authorization_result)
 
     @bank = Bank.find_by(id: params[:bank_id])
@@ -94,7 +94,7 @@ class Admin::BankAccountsController < ApplicationController
   end # def edit #
 
   def update
-    authorization_result = current_user.is_authorized?(@@category, "UPDATE")
+    authorization_result = @current_user.is_authorized?(@@category, "UPDATE")
     return if !process_authorization_result(authorization_result)
 
     @bank = Bank.find_by(id: params[:bank_id])
@@ -123,7 +123,7 @@ class Admin::BankAccountsController < ApplicationController
   end # def update #
 
   def destroy
-    authorization_result = current_user.is_authorized?(@@category, "DELETE")
+    authorization_result = @current_user.is_authorized?(@@category, "DELETE")
     return if !process_authorization_result(authorization_result)
 
     @bank = Bank.find_by(id: params[:bank_id])

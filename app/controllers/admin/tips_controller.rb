@@ -62,7 +62,7 @@ class Admin::TipsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @tip = TipRecipe.find_by(id: params[:id])
+    @tip = TipRecipe.find_by!(id: params[:id])
     if @tip.nil?
       flash[:info] = "No se encontró el tip con clave: #{params[:id]}"
       redirect_to admin_tips_path
@@ -83,7 +83,7 @@ class Admin::TipsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @tip = TipRecipe.find_by(id: params[:id])
+    @tip = TipRecipe.find_by!(id: params[:id])
     if @tip.nil?
       flash[:info] = "No se encontró el tip con clave: #{params[:id]}"
       redirect_to admin_tips_path

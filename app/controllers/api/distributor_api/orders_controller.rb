@@ -5,7 +5,7 @@ class Api::DistributorApi::OrdersController < ApplicationController
       return
     end
 
-    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -15,7 +15,7 @@ class Api::DistributorApi::OrdersController < ApplicationController
       orders = @current_user.Orders.order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State).includes(:Client, City: :State)
     else
 
-      client = Client.find_by(hash_id: params[:client])
+      client = Client.find_by!(hash_id: params[:client])
       if !client.blank?
         orders = Order.where(client_id: client.id).order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State)
         @current_user.updateRevision(client)
@@ -43,7 +43,7 @@ class Api::DistributorApi::OrdersController < ApplicationController
       return
     end
 
-    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return

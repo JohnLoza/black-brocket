@@ -5,7 +5,7 @@ class Api::DistributorApi::MessagesController < ApplicationController
       return
     end
 
-    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -16,7 +16,7 @@ class Api::DistributorApi::MessagesController < ApplicationController
       notification.update_attributes(seen: true)
     end
 
-    client = Client.find_by(hash_id: params[:id])
+    client = Client.find_by!(hash_id: params[:id])
     if client.blank?
       render :status => 200,
              :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
@@ -30,7 +30,7 @@ class Api::DistributorApi::MessagesController < ApplicationController
     data[:per_page] = 50
     data[:client_image] = User.getImage(client)
     data[:client_username] = client.username
-    data[:distributor_image] = User.getImage(@current_user)
+    data[:distributor_image] = @current_user.getImage
     data[:distributor_username] = @current_user.username
 
     array = Array.new
@@ -49,13 +49,13 @@ class Api::DistributorApi::MessagesController < ApplicationController
       return
     end
 
-    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    client = Client.find_by(hash_id: params[:id])
+    client = Client.find_by!(hash_id: params[:id])
     if client.blank?
       render :status => 200,
              :json => { :success => false, :info => "CLIENT_NOT_FOUND" }

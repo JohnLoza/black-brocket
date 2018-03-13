@@ -14,21 +14,23 @@
             <%= form_for [:admin, @worker], :html => {:id => "worker_form", :class => 'form-horizontal'} do |f| %>
               <%= render :partial=>'/shared/error_messages', locals:{entity: @worker} %>
 
-              <% if @actions["UPDATE_PERSONAL_INFORMATION"] %>
+              <% if @current_user.has_permission?('site_workers@update_personal_data') %>
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
                   <div class="col-sm-10">
                     <%= f.text_field :hash_id, :class => 'form-control', :disabled => true %>
                   </div>
                 </div>
-              <% end # if @actions["UPDATE_NAME"] # %>
+              <% end # has_permission @update_personal_data %>
 
-              <% if @actions["UPDATE_PERSONAL_INFORMATION"] or @actions["CREATE"] %>
+              <% if @current_user.has_permission?('site_workers@update_personal_data') or
+                    @current_user.has_permission?('site_workers@create') %>
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :name, "Nombre" %></label>
                   <div class="col-sm-10">
                     <%= f.text_field :name, :class => 'form-control', :placeholder => "John",
-                          :required => true, :minlength => 2, :maxlength => 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+                        :required => true, :minlength => 2, :maxlength => 25,
+                        "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
                   </div>
                 </div>
 
@@ -36,7 +38,7 @@
                   <label class="col-sm-2 control-label"><%= f.label :lastname, "Apellido paterno" %></label>
                   <div class="col-sm-10">
                     <%= f.text_field :lastname, :class => 'form-control', :placeholder => "Black",
-                          :required => true, :minlength => 2, :maxlength => 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+                        :required => true, :minlength => 2, :maxlength => 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
                   </div>
                 </div>
 
@@ -44,7 +46,7 @@
                   <label class="col-sm-2 control-label"><%= f.label :mother_lastname, "Apellido materno" %></label>
                   <div class="col-sm-10">
                     <%= f.text_field :mother_lastname, :class => 'form-control', :placeholder => "Smith",
-                          :required => true, :minlength => 2, :maxlength => 20, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/"%>
+                        :required => true, :minlength => 2, :maxlength => 20, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/"%>
                   </div>
                 </div>
 
@@ -66,7 +68,7 @@
                   <label class="col-sm-2 control-label"><%= f.label :username, "Nombre comercial o de usuario" %></label>
                   <div class="col-sm-10">
                     <%= f.text_field :username, :class => 'form-control', :placeholder => "John01",
-                          :required => true, :minlength => 5, :maxlength => 15 %>
+                        :required => true, :minlength => 5, :maxlength => 15 %>
                     <span class="help-block m-b-none">Mínimo 5 caracteres y máximo 15.</span>
                   </div>
                 </div>
@@ -75,7 +77,7 @@
                   <label class="col-sm-2 control-label"><%= f.label :email, "Correo electrónico" %></label>
                   <div class="col-sm-10">
                     <%= f.email_field :email, :class => 'form-control', :placeholder => "john@example.com",
-                          :required => true, :maxlength => 50 %>
+                        :required => true, :maxlength => 50 %>
                   </div>
                 </div>
 
@@ -141,7 +143,7 @@
                   <label class="col-sm-2 control-label"><%= f.label :telephone, "Teléfono" %></label>
                   <div class="col-sm-10">
                     <%= f.text_field :telephone, :class => 'form-control',
-                          :required => true, :minlength => 8, :maxlength => 20 %>
+                        :required => true, :minlength => 8, :maxlength => 20 %>
                   </div>
                 </div>
 
@@ -149,7 +151,7 @@
                   <label class="col-sm-2 control-label"><%= f.label :cellphone, "Celular" %></label>
                   <div class="col-sm-10">
                     <%= f.text_field :cellphone, :class => 'form-control',
-                          :required => true, :minlength => 10, :maxlength => 25 %>
+                        :required => true, :minlength => 10, :maxlength => 25 %>
                   </div>
                 </div>
 
@@ -157,7 +159,7 @@
                   <label class="col-sm-2 control-label"><%= f.label :address, "Dirección" %></label>
                   <div class="col-sm-10">
                     <%= f.text_field :address, :class => 'form-control', :placeholder => "calle #0000, col. ejemplo",
-                          :required => true, :maxlength => 150 %>
+                        :required => true, :maxlength => 150 %>
                   </div>
                 </div>
 
@@ -170,7 +172,7 @@
                   <label class="col-sm-2 control-label"><%= f.label :rfc, "RFC" %></label>
                   <div class="col-sm-10">
                     <%= f.text_field :rfc, :class => 'form-control', :placeholder => "RFC", onkeyup:"this.value = this.value.toUpperCase();",
-                          :required => true, :maxlength => 20 %>
+                        :required => true, :maxlength => 20 %>
                   </div>
                 </div>
 
@@ -178,7 +180,7 @@
                   <label class="col-sm-2 control-label"><%= f.label :nss, "NSS" %></label>
                   <div class="col-sm-10">
                     <%= f.text_field :nss, :class => 'form-control', :placeholder => "Número de Seguro Social",
-                          :required => true, :maxlength => 20 %>
+                        :required => true, :maxlength => 20 %>
                   </div>
                 </div>
 
@@ -194,7 +196,8 @@
                 <div class="hr-line-dashed"></div>
               <% end # if @actions["UPDATE_PERSONAL_INFORMATION"] or @actions["CREATE"] end # %>
 
-              <% if @actions["UPDATE_WAREHOUSE"] or @actions["CREATE"] %>
+              <% if @current_user.has_permission?('site_workers@update_warehouse') or
+                    @current_user.has_permission?('site_workers@create') %>
                 <div id="select_state">
                   <div class="form-group"><label class="col-sm-2 control-label">Almacén</label>
                       <div class="col-sm-10">
@@ -208,10 +211,10 @@
 
               <div class="hr-line-dashed"></div>
               <div class="form-group">
-                  <div class="col-sm-4 col-sm-offset-2">
-                      <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
-                      <%= f.submit "Guardar cambios", :class => "btn btn-primary" %>
-                  </div>
+                <div class="col-sm-4 col-sm-offset-2">
+                  <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
+                  <%= f.submit "Guardar cambios", :class => "btn btn-primary" %>
+                </div>
               </div>
             <% end %>
           </div>

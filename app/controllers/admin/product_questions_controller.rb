@@ -28,7 +28,7 @@ class Admin::ProductQuestionsController < ApplicationController
     @answer = ProdAnswer.new(site_worker_id: @current_user.id,
                              description: params[:prod_answer][:description])
 
-    @question = ProdQuestion.find_by(hash_id: params[:prod_answer][:question_id])
+    @question = ProdQuestion.find_by!(hash_id: params[:prod_answer][:question_id])
     @answer.question_id = @question.id
 
     if @answer.save and @question.update_attributes(answered: true)

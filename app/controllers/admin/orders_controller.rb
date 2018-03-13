@@ -95,7 +95,7 @@ class Admin::OrdersController < ApplicationController
       end # if ["CANCEL","ACCEPT_REJECT_PAYMENT","INVOICES"].include? params[:type] #
 
       if !params[:distributor].nil?
-        distributor = Distributor.find_by(:hash_id => params[:distributor])
+        distributor = Distributor.find_by!(:hash_id => params[:distributor])
         if distributor.nil?
           flash[:info] = "No se encontró el distribuidor con clave: #{params[:distributor]}"
           redirect_to admin_distributors_path
@@ -127,7 +127,7 @@ class Admin::OrdersController < ApplicationController
     @order = Order.where(hash_id: params[:id]).take
     if @order
       if params[:accept] == "true"
-        if Order.find_by(payment_folio: params[:payment_folio])
+        if Order.find_by!(payment_folio: params[:payment_folio])
           #Duplicate folio
           flash[:info] = "El folio del pago ya ha sido registrado previamente."
           redirect_to admin_orders_path(type: 'ACCEPT_REJECT_PAYMENT')
@@ -158,7 +158,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "SHOW")
     return if !process_authorization_result(authorization_result)
 
-    @order = Order.find_by(hash_id: params[:id])
+    @order = Order.find_by!(hash_id: params[:id])
 
     if @order
       if !params[:only_address] or params[:only_address] != "Y"
@@ -187,7 +187,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "CANCEL")
     return if !process_authorization_result(authorization_result)
 
-    @order = Order.find_by(hash_id: params[:id])
+    @order = Order.find_by!(hash_id: params[:id])
 
     if @order
       ActiveRecord::Base.transaction do
@@ -217,7 +217,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "INSPECTION")
     return if !process_authorization_result(authorization_result)
 
-    @order = Order.find_by(hash_id: params[:id])
+    @order = Order.find_by!(hash_id: params[:id])
     success = false
     if @order
       success = true if @order.update_attribute(:state, "INSPECTIONED")
@@ -237,7 +237,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "INSPECTION")
     return if !process_authorization_result(authorization_result)
 
-    order = Order.find_by(hash_id: params[:id])
+    order = Order.find_by!(hash_id: params[:id])
     shipment_details = OrderProductShipmentDetail.where(order_id: order.id)
 
     warehouse = order.Warehouse
@@ -264,7 +264,7 @@ class Admin::OrdersController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     @label_styles = get_label_styles
-    @order = Order.find_by(hash_id: params[:id])
+    @order = Order.find_by!(hash_id: params[:id])
 
     if @order
       product_ids = Array.new
@@ -284,7 +284,7 @@ class Admin::OrdersController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     success = false
-    @order = Order.find_by(hash_id: params[:id])
+    @order = Order.find_by!(hash_id: params[:id])
 
     if @order and @order.state == "PAYMENT_ACCEPTED"
       ActiveRecord::Base.transaction do
@@ -381,7 +381,7 @@ class Admin::OrdersController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     success = false
-    @order = Order.find_by(hash_id: params[:id])
+    @order = Order.find_by!(hash_id: params[:id])
 
     if @order
       @order.tracking_code = params[:tracking_code]
@@ -404,7 +404,7 @@ class Admin::OrdersController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     success = false
-    @order = Order.find_by(hash_id: params[:id])
+    @order = Order.find_by!(hash_id: params[:id])
     success = true if @order.update_attribute(:state, "DELIVERED")
 
     if success
@@ -421,7 +421,7 @@ class Admin::OrdersController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     success = false
-    @order = Order.find_by(hash_id: params[:id])
+    @order = Order.find_by!(hash_id: params[:id])
     success = true if @order.update_attribute(:invoice_sent, true)
 
     if success
@@ -444,7 +444,7 @@ class Admin::OrdersController < ApplicationController
     end
 
     if !params[:reference].blank?
-      @order = Order.find_by(hash_id: params[:reference].strip)
+      @order = Order.find_by!(hash_id: params[:reference].strip)
       if @order.blank?
         flash.now[:warning] = "Orden con referencia: #{params[:reference]} no encontrada :("
       end
@@ -482,7 +482,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "SEARCH")
     return if !process_authorization_result(authorization_result)
 
-    @order = Order.find_by(hash_id: params[:id])
+    @order = Order.find_by!(hash_id: params[:id])
 
     # if non order was found redirect to other action #
     if @order.blank?
@@ -577,7 +577,7 @@ class Admin::OrdersController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "ACCEPT_REJECT_PAYMENT")
     return if !process_authorization_result(authorization_result)
 
-    order = Order.find_by(download_payment_key: params[:payment_key])
+    order = Order.find_by!(download_payment_key: params[:payment_key])
     if !order
       redirect_to admin_welcome_path
       flash[:waring] = "No se encontró la orden especificada."

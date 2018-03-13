@@ -7,8 +7,8 @@ module SessionsHelper
 
   # Remembers a user in a persistent session.
   def remember(user, type)
-    user.remember_token = User.new_token
-    user.update_attribute(:remember_digest, User.digest(user.remember_token))
+    user.remember_token = user.new_token
+    user.update_attribute(:remember_digest, user.digest(user.remember_token))
 
     cookies.permanent.signed[:user_id] = user.id
     cookies.permanent[:remember_token] = user.remember_token
@@ -27,11 +27,11 @@ module SessionsHelper
       user_type = session[:user_type]
 
       if user_type == 'w'
-        @current_user ||= SiteWorker.find_by(id: user_id)
+        @current_user ||= SiteWorker.find_by!(id: user_id)
       elsif  user_type == 'd'
-        @current_user ||= Distributor.find_by(id: user_id)
+        @current_user ||= Distributor.find_by!(id: user_id)
       elsif  user_type == 'c'
-        @current_user ||= Client.find_by(id: user_id)
+        @current_user ||= Client.find_by!(id: user_id)
       end
 
     elsif !cookies.signed[:user_id].nil?
@@ -39,14 +39,14 @@ module SessionsHelper
       user_type = cookies[:user_type]
 
       if user_type == 'w'
-        user = SiteWorker.find_by(id: user_id)
+        user = SiteWorker.find_by!(id: user_id)
       elsif  user_type == 'd'
-        user = Distributor.find_by(id: user_id)
+        user = Distributor.find_by!(id: user_id)
       elsif  user_type == 'c'
-        user = Client.find_by(id: user_id)
+        user = Client.find_by!(id: user_id)
       end
 
-      if user && User.authenticated?(user, :remember, cookies[:remember_token])
+      if user && user.authenticated?(:remember, cookies[:remember_token])
         log_in(user, user_type)
         @current_user = user
       end
@@ -61,7 +61,7 @@ module SessionsHelper
 
   # Forgets a persistent session.
   def forget(user)
-    User.forget(user)
+    user.forget
     cookies.delete(:user_id)
     cookies.delete(:remember_token)
     cookies.delete(:user_type)

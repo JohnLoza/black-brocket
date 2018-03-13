@@ -39,7 +39,7 @@ class Distributor::ClientsController < ApplicationController
   end
 
   def create_prices
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
     success = false
     if @client
       ActiveRecord::Base.transaction do
@@ -80,7 +80,7 @@ class Distributor::ClientsController < ApplicationController
     @client_image = User.getImage(@client, :mini)
     @client_username = @client.username
 
-    @distributor_image = User.getImage(@current_user, :mini)
+    @distributor_image = @current_user.getImage(:mini)
     @distributor_username = @current_user.username
 
     @create_message_url = distributor_client_messages_path(@client.hash_id)

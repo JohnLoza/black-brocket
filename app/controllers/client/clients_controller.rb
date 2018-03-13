@@ -21,7 +21,7 @@ class Client::ClientsController < ApplicationController
                     .paginate(page: params[:page], :per_page => 25)
       @create_message_url = client_create_distributor_comment_path(@distributor.id)
 
-      @client_image = User.getImage(@current_user, :mini)
+      @client_image = @current_user.getImage(:mini)
       @client_username = @current_user.username
 
       @distributor_image = User.getImage(@distributor, :mini)

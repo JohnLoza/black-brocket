@@ -15,7 +15,7 @@ class Client::EcartsController < ApplicationController
   end
 
   def add_to_cart
-    @product = WarehouseProduct.find_by(hash_id: params[:id])
+    @product = WarehouseProduct.find_by!(hash_id: params[:id])
 
     @quantity_is_correct = true if params[:quantity].to_i > 0 and
                                    @product.existence >= params[:quantity].to_i

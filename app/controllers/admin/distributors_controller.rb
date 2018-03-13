@@ -19,7 +19,7 @@ class Admin::DistributorsController < ApplicationController
       if !params[:city_id].blank?
         flash[:info] = "Buscando por población en zonas de distribución."
         @city_id = params[:city_id]
-        city = City.find_by(id: @city_id)
+        city = City.find_by!(id: @city_id)
         @distributors = Distributor.where(id: city.distributor_id)
             .paginate(:page =>  params[:page], :per_page => 10).includes(City: :State)
       else
@@ -101,7 +101,7 @@ class Admin::DistributorsController < ApplicationController
       "SHOW_BANK_DATA", "SHOW_DISTRIBUTION_REGIONS", "SHOW_COMMISSION"])
     return if !process_authorization_result(authorization_result)
 
-    @distributor = Distributor.find_by(hash_id: params[:id])
+    @distributor = Distributor.find_by!(hash_id: params[:id])
     if @distributor.nil?
       flash[:info] = "No se encontró el distribuidor con clave: #{params[:id]}"
       redirect_to admin_distributors_path
@@ -135,7 +135,7 @@ class Admin::DistributorsController < ApplicationController
 
     _edit()
 
-    @distributor = Distributor.find_by(hash_id: params[:id])
+    @distributor = Distributor.find_by!(hash_id: params[:id])
     if @distributor.nil?
       flash[:info] = "No se encontró el distribuidor con clave: #{params[:id]}"
       redirect_to admin_distributors_path
@@ -153,7 +153,7 @@ class Admin::DistributorsController < ApplicationController
       "UPDATE_BANK_DATA", "UPDATE_SHOW_ADDRESS", "UPDATE_PHOTO"])
     return if !process_authorization_result(authorization_result)
 
-    @distributor = Distributor.find_by(hash_id: params[:id])
+    @distributor = Distributor.find_by!(hash_id: params[:id])
     if @distributor.nil?
       flash[:info] = "No se encontró el distribuidor con clave: #{params[:id]}"
       redirect_to admin_distributors_path
@@ -180,7 +180,7 @@ class Admin::DistributorsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "DELETE")
     return if !process_authorization_result(authorization_result)
 
-    @distributor = Distributor.find_by(hash_id: params[:id])
+    @distributor = Distributor.find_by!(hash_id: params[:id])
     if @distributor.nil?
       flash[:info] = "No se encontró el distribuidor con clave: #{params[:id]}"
       redirect_to admin_distributors_path
@@ -202,7 +202,7 @@ class Admin::DistributorsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @distributor = Distributor.find_by(hash_id: params[:id])
+    @distributor = Distributor.find_by!(hash_id: params[:id])
     if @distributor.nil?
       flash[:info] = "No se encontró el distribuidor con clave: #{params[:id]}"
       redirect_to admin_distributors_path

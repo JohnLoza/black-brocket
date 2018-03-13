@@ -9,7 +9,7 @@ class Admin::ParcelsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(hash_id: params[:id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:id])
     @parcels = @warehouse.Parcels
 
     # determine the actions the user can do, so we can display them in screen #
@@ -39,7 +39,7 @@ class Admin::ParcelsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(hash_id: params[:id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:id])
 
     @parcel = Parcel.new(parcel_params)
     @parcel.warehouse_id = @warehouse.id
@@ -67,7 +67,7 @@ class Admin::ParcelsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "UPDATE")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @parcel = Parcel.find(params[:id])
 
     if @parcel.update_attributes(parcel_params)

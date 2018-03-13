@@ -22,7 +22,7 @@ class TipsController < ApplicationController
   end
 
   def show
-    @tip = TipRecipe.find_by(id: params[:id])
+    @tip = TipRecipe.find_by!(id: params[:id])
 
     if @tip.nil?
       flash[:info] = "La entrada de blog que buscas no existe."

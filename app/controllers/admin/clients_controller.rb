@@ -16,7 +16,7 @@ class Admin::ClientsController < ApplicationController
 
     elsif params[:distributor]
 
-      @distributor = Distributor.find_by(hash_id: params[:distributor])
+      @distributor = Distributor.find_by!(hash_id: params[:distributor])
       if @distributor.nil?
         flash[:info] = "No se encontró el distribuidor con clave: #{params[:distributor]}"
         redirect_to admin_distributors_path
@@ -49,7 +49,7 @@ class Admin::ClientsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
     @client_city = @client.City
     @fiscal_data = @client.FiscalData
   end
@@ -58,7 +58,7 @@ class Admin::ClientsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
     if @client.nil?
       flash[:info] = "No se encontró el cliente con clave: #{params[:id]}"
       redirect_to admin_clients_path
@@ -74,7 +74,7 @@ class Admin::ClientsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
     if @client.nil?
       flash[:info] = "No se encontró el cliente con clave: #{params[:id]}"
       redirect_to admin_clients_path
@@ -90,7 +90,7 @@ class Admin::ClientsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
     if @client.nil?
       flash[:info] = "No se encontró el cliente con clave: #{params[:id]}"
       redirect_to admin_clients_path
@@ -106,7 +106,7 @@ class Admin::ClientsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
     if @client.nil?
       flash[:info] = "No se encontró el cliente con clave: #{params[:id]}"
       redirect_to admin_clients_path
@@ -123,7 +123,7 @@ class Admin::ClientsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "SUPERVISOR_VISIT")
     return if !process_authorization_result(authorization_result)
 
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
     if @client.nil?
       flash[:info] = "No se encontró el cliente con clave: #{params[:id]}"
       redirect_to admin_clients_path
@@ -158,7 +158,7 @@ class Admin::ClientsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "SUPERVISOR_VISIT")
     return if !process_authorization_result(authorization_result)
 
-    client = Client.find_by(hash_id: params[:id])
+    client = Client.find_by!(hash_id: params[:id])
     if client.nil?
       flash[:info] = "No se encontró el cliente con clave: #{params[:id]}"
       redirect_to admin_clients_path

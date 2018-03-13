@@ -8,7 +8,7 @@ class Api::ProductsController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -60,7 +60,7 @@ class Api::ProductsController < ApplicationController
       data<<{per_page: 18, new_visit: false, visit_id: nil, distributor_image: nil, distributor_name: nil, visit_date: nil}
     end
 
-    data << {user_data: {username: @current_user.username, photo: User.getImage(@current_user)}}
+    data << {user_data: {username: @current_user.username, photo: @current_user.getImage}}
 
     products.each do |w_product|
       p = w_product.Product
@@ -97,13 +97,13 @@ class Api::ProductsController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    w_product = WarehouseProduct.find_by(hash_id: params[:id])
+    w_product = WarehouseProduct.find_by!(hash_id: params[:id])
     if w_product.blank?
       render :status => 200,
              :json => { :success => false, :info => "PRODUCT_NOT_FOUND", :data => data }

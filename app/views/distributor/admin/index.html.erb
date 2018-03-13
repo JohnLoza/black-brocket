@@ -20,7 +20,7 @@
                 <h2 class="font-bold no-margins"><%= @current_user.username %></h2>
                 <small>Distribuidor</small>
             </div>
-            <%= image_tag User.getImage(@current_user, :mini), :class => "img-circle img-rounded m-b-md" %>
+            <%= image_tag @current_user.getImage(:mini), :class => "img-circle img-rounded m-b-md" %>
             <div class="m-sm pull-right-bottom">
                 <span class="btn btn-info" onclick="$('#distributor_home_img').click();">Cambiar imagen</span>
 

@@ -68,7 +68,7 @@ class Admin::WarehousesController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "SHOW")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(hash_id: params[:id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:id])
     if @warehouse.nil?
       flash[:info] = "No se encontró el almacén con clave: #{params[:id]}"
       redirect_to admin_warehouses_path
@@ -126,7 +126,7 @@ class Admin::WarehousesController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     _edit()
-    @warehouse = Warehouse.find_by(hash_id: params[:id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:id])
     warehouse_city = @warehouse.City
     @city_id = warehouse_city.id
     @state_id = warehouse_city.State.id
@@ -138,7 +138,7 @@ class Admin::WarehousesController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_WAREHOUSE_DATA","UPDATE_WHOLESALE","UPDATE_SHIPPING_COST"])
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(hash_id: params[:id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:id])
     @warehouse.city_id = params[:city_id]
 
     if @warehouse.update_attributes(warehouse_params)
@@ -155,7 +155,7 @@ class Admin::WarehousesController < ApplicationController
   end
 
   def destroy
-    @warehouse = Warehouse.find_by(hash_id: params[:id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:id])
     if @warehouse.update_attributes(:deleted => true)
       @warehouse.Regions.update_all(warehouse_id: nil)
       redirect_to controller: "admin/warehouses"
@@ -186,7 +186,7 @@ class Admin::WarehousesController < ApplicationController
     authorization_result = @current_user.is_authorized?("WAREHOUSE_PRODUCTS", "INVENTORY")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     if @warehouse.nil?
       flash[:warning] = "No se encontró el almacén especificado."
       redirect_to admin_warehouses_path

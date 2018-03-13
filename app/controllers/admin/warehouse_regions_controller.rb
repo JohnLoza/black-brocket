@@ -9,7 +9,7 @@ class Admin::WarehouseRegionsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "UPDATE_REGIONS")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     if @warehouse.nil?
       flash[:info] = "No se encontró el almacén con clave: #{params[:warehouse_id]}"
       redirect_to admin_warehouses_path
@@ -26,7 +26,7 @@ class Admin::WarehouseRegionsController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     @saved = false
-    @state = State.find_by(id: params[:state_id])
+    @state = State.find_by!(id: params[:state_id])
     if !@state.nil?
 
       if @state.warehouse_id == nil
@@ -47,9 +47,9 @@ class Admin::WarehouseRegionsController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     @deleted = false
-    @state = State.find_by(id: params[:id])
+    @state = State.find_by!(id: params[:id])
     if !@state.nil?
-      warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+      warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
 
       if !warehouse.nil?
         if @state.warehouse_id == warehouse.id

@@ -5,7 +5,7 @@
         <li class="nav-header fixed-image-bg">
           <center>
             <div class="dropdown profile-element">
-              <%= image_tag User.getImage(@current_user, :mini), :class => "img-responsive img-rounded img-50" %>
+              <%= image_tag @current_user.getImage(:mini), :class => "img-responsive img-rounded img-50" %>
 
               <% if @current_user.is_admin %>
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">

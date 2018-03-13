@@ -51,7 +51,7 @@ class ProductsController < ApplicationController
 
   def show
     if logged_in? and session[:user_type] == 'c'
-      @w_product = WarehouseProduct.find_by(hash_id: params[:id])
+      @w_product = WarehouseProduct.find_by!(hash_id: params[:id])
 
       if @w_product.nil?
         flash[:info] = "No se encontró el producto con clave: #{params[:id]}."
@@ -63,7 +63,7 @@ class ProductsController < ApplicationController
       @product = @w_product.Product
       @product_price = @current_user.ProductPrices.where(product_id: @product.id).take
     else
-      @product = Product.find_by(hash_id: params[:id])
+      @product = Product.find_by!(hash_id: params[:id])
     end
 
     if @product
@@ -75,7 +75,7 @@ class ProductsController < ApplicationController
   end
 
   def ask
-    product = Product.find_by(hash_id: params[:id])
+    product = Product.find_by!(hash_id: params[:id])
     @question = ProdQuestion.new(product_id: product.id, client_id: @current_user.id,
                 hash_id: random_hash_id(12).upcase,
                 description: params[:prod_question][:description])

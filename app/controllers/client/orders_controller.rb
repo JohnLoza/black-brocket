@@ -13,7 +13,7 @@ class Client::OrdersController < ApplicationController
       notification = Notification.find(params[:notification])
       notification.update_attribute(:seen, true)
     end
-    @order = Order.find_by(hash_id: params[:id])
+    @order = Order.find_by!(hash_id: params[:id])
 
     if @order
       @details = @order.Details.includes(:Product)
@@ -189,7 +189,7 @@ class Client::OrdersController < ApplicationController
   end
 
   def get_payment
-    @order = @current_user.Orders.find_by(download_payment_key: params[:id])
+    @order = @current_user.Orders.find_by!(download_payment_key: params[:id])
     if !@order.nil?
       # if there is an image of the payment send it
       if !@order.pay_img.blank?
@@ -202,8 +202,8 @@ class Client::OrdersController < ApplicationController
   end
 
   def get_bank_payment_info
-    @order = @current_user.Orders.find_by(hash_id: params[:id])
-    @bank = Bank.find_by(id: @order.payment_method) if @order
+    @order = @current_user.Orders.find_by!(hash_id: params[:id])
+    @bank = Bank.find_by!(id: @order.payment_method) if @order
     @bank_accounts = @bank.Accounts if @bank
 
     respond_to do |format|
@@ -213,7 +213,7 @@ class Client::OrdersController < ApplicationController
 
   def update_payment_method
     return if params[:order][:payment_method].nil?
-    @order = @current_user.Orders.find_by(hash_id: params[:id])
+    @order = @current_user.Orders.find_by!(hash_id: params[:id])
 
     if @order
       @order.update_attributes(payment_method: params[:order][:payment_method])

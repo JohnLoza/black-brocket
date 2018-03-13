@@ -15,7 +15,7 @@ class Admin::CommissionsController < ApplicationController
     return if !process_authorization_result(authorization_result)
 
     if params[:distributor]
-      distributor = Distributor.find_by(hash_id: params[:distributor])
+      distributor = Distributor.find_by!(hash_id: params[:distributor])
       if distributor.nil?
         flash[:info] = "No se encontró el distribuidor con clave #{params[:distributor]}"
         redirect_to admin_distributors_path
@@ -36,7 +36,7 @@ class Admin::CommissionsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
-    @distributor = Distributor.find_by(hash_id: params[:distributor])
+    @distributor = Distributor.find_by!(hash_id: params[:distributor])
     @orders = Order.where("hash_id in (?)", params[:order_keys]).where(commission_in_progress: false)
     # verify if we found any order corresponding to the given params #
     if !@orders.any?
@@ -83,7 +83,7 @@ class Admin::CommissionsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    commission = Commission.find_by(hash_id: params[:id])
+    commission = Commission.find_by!(hash_id: params[:id])
     if commission.nil?
       flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
       redirect_to admin_commissions_path
@@ -99,7 +99,7 @@ class Admin::CommissionsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "PAY")
     return if !process_authorization_result(authorization_result)
 
-    commission = Commission.find_by(hash_id: params[:id])
+    commission = Commission.find_by!(hash_id: params[:id])
     if commission.nil?
       flash[:warning] = "No se encontró la comisión especificada"
       redirect_to admin_commissions_path
@@ -124,7 +124,7 @@ class Admin::CommissionsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    commission = Commission.find_by(hash_id: params[:id])
+    commission = Commission.find_by!(hash_id: params[:id])
     if commission.nil?
       flash[:warning] = "No se encontró la comisión especificada"
       redirect_to admin_commissions_path

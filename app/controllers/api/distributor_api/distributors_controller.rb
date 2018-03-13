@@ -5,7 +5,7 @@ class Api::DistributorApi::DistributorsController < ApplicationController
       return
     end
 
-    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -13,7 +13,7 @@ class Api::DistributorApi::DistributorsController < ApplicationController
 
     regions = @current_user.Regions
     home_img = @current_user.home_img.url
-    avatar = User.getImage(@current_user)
+    avatar = @current_user.getImage
 
     data = Hash.new
     data[:avatar] = avatar
@@ -34,7 +34,7 @@ class Api::DistributorApi::DistributorsController < ApplicationController
       return
     end
 
-    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -63,7 +63,7 @@ class Api::DistributorApi::DistributorsController < ApplicationController
       return
     end
 
-    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -71,7 +71,7 @@ class Api::DistributorApi::DistributorsController < ApplicationController
 
     render :status => 200,
            :json => { :success => true, :info => "USER_DATA",
-                      :data => {username: @current_user.username, photo: User.getImage(@current_user) }}
+                      :data => {username: @current_user.username, photo: @current_user.getImage }}
   end
 
   def notifications
@@ -80,7 +80,7 @@ class Api::DistributorApi::DistributorsController < ApplicationController
       return
     end
 
-    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return

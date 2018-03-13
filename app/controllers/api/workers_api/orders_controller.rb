@@ -7,7 +7,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
       return
     end
 
-    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -31,7 +31,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
       return
     end
 
-    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -61,7 +61,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
       return
     end
 
-    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -73,7 +73,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
              :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
     end
 
-    order = Order.find_by(hash_id: params[:id])
+    order = Order.find_by!(hash_id: params[:id])
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }
@@ -111,7 +111,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
       return
     end
 
-    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -139,7 +139,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
       return
     end
 
-    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -152,7 +152,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
     end
 
     success = false
-    @order = Order.find_by(hash_id: params[:id])
+    @order = Order.find_by!(hash_id: params[:id])
 
     if @order.blank?
       render :status => 200,

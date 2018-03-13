@@ -36,7 +36,7 @@ class Admin::MexicoDbController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, ["CREATE", "UPDATE_CITY_NAME", "UPDATE_CITY_LADA"])
     return if !process_authorization_result(authorization_result)
 
-    @state = State.find_by(id: params[:id])
+    @state = State.find_by!(id: params[:id])
     if @state.nil?
       flash[:info] = "No se encontró el estado con clave: #{params[:id]}"
       redirect_to admin_mexico_db_path

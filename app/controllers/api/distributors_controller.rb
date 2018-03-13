@@ -16,7 +16,7 @@ class Api::DistributorsController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -57,7 +57,7 @@ class Api::DistributorsController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -86,7 +86,7 @@ class Api::DistributorsController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return

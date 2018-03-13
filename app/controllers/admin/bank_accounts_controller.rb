@@ -9,7 +9,7 @@ class Admin::BankAccountsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @bank = Bank.find_by(id: params[:bank_id])
+    @bank = Bank.find_by!(id: params[:bank_id])
     if !@bank
       flash[:info] = "No se encontró el banco especificado"
       redirect_to admin_banks_path
@@ -36,7 +36,7 @@ class Admin::BankAccountsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
-    @bank = Bank.find_by(id: params[:bank_id])
+    @bank = Bank.find_by!(id: params[:bank_id])
     if !@bank
       flash[:info] = "No se encontró el banco especificado"
       redirect_to admin_banks_path
@@ -51,7 +51,7 @@ class Admin::BankAccountsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "CREATE")
     return if !process_authorization_result(authorization_result)
 
-    @bank = Bank.find_by(id: params[:bank_id])
+    @bank = Bank.find_by!(id: params[:bank_id])
     if !@bank
       flash[:info] = "No se encontró el banco especificado"
       redirect_to admin_banks_path
@@ -76,7 +76,7 @@ class Admin::BankAccountsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "UPDATE")
     return if !process_authorization_result(authorization_result)
 
-    @bank = Bank.find_by(id: params[:bank_id])
+    @bank = Bank.find_by!(id: params[:bank_id])
     if !@bank
       flash[:info] = "No se encontró el banco especificado"
       redirect_to admin_banks_path
@@ -84,7 +84,7 @@ class Admin::BankAccountsController < ApplicationController
     end
 
     @url = admin_bank_account_path(@bank.id, params[:id])
-    @bank_account = @bank.Accounts.find_by(id: params[:id])
+    @bank_account = @bank.Accounts.find_by!(id: params[:id])
 
     if @bank_account.nil?
       flash[:info] = "No se encontró la cuenta bancaria con clave: #{params[:id]}"
@@ -97,14 +97,14 @@ class Admin::BankAccountsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "UPDATE")
     return if !process_authorization_result(authorization_result)
 
-    @bank = Bank.find_by(id: params[:bank_id])
+    @bank = Bank.find_by!(id: params[:bank_id])
     if !@bank
       flash[:info] = "No se encontró el banco especificado"
       redirect_to admin_banks_path
       return
     end
 
-    @bank_account = @bank.Accounts.find_by(id: params[:id])
+    @bank_account = @bank.Accounts.find_by!(id: params[:id])
     if @bank_account.nil?
       flash[:info] = "No se encontró la cuenta bancaria con clave: #{params[:id]}"
       redirect_to admin_bank_accounts_path
@@ -126,14 +126,14 @@ class Admin::BankAccountsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "DELETE")
     return if !process_authorization_result(authorization_result)
 
-    @bank = Bank.find_by(id: params[:bank_id])
+    @bank = Bank.find_by!(id: params[:bank_id])
     if !@bank
       flash[:info] = "No se encontró el banco especificado"
       redirect_to admin_banks_path
       return
     end
 
-    @bank_account = @bank.Accounts.find_by(id: params[:id])
+    @bank_account = @bank.Accounts.find_by!(id: params[:id])
     if @bank_account.nil?
       flash[:info] = "No se encontró la cuenta bancaria con clave: #{params[:id]}"
       redirect_to admin_bank_accounts_path

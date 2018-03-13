@@ -2,12 +2,12 @@ class Api::SessionsController < ApplicationController
 
   def create
     user_type = nil
-    user = SiteWorker.find_by(email: params[:email])
+    user = SiteWorker.find_by!(email: params[:email])
 
     if !user.blank?
       user_type = "WORKER" if user_type == nil
     else
-      user = Distributor.find_by(email: params[:email])
+      user = Distributor.find_by!(email: params[:email])
     end
 
     if !user.blank?
@@ -32,9 +32,9 @@ class Api::SessionsController < ApplicationController
   end
 
   def destroy
-    user = SiteWorker.find_by(authentication_token: params[:authentication_token])
-    user = Distributor.find_by(authentication_token: params[:authentication_token])
-    user = Client.find_by(authentication_token: params[:authentication_token])
+    user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
+    user = Distributor.find_by!(authentication_token: params[:authentication_token])
+    user = Client.find_by!(authentication_token: params[:authentication_token])
 
     if user.blank?
       api_authentication_failed

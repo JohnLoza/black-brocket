@@ -5,7 +5,7 @@ class Api::OrdersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -39,7 +39,7 @@ class Api::OrdersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -69,7 +69,7 @@ class Api::OrdersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -126,7 +126,7 @@ class Api::OrdersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -241,7 +241,7 @@ class Api::OrdersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -281,13 +281,13 @@ class Api::OrdersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    order = @current_user.Orders.find_by(hash_id: params[:id])
+    order = @current_user.Orders.find_by!(hash_id: params[:id])
     if order.blank?
       render :status => 200,
              :json => { :success => false, :info => "ORDER_NOT_FOUND" }

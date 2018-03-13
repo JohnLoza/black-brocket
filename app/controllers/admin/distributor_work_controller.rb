@@ -18,7 +18,7 @@ class Admin::DistributorWorkController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    client = Client.find_by(hash_id: params[:id])
+    client = Client.find_by!(hash_id: params[:id])
     if client
       client.update_attribute(:worker_id, @current_user.id)
     end
@@ -38,7 +38,7 @@ class Admin::DistributorWorkController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
 
     if @client
       @product_prices = @client.ProductPrices
@@ -51,7 +51,7 @@ class Admin::DistributorWorkController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
     success = false
     if @client
       ActiveRecord::Base.transaction do
@@ -74,7 +74,7 @@ class Admin::DistributorWorkController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
     if !@client
       redirect_to distributor_welcome_path
       return
@@ -92,7 +92,7 @@ class Admin::DistributorWorkController < ApplicationController
     @client_image = User.getImage(@client, :mini)
     @client_username = @client.username
 
-    @distributor_image = User.getImage(@current_user, :mini)
+    @distributor_image = @current_user.getImage(:mini)
     @distributor_username = @current_user.username
 
     @create_message_url = admin_distributor_work_client_messages_path(@client.hash_id)
@@ -102,7 +102,7 @@ class Admin::DistributorWorkController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
     if !@client
       redirect_to admin_welcome_path
       return

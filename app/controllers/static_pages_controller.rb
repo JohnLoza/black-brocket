@@ -35,7 +35,7 @@ class StaticPagesController < ApplicationController
   end
 
   def good_bye
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
     render :good_bye, layout: false
   end
 
@@ -78,7 +78,7 @@ class StaticPagesController < ApplicationController
   def get_city_lada
     @city = nil
     if (params[:city] != nil && params[:city] != '')
-      @city = City.find_by(id: params[:city])
+      @city = City.find_by!(id: params[:city])
     end
 
     respond_to do |format|

@@ -18,7 +18,7 @@ class Distributor::VisitsController < ApplicationController
   end
 
   def create
-    @client = Client.find_by(hash_id: params[:id])
+    @client = Client.find_by!(hash_id: params[:id])
 
     success = false
     today = Time.now.year.to_s+"-"+Time.now.month.to_s+"-"+Time.now.day.to_s

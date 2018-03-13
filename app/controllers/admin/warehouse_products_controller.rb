@@ -46,7 +46,7 @@ class Admin::WarehouseProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@manager_category, "UPDATE_STOCK")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @product = Product.find(params[:id])
     @stock_details = @warehouse.Products.where(product_id: params[:id], describes_total_stock: false)
   end # def stock_details #
@@ -55,7 +55,7 @@ class Admin::WarehouseProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@manager_category, "UPDATE_STOCK")
     return if !process_authorization_result(authorization_result)
 
-    warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+    warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     product = Product.find(params[:id])
 
     master_detail = WarehouseProduct.where(warehouse_id: warehouse.id,
@@ -87,7 +87,7 @@ class Admin::WarehouseProductsController < ApplicationController
 
     session[:shipment_products] = Hash.new if !session[:shipment_products]
 
-    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     if @warehouse.nil?
       flash[:info] = "No se encontró el almacén con clave: #{params[:id]}"
       redirect_to admin_warehouses_path
@@ -184,7 +184,7 @@ class Admin::WarehouseProductsController < ApplicationController
     end
     return if !process_authorization_result(authorization_result)
 
-    warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+    warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     if warehouse.nil?
       flash[:info] = "No se encontró el almacén con clave: #{params[:warehouse_id]}"
       redirect_to admin_warehouses_path
@@ -342,7 +342,7 @@ class Admin::WarehouseProductsController < ApplicationController
 
     shipment = Shipment.find(params[:id])
     if shipment.reviewed == false
-      warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+      warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
       saved = update_stock_from_shipment(warehouse, shipment)
     end
 
@@ -355,7 +355,7 @@ class Admin::WarehouseProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "SHOW_SHIPMENTS")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @shipments = @warehouse.IncomingShipments.includes(:Chief, :Worker, :OriginWarehouse).order(:created_at => :desc).paginate(page: params[:page], per_page: 20)
 
     # determine the actions the user can do, so we can display them in screen #
@@ -405,7 +405,7 @@ class Admin::WarehouseProductsController < ApplicationController
 
     shipment = Shipment.find(params[:id])
     if shipment.reviewed == false
-      warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+      warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
       report = shipment.DifferenceReport
 
       saved = update_stock_from_shipment(warehouse, shipment, report)
@@ -420,7 +420,7 @@ class Admin::WarehouseProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@manager_category, "RECEIVE_SHIPMENTS")
     return if !process_authorization_result(authorization_result)
 
-    @warehouse = Warehouse.find_by(hash_id: params[:warehouse_id])
+    @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @shipment = Shipment.find(params[:id])
     @saved = false
 
@@ -469,7 +469,7 @@ class Admin::WarehouseProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, nil)
     return if !process_authorization_result(authorization_result)
 
-    @product = Product.find_by(hash_id: params[:product_qr][:product])
+    @product = Product.find_by!(hash_id: params[:product_qr][:product])
     if @product.blank?
       flash[:danger] = "No se encontró el producto con clave #{params[:product_qr][:product]}."
       redirect_to admin_chief_warehouse_products_path(params[:product_qr][:warehouse])

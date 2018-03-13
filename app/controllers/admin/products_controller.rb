@@ -118,7 +118,7 @@ class Admin::ProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "SHOW")
     return if !process_authorization_result(authorization_result)
 
-    @product = Product.find_by(hash_id: params[:id])
+    @product = Product.find_by!(hash_id: params[:id])
     if @product.nil?
       flash[:info] = "No se encontró el producto con clave: #{params[:id]}"
       redirect_to admin_products_path
@@ -133,7 +133,7 @@ class Admin::ProductsController < ApplicationController
                                       "UPDATE_PRICE", "UPDATE_SHOW_IN_WEB_PAGE"])
     return if !process_authorization_result(authorization_result)
 
-    @product = Product.find_by(hash_id: params[:id])
+    @product = Product.find_by!(hash_id: params[:id])
     if !@product.nil?
       description_file = @@base_file_path + @product.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
       preparation_file = @@base_file_path + @product.preparation_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
@@ -154,7 +154,7 @@ class Admin::ProductsController < ApplicationController
                                       "UPDATE_PRICE", "UPDATE_SHOW_IN_WEB_PAGE"])
     return if !process_authorization_result(authorization_result)
 
-    @product = Product.find_by(hash_id: params[:id])
+    @product = Product.find_by!(hash_id: params[:id])
     if @product.nil?
       flash[:info] = "No se encontró el producto con clave: #{params[:id]}"
       redirect_to admin_products_path
@@ -225,7 +225,7 @@ class Admin::ProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "DELETE")
     return if !process_authorization_result(authorization_result)
 
-    @product = Product.find_by(hash_id: params[:id])
+    @product = Product.find_by!(hash_id: params[:id])
     if @product.nil?
       flash[:info] = "No se encontró el producto con clave: #{params[:id]}"
       redirect_to admin_products_path
@@ -244,7 +244,7 @@ class Admin::ProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PRODUCT_DATA")
     return if !process_authorization_result(authorization_result)
 
-    product_id = Product.find_by(hash_id: params[:id]).id
+    product_id = Product.find_by!(hash_id: params[:id]).id
 
     ProdPhoto.where("product_id=#{product_id} and is_principal=true").limit(1).update_all(is_principal: false)
     ProdPhoto.where("product_id=#{product_id} and hash_id='#{params[:photo_id]}'").limit(1).update_all(is_principal: true)
@@ -258,7 +258,7 @@ class Admin::ProductsController < ApplicationController
     authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PRODUCT_DATA")
     return if !process_authorization_result(authorization_result)
 
-    photo = ProdPhoto.find_by(hash_id: params[:photo_id])
+    photo = ProdPhoto.find_by!(hash_id: params[:photo_id])
     photo.destroy
 
     respond_to do |format|

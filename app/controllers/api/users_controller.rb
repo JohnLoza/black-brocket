@@ -25,7 +25,7 @@ class Api::UsersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -49,7 +49,7 @@ class Api::UsersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -57,7 +57,7 @@ class Api::UsersController < ApplicationController
 
     render :status => 200,
            :json => { :success => true, :info => "USER_DATA",
-                      :data => {username: @current_user.username, photo: User.getImage(@current_user) }}
+                      :data => {username: @current_user.username, photo: @current_user.getImage }}
   end
 
   def update
@@ -66,7 +66,7 @@ class Api::UsersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -88,7 +88,7 @@ class Api::UsersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -119,7 +119,7 @@ class Api::UsersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
@@ -147,7 +147,7 @@ class Api::UsersController < ApplicationController
       return
     end
 
-    @current_user = Client.find_by(authentication_token: params[:authentication_token])
+    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return

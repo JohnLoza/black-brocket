@@ -7,7 +7,7 @@ class Api::WorkersApi::WarehouseProductsController < ApplicationController
       return
     end
 
-    @current_user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return

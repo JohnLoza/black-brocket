@@ -5,13 +5,13 @@ class Api::DistributorApi::VisitsController < ApplicationController
       return
     end
 
-    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    client = Client.find_by(hash_id: params[:id])
+    client = Client.find_by!(hash_id: params[:id])
     if client.blank?
       render :status => 200,
              :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
@@ -37,13 +37,13 @@ class Api::DistributorApi::VisitsController < ApplicationController
       return
     end
 
-    @current_user = Distributor.find_by(authentication_token: params[:authentication_token])
+    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
     if @current_user.blank?
       api_authentication_failed
       return
     end
 
-    client = Client.find_by(hash_id: params[:id])
+    client = Client.find_by!(hash_id: params[:id])
     if client.blank?
       render :status => 200,
              :json => { :success => false, :info => "CLIENT_NOT_FOUND" }

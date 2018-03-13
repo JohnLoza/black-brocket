@@ -8,18 +8,14 @@
         <div class="col-md-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Detalles del perfil</h5>
+                  <h5>Detalles del perfil</h5>
                 </div>
                 <div class="ibox-content no-padding border-left-right">
-        					<% if !@worker.photo.blank? %>
-        						<%= image_tag(@worker.photo.url, { :class => "img-responsive full-width" }) %>
-        					<% else %>
-        						<%= image_tag("user_avatar.png", { :class => "img-responsive full-width" }) %>
-        					<% end %>
+        					<%= image_tag(@worker.getImage, :class => "img-responsive full-width") %>
                 </div>
                 <div class="ibox-content profile-content">
-                    <h4><strong><%= @worker.name %> <%= @worker.lastname %> <%= @worker.mother_lastname %></strong></h4>
-                    <h4><strong>Almacén: </strong><%=@worker.Warehouse.name%></h4>
+                  <h4><strong><%= @worker.full_name %></strong></h4>
+                  <h4><strong>Almacén: </strong><%= @worker.Warehouse.name %></h4>
                 </div>
             </div>
         </div>
@@ -30,18 +26,8 @@
               <div class="ibox-title">
                   <h5>Información del trabajador</h5>
                   <div class="ibox-tools">
-                      <a class="collapse-link">
-                          <i class="fa fa-chevron-up"></i>
-                      </a>
-                      <!--a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                          <i class="fa fa-wrench"></i>
-                      </a>
-                      <ul class="dropdown-menu dropdown-user">
-                          <li><%#= link_to "Editar".html_safe, edit_admin_site_worker_path(@worker.hash_id) %></li>
-                      </ul-->
-                      <a class="close-link">
-                          <i class="fa fa-times"></i>
-                      </a>
+                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    <a class="close-link"><i class="fa fa-times"></i></a>
                   </div>
               </div>
               <div class="ibox-content">

@@ -22,6 +22,6 @@ module HashId
   end
 
   def hash_id_taken?(hash_id)
-    self.class.find_by(hash_id: hash_id)
+    self.class.find_by!(hash_id: hash_id)
   end
 end

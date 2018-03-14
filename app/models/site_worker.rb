@@ -9,26 +9,25 @@ class SiteWorker < ApplicationRecord
   before_save { self.email = email.downcase }
   has_secure_password
 
-  has_many :ProdAnsweres
-  belongs_to :City, :foreign_key => :city_id
-  belongs_to :Warehouse, :foreign_key => :warehouse_id
-  has_many :Permissions, :class_name => 'Permission', :foreign_key => :worker_id
-  has_many :Clients, :class_name => :Client, :foreign_key => :worker_id
+  has_many :ProdAnswers
+  belongs_to :City, class_name: :City, foreign_key: :city_id
+  belongs_to :Warehouse, class_name: :Warehouse, foreign_key: :warehouse_id
+  has_many :Permissions, class_name: :Permission, foreign_key: :worker_id
+  has_many :clients, foreign_key: :worker_id
 
-  has_many :ClientMessages, :class_name => :ClientDistributorComment, :foreign_key => :worker_id
-  has_many :Notifications, :class_name => :Notification, :foreign_key => :worker_id
+  has_many :ClientMessages, class_name: :ClientDistributorComment, foreign_key: :worker_id
+  has_many :Notifications, class_name: :Notification, foreign_key: :worker_id
 
-  validates :city_id, presence: true,
-                      numericality: { only_integer: true }
+  validates :city_id, presence: true, numericality: { only_integer: true }
 
   validates :password, length: { minimum: 6 }, :on => :create
 
   validates :name, :email, :username,
             :rfc, :nss, :address, :telephone, presence: true
 
-  validates :rfc, :nss, uniqueness: {case_sensitive: false }
+  #validates :rfc, :nss, uniqueness: {case_sensitive: false }
 
-  validates :email, uniqueness: { case_sensitive: false }
+  #validates :email, uniqueness: { case_sensitive: false }
   validates :email, :confirmation => true
 
   validates :name, :lastname, :mother_lastname,
@@ -45,6 +44,7 @@ class SiteWorker < ApplicationRecord
     way = :asc unless way.present?
     order(name: way)
   }
+  scope :by_warehouse, -> (warehouse) { where(warehouse_id: warehouse) }
 
   # Returns if the user has or not at least one of the given roles
   # The splat (*) will automatically convert all arguments into an Array

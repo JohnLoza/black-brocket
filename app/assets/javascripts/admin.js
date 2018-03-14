@@ -11,6 +11,7 @@
 // about supported directives.
 //Poner todos los que agregen en el orden que busco y quitar require tree
 //
+//= require rails-ujs
 //= require jquery-2.1.1
 //= require bootstrap.min
 //= require switchery

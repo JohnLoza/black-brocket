@@ -4,50 +4,12 @@
 <div class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
     <div class="row">
-
-      <div class="col-md-4">
-          <div class="ibox float-e-margins">
-              <div class="ibox-title">
-                  <h5>Detalles del perfil</h5>
-              </div>
-              <div class="ibox-content no-padding border-left-right">
-      					<% if !@worker.photo.blank? %>
-      						<%= image_tag(@worker.photo.url, { :class => "img-responsive full-width" }) %>
-      					<% else %>
-      						<%= image_tag("user_avatar.png", { :class => "img-responsive full-width" }) %>
-      					<% end %>
-              </div>
-              <div class="ibox-content profile-content">
-                  <h4><strong><%= @worker.name %> <%= @worker.lastname %> <%= @worker.mother_lastname %></strong></h4>
-                  <h5>Datos</h5>
-                  <table>
-        					  <tr>
-        					    <td class="table-padd"><strong>Identificador:</strong></td>
-        					    <td><%= @worker.hash_id %></td>
-        					  </tr>
-        					  <tr>
-        					    <td><strong>Ubicación:</strong></td>
-        					    <td><%= @worker_city.name %>, <%= @worker_city.State.name %></td>
-        					  </tr>
-        					  <tr>
-        					    <td><strong>Email:</strong></td>
-        					    <td><%= @worker.email %></td>
-        					  </tr>
-        					  <tr>
-        					    <td><strong>Teléfono:</strong></td>
-        					    <td>(<%=@worker_city.lada%>) <%= @worker.telephone %></td>
-        					  </tr>
-        					</table><br>
-              </div>
-          </div>
-      </div>
+      <%= render partial: 'details_box', locals: {site_worker: @worker} %>
 
       <div class="col-md-8">
 
         <div class="ibox float-e-margins">
-          <div class="ibox-title">
-              <h5>Permisos <small><%= @worker.name %> <%= @worker.lastname %> <%= @worker.mother_lastname %></small></h5>
-          </div>
+          <div class="ibox-title"><h5>Permisos</h5></div>
 
           <div class="ibox-content">
             <input name="checkAll" type="checkbox" onChange="toggleAll(this)" class="js-switch" />
@@ -55,8 +17,7 @@
           </div>
 
           <div class="ibox-content">
-          <%= form_for(:permission,
-              url: update_permissions_admin_site_worker_path(@worker.hash_id),
+          <%= form_for(:permission, url: update_permissions_admin_site_worker_path(@worker),
               method: :put, :class => "form") do |f| %>
 
             <div id="workers-permissions">
@@ -64,7 +25,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'workers-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @worker_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -74,7 +35,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'distributors-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @distributor_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -84,7 +45,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'commissions-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @commission_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -94,7 +55,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'products-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @product_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -104,7 +65,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'managers-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @warehouse_manager_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
             </div>
             <div class="hr-line-dashed"></div>
@@ -115,17 +76,17 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'warehouses-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @warehouse_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
               <h1>Paqueterías</h1>
               <% @parcel_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
               <h1>Inventario de almacén</h1>
               <% @warehouse_product_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
             </div>
             <div class="hr-line-dashed"></div>
@@ -135,7 +96,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'orders-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @order_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -145,7 +106,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'web-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @web_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -155,7 +116,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'bank-accounts-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @bank_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -165,7 +126,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'mexico-db-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @mexico_db_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -175,7 +136,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'other-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @other_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {permission: p, f: f} %>
+                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>

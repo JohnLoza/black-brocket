@@ -1,7 +1,7 @@
 class Admin::ParcelsController < ApplicationController
   before_action :logged_in?
   before_action :current_user_is_a_worker?
-  layout "admin_layout.html.erb"
+  layout 'admin_layout.html.erb'
 
   @@category = "PARCELS"
 

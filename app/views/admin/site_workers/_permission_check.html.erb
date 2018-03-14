@@ -1,10 +1,5 @@
-<% checked = false %>
-<% @user_permissions.each do |p| %>
-  <% if p.category == permission[:category].upcase and p.name == permission[:name].upcase %>
-    <% checked = true %>
-    <% break %>
-  <% end %>
-<% end %>
+<% checked = site_worker.has_permission?("#{permission[:category]}@#{permission[:name]}") %>
+
 <div class="row m-b-xs" style="border-bottom: solid 1px #DCDBDB;padding-bottom: 5px;">
   <div class="col-md-8">
     <%= f.label "#{permission[:category]}-#{permission[:name]}", permission[:description] %>

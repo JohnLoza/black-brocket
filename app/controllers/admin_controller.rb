@@ -2,6 +2,7 @@ class AdminController < ApplicationController
   helper_method :search_params
 
   before_action :authenticate_user!
+  layout 'admin_layout.html.erb'
 
   def authenticate_user!
     unless logged_in?

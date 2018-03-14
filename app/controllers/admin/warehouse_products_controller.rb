@@ -1,7 +1,7 @@
 class Admin::WarehouseProductsController < ApplicationController
   before_action :logged_in?
   before_action :current_user_is_a_worker?
-  layout "admin_layout.html.erb"
+  layout 'admin_layout.html.erb'
 
   @@manager_category = "WAREHOUSE_MANAGER"
   @@category = "WAREHOUSE_PRODUCTS"

@@ -4,13 +4,13 @@ class Client < ApplicationRecord
   before_save { self.email = email.downcase }
   has_secure_password
 
-  belongs_to :City, :foreign_key => :city_id
-  belongs_to :Worker, class_name: :SiteWorker, :foreign_key => :worker_id
-  has_many :ProductPrices, class_name: :ClientProduct, :foreign_key => :client_id
+  belongs_to :City, foreign_key: :city_id
+  belongs_to :Worker, class_name: :SiteWorker, foreign_key: :worker_id
+  has_many :ProductPrices, class_name: :ClientProduct, foreign_key: :client_id
   has_many :Orders
   has_many :ProdQuestions
   has_many :Notifications
-  has_many :DistributorRevisions, class_name: :DistributorClientRevision, :foreign_key => :client_id
+  has_many :DistributorRevisions, class_name: :DistributorClientRevision, foreign_key: :client_id
   has_one :FiscalData
 
   has_many :DistributorVisits

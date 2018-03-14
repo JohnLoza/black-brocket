@@ -1,11 +1,11 @@
 class Product < ApplicationRecord
   attr_accessor :description_body, :preparation_body
 
-  has_many :Questions, :class_name => 'ProdQuestion', :foreign_key => 'product_id'
+  has_many :Questions, class_name: 'ProdQuestion', foreign_key: 'product_id'
   has_many :Recipes
-  has_many :SubCategories, :class_name => 'ProdSubCategory', :foreign_key => 'product_id'
+  has_many :SubCategories, class_name: 'ProdSubCategory', foreign_key: 'product_id'
   has_many :OrderDetails
-  has_many :Photos, :class_name => 'ProdPhoto', :foreign_key => 'product_id'
+  has_many :Photos, class_name: 'ProdPhoto', foreign_key: 'product_id'
 
   validates :name, :price, presence: true
 

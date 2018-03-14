@@ -1,7 +1,7 @@
 class Admin::StatisticsController < ApplicationController
   before_action :logged_in?
   before_action :current_user_is_a_worker?
-  layout "admin_layout.html.erb"
+  layout 'admin_layout.html.erb'
 
   @@category = "STATISTICS"
   @@noProcessableOrders = ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED","ORDER_CANCELED"]

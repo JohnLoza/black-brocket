@@ -1,0 +1,29 @@
+<% new_permission = nil unless new_permission.present? %>
+
+<div class="ibox">
+  <div class="ibox-content" style="display: block;">
+    <div class="row">
+      <div class="col-sm-9 b-r margin-bot-resp">
+        <%= content_tag(:h3, title, class: 'm-t-none m-b') %>
+
+        <%= form_for(:class, url: search_url, method: :get) do |f| %>
+          <div class="input-group">
+            <%= f.text_field :search, value: search_params, class: 'input form-control',
+              placeholder: 'Buscar', maxlength: 20  %>
+
+            <span class="input-group-btn">
+              <%= f.submit 'Buscar', class: 'btn btn btn-success' %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+      <div class="hr-line-dashed pro-mobile"></div>
+      <% if new_permission and @current_user.has_permission?(new_permission) %>
+        <div class="col-sm-3 text-center">
+          <h4>Registrar Nuevo</h4>
+          <%= link_to "<i class='fa fa-plus med-icon'></i>".html_safe, new_url %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

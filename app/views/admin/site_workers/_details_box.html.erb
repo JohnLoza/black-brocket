@@ -1,0 +1,39 @@
+<div class="col-md-4">
+  <div class="ibox float-e-margins">
+    <div class="ibox-title"><h5>Detalles del perfil</h5></div>
+    <div class="ibox-content no-padding border-left-right">
+      <%= image_tag(site_worker.getImage, :class => "img-responsive full-width" ) %>
+    </div>
+    <div class="ibox-content profile-content">
+      <%= content_tag(:h4, site_worker.full_name) %>
+      <h5>Datos</h5>
+      <table>
+			  <tr>
+			    <td class="table-padd"><strong>Identificador:</strong></td>
+          <%= content_tag(:td, site_worker.hash_id) %>
+			  </tr>
+			  <tr>
+			    <td><strong>Ubicación:</strong></td>
+			    <%= content_tag(:td, site_worker.location) %>
+			  </tr>
+			  <tr>
+			    <td><strong>Correo electrónico:</strong></td>
+			    <%= content_tag(:td, site_worker.email) %>
+			  </tr>
+			  <tr>
+			    <td><strong>Teléfono:</strong></td>
+			    <%= content_tag(:td, site_worker.telephone_with_lada) %>
+			  </tr>
+        <tr>
+          <td><strong>Celular:</strong></td>
+          <%= content_tag(:td, site_worker.cellphone_with_lada) %>
+        </tr>
+        <tr>
+          <td><strong>Almacén:</strong></td>
+          <%= content_tag(:td, site_worker.Warehouse) %>
+        </tr>
+			</table>
+      <br>
+    </div>
+  </div>
+</div>

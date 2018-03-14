@@ -4,14 +4,14 @@ class Distributor < ApplicationRecord
   before_save { self.email = email.downcase }
   has_secure_password
 
-  belongs_to :City, :foreign_key => :city_id
+  belongs_to :City, foreign_key: :city_id
   has_many :Orders
-  has_many :Regions, :class_name => 'City', :foreign_key => :distributor_id
+  has_many :Regions, class_name: 'City', foreign_key: :distributor_id
 
   has_many :DistributorVisits
-  has_many :ClientMessages, :class_name => :ClientDistributorComment, :foreign_key => :distributor_id
-  has_many :Notifications, :class_name => :Notification, :foreign_key => :distributor_id
-  has_many :Commissions, :class_name => :Commission, :foreign_key => :distributor_id
+  has_many :ClientMessages, class_name: :ClientDistributorComment, foreign_key: :distributor_id
+  has_many :Notifications, class_name: :Notification, foreign_key: :distributor_id
+  has_many :Commissions, class_name: :Commission, foreign_key: :distributor_id
 
   validates :city_id, numericality: { only_integer: true }
 

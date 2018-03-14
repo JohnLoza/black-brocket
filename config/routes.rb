@@ -18,7 +18,6 @@ Rails.application.routes.draw do
   get 'log_in/' => 'sessions#new'
   post   'log_in/'   => 'sessions#create'
   delete 'log_out/'  => 'sessions#destroy'
-  get 'log_out/' => 'sessions#destroy'
 
   # product paths (what the client sees) #
   get '/products' => 'products#index', :as => :products

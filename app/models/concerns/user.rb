@@ -11,6 +11,10 @@ module User
     # scope :inactive, -> { where.not(deleted_at: nil) }
   end
 
+  def to_s
+    full_name
+  end
+
   # Returns a random token.
   def new_token
     SecureRandom.urlsafe_base64
@@ -51,6 +55,18 @@ module User
 
   def full_name
     "#{self.name} #{self.lastname} #{self.mother_lastname}"
+  end
+
+  def location
+    "#{self.City} #{self.City.State}"
+  end
+
+  def telephone_with_lada
+    "(#{self.City.lada}) #{self.telephone}"
+  end
+
+  def cellphone_with_lada
+    "(#{self.City.lada}) #{self.cellphone}"
   end
 
   def same_as?(another_user)

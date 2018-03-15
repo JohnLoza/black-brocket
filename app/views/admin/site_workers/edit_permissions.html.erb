@@ -17,15 +17,15 @@
           </div>
 
           <div class="ibox-content">
-          <%= form_for(:permission, url: update_permissions_admin_site_worker_path(@worker),
-              method: :put, class: "form") do |f| %>
+            <%= form_for(:permission, url: update_permissions_admin_site_worker_path(@worker),
+            method: :put, class: "form") do |f| %>
 
             <div id="workers-permissions">
               <h1>Trabajadores</h1>
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'workers-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @worker_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -35,7 +35,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'distributors-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @distributor_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -45,7 +45,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'commissions-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @commission_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -55,7 +55,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'products-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @product_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -65,7 +65,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'managers-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @warehouse_manager_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
             </div>
             <div class="hr-line-dashed"></div>
@@ -76,17 +76,17 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'warehouses-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @warehouse_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
               <h1>Paqueterías</h1>
               <% @parcel_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
               <h1>Inventario de almacén</h1>
               <% @warehouse_product_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
             </div>
             <div class="hr-line-dashed"></div>
@@ -96,7 +96,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'orders-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @order_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -106,7 +106,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'web-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @web_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -116,7 +116,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'bank-accounts-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @bank_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -126,7 +126,7 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'mexico-db-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @mexico_db_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
@@ -136,14 +136,14 @@
               <input name="checkAll" type="checkbox" onChange="toggleSection(this, 'other-permissions')" class="js-switch" />
               <label for="checkAll">Seleccionar los permisos de esta sección</label><br><br>
               <% @other_category.each do |p| %>
-                <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
+              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
             </div>
 
             <%= f.submit "Guardar permisos", class: "btn btn-primary pull-right" %>
             <div class="clearfix"></div>
-          <% end %> <!-- form end -->
+            <% end %> <!-- form end -->
           </div>
         </div>
       </div>
@@ -153,49 +153,49 @@
 </div><br>
 
 <script>
-  $(document).ready(function(){
-    var switches = $(".js-switch");
-    for(i=0;i<switches.length;i++){
-      new Switchery(switches[i], { color: '#1AB394' });
-    }
-  });
-
-  // toggle all switches
-  function toggleAll(source) {
-    checkboxes = document.getElementsByClassName('js-switch');
-    switches = $('.switchery');
-
-    toggleChecks(checkboxes, switches, source);
+$(document).ready(function(){
+  var switches = $(".js-switch");
+  for(i=0;i<switches.length;i++){
+    new Switchery(switches[i], { color: '#1AB394' });
   }
+});
 
-  function toggleSection(source, section){
-    div_section = $("#"+section);
-    checkboxes = div_section.find(".js-switch");
-    switches = div_section.find('.switchery');
+// toggle all switches
+function toggleAll(source) {
+  checkboxes = document.getElementsByClassName('js-switch');
+  switches = $('.switchery');
 
-    toggleChecks(checkboxes, switches, source);
-  }
+  toggleChecks(checkboxes, switches, source);
+}
 
-  function toggleChecks(checkboxes, switches, source){
-    for(var i=0, n=checkboxes.length;i<n;i++){
-      if (checkboxes[i].checked != source.checked){
-        $(switches[i]).trigger('click');
-      }// end if
-    }// end for
-  }
+function toggleSection(source, section){
+  div_section = $("#"+section);
+  checkboxes = div_section.find(".js-switch");
+  switches = div_section.find('.switchery');
+
+  toggleChecks(checkboxes, switches, source);
+}
+
+function toggleChecks(checkboxes, switches, source){
+  for(var i=0, n=checkboxes.length;i<n;i++){
+    if (checkboxes[i].checked != source.checked){
+      $(switches[i]).trigger('click');
+    }// end if
+  }// end for
+}
 </script>
 
 <style>
- .permissions-1{
-    background-color: #DDD3F0;
-    color: #333;
-    border-radius: 10px;
-    padding: 10px;
- }
- .permissions-2{
-    background-color: #C5EEEA;
-    color: #333;
-    border-radius: 10px;
-    padding: 10px;
- }
+.permissions-1{
+  background-color: #DDD3F0;
+  color: #333;
+  border-radius: 10px;
+  padding: 10px;
+}
+.permissions-2{
+  background-color: #C5EEEA;
+  color: #333;
+  border-radius: 10px;
+  padding: 10px;
+}
 </style>

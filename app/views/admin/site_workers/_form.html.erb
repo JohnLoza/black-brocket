@@ -16,7 +16,7 @@
 
               <% if @current_user.has_permission?('site_workers@update_personal_data') or
                     @current_user.has_permission?('site_workers@create') %>
-                    
+
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
                   <div class="col-sm-10">

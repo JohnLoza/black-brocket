@@ -29,33 +29,33 @@
         <!--<div class="table-responsive">-->
         <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15" data-filter=#filter>
           <thead>
-          <tr>
+            <tr>
               <th>Nombre del candidato</th>
               <th>Fecha de solicitud</th>
               <th>Status</th>
               <th>Acción</th>
-          </tr>
+            </tr>
           </thead>
           <tbody>
             <% @candidates.each do |candidate| %>
-              <tr>
-                <td><%= candidate.getFullName %></td>
-                <td><%= l(candidate.created_at, format: :long) %></td>
-                <td>
-                  <% if !candidate.read %>
-                    <span id="<%=candidate.id%>" class="label label-primary"> Nuevo </span>
-                  <% else %>
-                    <span id="<%=candidate.id%>" class="label label-default"> Visto </span>
-                  <% end %>
-                </td>
-                <td>
-                  <a onclick="showDetails('<%=candidate.id%>','<%=candidate.getFullName%>','<%=candidate.email%>',
-                    '<%=candidate.telephone%>','<%=candidate.cellphone%>','<%=candidate.getLocation%>')"
-                     class="btn btn-white btn-sm">
-                    Mostrar detalles
-                  </a>
-                </td>
-              </tr>
+            <tr>
+              <td><%= candidate.getFullName %></td>
+              <td><%= l(candidate.created_at, format: :long) %></td>
+              <td>
+                <% if !candidate.read %>
+                <span id="<%=candidate.id%>" class="label label-primary"> Nuevo </span>
+                <% else %>
+                <span id="<%=candidate.id%>" class="label label-default"> Visto </span>
+                <% end %>
+              </td>
+              <td>
+                <a onclick="showDetails('<%=candidate.id%>','<%=candidate.getFullName%>','<%=candidate.email%>',
+                  '<%=candidate.telephone%>','<%=candidate.cellphone%>','<%=candidate.getLocation%>')"
+                  class="btn btn-white btn-sm">
+                  Mostrar detalles
+                </a>
+              </td>
+            </tr>
             <% end %>
           </tbody>
           <tfoot>
@@ -70,10 +70,10 @@
         </table>
       </div>
     </div>
-    </br>
+  </br>
   <!--End Table-->
 
- </div>
+</div>
 </div>
 <br>
 <!--End content whit animation-->
@@ -82,29 +82,29 @@
 
 <%= link_to "candidate_seen", "#", remote: true, id: :candidate_seen_link, method: :post, style: "display: none;" %>
 <script type="text/javascript">
-  function showDetails(new_button, fullname, email, telephone, cellphone, location){
-    modal = $("#modal");
+function showDetails(new_button, fullname, email, telephone, cellphone, location){
+  modal = $("#modal");
 
-    title = modal.find(".modal-title");
-    title.html(fullname);
+  title = modal.find(".modal-title");
+  title.html(fullname);
 
-    body = modal.find(".modal-body");
-    body.html("<p><b>Nombre:</b> "+fullname+"</p><p><b>Correo electrónico:</b> "+email+"</p>"+
-              "<p><b>Teléfono:</b> "+telephone+"</p><p><b>Celular:</b> "+cellphone+"</p>"+
-              "<p><b>Ubicación:</b> "+location+"</p>");
+  body = modal.find(".modal-body");
+  body.html("<p><b>Nombre:</b> "+fullname+"</p><p><b>Correo electrónico:</b> "+email+"</p>"+
+  "<p><b>Teléfono:</b> "+telephone+"</p><p><b>Celular:</b> "+cellphone+"</p>"+
+  "<p><b>Ubicación:</b> "+location+"</p>");
 
-    $("#modal").modal("show");
-    $("#"+new_button).remove();
+  $("#modal").modal("show");
+  $("#"+new_button).remove();
 
-    url = "<%=admin_update_candidate_path('x0x')%>";
-    url = url.replace("x0x", new_button);
-    $("#candidate_seen_link").attr('href', url);
-    $("#candidate_seen_link").click();
-  }
+  url = "<%=admin_update_candidate_path('x0x')%>";
+  url = url.replace("x0x", new_button);
+  $("#candidate_seen_link").attr('href', url);
+  $("#candidate_seen_link").click();
+}
 </script>
 
 <script>
-    $(document).ready(function() {
-        $('.footable').footable();
-    });
+$(document).ready(function() {
+  $('.footable').footable();
+});
 </script>

@@ -6,63 +6,63 @@
     <div class="row">
       <%= render partial: 'details_box', locals: {site_worker: @worker} %>
 
-        <div class="col-md-8">
-          <!--Datos del distribuidor-->
-          <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <h5>Información del trabajador</h5>
-                <div class="ibox-tools">
-                  <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  <a class="close-link"><i class="fa fa-times"></i></a>
-                </div>
+      <div class="col-md-8">
+        <!--Datos del distribuidor-->
+        <div class="ibox float-e-margins">
+          <div class="ibox-title">
+            <h5>Información del trabajador</h5>
+            <div class="ibox-tools">
+              <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              <a class="close-link"><i class="fa fa-times"></i></a>
             </div>
-            <div class="ibox-content">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                      <tr>
-                          <td><b>Clave:</b></td>
-                          <td><%= @worker.hash_id %></td>
-                          <td><b>Fecha nacimiento:</b></td>
-                          <td><%= l(@worker.birthday, format: :long) if @worker.birthday %></td>
-                        </tr>
-                        <tr>
-                            <td><b>Nombre:</b></td>
-                            <%= content_tag(:td, @worker.full_name, col_span: 3) %>
-                          </tr>
-                        <tr>
-                            <td><b>Ubicación:</b></td>
-                            <%= content_tag(:td, @worker.location) %>
-                            <td><b>Dirección:</b></td>
-                            <td><%= @worker.address %></td>
-                        </tr>
-                        <tr>
-                            <td><b>Teléfono:</b></td>
-                            <%= content_tag(:td, @worker.telephone_with_lada) %>
-                            <td><b>Teléfono celular:</b></td>
-                            <td><%= @worker.cellphone %></td>
-                        <tr>
-                            <td><b>RFC:</b></td>
-                            <td><%= @worker.rfc %></td>
-                            <td><b>NSS:</b></td>
-                            <td><%= @worker.nss %></td>
-                        </tr>
-                        <tr>
-                          <td><b>Fecha de creación:</b></td>
-                          <td><%= l(@worker.created_at, format: :long) %></td>
-                          <td><b>Última modificación:</b></td>
-                          <td><%= l(@worker.updated_at, format: :long) %></td>
-                        </tr>
-                        <tr>
-                          <td><b>Email:</b></td>
-                          <td colspan="3"><%= @worker.email %></td>
-                        </tr>
-                    </table>
-                </div>
+          </div>
+          <div class="ibox-content">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <tr>
+                  <td><b>Clave:</b></td>
+                  <td><%= @worker.hash_id %></td>
+                  <td><b>Fecha nacimiento:</b></td>
+                  <td><%= l(@worker.birthday, format: :long) if @worker.birthday %></td>
+                </tr>
+                <tr>
+                  <td><b>Nombre:</b></td>
+                  <%= content_tag(:td, @worker.full_name, col_span: 3) %>
+                </tr>
+                <tr>
+                  <td><b>Ubicación:</b></td>
+                  <%= content_tag(:td, @worker.location) %>
+                  <td><b>Dirección:</b></td>
+                  <td><%= @worker.address %></td>
+                </tr>
+                <tr>
+                  <td><b>Teléfono:</b></td>
+                  <%= content_tag(:td, @worker.telephone_with_lada) %>
+                  <td><b>Teléfono celular:</b></td>
+                  <td><%= @worker.cellphone %></td>
+                  <tr>
+                    <td><b>RFC:</b></td>
+                    <td><%= @worker.rfc %></td>
+                    <td><b>NSS:</b></td>
+                    <td><%= @worker.nss %></td>
+                  </tr>
+                  <tr>
+                    <td><b>Fecha de creación:</b></td>
+                    <td><%= l(@worker.created_at, format: :long) %></td>
+                    <td><b>Última modificación:</b></td>
+                    <td><%= l(@worker.updated_at, format: :long) %></td>
+                  </tr>
+                  <tr>
+                    <td><b>Email:</b></td>
+                    <td colspan="3"><%= @worker.email %></td>
+                  </tr>
+                </table>
+              </div>
             </div>
           </div>
 
         </div>
 
+      </div>
     </div>
-  </div>
-</div><br>
+  </div><br>

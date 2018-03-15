@@ -6,32 +6,32 @@
     <div class="ibox ibox-content">
       <h1>Búsqueda</h1>
 
-      <%= form_tag(admin_orders_search_path, method: :get, :class => "form-inline") do %>
+      <%= form_tag(admin_orders_search_path, method: :get, class: "form-inline") do %>
         <div class="form-group">
           <%= label_tag :warehouse_id, "Almacén" %>
           <%= select_tag :warehouse_id, options_from_collection_for_select(
             @warehouses, "id", "name", :selected => params[:warehouse_id]), prompt: "Selecciona...",
-            :class => "form-control m-b", onchange: "referenceNotWriting();" %>
+            class: "form-control m-b", onchange: "referenceNotWriting();" %>
         </div>
 
         <div class="form-group">
           <%= label_tag :start_date, "Fecha de inicio" %>
-          <%= text_field_tag :start_date, params[:start_date], { :class => 'form-control form-control-black',
-  					:maxlength => 15, :placeholder => "1990-11-15", onchange: "referenceNotWriting();" } %>
+          <%= text_field_tag :start_date, params[:start_date], { class: 'form-control form-control-black',
+  					maxlength: 15, placeholder: "1990-11-15", onchange: "referenceNotWriting();" } %>
         </div>
 
         <div class="form-group">
           <%= label_tag :end_date, "Fecha de fin" %>
-          <%= text_field_tag :end_date, params[:end_date], { :class => 'form-control form-control-black',
-  					:maxlength => 15, :placeholder => "1990-11-21", onchange: "referenceNotWriting();" } %>
+          <%= text_field_tag :end_date, params[:end_date], { class: 'form-control form-control-black',
+  					maxlength: 15, placeholder: "1990-11-21", onchange: "referenceNotWriting();" } %>
         </div>
 
         <div class="form-group">
           <%= label_tag :reference, "Referencia" %>
-          <%= text_field_tag :reference, params[:reference], :class => "form-control", onkeyup: "referenceWriting();", maxlength: 15 %>
+          <%= text_field_tag :reference, params[:reference], class: "form-control", onkeyup: "referenceWriting();", maxlength: 15 %>
         </div>
 
-        <%= submit_tag :Buscar, :class => "btn btn-primary" %>
+        <%= submit_tag :Buscar, class: "btn btn-primary" %>
       <% end %> <br>
 
       <table class="footable table table-stripped toggle-arrow-tiny">

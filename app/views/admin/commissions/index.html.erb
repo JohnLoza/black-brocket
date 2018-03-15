@@ -21,7 +21,7 @@
               <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
             </div>
     				<div class="col-md-2">
-    					<%= link_to(admin_commissions_path, :class => "btn btn-white btn-sm full-width") do %>
+    					<%= link_to(admin_commissions_path, class: "btn btn-white btn-sm full-width") do %>
     						<i class="fa fa-refresh"></i> Actualizar
     					<% end %>
     				</div>
@@ -62,7 +62,7 @@
                     </td>
                     <td class="text-center">
                       <% if !c.payment_img.blank? %>
-                        <%= link_to image_tag(c.payment_img.url(:mini), :class => "img-rounded", :style =>"width:60px;"),
+                        <%= link_to image_tag(c.payment_img.url(:mini), class: "img-rounded", :style =>"width:60px;"),
                             image_path(c.payment_img.url), :data => {:toggle => "lightbox", :title => "Pago de la comisión: " + c.hash_id } %>
                       <% elsif !c.payment_pdf.blank? %>
                         <%= link_to "<i class='fa fa-file-pdf-o fa-5x'></i>".html_safe,
@@ -82,7 +82,7 @@
                     <td>
                       <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
                                   admin_commission_details_path(c.hash_id),
-                                  :class => "btn btn-white btn-sm m-b-xs" %>
+                                  class: "btn btn-white btn-sm m-b-xs" %>
 
                         <%= form_for(Commission.new, url: admin_upload_commission_payment_path(c.hash_id)) do |f| %>
                           <a onclick="$('#payment_field_<%=c.hash_id%>').click();" class="btn btn-white btn-sm m-b-xs">

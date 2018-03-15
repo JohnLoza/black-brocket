@@ -7,8 +7,8 @@
 
   <div class="panel-body">
     <%= form_tag(create_message_url) do %>
-      <%= text_area_tag :comment, nil, :class => "form-control form-control-black", :maxlength => 250 %><br>
-      <%= submit_tag :Enviar, :class => "btn btn-custom-1 pull-right" %>
+      <%= text_area_tag :comment, nil, class: "form-control form-control-black", maxlength: 250 %><br>
+      <%= submit_tag :Enviar, class: "btn btn-custom-1 pull-right" %>
     <% end %>
   </div>
 </div>

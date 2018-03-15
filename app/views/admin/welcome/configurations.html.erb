@@ -10,10 +10,10 @@
         <h1>Configuración</h1>
         <%= form_for @configuration, url: admin_configurations_path, method: :post do |f| %>
           <%= f.label :IVA %>
-          <%= f.number_field :IVA, {:class => "form-control", min: 1, step: 0.01,
-              :placeholder => "ej. 16 (sin signo de %)" } %>
+          <%= f.number_field :IVA, {class: "form-control", min: 1, step: 0.01,
+              placeholder: "ej. 16 (sin signo de %)" } %>
 
-          <%= f.submit :Guardar, :class => "btn btn-primary" %>
+          <%= f.submit :Guardar, class: "btn btn-primary" %>
         <% end %>
       </div>
     </div>

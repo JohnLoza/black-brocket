@@ -10,32 +10,17 @@
                     <h5>Detalles del perfil</h5>
                 </div>
                 <div class="ibox-content no-padding border-left-right">
-                    <% if !@distributor.photo.blank? %>
-                        <%= image_tag(@distributor.photo.url, { :class => "img-responsive full-width" }) %>
-                    <% else %>
-                        <%= image_tag("user_avatar.png", { :class => "img-responsive full-width" }) %>
-                    <% end %>
+                  <%= image_tag(@distributor.avatar_url, class: "img-responsive full-width") %>
                 </div>
                 <div class="ibox-content profile-content">
-                    <h4><strong><%= @distributor.name %> <%= @distributor.lastname %> <%= @distributor.mother_lastname %></strong></h4>
-                    <div class="user-button">
-                        <div class="row">
-                            <div class="col-md-6 p-r-7">
-                                <%#= link_to "<button type='button' class='btn btn-success btn-sm btn-block'><i class='fa fa-pencil'></i> Modificar</button>".html_safe, edit_admin_distributor_path(@distributor.hash_id) %>
-                            </div>
-                            <div class="col-md-6 p-l-7">
-                                <%#= link_to " <button type='button' class='btn btn-danger btn-sm btn-block'><i class='fa fa-trash'></i> Eliminar</button>".html_safe, admin_distributor_path(@distributor.hash_id),
-                  method: "delete", data: { confirm: "Estas seguro(a) de eliminarlo?" } %>
-                            </div>
-                        </div>
-                    </div>
+                    <%= content_tag(:h4, @distributor.full_name) %>
                 </div>
             </div>
         </div>
 
 
         <div class="col-md-8">
-          <% if @actions["SHOW_PERSONAL_DATA"] %>
+          <% if @current_user.has_permission?('distributors@show_personal_data') %>
             <!--Datos del distribuidor-->
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -44,12 +29,6 @@
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
                         </a>
-                        <!--a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><%#= link_to "Editar".html_safe, edit_admin_distributor_path(@distributor.hash_id) %></li>
-                        </ul-->
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -61,45 +40,45 @@
                               <td><b>Fecha nacimiento:</b></td>
                               <td><%= l(@distributor.birthday, format: :long) if @distributor.birthday %></td>
                           </tr>
-                            <tr>
-                                <td><b>Nombre:</b></td>
-                                <td><%= @distributor.name %> <%= @distributor.lastname %> <%= @distributor.mother_lastname %></td>
-                                <td><b>Nombre comercial o de usuario:</b></td>
-                                <td><%= @distributor.username %></td>
-                            </tr>
-                            <tr>
-                                <td><b>Ubicación:</b></td>
-                                <td><%= @distributor_city.name %>, <%= @distributor_city.State.name %></td>
-                                <td><b>Dirección:</b></td>
-                                <td><%= @distributor.address %></td>
-                            </tr>
-                            <tr>
-                                <td><b>Teléfono:</b></td>
-                                <td>(<%=@distributor_city.lada%>) <%= @distributor.telephone %></td>
-                                <td><b>Celular:</b></td>
-                                <td><%= @distributor.cellphone %></td>
-                            </tr>
-                            <tr>
-                              <td><b>Fecha de creación:</b></td>
-                              <td><%= l(@distributor.created_at, format: :long) %></td>
-                              <td><b>Última modificación:</b></td>
-                              <td><%= l(@distributor.updated_at, format: :long) %></td>
-                            </tr>
-                            <tr>
-                              <td><b>Email:</b></td>
+                          <tr>
+                              <td><b>Nombre:</b></td>
+                              <td><%= @distributor.full_name %></td>
+                              <td><b>Nombre comercial o de usuario:</b></td>
+                              <td><%= @distributor.username %></td>
+                          </tr>
+                          <tr>
+                              <td><b>Ubicación:</b></td>
+                              <td><%= @distributor.location %></td>
+                              <td><b>Dirección:</b></td>
+                              <td><%= @distributor.address %></td>
+                          </tr>
+                          <tr>
+                              <td><b>Teléfono:</b></td>
+                              <td><%= @distributor.telephone_with_lada %></td>
+                              <td><b>Celular:</b></td>
+                              <td><%= @distributor.cellphone %></td>
+                          </tr>
+                          <tr>
+                            <td><b>Fecha de creación:</b></td>
+                            <td><%= l(@distributor.created_at, format: :long) %></td>
+                            <td><b>Última modificación:</b></td>
+                            <td><%= l(@distributor.updated_at, format: :long) %></td>
+                          </tr>
+                          <tr>
+                            <td><b>Email:</b></td>
                               <td><%= @distributor.email %></td>
-                            <% if @actions["SHOW_COMMISSION"] %>
-                                <td><strong>Comisión:</strong></td>
-                                <td><%= @distributor.commission %>%</td>
-                              </tr>
+                            <% if @current_user.has_permission?('distributors@show_commission') %>
+                              <td><strong>Comisión:</strong></td>
+                              <td><%= @distributor.commission %>%</td>
                             <% end %>
+                          </tr>
                         </table>
                     </div>
                 </div>
             </div>
           <% end # if @actions["SHOW_PERSONAL_DATA"] end #%>
 
-          <% if @actions["SHOW_FISCAL_DATA"] %>
+          <% if @current_user.has_permission?('distributors@show_fiscal_data') %>
             <!-- Fiscal Data -->
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -113,7 +92,7 @@
             </div>
           <% end %>
 
-          <% if @actions["SHOW_BANK_DATA"] %>
+          <% if @current_user.has_permission?('distributors@show_bank_data') %>
             <!-- Fiscal Data -->
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -129,7 +108,7 @@
             </div>
           <% end %>
 
-          <% if @actions["SHOW_DISTRIBUTION_REGIONS"] %>
+          <% if @current_user.has_permission?('distributors@show_distribution_regions') %>
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Zonas de distribución</h5>

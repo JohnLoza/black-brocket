@@ -34,9 +34,9 @@
               <%= f.hidden_field :type, :value => "TRANSFER" %>
 
               <%= select_tag "shipment[target_warehouse_id]", options_from_collection_for_select(
-              @warehouses, "id", "name"), prompt: "Selecciona...", :class => "form-control m-b", required: true %>
+              @warehouses, "id", "name"), prompt: "Selecciona...", class: "form-control m-b", required: true %>
 
-              <%= f.submit "Enviar productos al almacén!", :class => "btn btn-primary",
+              <%= f.submit "Enviar productos al almacén!", class: "btn btn-primary",
               data: {confirm: "Seguro(a) de registrar el envío de productos?" }%>
             <% end %>
           </div>

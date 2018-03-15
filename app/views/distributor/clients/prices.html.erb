@@ -69,7 +69,7 @@
                                end # if @product_prices.any? # %>
                             <td>
                               <%= number_field_tag "product[#{p.id}]", field_value,
-                                  {:class => "form-control product-control", max: p.price,
+                                  {class: "form-control product-control", max: p.price,
                                    recommended: p.recommended_price, min: p.lowest_price,
                                    step: 0.01, required: 'required'} %>
                                    <span class="help-block m-b-none">Escribe el precio pactado para "<%= p.name %>".</span>
@@ -89,7 +89,7 @@
                                  onclick="update_product_prices_to_default()">
                                  Establecer todos los precios recomendados
                               </i>
-                              <%= submit_tag :Guardar, :class => "btn btn-primary" %>
+                              <%= submit_tag :Guardar, class: "btn btn-primary" %>
                             </div>
                           </td>
                         </tr>

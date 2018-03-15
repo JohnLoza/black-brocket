@@ -1,0 +1,45 @@
+<div class="ibox">
+  <div class="ibox-content" style="display: block;">
+    <div class="row">
+      <div class="col-sm-6 b-r margin-bot-resp">
+        <h3 class="m-t-none m-b">Lista de distribuidores</h3>
+
+        <%= form_for(:class, url: admin_distributors_path, method: :get) do |f| %>
+          <%= f.text_field :search, value: search_params, class: "input form-control",
+            placeholder: "Buscar", maxlength: 50  %>
+
+           <label>Buscar por zona de distribución:</label>
+
+           <div class="input-group">
+             <%= render partial: '/shared/select_state', locals: { states: @states } %>
+             <%= render partial: '/shared/select_city', locals: { cities: @cities } %>
+
+             <span class="input-group-btn">
+                <%= f.submit "Buscar".html_safe, class: "btn btn btn-success" %>
+             </span>
+           </div>
+        <% end %>
+      </div>
+      <% if @current_user.has_permission?('distributors@create') %>
+      <div class="hr-line-dashed pro-mobile"></div>
+        <div class="col-sm-3 text-center">
+          <h4>Registrar Nuevo</h4>
+          <%= link_to "<i class='fa fa-street-view med-icon'></i>".html_safe, new_admin_distributor_path %>
+        </div>
+      <% end %>
+      <div class="hr-line-dashed pro-mobile"></div>
+      <% if @current_user.has_permission?('distributors@requests') %>
+        <div class="col-sm-3 text-center">
+          <h4>Solicitudes</h4>
+          <%= link_to "<i class='fa fa-file-o med-icon'></i>".html_safe, admin_distributor_candidates_path %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#city_id").removeAttr('required');
+  });
+</script>

@@ -4,77 +4,64 @@
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-
-    <div class="ibox">
-      <div class="ibox-content" style="display: block;">
-        <div class="row">
-	        <div class="col-sm-6 b-r margin-bot-resp">
-            <h3 class="m-t-none m-b">Lista de distribuidores</h3>
-            <p>Aquí puedes realizar diversas acciones como dar de alta un distributor, modificar, eliminarlo o simplemente ver su información!!!</p>
-            <p>En la búsqueda, separa los parámetros con "," ejemplo: Guadalajara, Querétaro, D0009 </p>
-
-	          <%= form_for(:distributor, url: admin_distributors_path, method: :get) do |f| %>
-
-                <% if params[:distributor] %>
-                   <%= f.text_field :search, value: params[:distributor][:search], :class => "input form-control",  :placeholder => "Buscar distribuidor...", :maxlength => 50  %>
-                <% else %>
-                   <%= f.text_field :search, :class => "input form-control",  :placeholder => "Buscar distribuidor...", :maxlength => 50  %>
-                <% end %>
-
-               <label>Buscar por zona de distribución:</label>
-
-               <div class="input-group">
-                 <div id="select_state" class="form-group">
-                   <label class="col-sm-2 control-label">Estado</label>
-                   <div class="col-sm-10">
-                     <%= link_to 'get_cities_link', get_cities_path + "?state=null", :remote => true, id: "get_cities_link", style: "display:none;"%>
-                     <%= select_tag :state_id, options_from_collection_for_select(
-                         @states, "id", "name", :selected => @state_id),
-                         prompt: "Selecciona...", :class => "input form-control",
-                         onchange: " update_state_ref(this.value);
-                                     $('#get_cities_link').click(); " %>
-                   </div>
-                 </div>
-
-                 <div id="select_city" class="form-group">
-                   <label class="col-sm-2 control-label">Población</label>
-                   <div class="col-sm-10">
-                     <%= select_tag :city_id, options_from_collection_for_select(
-                         @cities, "id", "name", :selected => @city_id),
-                         prompt: "Selecciona...", :class => "input form-control" %>
-                   </div>
-                 </div>
-
-                 <span class="input-group-btn">
-                    <%= f.submit "Buscar".html_safe, :class => "btn btn btn-success" %>
-                 </span>
-               </div>
-		        <% end %>
-		      </div>
-          <% if @actions["CREATE"] %>
-          <div class="hr-line-dashed pro-mobile"></div>
-            <div class="col-sm-3 text-center">
-              <h4>Registrar Nuevo</h4>
-		          <%= link_to "<i class='fa fa-street-view med-icon'></i>".html_safe, new_admin_distributor_path %>
-		        </div>
-          <% end %>
-          <div class="hr-line-dashed pro-mobile"></div>
-          <% if @actions["REQUESTS"] %>
-            <div class="col-sm-3 text-center">
-              <h4>Solicitudes</h4>
-              <%= link_to "<i class='fa fa-file-o med-icon'></i>".html_safe, admin_distributor_candidates_path %>
-            </div>
-          <% end %>
-	     </div>
-	   </div>
-     </div>
+    <%= render 'header_with_search' %>
 
     <div class="row">
-        <%= render partial: "presentation_table" %>
+      <div class="col-lg-12">
+        <div class="ibox">
+        	<div class="ibox-content">
+
+        			<div class="row m-b-sm m-t-sm">
+                <div class="col-md-10">
+                  <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
+                </div>
+        				<div class="col-md-2">
+        					<%= link_to(admin_distributors_path, class: "btn btn-white btn-sm full-width") do %>
+        						<i class="fa fa-refresh"></i> Actualizar
+        					<% end %>
+        				</div>
+        			</div>
+
+        			<table class="footable table table-stripped  toggle-arrow-tiny" data-filter=#filter>
+        					<thead>
+          					<tr>
+                        <th data-sort-ignore="true"></th>
+                        <th data-hide="phone" data-sort-ignore="true"></th>
+          					    <th data-hide="phone">Clave</th>
+          					    <th>Nombre comercial o de usuario</th>
+                        <th data-hide="all">Nombre</th>
+          					    <th data-hide="phone">Ciudad</th>
+          					    <th data-hide="phone">Teléfono</th>
+          					    <th data-hide="all">Fecha de creación</th>
+                        <th data-hide="all">Última modificación</th>
+          					    <th data-hide="phone" data-sort-ignore="true">Acción</th>
+          					</tr>
+        					</thead>
+        					<tbody>
+        					  <%= render @distributors %>
+        					</tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="7">
+                        <div class="pull-right">
+                          <%= will_paginate @distributors, renderer: BootstrapPagination::Rails %>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+        			</table>
+
+              <script>
+                  $(document).ready(function() {
+                      $('.footable').footable();
+                  });
+              </script>
+
+        	</div>
+        </div>
+      </div>
+
     </div>
-    <% # @distributors.each do |d| %>
-      <% # = render partial: "presentation_card", locals: { distributor: d } %>
-    <% # end %>
 
   </div>
 </div>

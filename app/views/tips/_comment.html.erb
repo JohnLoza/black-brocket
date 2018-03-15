@@ -2,7 +2,7 @@
   <% client = comment.Client %>
   <div class="panel-heading">
     <h4 class="panel-title">
-      <%= image_tag User.getImage(client, :mini), style: "width: 35px;border-radius: 4px;" %> <%= client.username %> - <small><%= l(comment.created_at, format: :long) %></small><br>
+      <%= image_tag User.avatar_url(client, :mini), style: "width: 35px;border-radius: 4px;" %> <%= client.username %> - <small><%= l(comment.created_at, format: :long) %></small><br>
     </h4>
   </div>
   <div class="panel-body" style="padding: 10px;padding-left: 15px;">

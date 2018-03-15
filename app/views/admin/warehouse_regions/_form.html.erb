@@ -1,8 +1,8 @@
 
-    <%= form_for(:warehouse_region, remote: true, :html => {:class => 'form-horizontal'}) do |f| %>
+    <%= form_for(:warehouse_region, remote: true, :html => {class: 'form-horizontal'}) do |f| %>
       <%= render :partial => "select_state", locals: { states: @states } %>
       <%= f.hidden_field :warehouse_id, value: @warehouse.id %>
 
-      <%= f.submit "Añadir", :class => "btn btn-primary pull-right" %>
+      <%= f.submit "Añadir", class: "btn btn-primary pull-right" %>
     <% end %>
 

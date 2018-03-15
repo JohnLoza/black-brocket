@@ -23,7 +23,7 @@
               </div>
 
               <% @infos.each do |info| %>
-                <%= form_for info, url: admin_web_service_path(info.id), :html => {:class => 'form-horizontal'}, method: :put do |f| %>
+                <%= form_for info, url: admin_web_service_path(info.id), :html => {class: 'form-horizontal'}, method: :put do |f| %>
 
                   <div class="col-md-6 col-lg-3" style="border-right: solid #E7EAEC 1px;">
                     <br>
@@ -37,9 +37,9 @@
                     <%else%>
                         <h4>Distribuidores en varias zonas</h4>
                     <%end%>
-                    <%# f.text_area :description, :class => "form-control summernote" %>
-                    <%= f.text_area :body, :class => "form-control", :maxlength => 110 %><br>
-                    <%= f.submit "Guardar", :class => "btn btn-primary pull-right" %>
+                    <%# f.text_area :description, class: "form-control summernote" %>
+                    <%= f.text_area :body, class: "form-control", maxlength: 110 %><br>
+                    <%= f.submit "Guardar", class: "btn btn-primary pull-right" %>
                     <div class="clearfix"></div>
                   </div>
                   <div class="hr-line-dashed pro-mobile"></div>
@@ -50,7 +50,7 @@
             <div class="hr-line-dashed no-mobile"></div>
             <div class="form-group">
                 <div class="col-sm-4">
-                    <%= link_to "Regresar".html_safe, admin_web_path, :class => "btn btn-white" %>
+                    <%= link_to "Regresar".html_safe, admin_web_path, class: "btn btn-white" %>
                 </div>
             </div>
             <br><br>

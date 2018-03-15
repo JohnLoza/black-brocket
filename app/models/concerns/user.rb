@@ -40,7 +40,7 @@ module User
   end
 
   # Get the user image if there is one, else return default image #
-  def getImage(type = nil)
+  def avatar_url(type = nil)
     image = ""
     if !self.photo.blank?
       if !type.nil?
@@ -63,10 +63,6 @@ module User
 
   def telephone_with_lada
     "(#{self.City.lada}) #{self.telephone}"
-  end
-
-  def cellphone_with_lada
-    "(#{self.City.lada}) #{self.cellphone}"
   end
 
   def same_as?(another_user)

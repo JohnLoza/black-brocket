@@ -5,14 +5,12 @@
        <ol class="breadcrumb">
        	  <li><%= link_to "Inicio", admin_welcome_path %></li>
 
-       	  <% cont = 0 %>
-       	  <% labels.each do |lab| %>
-       	  	<% if cont == labels.size - 1 %>
-       	  		<li><strong><%=lab%></strong></li>
+       	  <% labels.each.with_index do |label, index| %>
+       	  	<% if index == labels.size - 1 %>
+       	  		<li><strong><%= link_to label, nil %></strong></li>
        	  	<% else %>
-       	  	  <li><%= link_to(links[cont]) do %><%=lab%><% end %></li>
+       	  	  <li><%= link_to label, links[index] %></li>
        	  	<% end %>
-            <% cont += 1 %>
        	  <% end %>
 
        </ol>

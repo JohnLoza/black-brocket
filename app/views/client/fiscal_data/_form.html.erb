@@ -20,8 +20,8 @@
         <div class="row">
   				<div class="col-sm-12 form-group">
   					<%= f.label :name, "Nombre(s) / Razón Social", id:"label_name" %>
-            <%= f.text_field :name, :class => 'form-control form-control-black',
-                  :maxlength => 99, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+            <%= f.text_field :name, class: 'form-control form-control-black',
+                  maxlength: 99, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
             <span class="help-text">Solo se admite letras, espacios y puntos para nombre y appellidos</span>
   				</div>
   			</div><!-- .row -->
@@ -31,16 +31,16 @@
           <div class="row">
     				<div class="col-sm-12 form-group">
     					<%= f.label :lastname, "Apellido paterno" %>
-              <%= f.text_field :lastname, :class => 'form-control form-control-black',
-                    :maxlength => 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+              <%= f.text_field :lastname, class: 'form-control form-control-black',
+                    maxlength: 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
     				</div>
     			</div><!-- .row -->
 
           <div class="row">
     				<div class="col-sm-12 form-group">
     					<%= f.label :mother_lastname, "Apellido materno" %>
-              <%= f.text_field :mother_lastname, :class => 'form-control form-control-black',
-                      :maxlength => 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+              <%= f.text_field :mother_lastname, class: 'form-control form-control-black',
+                      maxlength: 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
             </div>
     			</div><!-- .row -->
         </div>
@@ -48,8 +48,8 @@
         <div class="row">
           <div class="col-sm-12 form-group">
             <%= f.label :rfc, "RFC" %>
-            <%= f.text_field :rfc, :class => 'form-control form-control-black', onkeyup:"this.value = this.value.toUpperCase();",
-                  required: true, :maxlength => 20 %>
+            <%= f.text_field :rfc, class: 'form-control form-control-black', onkeyup:"this.value = this.value.toUpperCase();",
+                  required: true, maxlength: 20 %>
           </div>
         </div><!-- .row -->
 
@@ -71,56 +71,56 @@
       <div class="row">
         <div class="col-sm-12 form-group">
           <%= f.label :street, "Calle" %>
-          <%= f.text_field :street, :class => 'form-control form-control-black',
-                :required => true, :maxlength => 50 %>
+          <%= f.text_field :street, class: 'form-control form-control-black',
+                required: true, maxlength: 50 %>
         </div>
       </div><!-- .row -->
 
       <div class="row">
  			 <div class="col-sm-12 form-group">
  				 <%= f.label :extnumber, "Número exterior" %>
- 				 <%= f.number_field :extnumber, :class => 'form-control form-control-black',
- 				 			:required => true, :maxlength => 5, :step => 1, :min => 0 %>
+ 				 <%= f.number_field :extnumber, class: 'form-control form-control-black',
+ 				 			required: true, maxlength: 5, :step => 1, :min => 0 %>
  			 </div>
  		 </div><!-- .row -->
 
  		 <div class="row">
  			 <div class="col-sm-12 form-group">
  				 <%= f.label :intnumber, "Número interior" %>
- 				 <%= f.number_field :intnumber, :class => 'form-control form-control-black',
- 				 			:maxlength => 4, :step => 1, :min => 0 %>
+ 				 <%= f.number_field :intnumber, class: 'form-control form-control-black',
+ 				 			maxlength: 4, :step => 1, :min => 0 %>
  			 </div>
  		 </div><!-- .row -->
 
       <div class="row">
         <div class="col-sm-12 form-group">
           <%= f.label :col, "Colonia" %>
-          <%= f.text_field :col, :class => 'form-control form-control-black',
-              :required => true, :maxlength => 50 %>
+          <%= f.text_field :col, class: 'form-control form-control-black',
+              required: true, maxlength: 50 %>
         </div>
       </div><!-- .row -->
 
       <div class="row">
         <div class="col-sm-12 form-group">
           <%= f.label :cp, "Código postal" %>
-          <%= f.text_field :cp, :class => 'form-control form-control-black',
-                :required => true, :maxlength => 5 %>
+          <%= f.text_field :cp, class: 'form-control form-control-black',
+                required: true, maxlength: 5 %>
         </div>
       </div><!-- .row -->
 
       <% if logged_in? %>
  			 <div class="row">
  				 <div class="col-sm-6">
- 					 <%= link_to "Cancelar", products_path, :class => "btn btn-block btn-custom-1 m-b-sm" %>
+ 					 <%= link_to "Cancelar", products_path, class: "btn btn-block btn-custom-1 m-b-sm" %>
  				 </div>
          <div class="col-sm-6">
- 					 <%= f.submit "Guardar cambios", :class => "btn btn-block btn-custom-1 m-b-sm" %><br>
+ 					 <%= f.submit "Guardar cambios", class: "btn btn-block btn-custom-1 m-b-sm" %><br>
  				 </div>
  			 </div><!-- .row -->
  		 <% else %>
  		   <div class="row">
  		     <div class="col-sm-12">
- 		       <%= f.submit "Guardar cambios", :class => "btn btn-block btn-custom-1 m-b-sm" %>
+ 		       <%= f.submit "Guardar cambios", class: "btn btn-block btn-custom-1 m-b-sm" %>
  		     </div>
  		   </div><!-- .row -->
  		 <% end %>

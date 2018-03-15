@@ -5,6 +5,6 @@
     <%= f.label "#{permission[:category]}-#{permission[:name]}", permission[:description] %>
   </div>
   <div class="col-md-4">
-    <%= f.check_box "#{permission[:category]}-#{permission[:name]}", :class => "js-switch", checked: checked %>
+    <%= f.check_box "#{permission[:category]}-#{permission[:name]}", class: "js-switch", checked: checked %>
   </div>
 </div>

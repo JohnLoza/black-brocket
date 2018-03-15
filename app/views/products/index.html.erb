@@ -15,7 +15,7 @@
 
     <% if logged_in?%>
       <center>
-       <%= image_tag @current_user.getImage(:mini), :class => "img-rounded", :style => "width:130px;" %><br>
+       <%= image_tag @current_user.avatar_url(:mini), class: "img-rounded", :style => "width:130px;" %><br>
        <h5 style="margin-top: 10px;margin-bottom: 15px;"><%= @current_user.username %></h5>
       </center>
     <% end %>
@@ -23,10 +23,10 @@
     <%= form_tag(products_path, method: :get) do %>
       <div class="input-group">
         <%= text_field_tag :search, params[:search],
-            {:class => "input form-control", :maxlength => 20, :placeholder => "Buscar producto..."} %>
+            {class: "input form-control", maxlength: 20, placeholder: "Buscar producto..."} %>
 
         <span class="input-group-btn">
-          <%= submit_tag :Buscar, {:class => "btn btn-custom-3 search-button"} %>
+          <%= submit_tag :Buscar, {class: "btn btn-custom-3 search-button"} %>
         </span>
       </div>
     <% end %>
@@ -38,10 +38,10 @@
   				<h3 class="iconbox-title" style="margin-top: 15px;">Categorías</h3>
   				<div class="iconbox-desc">
             <div class="list-group" style="margin: 0px;">
-              <%= link_to "Todos", products_path, :class => "list-group-item" %>
-              <%= link_to "Frío", products_path + "?category=cold" , :class => "list-group-item cold" %>
-              <%= link_to "Caliente", products_path + "?category=hot" , :class => "list-group-item hot" %>
-              <%= link_to "Frappé", products_path + "?category=frappe" , :class => "list-group-item frappe" %>
+              <%= link_to "Todos", products_path, class: "list-group-item" %>
+              <%= link_to "Frío", products_path + "?category=cold" , class: "list-group-item cold" %>
+              <%= link_to "Caliente", products_path + "?category=hot" , class: "list-group-item hot" %>
+              <%= link_to "Frappé", products_path + "?category=frappe" , class: "list-group-item frappe" %>
             </div>
   				</div>
   			</div>
@@ -111,7 +111,7 @@
           <div class="col-sm-12">
              <div class="col-sm-3">
                <center>
-                 <%= image_tag User.getImage(distributor, :mini),:class => "img-circle" %>
+                 <%= image_tag User.avatar_url(distributor, :mini),class: "img-circle" %>
                </center>
              </div>
              <div class="col-sm-9">
@@ -147,12 +147,12 @@
           </select></p>
 
           <p><b>Sugerencias y/o comentarios:</b></p>
-          <%= f.text_area :extra_comments, :class => "input form-control", style: "border: solid #999 1px;" %><br>
+          <%= f.text_area :extra_comments, class: "input form-control", style: "border: solid #999 1px;" %><br>
         </div>
         <div class="clearfix"></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
-          <%= submit_tag "Guardar", :class => "btn btn-primary" %>
+          <%= submit_tag "Guardar", class: "btn btn-primary" %>
         </div>
 
       <% end %>

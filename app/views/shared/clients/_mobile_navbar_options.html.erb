@@ -1,7 +1,7 @@
 <!--Start Dropdown profile-->
 <li class="dropdown yes-mobile">
   <a href="#" class="less_padding" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top: 14px !important;padding-bottom: 12px !important;">
-    <%= image_tag @current_user.getImage(:mini),
+    <%= image_tag @current_user.avatar_url(:mini),
         style: "margin-right: 5px;width: 25px;border-radius: 4px;" %>
     <%= @current_user.username %>
     <span class="caret"></span>

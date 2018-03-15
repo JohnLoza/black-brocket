@@ -7,7 +7,7 @@
           <center>
             <% @photos.each do |photo| %>
               <% if photo.product_id == p.id %>
-                <%= link_to image_tag(photo.photo.url(:mini),:class => "img-circle"), product_path(wp.hash_id) %>
+                <%= link_to image_tag(photo.photo.url(:mini),class: "img-circle"), product_path(wp.hash_id) %>
                 <% break %>
               <% end %>
             <% end %>
@@ -107,7 +107,7 @@
           <%= check_box_tag "invoice" %>
         </div>
         <div class="col-sm-2" >
-          <%= submit_tag "Comprar", :class => "btn btn-block btn-custom-1",
+          <%= submit_tag "Comprar", class: "btn btn-block btn-custom-1",
               data: {confirm: "Seguro(a) de realizar la compra?"} %>
         </div>
     <% end %>

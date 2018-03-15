@@ -27,7 +27,7 @@
                 </video>
                 <div class="hr-line-dashed"></div>
                 <%= link_to "<i class='fa fa-trash'></i> Restaurar valores predeterminados".html_safe, "",
-                    :class => "btn btn-danger btn-sm", method: :delete,
+                    class: "btn btn-danger btn-sm", method: :delete,
                     data: { confirm: "Seguro(a) de restaurar los valores por defecto del video de bienvenida?" } %>
               <% else %>
                 <video controls>
@@ -38,7 +38,7 @@
 
               <div class="hr-line-dashed"></div>
 
-              <%= form_for @video, url: admin_web_videos_path, :html => {:class => 'form-horizontal'}, method: :post do |f| %>
+              <%= form_for @video, url: admin_web_videos_path, :html => {class: 'form-horizontal'}, method: :post do |f| %>
                 <%= render :partial=>'/shared/error_messages', locals:{entity: @video} %>
 
                 <div class="form-group">
@@ -52,8 +52,8 @@
 
                 <div class="form-group">
                     <div class="col-sm-4">
-                        <%= link_to "Regresar".html_safe, admin_web_path, :class => "btn btn-white" %>
-                        <%= f.submit "Guardar", :class => "btn btn-primary" %>
+                        <%= link_to "Regresar".html_safe, admin_web_path, class: "btn btn-white" %>
+                        <%= f.submit "Guardar", class: "btn btn-primary" %>
                     </div>
                 </div>
               <% end %>

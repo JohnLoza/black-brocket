@@ -1,5 +1,9 @@
 class Distributor < ApplicationRecord
   attr_accessor :remember_token
+  include HashId
+  include Searchable
+  include SoftDeletable
+  include User
 
   before_save { self.email = email.downcase }
   has_secure_password
@@ -29,6 +33,27 @@ class Distributor < ApplicationRecord
   mount_uploader :photo, AvatarUploader
   mount_uploader :home_img, ImageUploader
 
+  scope :recent, ->    { order(created_at: :desc) }
+  scope :order_by_name, -> (way = nil) {
+    way = :asc unless way.present?
+    order(name: way)
+  }
+  scope :by_region, -> (options = {}) {
+    return all unless options[:state_id].present? or options[:city_id].present?
+    # give preference to city rather than state search
+    if options[:city_id].present?
+      # search the distributor by city
+      city = City.find_by(id: options[:city_id])
+      return all unless city
+      where(id: city.distributor_id)
+    else # options[:state_id] given
+      # search the distributor by state
+      cities = City.where(state_id: options[:state_id])
+      return all unless cities.any?
+      where(id: cities.map(&:distributor_id).uniq)
+    end
+  }
+
   def getHomeImage(default = nil)
     image = ""
     if !self.home_img.blank?
@@ -36,41 +61,6 @@ class Distributor < ApplicationRecord
     else
       image = default
     end # if !self.photo.blank? #
-  end
-
-  # When have search params
-  def self.search(search, params_page)
-    page = params_page
-    page = 1 if !page
-
-    if search.at(",") == ","
-      search=search.gsub(/\s+/, "")
-      search=search.gsub(',','|')
-      operator = "REGEXP"
-    else
-      search = "%"+search+"%"
-      operator = "LIKE"
-    end
-
-    joins(City: :State).where("
-      distributors.deleted=false and
-      (cities.name #{operator} :search or
-      states.name #{operator} :search or
-      distributors.name #{operator} :search or
-      distributors.lastname #{operator} :search or
-      distributors.mother_lastname #{operator} :search or
-      distributors.hash_id #{operator} :search)", search: search).order(created_at: :DESC).paginate(:page =>  page, :per_page => 20).includes(City: :State)
-  end
-
-  def self.show_admin(params_page)
-    page = params_page
-    page = 1 if !page
-
-    where(deleted: false).order(created_at: :DESC).paginate(:page =>  page, :per_page => 20).includes(City: :State)
-  end
-
-  def getName()
-    return self.name + " " + self.lastname + " " + self.mother_lastname
   end
 
   # update revisions from distributor to client creating timestamps #

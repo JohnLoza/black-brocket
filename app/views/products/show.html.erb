@@ -2,7 +2,7 @@
 
 <div class="show-tips-container">
   <h1 class="module-title long-up-2x">
-    <%= link_to(products_path, :class => "darklink") do %>
+    <%= link_to(products_path, class: "darklink") do %>
       <small><span class="icon-arrow-left"></span></small>
     <% end %>
     <%= @product.name %></h1>
@@ -12,7 +12,7 @@
         <div class="thumbnail" style="border: 0;">
           <% @photos.each do |photo| %>
             <% if photo.is_principal %>
-              <%= link_to image_tag(photo.photo.url(:thumb), :class => "img-responsive",
+              <%= link_to image_tag(photo.photo.url(:thumb), class: "img-responsive",
                   style: "max-height: 400px; max-width: 420px;margin-bottom:10px;"),
                   image_path(photo.photo.url), :data => {:toggle => "lightbox", :gallery => "products", :title => @product.name } %>
               <% break %>
@@ -21,7 +21,7 @@
 
           <% @photos.each do |photo| %>
             <% if !photo.is_principal %>
-              <%= link_to image_tag(photo.photo.url(:mini), :class => "img-thumbnail photo-gallery pull-left",
+              <%= link_to image_tag(photo.photo.url(:mini), class: "img-thumbnail photo-gallery pull-left",
                   style:"heigth: 90px; width: 90px; display: inline-block; margin-right:5px;"),
                   image_path(photo.photo.url), :data => {:toggle => "lightbox", :gallery => "products", :title => @product.name } %>
             <% end %>

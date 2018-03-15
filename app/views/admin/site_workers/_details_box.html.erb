@@ -2,7 +2,7 @@
   <div class="ibox float-e-margins">
     <div class="ibox-title"><h5>Detalles del perfil</h5></div>
     <div class="ibox-content no-padding border-left-right">
-      <%= image_tag(site_worker.getImage, :class => "img-responsive full-width" ) %>
+      <%= image_tag(site_worker.avatar_url, class: "img-responsive full-width" ) %>
     </div>
     <div class="ibox-content profile-content">
       <%= content_tag(:h4, site_worker.full_name) %>

@@ -13,7 +13,7 @@ class Admin::SiteWorkersController < AdminController
     deny_access! unless @current_user.has_permission?('site_workers@create')
 
     @worker = SiteWorker.new
-    @states = State.all.order_by_name
+    @states = State.order_by_name
     @cities = Array.new
     @warehouses = Warehouse.active
   end # def new end #
@@ -28,10 +28,8 @@ class Admin::SiteWorkersController < AdminController
       @worker.update_attribute(:hash_id, generateAlphKey("T", @worker.id))
       redirect_to admin_site_workers_path
     else
-      @city_id = params[:city_id]
-      @state_id = params[:state_id]
-      @cities = City.where(state_id: @state_id).order_by_name
-      @states = State.all.order_by_name
+      @cities = City.where(state_id: params[:state_id]).order_by_name
+      @states = State.order_by_name
       @warehouse_id = params[:site_worker][:warehouse_id]
       @warehouses = Warehouse.active
 
@@ -56,11 +54,10 @@ class Admin::SiteWorkersController < AdminController
 
     @warehouse_id = @worker.warehouse_id
     @warehouses = Warehouse.active.order_by_name
-    @states = State.all.order(:name)
-    @city_id = @worker.city_id
-    @state_id = @worker.City.state_id
-
-    @cities = City.where(state_id: @state_id)
+    params[:city_id] = @worker.city_id
+    params[:state_id] = @worker.City.state_id
+    @cities = City.where(state_id: params[:state_id]).order_by_name
+    @states = State.by_name
   end # def edit end #
 
   def update
@@ -77,10 +74,8 @@ class Admin::SiteWorkersController < AdminController
     else
       @warehouse_id = params[:site_worker][:warehouse_id]
       @warehouses = Warehouse.active.order_by_name
-      @states = State.all.order(:name)
-      @city_id = params[:city_id]
-      @state_id = params[:state_id]
-      @cities = City.where(state_id: @state_id)
+      @cities = City.where(state_id: params[:state_id]).order_by_name
+      @states = State.order_by_name
 
       flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
       render :edit

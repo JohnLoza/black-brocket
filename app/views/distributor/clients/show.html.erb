@@ -12,9 +12,9 @@
                 </div>
                 <div class="ibox-content no-padding border-left-right">
         					<% if !@client.photo.blank? %>
-        						<%= image_tag(@client.photo.url, { :class => "img-responsive full-width" }) %>
+        						<%= image_tag(@client.photo.url, { class: "img-responsive full-width" }) %>
         					<% else %>
-        						<%= image_tag("user_avatar.png", { :class => "img-responsive full-width" }) %>
+        						<%= image_tag("user_avatar.png", { class: "img-responsive full-width" }) %>
         					<% end %>
                 </div>
                 <div class="ibox-content profile-content">

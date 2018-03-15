@@ -13,7 +13,7 @@
                 </div>
                 <div class="ibox-content no-padding border-left-right">
                   <% @photos.each do |p| %>
-                    <%= image_tag(p.photo.url(:thumb), { :class => "img-responsive full-width" }) if p.is_principal %>
+                    <%= image_tag(p.photo.url(:thumb), { class: "img-responsive full-width" }) if p.is_principal %>
                   <% end %>
                 </div>
                 <div class="ibox-content profile-content">
@@ -151,7 +151,7 @@
               </div>
               <div class="ibox-content">
                 <% @photos.each do |p| %>
-                  <%= image_tag(p.photo.url(:mini), { :class => "img-thumbnail photo-gallery" }) %>
+                  <%= image_tag(p.photo.url(:mini), { class: "img-thumbnail photo-gallery" }) %>
                 <% end %>
               </div>
           </div>

@@ -14,9 +14,9 @@
 					<div class="col-sm-4">
 					   <div class="text-center">
                 <% if !@distributor.photo.blank? %>
-                    <%= image_tag(@distributor.photo.url(:mini), { :class => "img-circle m-t-xs img-responsive display-initial margin-bot-resp" }) %>
+                    <%= image_tag(@distributor.photo.url(:mini), { class: "img-circle m-t-xs img-responsive display-initial margin-bot-resp" }) %>
                 <% else %>
-                    <%= image_tag("user_avatar.png", { :class => "img-circle m-t-xs img-responsive display-initial margin-bot-resp" }) %>
+                    <%= image_tag("user_avatar.png", { class: "img-circle m-t-xs img-responsive display-initial margin-bot-resp" }) %>
                 <% end %>
 				     </div>
 					</div>

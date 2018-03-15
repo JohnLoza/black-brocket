@@ -23,7 +23,7 @@
         data:{confirm: 'Seguro(a) de aceptar el pago?'} %>
   <% end %>
 
-  <%= link_to "Rechazar", "#", :class => "btn btn-danger btn-sm m-t" ,
+  <%= link_to "Rechazar", "#", class: "btn btn-danger btn-sm m-t" ,
             onclick: "update_reject_pay_form('#{o.hash_id}')" %>
 <% end # if o.state == "PAYMENT_DEPOSITED" # %>
 
@@ -33,14 +33,14 @@
     <%= label_tag :parcel_id, "Paquetería" %>
     <%= select_tag :parcel_id, options_from_collection_for_select(
         @parcels, :id, :parcel_name), prompt: :Selecciona,
-        :class => "form-control m-b", required: true %>
+        class: "form-control m-b", required: true %>
 
     <%= label_tag :tracking_code, "Código de rastreo" %>
     <%= text_field_tag :tracking_code, "",
-        {:class => "form-control m-b", :maxlength => 20, required: true} %>
+        {class: "form-control m-b", maxlength: 20, required: true} %>
 
     <%= submit_tag "Guardar código de rastreo",
-        {:class => "btn btn-primary",
+        {class: "btn btn-primary",
           data: {confirm: "Estas seguro(a) de ser el código correcto?"}} %>
   <% end %>
 <% end %>

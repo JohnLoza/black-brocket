@@ -4,10 +4,10 @@
 
     <% if @current_user.has_permission?('site_workers@show') %>
       <%= link_to admin_site_worker_path(site_worker) do %>
-        <%= image_tag site_worker.getImage(:mini), :class => "img-circle" %>
+        <%= image_tag site_worker.avatar_url(:mini), class: "img-circle" %>
       <% end # link_to end # %>
     <% else %>
-      <%= image_tag @current_user.getImage(:mini), :class => "img-circle" %>
+      <%= image_tag @current_user.avatar_url(:mini), class: "img-circle" %>
     <% end # if @actions["SHOW"] end #%>
 
   </td>

@@ -1,7 +1,7 @@
 <% provide(:title, "Tips") %>
 <div class="show-tips-container">
   <h1 class="module-title long-up-2x">
-    <%= link_to(tips_path, :class => "darklink") do %>
+    <%= link_to(tips_path, class: "darklink") do %>
       <small><span class="icon-arrow-left"></span></small>
     <% end %>
     <%= @tip.title %></h1>
@@ -13,7 +13,7 @@
             Your browser does not support the video tag.
           </video>
         <% elsif !@tip.image.blank? %>
-          <%= image_tag(@tip.image.url , { :class => "img-responsive full-width show-tip-image", :align =>"left" }) %>
+          <%= image_tag(@tip.image.url , { class: "img-responsive full-width show-tip-image", :align =>"left" }) %>
         <% end %>
 
         <!-- For heroku not crashing -->
@@ -38,12 +38,12 @@
           <div class="panel-body">
             <%= form_for(TipRecipeComment.new, url: create_tip_comment_path(@tip.id),
                         method: :post, remote: true,
-                        html: {id: "form-#{@tip.id}", :class => "form"}) do |f| %>
+                        html: {id: "form-#{@tip.id}", class: "form"}) do |f| %>
 
               <!--<%= f.label :description, "Nuevo comentario" %>-->
-              <%= f.text_area :description, :class => "text-area form-control", :maxlength => 250 %>
+              <%= f.text_area :description, class: "text-area form-control", maxlength: 250 %>
               <a onclick="verify_message(this)" class="btn btn-custom-1 pull-right">Comentar</a>
-              <%= f.submit nil, :class => "commit", style: "display: none;" %>
+              <%= f.submit nil, class: "commit", style: "display: none;" %>
             <% end %>
           </div>
         </div>

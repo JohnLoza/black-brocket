@@ -11,25 +11,24 @@
               </div>
           </div>
           <div class="ibox-content">
-            <%= form_for [:admin, @worker], :html => {:id => "worker_form", :class => 'form-horizontal'} do |f| %>
+            <%= form_for [:admin, @worker], :html => {:id => "worker_form", class: 'form-horizontal'} do |f| %>
               <%= render :partial=>'/shared/error_messages', locals:{entity: @worker} %>
-
-              <% if @current_user.has_permission?('site_workers@update_personal_data') %>
-                <div class="form-group">
-                  <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
-                  <div class="col-sm-10">
-                    <%= f.text_field :hash_id, :class => 'form-control', :disabled => true %>
-                  </div>
-                </div>
-              <% end # has_permission @update_personal_data %>
 
               <% if @current_user.has_permission?('site_workers@update_personal_data') or
                     @current_user.has_permission?('site_workers@create') %>
+                    
+                <div class="form-group">
+                  <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
+                  <div class="col-sm-10">
+                    <%= f.text_field :hash_id, class: 'form-control', :disabled => true %>
+                  </div>
+                </div>
+
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :name, "Nombre" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :name, :class => 'form-control', :placeholder => "John",
-                        :required => true, :minlength => 2, :maxlength => 25,
+                    <%= f.text_field :name, class: 'form-control', placeholder: "John",
+                        required: true, minlength: 2, maxlength: 25,
                         "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
                   </div>
                 </div>
@@ -37,25 +36,25 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :lastname, "Apellido paterno" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :lastname, :class => 'form-control', :placeholder => "Black",
-                        :required => true, :minlength => 2, :maxlength => 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+                    <%= f.text_field :lastname, class: 'form-control', placeholder: "Black",
+                        required: true, minlength: 2, maxlength: 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :mother_lastname, "Apellido materno" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :mother_lastname, :class => 'form-control', :placeholder => "Smith",
-                        :required => true, :minlength => 2, :maxlength => 20, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/"%>
+                    <%= f.text_field :mother_lastname, class: 'form-control', placeholder: "Smith",
+                        required: true, minlength: 2, maxlength: 20, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/"%>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <%= f.label :birthday, "Fecha de nacimiento (yyyy-mm-dd)", :class => "col-sm-2 control-label" %>
+                  <%= f.label :birthday, "Fecha de nacimiento (yyyy-mm-dd)", class: "col-sm-2 control-label" %>
                   <div class="col-sm-10">
                   	<div class='input-group date' id="datetimepicker">
-                  		<%= f.text_field :birthday, { :class => 'form-control form-control-black',
-                  			:required => true, :maxlength => 10 } %>
+                  		<%= f.text_field :birthday, { class: 'form-control form-control-black',
+                  			required: true, maxlength: 10 } %>
                   		<span class="input-group-addon">
                   			<span class="fa fa-calendar"></span>
                   		</span>
@@ -67,8 +66,8 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :username, "Nombre comercial o de usuario" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :username, :class => 'form-control', :placeholder => "John01",
-                        :required => true, :minlength => 5, :maxlength => 15 %>
+                    <%= f.text_field :username, class: 'form-control', placeholder: "John01",
+                        required: true, minlength: 5, maxlength: 15 %>
                     <span class="help-block m-b-none">Mínimo 5 caracteres y máximo 15.</span>
                   </div>
                 </div>
@@ -76,8 +75,8 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :email, "Correo electrónico" %></label>
                   <div class="col-sm-10">
-                    <%= f.email_field :email, :class => 'form-control', :placeholder => "john@example.com",
-                        :required => true, :maxlength => 50 %>
+                    <%= f.email_field :email, class: 'form-control', placeholder: "john@example.com",
+                        required: true, maxlength: 50 %>
                   </div>
                 </div>
 
@@ -87,16 +86,16 @@
                     <label class="col-sm-2 control-label"><%= f.label :email_confirmation, "Confirma tu correo electrónico" %></label>
                     <div class="col-sm-10">
                       <%= f.email_field :email_confirmation, :value => @worker.email,
-                          :class => 'form-control form-control-black', :placeholder => "john@example.com",
-                          :required => true, :maxlength => 50, "data-parsley-equalto"=>"#site_worker_email" %>
+                          class: 'form-control form-control-black', placeholder: "john@example.com",
+                          required: true, maxlength: 50, "data-parsley-equalto"=>"#site_worker_email" %>
                     </div>
                   </div>
 
                   <div class="form-group <%if @worker.errors.any?%>has-error<%end%>">
                     <label class="col-sm-2 control-label"><%= f.label :password, "Contraseña" %></label>
                     <div class="col-sm-10">
-                      <%= f.password_field :password, :placeholder => '********', :class => 'form-control',
-                            :minlength => 6, :maxlength => 20 %>
+                      <%= f.password_field :password, placeholder: '********', class: 'form-control',
+                            minlength: 6, maxlength: 20 %>
                       <span class="help-block m-b-none">Mínimo 6 caracteres.</span>
                     </div>
                   </div>
@@ -104,7 +103,7 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><%= f.label :password_confirmation, "Confirma contraseña" %></label>
                     <div class="col-sm-10">
-                      <%= f.password_field :password_confirmation, :placeholder => '********', :class => 'form-control',
+                      <%= f.password_field :password_confirmation, placeholder: '********', class: 'form-control',
                           "data-parsley-equalto" => "#site_worker_password" %>
                     </div>
                   </div>
@@ -114,16 +113,16 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><%= f.label :email_confirmation, "Confirma tu correo electrónico" %></label>
                     <div class="col-sm-10">
-                      <%= f.email_field :email_confirmation, :class => 'form-control form-control-black', :placeholder => "john@example.com",
-            							:required => true, :maxlength => 50, "data-parsley-equalto"=>"#site_worker_email" %>
+                      <%= f.email_field :email_confirmation, class: 'form-control form-control-black', placeholder: "john@example.com",
+            							required: true, maxlength: 50, "data-parsley-equalto"=>"#site_worker_email" %>
                     </div>
                   </div>
 
                   <div class="form-group <%if @worker.errors.any?%>has-error<%end%>">
                     <label class="col-sm-2 control-label"><%= f.label :password, "Contraseña" %></label>
                     <div class="col-sm-10">
-                      <%= f.password_field :password, :placeholder => '********', :class => 'form-control',
-                            :required => true, :minlength => 6, :maxlength => 20 %>
+                      <%= f.password_field :password, placeholder: '********', class: 'form-control',
+                            required: true, minlength: 6, maxlength: 20 %>
                       <span class="help-block m-b-none">Mínimo 6 caracteres.</span>
                     </div>
                   </div>
@@ -131,8 +130,8 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><%= f.label :password_confirmation, "Confirma contraseña" %></label>
                     <div class="col-sm-10">
-                      <%= f.password_field :password_confirmation, :placeholder => '********', :class => 'form-control',
-                          :required => true, "data-parsley-equalto" => "#site_worker_password" %>
+                      <%= f.password_field :password_confirmation, placeholder: '********', class: 'form-control',
+                          required: true, "data-parsley-equalto" => "#site_worker_password" %>
                     </div>
                   </div>
 
@@ -142,24 +141,24 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :telephone, "Teléfono" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :telephone, :class => 'form-control',
-                        :required => true, :minlength => 8, :maxlength => 20 %>
+                    <%= f.text_field :telephone, class: 'form-control',
+                        required: true, minlength: 8, maxlength: 20 %>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :cellphone, "Celular" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :cellphone, :class => 'form-control',
-                        :required => true, :minlength => 10, :maxlength => 25 %>
+                    <%= f.text_field :cellphone, class: 'form-control',
+                        required: true, minlength: 10, maxlength: 25 %>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :address, "Dirección" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :address, :class => 'form-control', :placeholder => "calle #0000, col. ejemplo",
-                        :required => true, :maxlength => 150 %>
+                    <%= f.text_field :address, class: 'form-control', placeholder: "calle #0000, col. ejemplo",
+                        required: true, maxlength: 150 %>
                   </div>
                 </div>
 
@@ -171,16 +170,16 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :rfc, "RFC" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :rfc, :class => 'form-control', :placeholder => "RFC", onkeyup:"this.value = this.value.toUpperCase();",
-                        :required => true, :maxlength => 20 %>
+                    <%= f.text_field :rfc, class: 'form-control', placeholder: "RFC", onkeyup:"this.value = this.value.toUpperCase();",
+                        required: true, maxlength: 20 %>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :nss, "NSS" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :nss, :class => 'form-control', :placeholder => "Número de Seguro Social",
-                        :required => true, :maxlength => 20 %>
+                    <%= f.text_field :nss, class: 'form-control', placeholder: "Número de Seguro Social",
+                        required: true, maxlength: 20 %>
                   </div>
                 </div>
 
@@ -203,7 +202,7 @@
                       <div class="col-sm-10">
                       <%= select_tag "site_worker[warehouse_id]", options_from_collection_for_select(
                       @warehouses, "id", "name", :selected => @warehouse_id), prompt: "Selecciona...",
-                        :class => "form-control m-b", required: true %>
+                        class: "form-control m-b", required: true %>
                       </div>
                   </div>
                 </div>
@@ -213,7 +212,7 @@
               <div class="form-group">
                 <div class="col-sm-4 col-sm-offset-2">
                   <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
-                  <%= f.submit "Guardar cambios", :class => "btn btn-primary" %>
+                  <%= f.submit "Guardar cambios", class: "btn btn-primary" %>
                 </div>
               </div>
             <% end %>

@@ -3,6 +3,6 @@
   <p><b>Cantidad:</b> <%=product["quantity"]%></p>
   <p><b>Lote:</b> <%=product["batch"]%></p>
   <p><b>Caducidad:</b> <%=product["expiration_date"]%></p>
-  <%= link_to "<i class='fa fa-trash'></i> Borrar".html_safe, admin_discard_shipment_preparation_path(params[:warehouse_id], product_key), method: :delete, :class => "btn btn-danger btn-sm",
+  <%= link_to "<i class='fa fa-trash'></i> Borrar".html_safe, admin_discard_shipment_preparation_path(params[:warehouse_id], product_key), method: :delete, class: "btn btn-danger btn-sm",
   data: {confirm: "Seguro(a) de eliminar este lote de los preparativos"}, remote: true %>
 </div>

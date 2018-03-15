@@ -31,17 +31,17 @@
                 <p><b>Lote:</b> <%= d.batch %></p>
                 <p><b>Fecha de caducidad capturada:</b> <%= d.expiration_date %></p>
                 <% if @shipment.got_safe_to_destination.nil? %>
-                  <%= number_field_tag "difference_#{d.id}", " ", :class => "form-control m-b", step: 1, min: 1, max: 999999, :placeholder => "introduce aquí la cantidad real (si es que existe una diferencia)" %>
+                  <%= number_field_tag "difference_#{d.id}", " ", class: "form-control m-b", step: 1, min: 1, max: 999999, placeholder: "introduce aquí la cantidad real (si es que existe una diferencia)" %>
                 <% end %>
                 <div class="hr-line-dashed"></div>
               <% end #details.each end %>
 
               <% if @shipment.got_safe_to_destination.nil? %>
                 <p><b>Observaciones:</b></p>
-                <%= text_area_tag :observations, "", :class => "form-control m-b", maxlenght: 250, :placeholder => "Introduce aquí tus observaciones." %>
+                <%= text_area_tag :observations, "", class: "form-control m-b", maxlenght: 250, placeholder: "Introduce aquí tus observaciones." %>
 
-                <%= link_to "Todo llegó según lo esperado!", admin_receive_complete_shipment_path(@warehouse.hash_id, @shipment.id), :class => "btn btn-primary m-b btn-sm", method: :post %>
-                <%= submit_tag "Guardar reporte de diferencias", {:class => "btn btn-warning m-b btn-sm", data:{confirm: "Estás seguro(a) de guardar el reporte de diferencias?"}} %>
+                <%= link_to "Todo llegó según lo esperado!", admin_receive_complete_shipment_path(@warehouse.hash_id, @shipment.id), class: "btn btn-primary m-b btn-sm", method: :post %>
+                <%= submit_tag "Guardar reporte de diferencias", {class: "btn btn-warning m-b btn-sm", data:{confirm: "Estás seguro(a) de guardar el reporte de diferencias?"}} %>
 
               <% end %>
             <% end #form_tag end %>

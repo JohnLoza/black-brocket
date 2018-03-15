@@ -70,7 +70,7 @@
                       <td></td>
                       <td><%= label_tag "product[#{p.id}]", p.name %></td>
                       <td><%= number_field_tag "product[#{p.id}]", field_value,
-                          {:class => "form-control product-control", max: p.price,
+                          {class: "form-control product-control", max: p.price,
                            recommended: p.recommended_price, min: p.lowest_price,
                            step: 0.01, required: true} %></td>
                       <td>$<%= p.lowest_price %></td>
@@ -96,7 +96,7 @@
                  <i class="fa fa-dollar"></i>
                  <i>Establecer todos los precios recomendados</i>
               </button>
-              <%= submit_tag :Guardar, :class => "btn btn-primary" %>
+              <%= submit_tag :Guardar, class: "btn btn-primary" %>
             </div>
             <div class="clearfix"></div>
           <% end %>

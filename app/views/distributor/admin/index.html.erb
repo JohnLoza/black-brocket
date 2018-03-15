@@ -20,17 +20,17 @@
                 <h2 class="font-bold no-margins"><%= @current_user.username %></h2>
                 <small>Distribuidor</small>
             </div>
-            <%= image_tag @current_user.getImage(:mini), :class => "img-circle img-rounded m-b-md" %>
+            <%= image_tag @current_user.avatar_url(:mini), class: "img-circle img-rounded m-b-md" %>
             <div class="m-sm pull-right-bottom">
                 <span class="btn btn-info" onclick="$('#distributor_home_img').click();">Cambiar imagen</span>
 
                 <%= form_for(@current_user, url: distributor_update_home_image_path, method: :post, html: {style: "display: none;"}) do |f| %>
                   <%= f.file_field :home_img,
-                      {:class => "input form-control",
+                      {class: "input form-control",
                        onchange: "$('#commit').click();"} %>
 
                   <%= f.submit :Guardar,
-                      {id: "commit", :class => "btn btn-success",
+                      {id: "commit", class: "btn btn-success",
                        data: {confirm: "Estas seguro(a) de ser la imagen que quieres?"}} %>
                 <% end %>
 

@@ -18,7 +18,7 @@
 
           <div class="ibox-content">
           <%= form_for(:permission, url: update_permissions_admin_site_worker_path(@worker),
-              method: :put, :class => "form") do |f| %>
+              method: :put, class: "form") do |f| %>
 
             <div id="workers-permissions">
               <h1>Trabajadores</h1>
@@ -141,7 +141,7 @@
               <div class="hr-line-dashed"></div>
             </div>
 
-            <%= f.submit "Guardar permisos", :class => "btn btn-primary pull-right" %>
+            <%= f.submit "Guardar permisos", class: "btn btn-primary pull-right" %>
             <div class="clearfix"></div>
           <% end %> <!-- form end -->
           </div>

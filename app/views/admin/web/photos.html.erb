@@ -27,7 +27,7 @@
                 <div class="row">
                   <% @photos.each do |photo| %>
                     <div class="col-xs-6 col-md-3 " style="display: inline-block">
-                      <%= link_to image_tag(photo.photo.url(:thumb), :class => "img-thumbnail photo-gallery"),
+                      <%= link_to image_tag(photo.photo.url(:thumb), class: "img-thumbnail photo-gallery"),
                                   image_path(photo.photo.url), :data => {:toggle => "lightbox", :gallery => "home-gallery", :title => "Imagen de la galería" } %>
 
                         <%= link_to "<button type='button' class='btn btn-danger btn-sm m-t btn-block'><i class='fa fa-trash'></i> Eliminar</button>".html_safe, admin_web_destroy_photo_path(photo.id),
@@ -44,7 +44,7 @@
                 </center>
               <% end %>
 
-                <%= form_for @new_photo, url: admin_web_photos_path, html: { method: :post, :class => 'form-horizontal' } do |f| %>
+                <%= form_for @new_photo, url: admin_web_photos_path, html: { method: :post, class: 'form-horizontal' } do |f| %>
                   <div class="form-group">
                     <label class="col-sm-4 control-label"><%= f.label :photos, "Elige las imágenes que deseas subir, pueden ser jpg, jpeg o png." %></label>
                     <div class="col-sm-8"><br>
@@ -57,8 +57,8 @@
 
                   <div class="form-group">
                       <div class="col-sm-4">
-                          <%= link_to "Regresar".html_safe, admin_web_path, :class => "btn btn-white" %>
-                          <%= f.submit "Guardar", :class => "btn btn-primary" %>
+                          <%= link_to "Regresar".html_safe, admin_web_path, class: "btn btn-white" %>
+                          <%= f.submit "Guardar", class: "btn btn-primary" %>
                       </div>
                   </div>
 
@@ -87,7 +87,7 @@
               <div class="row">
                 <% @log_in_initial.each do |photo| %>
                   <div class="col-xs-6 col-md-3 " style="display: inline-block">
-                    <%= link_to image_tag(photo.photo.url(:thumb), :class => "img-thumbnail photo-gallery"),
+                    <%= link_to image_tag(photo.photo.url(:thumb), class: "img-thumbnail photo-gallery"),
                                 image_path(photo.photo.url), :data => {:toggle => "lightbox", :gallery => "session-gallery", :title => "Imagenes de inicio de sesión y portada del sitio" } %>
                     <% if photo.name == "LOGIN" %>
                       <label> Inicio de sesión </label>
@@ -106,7 +106,7 @@
               <h3> Se están usando las imágenes por defecto. </h3>
             <% end %>
 
-            <%= form_for @new_photo, url: admin_web_photos_path, html: { method: :post, :class => 'form-horizontal', id: "new_web_photo2"} do |f| %>
+            <%= form_for @new_photo, url: admin_web_photos_path, html: { method: :post, class: 'form-horizontal', id: "new_web_photo2"} do |f| %>
               <div class="form-group">
                 <label class="col-sm-4 control-label"><%= f.label :photo, "Elige la imágen que deseas subir, pueden ser jpg, jpeg o png." %></label>
                 <div class="col-sm-8">
@@ -123,8 +123,8 @@
 
               <div class="form-group">
                   <div class="col-sm-4">
-                      <%= link_to "Regresar".html_safe, admin_web_path, :class => "btn btn-white" %>
-                      <%= f.submit "Guardar", :class => "btn btn-primary" %>
+                      <%= link_to "Regresar".html_safe, admin_web_path, class: "btn btn-white" %>
+                      <%= f.submit "Guardar", class: "btn btn-primary" %>
                   </div>
               </div>
 

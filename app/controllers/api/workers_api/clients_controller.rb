@@ -32,7 +32,7 @@ class Api::WorkersApi::ClientsController < ApplicationController
             zipcode: c.cp, street_ref1: c.street_ref1, street_ref2: c.street_ref2,
             telephone: c.telephone, birthday: c.birthday, cellphone: c.cellphone,
             name: c.name, lastname: c.lastname, mother_lastname: c.mother_lastname,
-            photo: User.getImage(c)}
+            photo: User.avatar_url(c)}
 
     render :status => 200,
            :json => { :success => true, :info => "DATA_RETURNED",

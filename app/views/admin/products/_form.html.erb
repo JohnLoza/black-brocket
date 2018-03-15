@@ -12,14 +12,14 @@
 
         <div id="tab-1" class="tab-pane active">
           <div class="panel-body">
-            <%= form_for @product, url: @url, :html => {:id => "product_form", :class => 'form-horizontal'} do |f| %>
+            <%= form_for @product, url: @url, :html => {:id => "product_form", class: 'form-horizontal'} do |f| %>
             <%= render :partial=>'/shared/error_messages', locals:{entity: @product} %>
 
             <% if @actions["UPDATE_NAME"] %>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_field :hash_id, { :class => 'form-control', :disabled => true } %>
+                  <%= f.text_field :hash_id, { class: 'form-control', :disabled => true } %>
                 </div>
               </div>
             <% end # if @actions["UPDATE_NAME"] # %>
@@ -28,8 +28,8 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :name, "Nombre" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_field :name, :class => 'form-control', :placeholder => "Café mocha",
-                        :required => true, :maxlength => 50 %>
+                  <%= f.text_field :name, class: 'form-control', placeholder: "Café mocha",
+                        required: true, maxlength: 50 %>
                 </div>
               </div>
             <% end # if @actions["UPDATE_NAME"] # %>
@@ -38,22 +38,22 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :price, "Precio máximo del producto" %></label>
                 <div class="col-sm-10">
-                  <%= f.number_field :price, :class => 'form-control', :placeholder => "110",
-                        :required => true, :maxlength => 11, :min => 1, :step => 0.01 %>
+                  <%= f.number_field :price, class: 'form-control', placeholder: "110",
+                        required: true, maxlength: 11, :min => 1, :step => 0.01 %>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :recommended_price, "Precio recomendado" %></label>
                 <div class="col-sm-10">
-                  <%= f.number_field :recommended_price, :class => 'form-control', :placeholder => "100",
-                        :required => true, :maxlength => 11, :min => 1, :step => 0.01%>
+                  <%= f.number_field :recommended_price, class: 'form-control', placeholder: "100",
+                        required: true, maxlength: 11, :min => 1, :step => 0.01%>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :lowest_price, "Precio mínimo del producto" %></label>
                 <div class="col-sm-10">
-                  <%= f.number_field :lowest_price, :class => 'form-control', :placeholder => "100",
-                        :required => true, :maxlength => 11, :min => 1, :step => 0.01 %>
+                  <%= f.number_field :lowest_price, class: 'form-control', placeholder: "100",
+                        required: true, maxlength: 11, :min => 1, :step => 0.01 %>
                 </div>
               </div>
               <div class="hr-line-dashed"></div>
@@ -63,7 +63,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :show, "Mostrar en la página web" %></label>
                 <div class="col-sm-10">
-                  <%= f.check_box :show, :class => "js-switch" %>
+                  <%= f.check_box :show, class: "js-switch" %>
                 </div>
               </div>
               <div class="hr-line-dashed"></div>
@@ -71,38 +71,38 @@
 
             <% if @actions["UPDATE_PRODUCT_DATA"] or @actions["CREATE"] %>
               <div class="form-group">
-                <%= f.label :iva, "IVA", :class => "col-sm-2 control-label" %>
+                <%= f.label :iva, "IVA", class: "col-sm-2 control-label" %>
                 <div class="col-sm-10">
-                  <%= f.number_field :iva, :class => "form-control", :placeholder => "ej. 16 (sin signo de porcentaje %)",
-                        :required => true, :min => 0, :max => 99, :step => 0.1 %>
+                  <%= f.number_field :iva, class: "form-control", placeholder: "ej. 16 (sin signo de porcentaje %)",
+                        required: true, :min => 0, :max => 99, :step => 0.1 %>
                 </div>
               </div>
 
               <div class="form-group">
-                <%= f.label :ieps, "IEPS", :class => "col-sm-2 control-label" %>
+                <%= f.label :ieps, "IEPS", class: "col-sm-2 control-label" %>
                 <div class="col-sm-10">
-                  <%= f.number_field :ieps, :placeholder => "ej. 8 (sin signo de porcentaje %)", :class => "form-control",
-                        :required => true, :min => 0, :max => 99, :step => 0.1 %>
+                  <%= f.number_field :ieps, placeholder: "ej. 8 (sin signo de porcentaje %)", class: "form-control",
+                        required: true, :min => 0, :max => 99, :step => 0.1 %>
                 </div>
               </div>
 
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :description, "Descripción del producto" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_area :description_body, :id => "summernote", :class => "form-control" %>
+                  <%= f.text_area :description_body, :id => "summernote", class: "form-control" %>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :preparation, "Preparación del producto" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_area :preparation_body, :id => "summernote2", :class => 'form-control' %>
+                  <%= f.text_area :preparation_body, :id => "summernote2", class: 'form-control' %>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :presentation, "Presentación del producto" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_field :presentation, :class => 'form-control', placeholder: "Bolsa de 500grs.",
-                        :required => true, :maxlength => 50 %>
+                  <%= f.text_field :presentation, class: 'form-control', placeholder: "Bolsa de 500grs.",
+                        required: true, maxlength: 50 %>
                 </div>
               </div>
 
@@ -111,15 +111,15 @@
                     <tbody>
                     <tr>
                         <td>Caliente</td>
-                        <td align="right"><%= f.check_box :hot, :class => "js-switch" %></td>
+                        <td align="right"><%= f.check_box :hot, class: "js-switch" %></td>
                     </tr>
                     <tr>
                         <td>Helado</td>
-                        <td align="right"><%= f.check_box :cold, :class => "js-switch" %></td>
+                        <td align="right"><%= f.check_box :cold, class: "js-switch" %></td>
                     </tr>
                     <tr>
                         <td>Frappé</td>
-                        <td align="right"><%= f.check_box :frappe, :class => "js-switch" %></td>
+                        <td align="right"><%= f.check_box :frappe, class: "js-switch" %></td>
                     </tr>
                     </tbody>
                   </table>
@@ -154,7 +154,7 @@
             <div class="form-group">
               <div class="col-sm-4 col-sm-offset-2">
                 <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
-                <%= f.submit "Guardar cambios", :class => "btn btn-primary" %>
+                <%= f.submit "Guardar cambios", class: "btn btn-primary" %>
               </div>
             </div>
             <% end %>
@@ -180,14 +180,14 @@
                         <% else %>
                           <tr id="<%= p.hash_id %>">
                         <% end %>
-                        <td><%= image_tag p.photo.url(:mini), :class => "feed-photo" %></td>
+                        <td><%= image_tag p.photo.url(:mini), class: "feed-photo" %></td>
                         <td>
                           <%= link_to "Principal".html_safe, admin_products_set_principal_path(@product.hash_id, p.hash_id),
-                                remote: true, :class => "btn btn-primary btn-lg", id: p.hash_id %>
+                                remote: true, class: "btn btn-primary btn-lg", id: p.hash_id %>
                         </td>
                         <td>
                             <%= link_to "<i class='fa fa-trash'></i> ".html_safe, admin_products_photo_destroy_path(@product.hash_id, p.hash_id),
-                                  remote: true, :class => "btn btn-danger btn-lg", data: { confirm: "Estas seguro(a) de eliminarlo? esta será eliminada instantaneamente sin necesidad de presionar el botón de guardar."} %>
+                                  remote: true, class: "btn btn-danger btn-lg", data: { confirm: "Estas seguro(a) de eliminarlo? esta será eliminada instantaneamente sin necesidad de presionar el botón de guardar."} %>
                         </td>
                         </tr>
                       <% end if @photos %>

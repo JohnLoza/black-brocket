@@ -7,7 +7,7 @@
             <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
           </div>
   				<div class="col-md-2">
-  					<%= link_to(admin_clients_path, :class => "btn btn-white btn-sm full-width") do %>
+  					<%= link_to(admin_clients_path, class: "btn btn-white btn-sm full-width") do %>
   						<i class="fa fa-refresh"></i> Actualizar
   					<% end %>
   				</div>
@@ -34,9 +34,9 @@
                 <td class="project-people">
                   <%= link_to admin_client_path(c.hash_id) do %>
                     <% if !c.photo.blank? %>
-                        <%= image_tag(c.photo.url(:mini), { :class => "img-circle" }) %>
+                        <%= image_tag(c.photo.url(:mini), { class: "img-circle" }) %>
                     <% else %>
-                        <%= image_tag("user_avatar.png", { :class => "img-circle" }) %>
+                        <%= image_tag("user_avatar.png", { class: "img-circle" }) %>
                     <% end %>
                   <% end %>
                 </td>
@@ -53,25 +53,25 @@
                 <td>
                   <%= link_to "<i class='fa fa-truck'></i> Órdenes".html_safe,
                               admin_client_orders_path(c.hash_id),
-                              :class => "btn btn-white btn-sm m-b-xs hidden-button"%>
+                              class: "btn btn-white btn-sm m-b-xs hidden-button"%>
 
                   <%= link_to "<i class='fa fa-pencil'></i> Precios".html_safe,
                               admin_client_prices_path(c.hash_id),
-                              :class => "btn btn-white btn-sm m-b-xs hidden-button"%>
+                              class: "btn btn-white btn-sm m-b-xs hidden-button"%>
 
                   <%= link_to "<i class='fa fa-calendar'></i> Revisiones".html_safe,
                               admin_client_revisions_path(c.hash_id),
-                              :class => "btn btn-white btn-sm m-b-xs hidden-button"%>
+                              class: "btn btn-white btn-sm m-b-xs hidden-button"%>
 
                   <%= link_to "<i class='fa fa-calendar'></i> Visitas de distribuidor".html_safe,
                               admin_client_visits_path(c.hash_id),
-                              :class => "btn btn-white btn-sm m-b-xs hidden-button"%>
+                              class: "btn btn-white btn-sm m-b-xs hidden-button"%>
 
 
                   <% if @actions["SUPERVISOR_VISIT"] %>
                     <%= link_to "<i class='fa fa-calendar'></i> Visitas de supervisor".html_safe,
                               admin_supervisor_visits_path(c.hash_id),
-                              :class => "btn btn-white btn-sm m-b-xs hidden-button" %>
+                              class: "btn btn-white btn-sm m-b-xs hidden-button" %>
                   <% end %>
 
                 </td>

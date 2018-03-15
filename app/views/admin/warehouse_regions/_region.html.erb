@@ -6,7 +6,7 @@
 		      	<strong><%= state.name %></strong>
 		      </div>
 		      <div class="col-xs-3 text-right">
-		          <%= link_to "<i class='fa fa-trash f-size-18'></i>".html_safe, admin_warehouse_region_path(warehouse_id, state.id), method: :delete, data: { confirm: "Estas seguro(a) de eliminarla?" }, remote: true, :class => "white-link" %>
+		          <%= link_to "<i class='fa fa-trash f-size-18'></i>".html_safe, admin_warehouse_region_path(warehouse_id, state.id), method: :delete, data: { confirm: "Estas seguro(a) de eliminarla?" }, remote: true, class: "white-link" %>
 		      </div>
 	        </div>
 	    </div>

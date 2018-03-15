@@ -22,10 +22,10 @@
         <p><b>Mensaje:</b> <%= s.message %></p>
         <p><b>E-mail:</b> <%= s.email %></p>
         <div class="hr-line-dashed"></div>
-        <%= link_to "Establecer como respondido", admin_answer_suggestion_path(s.id), :class => "btn btn-primary", method: :post %>
+        <%= link_to "Establecer como respondido", admin_answer_suggestion_path(s.id), class: "btn btn-primary", method: :post %>
         <%#= form_tag(admin_answer_suggestion_path(s.id), method: :post) do %>
-          <%#= text_area_tag :response, "", { :class => "form-control", :placeholder => "Inserta tu respuesta a #{s.name} aquí...", :required => true } %></br>
-          <%#= submit_tag "Enviar respuesta", :class => "btn btn-primary btn-sm", data: { confirm: "Estás seguro de enviar tu respuesta? esta acción no se puede deshacer." } %>
+          <%#= text_area_tag :response, "", { class: "form-control", placeholder: "Inserta tu respuesta a #{s.name} aquí...", required: true } %></br>
+          <%#= submit_tag "Enviar respuesta", class: "btn btn-primary btn-sm", data: { confirm: "Estás seguro de enviar tu respuesta? esta acción no se puede deshacer." } %>
         <%# end %><br/><br/>
       <% end %>
 

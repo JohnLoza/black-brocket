@@ -89,10 +89,10 @@ class Admin::DistributorWorkController < ApplicationController
     @messages = @current_user.ClientMessages.where(client_id: @client.id)
                   .order(created_at: :desc).paginate(page: params[:page], per_page: 25)
 
-    @client_image = User.getImage(@client, :mini)
+    @client_image = User.avatar_url(@client, :mini)
     @client_username = @client.username
 
-    @distributor_image = @current_user.getImage(:mini)
+    @distributor_image = @current_user.avatar_url(:mini)
     @distributor_username = @current_user.username
 
     @create_message_url = admin_distributor_work_client_messages_path(@client.hash_id)

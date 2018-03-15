@@ -11,8 +11,8 @@
                     <h5>Detalles del perfil</h5>
                 </div>
                 <div class="ibox-content no-padding border-left-right">
-                  <% image = User.getImage(@client) %>
-        					<%= image_tag(image, { :class => "img-responsive full-width" }) %>
+                  <% image = User.avatar_url(@client) %>
+        					<%= image_tag(image, { class: "img-responsive full-width" }) %>
                 </div>
                 <div class="ibox-content profile-content">
                     <h4><strong><%= @client.name %> <%= @client.lastname %> <%= @client.mother_lastname %></strong></h4>

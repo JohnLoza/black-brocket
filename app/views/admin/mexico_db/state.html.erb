@@ -17,7 +17,7 @@
 
       <label for="state_id">Poblaciones de <%= @state.name %></label>
       <%= select_tag :city_id, options_from_collection_for_select(
-        @cities, "id", "name"), :class => "form-control m-b", onchange: "city_selected(this);" %>
+        @cities, "id", "name"), class: "form-control m-b", onchange: "city_selected(this);" %>
 
       <%= select_tag :current_ladas, options_from_collection_for_select(
         @cities, "id", "LADA"), style: "display: none;" %>
@@ -28,15 +28,15 @@
         <%= form_for(:city, url: admin_mexico_city_path(@cities[0].id), method: :put, html: {id: "update_city_form"}) do |f| %>
           <% if @actions["UPDATE_CITY_NAME"] %>
             <%= f.label :name, "Nombre de la población" %>
-            <%= f.text_field :name, { value: @cities[0].name, :class => "form-control m-b", maxlength: 50 } %>
+            <%= f.text_field :name, { value: @cities[0].name, class: "form-control m-b", maxlength: 50 } %>
           <% end %>
 
           <% if @actions["UPDATE_CITY_LADA"] %>
             <%= f.label :lada, "Registrar LADA de la población" %>
-            <%= f.number_field "LADA", { value: @cities[0].lada, :class => "form-control m-b", min: 0, max: 99999, step: 1} %>
+            <%= f.number_field "LADA", { value: @cities[0].lada, class: "form-control m-b", min: 0, max: 99999, step: 1} %>
           <% end %>
 
-          <%= f.submit "Modificar", :class => "btn btn-primary",
+          <%= f.submit "Modificar", class: "btn btn-primary",
              data: { confirm: "Seguro(a) de modificar la población?" } %>
         <% end # form_for end # %>
         <div class="hr-line-dashed"></div>
@@ -48,12 +48,12 @@
            <%= f.hidden_field "state_id", value: @state.id %>
 
            <%= f.label "name", "Nombre de la población" %>
-           <%= f.text_field "name", :class => "form-control", maxlength: 50 %>
+           <%= f.text_field "name", class: "form-control", maxlength: 50 %>
 
            <%= f.label "LADA", "LADA de la población" %>
-           <%= f.number_field "LADA", { :class => "form-control", min: 0, max: 99999, step: 1} %>
+           <%= f.number_field "LADA", { class: "form-control", min: 0, max: 99999, step: 1} %>
 
-           <%= f.submit "Crear población", :class => "btn btn-primary",
+           <%= f.submit "Crear población", class: "btn btn-primary",
              data: { confirm: "Seguro(a) de crear esta población? Esto no puede deshacerse..." } %>
         <% end # form_for end # %>
       <% end # if @actions["CREATE"] # %>

@@ -33,7 +33,7 @@
                     <td>
                       <%= link_to "<i class='fa fa-eye'></i> Ver pedido".html_safe,
                           admin_order_details_path(@order.hash_id),
-                          :class => "btn btn-white btn-sm", target: "_blank" %>
+                          class: "btn btn-white btn-sm", target: "_blank" %>
                     </td>
                   </tr>
               </table>
@@ -57,7 +57,7 @@
             Añadir campos
           </a>
 
-          <%= submit_tag :Guardar, :class => "btn btn-primary", data: {
+          <%= submit_tag :Guardar, class: "btn btn-primary", data: {
             confirm: "Estas seguro(a) de guardar esta información?"} %>
         <% end # form_for # %>
 

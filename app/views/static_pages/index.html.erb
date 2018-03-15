@@ -9,7 +9,7 @@
   </center>
 
   <div class="fullscreen-bg">
-    <video loop muted autoplay poster="<%= image_url @bgImg.getImage() %>" class="fullscreen-bg__video">
+    <video loop muted autoplay poster="<%= image_url @bgImg.getImage %>" class="fullscreen-bg__video">
         <source src="<%= video_url @bgVideo.getVideo() %>" type="video/mp4">
     </video>
   </div>
@@ -22,7 +22,7 @@
         <% if !logged_in?%>
           <div class="row">
             <%= link_to "Regístrate", client_sign_up_path,
-            :class => "btn btn-default btn-custom-4 text-shadow-black", style:"margin-top:20em;" %>
+            class: "btn btn-default btn-custom-4 text-shadow-black", style:"margin-top:20em;" %>
           </div>
         <% end %>
       </div>
@@ -90,7 +90,7 @@
           <div id="slideshow0" class="owl-carousel" style="opacity: 1;">
             <% @offers.each do |o| %>
               <div class="item"><center>
-                <a href="<%= o.url %>"><%= image_tag o.photo.url, :class => "img-responsive" %></a>
+                <a href="<%= o.url %>"><%= image_tag o.photo.url, class: "img-responsive" %></a>
               </center></div>
             <% end %>
           </div>
@@ -208,7 +208,7 @@
         <div class="col-sm-6 col-sm-offset-3">
           <div class="module-header wow fadeInUp">
             <h2 class="module-title">Galería de nuestros productos</h2>
-            <%= link_to "Catálago", products_path, :class => "btn btn-default" %>
+            <%= link_to "Catálago", products_path, class: "btn btn-default" %>
           </div>
         </div>
       </div><!-- .row -->
@@ -225,7 +225,7 @@
                   <figure class="overlay">
                     <%= image_tag p.photo.url(:thumb) %>
                     <figcaption>
-                      <%= link_to "", p.photo.url, :class => "gallery" %>
+                      <%= link_to "", p.photo.url, class: "gallery" %>
                       <div class="caption-inner">
                         <div class="overlay-icon">
                           <span class="icon-magnifier"></span>
@@ -268,18 +268,18 @@
 						<div class="row">
 
 							<div class="col-sm-6 form-group">
-                <%= text_field_tag :name, "", { :class => "form-control", :placeholder => "Nombre", :maxlength => 60, :required => true} %>
+                <%= text_field_tag :name, "", { class: "form-control", placeholder: "Nombre", maxlength: 60, required: true} %>
 							</div>
 
 							<div class="col-sm-6 form-group">
-								<%= text_field_tag :email, "", { :class => "form-control", :placeholder => "Tu email", :maxlength => 50, :required => true} %>
+								<%= text_field_tag :email, "", { class: "form-control", placeholder: "Tu email", maxlength: 50, required: true} %>
 							</div>
 
 						</div><!-- .row -->
 
 						<div class="row">
 							<div class="col-sm-12 form-group">
-								<%= text_area_tag :message, "", { :class => "form-control", :placeholder => "Mensaje", :maxlength => 250, :required => true} %>
+								<%= text_area_tag :message, "", { class: "form-control", placeholder: "Mensaje", maxlength: 250, required: true} %>
 							</div>
 						</div><!-- .row -->
 
@@ -326,7 +326,7 @@
 
   @media (max-width: 767px) {
     .fullscreen-bg {
-        background: url('<%= image_url @bgImg.getImage() %>') center center / cover no-repeat;
+        background: url('<%= image_url @bgImg.getImage %>') center center / cover no-repeat;
     }
 
     .fullscreen-bg__video {

@@ -20,15 +20,15 @@
               <br/>
               <% @networks.each do |n| %>
 
-                <%= form_for(n, url: admin_update_social_network_path(n.id), :html => {:class => 'form-horizontal'}, method: :put, :class => "form") do |f| %>
+                <%= form_for(n, url: admin_update_social_network_path(n.id), :html => {class: 'form-horizontal'}, method: :put, class: "form") do |f| %>
 
                 <div class="form-group">
                   <label class="col-sm-2 control-label"> <%= f.label :url, "URL de " + n.name %></label>
                   <div class="col-sm-7">
-                    <%= f.text_field :url, :class => "form-control", maxlength: 210 %></br>
+                    <%= f.text_field :url, class: "form-control", maxlength: 210 %></br>
                   </div>
                   <div class="col-sm-3">
-                    <%= f.submit "Guardar url de " + n.name, :class => "btn btn-primary btn-sm btn-block" %>
+                    <%= f.submit "Guardar url de " + n.name, class: "btn btn-primary btn-sm btn-block" %>
                   </div>
                 </div>
 
@@ -37,7 +37,7 @@
               <% end %>
 
               <div class="hr-line-dashed"></div>
-              <%= link_to "Regresar".html_safe, admin_web_path, :class => "btn btn-white" %>
+              <%= link_to "Regresar".html_safe, admin_web_path, class: "btn btn-white" %>
 
           </div>
 

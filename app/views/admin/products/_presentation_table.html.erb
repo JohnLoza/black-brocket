@@ -7,7 +7,7 @@
                  <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
                </div>
                <div class="col-md-2">
-                  <%= link_to(admin_products_path, :class => "btn btn-white btn-sm m-b-xs full-width") do %>
+                  <%= link_to(admin_products_path, class: "btn btn-white btn-sm m-b-xs full-width") do %>
                     <i class="fa fa-refresh"></i> Actualizar
                   <% end %>
                </div>
@@ -39,10 +39,10 @@
 
                              <% if @actions["SHOW"] %>
                                  <%= link_to admin_product_path(p.hash_id) do %>
-                                    <%= image_tag(photo.photo.url(:mini), :class => "img-circle") %>
+                                    <%= image_tag(photo.photo.url(:mini), class: "img-circle") %>
                                  <% end %>
                              <% else %>
-                                 <%= image_tag(photo.photo.url(:mini), :class => "img-circle") %>
+                                 <%= image_tag(photo.photo.url(:mini), class: "img-circle") %>
                              <% end %>
 
                              <% break %>
@@ -67,11 +67,11 @@
                          <% if @actions["UPDATE"] %>
                            <%= link_to "<i class='fa fa-pencil'></i> Modificar".html_safe,
                            edit_admin_product_path(p.hash_id),
-                           :class => "btn btn-white btn-sm hidden-button" %>
+                           class: "btn btn-white btn-sm hidden-button" %>
                          <% end %>
                          <% if @actions["DELETE"] %>
                            <%= link_to "<i class='fa fa-trash'></i> Eliminar".html_safe,
-                           admin_product_path(p.hash_id), :class => "btn btn-white btn-sm hidden-button",
+                           admin_product_path(p.hash_id), class: "btn btn-white btn-sm hidden-button",
                            method: "delete", data: { confirm: "Estas seguro(a) de eliminarlo?" } %>
                          <% end %>
                        </td>

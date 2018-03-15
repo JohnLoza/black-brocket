@@ -30,7 +30,7 @@
                 <td><%= detail.detail %></td>
                 <td><%= link_to "<i class='fa fa-trash'> Eliminar</i>".html_safe,
                       admin_web_footer_detail_path(detail.id),
-                      :class => "btn btn-danger btn-sm", method: :delete,
+                      class: "btn btn-danger btn-sm", method: :delete,
                       data: {confirm: "Estás seguro(a) de eliminar el detalle?"} %></td>
               </tr>
             <% end #@details.each# %>

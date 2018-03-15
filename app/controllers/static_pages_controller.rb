@@ -67,10 +67,10 @@ class StaticPagesController < ApplicationController
   end
 
   def get_cities
-    @cities = City.where(:state_id => params[:state_id]).order(:name)
+    @cities = City.where(:state_id => params[:state_id]).order_by_name
 
     respond_to do |format|
-      format.json{ render json: @cities.as_json(only: [:id, :name, :LADA]), status: 200 }
+      format.json{ render json: @cities.as_json(only: [:id, :name, :lada]), status: 200 }
       format.any{ head :not_found }
     end
   end

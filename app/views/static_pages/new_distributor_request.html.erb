@@ -22,23 +22,23 @@
         <div class="row">
           <div class="col-sm-12 form-group">
             <%= label_tag "Nombre(s)" %>
-            <%= text_field_tag :name, nil, :maxlength => 30, required: true,
-            :class => "form-control form-control-black" %>
+            <%= text_field_tag :name, nil, maxlength: 30, required: true,
+            class: "form-control form-control-black" %>
           </div>
           <div class="col-sm-12 form-group">
             <%= label_tag "Apellido Paterno" %>
-            <%= text_field_tag :lastname, nil, :maxlength => 30, required: true,
-            :class => "form-control form-control-black" %>
+            <%= text_field_tag :lastname, nil, maxlength: 30, required: true,
+            class: "form-control form-control-black" %>
           </div>
           <div class="col-sm-12 form-group">
             <%= label_tag "Apellido Materno" %>
-            <%= text_field_tag :mother_lastname, nil, :maxlength => 30, required: true,
-            :class => "form-control form-control-black" %>
+            <%= text_field_tag :mother_lastname, nil, maxlength: 30, required: true,
+            class: "form-control form-control-black" %>
           </div>
           <div class="col-sm-12 form-group">
             <%= label_tag "Correo electrónico" %>
-            <%= email_field_tag :email, nil, :maxlength => 50, required: true,
-            :class => "form-control form-control-black" %>
+            <%= email_field_tag :email, nil, maxlength: 50, required: true,
+            class: "form-control form-control-black" %>
           </div>
         </div><!-- .row -->
       </div>
@@ -46,14 +46,14 @@
       <div class="col-md-6">
         <div class="col-sm-12 form-group">
           <%= label_tag "Teléfono" %>
-          <%= text_field_tag :telephone, nil, :maxlength => 20, required: true,
-          :class => "form-control form-control-black",
+          <%= text_field_tag :telephone, nil, maxlength: 20, required: true,
+          class: "form-control form-control-black",
           onchange: "$('#telephone').attr('required', true);$('#cellphone').attr('required', false);"%>
         </div>
         <div class="col-sm-12 form-group">
           <%= label_tag "Celular" %>
-          <%= text_field_tag :cellphone, nil, :maxlength => 20, required: true,
-          :class => "form-control form-control-black",
+          <%= text_field_tag :cellphone, nil, maxlength: 20, required: true,
+          class: "form-control form-control-black",
            onchange: "$('#telephone').attr('required', false);$('#cellphone').attr('required', true);"%>
         </div>
         <div class="row">
@@ -70,7 +70,7 @@
       </div>
 
       <div class="col-md-12">
-        <%= submit_tag "Enviar", :class => "btn btn-custom-1 pull-right" %>
+        <%= submit_tag "Enviar", class: "btn btn-custom-1 pull-right" %>
       </div>
       <% end #form end# %>
 

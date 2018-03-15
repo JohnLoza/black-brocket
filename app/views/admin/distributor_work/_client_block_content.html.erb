@@ -1,6 +1,6 @@
 <td class="project-people">
   <%= link_to admin_client_path(client.hash_id) do %>
-    <%= image_tag User.getImage(client, :mini), { :class => "img-circle" } %>
+    <%= image_tag User.avatar_url(client, :mini), { class: "img-circle" } %>
   <% end %>
 </td>
 <% current_city = client.City %>

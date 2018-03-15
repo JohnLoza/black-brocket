@@ -17,13 +17,13 @@
                     <div class="input-group">
 
                       <% if params[:product] %>
-                         <%= f.text_field :search, value: params[:product][:search], :class => "input form-control",  :placeholder => "Buscar producto...", :maxlength => 50  %>
+                         <%= f.text_field :search, value: params[:product][:search], class: "input form-control",  placeholder: "Buscar producto...", maxlength: 50  %>
                       <% else %>
-                         <%= f.text_field :search, :class => "input form-control",  :placeholder => "Buscar producto...", :maxlength => 50  %>
+                         <%= f.text_field :search, class: "input form-control",  placeholder: "Buscar producto...", maxlength: 50  %>
                       <% end %>
 
                       <span class="input-group-btn">
-                           <%= f.submit "Buscar".html_safe, :class => "btn btn btn-success" %>
+                           <%= f.submit "Buscar".html_safe, class: "btn btn btn-success" %>
                       </span>
                     </div>
                  <% end %>

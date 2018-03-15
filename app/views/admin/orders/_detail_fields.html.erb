@@ -4,15 +4,15 @@
   <%= label_tag :product, "Producto" %>
   <%= select_tag "[product_id][]",
     options_from_collection_for_select(@products, "id", "name"),
-    :class => "form-control m-b", required: true %>
+    class: "form-control m-b", required: true %>
 
   <%= label_tag :quantity, "Cantidad" %>
   <%= number_field_tag "[quantity][]", "",
-      {:class => "form-control m-b", min: 1, max: 999999, step: 1} %>
+      {class: "form-control m-b", min: 1, max: 999999, step: 1} %>
 
   <%= label_tag :batch, "Número de lote" %>
   <%= text_field_tag "[batch][]", "",
-      {:class => "form-control m-b", :maxlength => 50} %>
+      {class: "form-control m-b", maxlength: 50} %>
 
   <a class="btn btn-danger btn-sm" onclick="$('#<%= hash_id %>').remove();">
     <i class="fa fa-trash"></i>

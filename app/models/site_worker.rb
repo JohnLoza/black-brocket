@@ -46,8 +46,8 @@ class SiteWorker < ApplicationRecord
   }
   scope :by_warehouse, -> (warehouse) { where(warehouse_id: warehouse) }
 
-  # Returns if the user has or not at least one of the given roles
-  # The splat (*) will automatically convert all arguments into an Array
+  # Returns if the user has or not the required_permission
+  # Permission format 'Category@Name' example: 'distributors@create'
   def has_permission?(required_permission)
     return true if self.is_admin
     load_permissions unless self.loaded_permissions.present?
@@ -60,6 +60,7 @@ class SiteWorker < ApplicationRecord
   end
 
   # Returns if the user has or not all the given roles
+  # The splat (*) will automatically convert all arguments into an Array
   def has_permissions?(*required_permissions)
     return true if self.is_admin
     load_permissions unless self.loaded_permissions.present?

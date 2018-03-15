@@ -18,7 +18,7 @@ class Api::DistributorApi::ClientsController < ApplicationController
     data<<{per_page: 20}
     clients.each do |client|
       data << {hash_id: client.hash_id, username: client.username, city: client.City.name, state: client.City.State.name,
-               last_visit: client.last_distributor_visit, last_revision: client.last_distributor_revision, photo: User.getImage(client),
+               last_visit: client.last_distributor_visit, last_revision: client.last_distributor_revision, photo: User.avatar_url(client),
                telephone: client.telephone, cellphone: client.cellphone, lada: client.City.lada}
     end
 

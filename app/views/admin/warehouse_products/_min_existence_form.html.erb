@@ -5,9 +5,9 @@
     <table class="full-width">
       <tr>
           <td><%= f.label :min_stock, "Nuevo stock mínimo" %></td>
-          <td class="table-padd"><%= f.number_field :min_stock, :placeholder => "0", min: 0, max: 99999, :class => "form-control" %></td>
+          <td class="table-padd"><%= f.number_field :min_stock, placeholder: "0", min: 0, max: 99999, class: "form-control" %></td>
           <td><%= f.submit "Modificar", data: { confirm: "Seguro(a) de modificar el stock mínimo?" },
-      :class => "btn btn-primary" %></td>
+      class: "btn btn-primary" %></td>
       </tr>
     </table>
 

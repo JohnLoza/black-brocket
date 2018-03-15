@@ -22,7 +22,7 @@
               <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Buscar en tabla">
             </div>
     				<div class="col-md-2">
-    					<%= link_to(distributor_commission_details_path(params[:id]), :class => "btn btn-white btn-sm full-width") do %>
+    					<%= link_to(distributor_commission_details_path(params[:id]), class: "btn btn-white btn-sm full-width") do %>
     						<i class="fa fa-refresh"></i> Actualizar
     					<% end %>
     				</div>
@@ -50,7 +50,7 @@
                     <td>
                       <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
                                   distributor_order_details_path(o.hash_id),
-                                  :class => "btn btn-white btn-sm" %>
+                                  class: "btn btn-white btn-sm" %>
                     </td>
                   </tr>
                 <% end %>

@@ -63,13 +63,13 @@
     					<td>
                 <%= link_to "<i class='fa fa-truck'></i> Órdenes".html_safe,
                             admin_client_orders_path(c.hash_id),
-                            :class => "btn btn-white btn-sm m-b-xs hidden-button"%>
+                            class: "btn btn-white btn-sm m-b-xs hidden-button"%>
                 <%= link_to "<i class='fa fa-money'></i> Pactar precios".html_safe,
                             admin_distributor_work_client_prices_path(c.hash_id),
-                            :class => "btn btn-white btn-sm m-b-xs hidden-button" %>
+                            class: "btn btn-white btn-sm m-b-xs hidden-button" %>
                 <%= link_to "<i class='fa fa-envelope-o'></i> Mensajes".html_safe,
                             admin_distributor_work_client_messages_path(c.hash_id),
-                            :class => "btn btn-white btn-sm m-b-xs hidden-button"%>
+                            class: "btn btn-white btn-sm m-b-xs hidden-button"%>
               </td>
   					</tr>
           <% end %>

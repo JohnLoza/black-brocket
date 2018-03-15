@@ -25,15 +25,15 @@
                 </span>
               </h4>
               <% if wp.existence > 0 %>
-                <%= link_to(product_path(wp.hash_id), :class => "darklink") do %>
+                <%= link_to(product_path(wp.hash_id), class: "darklink") do %>
                   Producto Disponible
                 <% end %>
               <% else %>
-                <%= link_to(product_path(wp.hash_id), :class => "darklink", style: "color: #F44336;") do %>
+                <%= link_to(product_path(wp.hash_id), class: "darklink", style: "color: #F44336;") do %>
                   Producto Agotado
                 <% end %>
               <% end %>
-              <h4 class="nowrap-10em slide-image menu-title text-left"><%=link_to p.name, product_path(wp.hash_id), :class => "darklink"%></h4>
+              <h4 class="nowrap-10em slide-image menu-title text-left"><%=link_to p.name, product_path(wp.hash_id), class: "darklink"%></h4>
               <div class="menu-detail cortar text-left">
                 <% if p.cold %>
                   Frío /

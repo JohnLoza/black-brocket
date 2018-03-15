@@ -34,7 +34,7 @@ class Api::WorkersApi::DistributorsController < ApplicationController
     data = {address: "", city: city.name, state: city.State.name, username: distributor.username, name: distributor.name,
             lastname: distributor.lastname, mother_lastname: distributor.mother_lastname,
             email: distributor.email, telephone: distributor.telephone, cellphone: distributor.cellphone,
-            photo: User.getImage(distributor)}
+            photo: User.avatar_url(distributor)}
 
     if distributor.show_address
       data[:address] = distributor.address

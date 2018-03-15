@@ -52,7 +52,7 @@
         <% if o.tracking_code and o.parcel_id %>
           <% parcel = o.Parcel %>
           <a href="<%=parcel.tracking_url%>" target="_blank">
-            <%= image_tag parcel.image.url(:mini), :class => "img-rounded",:style =>"width:60px;" %>
+            <%= image_tag parcel.image.url(:mini), class: "img-rounded",:style =>"width:60px;" %>
           </a>
         <% end %><br>
         <%= o.tracking_code %>
@@ -72,7 +72,7 @@
       <div class="col-sm-2 text-center">
         <b>Ver pedido:</b></br>
         <%= link_to "<span class='icon-eye'></span>".html_safe, client_order_path(@current_user.hash_id, o.hash_id),
-            :class => "darklink", style: "font-size: 32px;", target: "_blank" %>
+            class: "darklink", style: "font-size: 32px;", target: "_blank" %>
       </div>
     </div>
     <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>

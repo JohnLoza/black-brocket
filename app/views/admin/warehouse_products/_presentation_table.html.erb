@@ -7,13 +7,13 @@
             <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
           </div>
   				<div class="col-md-2">
-  					<%= link_to(admin_warehouse_products_path(@warehouse.hash_id), :class => "btn btn-white btn-sm full-width") do %>
+  					<%= link_to(admin_warehouse_products_path(@warehouse.hash_id), class: "btn btn-white btn-sm full-width") do %>
   						<i class="fa fa-refresh"></i> Actualizar
   					<% end %>
   				</div>
           <div class="col-md-3">
             <% if @actions["RECEIVE_SHIPMENTS"] %>
-    					<%= link_to(admin_shipments_path(@warehouse.hash_id), :class => "btn btn-white btn-sm full-width") do %>
+    					<%= link_to(admin_shipments_path(@warehouse.hash_id), class: "btn btn-white btn-sm full-width") do %>
     						<i class="fa fa-truck"></i> Envíos a mi almacén
     					<% end %>
             <% end %>
@@ -46,7 +46,7 @@
                   <% if @actions["UPDATE_STOCK"] %>
                     <%= link_to "Detalles",
                     admin_warehouse_products_stock_details_path(params[:warehouse_id], p.id),
-                    :class => "btn btn-white btn-sm" %>
+                    class: "btn btn-white btn-sm" %>
                   <% end %>
                 </td>
     						<td>

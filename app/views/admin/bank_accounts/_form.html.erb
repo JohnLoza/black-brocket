@@ -4,31 +4,31 @@
       <div class="ibox float-e-margins">
           <h2>Nueva cuenta para el banco <%= @bank.name %></h2>
           <div class="ibox-content">
-            <%= form_for(@bank_account, url: @url, :html => {:class => 'form-horizontal'}) do |f| %>
+            <%= form_for(@bank_account, url: @url, :html => {class: 'form-horizontal'}) do |f| %>
               <%= render :partial=>'/shared/error_messages', locals:{entity: @bank_account} %>
 
               <div class="form-group">
                 <%= f.label :account_number, "Número de cuenta", class: 'col-sm-2 control-label' %>
                 <div class="col-sm-10">
-                  <%= f.text_field :account_number, :class => 'form-control',
-                        :required => true, :maxlength => 25 %>
+                  <%= f.text_field :account_number, class: 'form-control',
+                        required: true, maxlength: 25 %>
                 </div>
               </div>
 
               <div class="form-group">
                 <%= f.label :interbank_clabe, "CLABE interbancaria", class: 'col-sm-2 control-label' %>
                 <div class="col-sm-10">
-                  <%= f.text_field :interbank_clabe, :class => 'form-control',
-                        :required => true, :maxlength => 25 %>
+                  <%= f.text_field :interbank_clabe, class: 'form-control',
+                        required: true, maxlength: 25 %>
                 </div>
               </div>
 
               <div class="form-group">
                 <%= f.label :owner, "A nombre de:", class: 'col-sm-2 control-label'%>
                 <div class="col-sm-10">
-                  <%= f.text_field :owner, :class => 'form-control',
-                        :placeholder => "ej. BlackBrocket S.A. de C.V.",
-                        :required => true, :maxlength => 150,
+                  <%= f.text_field :owner, class: 'form-control',
+                        placeholder: "ej. BlackBrocket S.A. de C.V.",
+                        required: true, maxlength: 150,
                         :value => @bank_account.owner || @bank.owner %>
                 </div>
               </div>
@@ -36,8 +36,8 @@
               <div class="form-group">
                 <%= f.label :email, "Correo electrónico:", class: 'col-sm-2 control-label'%>
                 <div class="col-sm-10">
-                  <%= f.email_field :email, :class => 'form-control',
-                        :required => true, :maxlength => 150,
+                  <%= f.email_field :email, class: 'form-control',
+                        required: true, maxlength: 150,
                         :disabled => true, :value => @bank.email  %>
                 </div>
               </div>
@@ -45,8 +45,8 @@
               <div class="form-group">
                 <%= f.label :RFC, "RFC:", class: 'col-sm-2 control-label'%>
                 <div class="col-sm-10">
-                  <%= f.text_field :RFC, :class => 'form-control',
-                        :required => true, :maxlength => 150,
+                  <%= f.text_field :RFC, class: 'form-control',
+                        required: true, maxlength: 150,
                         :value => @bank_account.RFC || @bank.RFC %>
                 </div>
               </div>
@@ -55,7 +55,7 @@
               <div class="form-group">
                   <div class="col-sm-4 col-sm-offset-2">
                       <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
-                      <%= f.submit "Guardar cambios", :class => "btn btn-primary" %>
+                      <%= f.submit "Guardar cambios", class: "btn btn-primary" %>
                   </div>
               </div>
             <% end %>

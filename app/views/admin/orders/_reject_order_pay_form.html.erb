@@ -1,5 +1,5 @@
 <%= form_for :order, url: admin_accept_order_pay_path(0,"false"), method: :put, html: {id: "reject_pay_form"} do |f| %>
   <%= f.label :reject_description, "Descripción del por qué se rechaza el pago de esta orden/pedido" %>
-  <%= f.text_area :reject_description, :class => "form-control m-b-sm", required: true %>
-  <%= f.submit "Rechazar pago", :class => "btn btn-danger btn-sm", data:{confirm: "Seguro(a) de rechazar el pago?"} %>
+  <%= f.text_area :reject_description, class: "form-control m-b-sm", required: true %>
+  <%= f.submit "Rechazar pago", class: "btn btn-danger btn-sm", data:{confirm: "Seguro(a) de rechazar el pago?"} %>
 <% end %>

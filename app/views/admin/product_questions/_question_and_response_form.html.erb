@@ -35,9 +35,9 @@
             </a>
             <div class="media-body">
             	<%= form_for :prod_answer, remote: true do |f| %>
-	                 <%= f.text_area :description, { :class => 'form-control', :placeholder => "Contesta esta pregunta...", :maxlength => 250, :required => true } %>
+	                 <%= f.text_area :description, { class: 'form-control', placeholder: "Contesta esta pregunta...", maxlength: 250, required: true } %>
 	    			 <%= f.hidden_field :question_id, value: question.hash_id %>
-	    			 <%= f.submit "Guardar respuesta", :class => 'btn btn-primary m-t-sm pull-right',
+	    			 <%= f.submit "Guardar respuesta", class: 'btn btn-primary m-t-sm pull-right',
 	                  data: { confirm: '¿Estás seguro(a) de tu respuesta?' } %>
   				<% end %>
             </div>

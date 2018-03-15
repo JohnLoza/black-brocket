@@ -12,12 +12,12 @@
 <div class="col-md-12">
   <div class="row">
     <div class="ibox ibox-content">
-      <%= form_tag(admin_batch_search_path, method: :get, :class => "form-inline") do %>
+      <%= form_tag(admin_batch_search_path, method: :get, class: "form-inline") do %>
         <div class="form-group">
           <%= label_tag :batch, "Lote a búscar: " %>
           <%= text_field_tag :batch, params[:batch],
-              :class => "form-control", maxlenght: 20, :placeholder => "Introduce el lote" %>
-          <%= submit_tag "Búscar", :class => "btn btn-white" %>
+              class: "form-control", maxlenght: 20, placeholder: "Introduce el lote" %>
+          <%= submit_tag "Búscar", class: "btn btn-white" %>
         </div>
       <% end %>
 

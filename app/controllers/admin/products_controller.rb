@@ -1,253 +1,106 @@
-class Admin::ProductsController < ApplicationController
-  before_action :logged_in?
-  before_action :current_user_is_a_worker?
-  layout 'admin_layout.html.erb'
-
-  @@category = "PRODUCTS"
-
+class Admin::ProductsController < AdminController
   @@base_file_path = "app/views"
   @@replaceable_path = "/shared/products/"
 
   def index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
-    return if !process_authorization_result(authorization_result)
-
-    if search_params
-      @products = Product.search(search_params, params[:page])
-    else
-      @products = Product.show_admin(params[:page])
-    end
-
-    @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.id})
-
-    # determine the actions the user can do, so we can display them in screen #
-    @actions = {"SHOW"=>false,"CREATE"=>false,"DELETE"=>false,"UPDATE"=>false}
-    if !@current_user.is_admin
-      @user_permissions.each do |p|
-        # see if the permission category is equal to the one we need in these controller #
-        if p.category == @@category
-          case p.name
-          when "SHOW"
-            @actions[p.name]=true
-          when "CREATE"
-            @actions[p.name]=true
-          when "DELETE"
-            @actions[p.name]=true
-          when "UPDATE_NAME", "UPDATE_PRODUCT_DATA", "UPDATE_PRICE", "UPDATE_SHOW_IN_WEB_PAGE"
-            @actions["UPDATE"]=true
-          end # case p.name end #
-        end # if p.category == @@category #
-      end # @user_permissions.each end #
-    else
-      @actions = {"SHOW"=>true,"CREATE"=>true,"DELETE"=>true,"UPDATE"=>true}
-    end # if !@current_user.is_admin end #
+    deny_access! and return unless @current_user.has_permission_category?('products')
+    @products = Product.active.order_by_name
+      .search(key_words: search_params, fields: [:hash_id, :name])
+      .paginate(page: params[:page], per_page: 20)
+    @photos = ProdPhoto.by_product(@products.map(&:id).uniq).only_principal
   end
 
   def new
-    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
-    return if !process_authorization_result(authorization_result)
-
-    _new()
+    deny_access! and return unless @current_user.has_permission?('products@create')
     @product = Product.new
   end
 
   def create
-    authorization_result = @current_user.is_authorized?(@@category, "CREATE")
-    return if !process_authorization_result(authorization_result)
-
+    deny_access! and return unless @current_user.has_permission?('products@create')
     @product = Product.new(product_params)
-    @product.name.strip!
 
     if @product.save
       @product.update_attribute(:hash_id, generateAlphKey("P", @product.id))
-      if params[:product][:description_body]
-        render_file_path = @@replaceable_path + "product_" + @product.hash_id + "_description.html.erb"
-        file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
+      create_render_files_and_photos
+      # create warehouse products based on current product
+      create_warehouse_products
+      # create product special prices slots for each user #
+      create_client_prices
 
-        file = File.open(file_path, "w")
-        file.puts(params[:product][:description_body])
-        file.flush
-
-        @product.update_attributes(:description_render_path => render_file_path)
-      end
-      if params[:product][:preparation_body]
-        render_file_path = @@replaceable_path + "product_" + @product.hash_id + "_preparation.html.erb"
-        file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
-
-        file = File.open(file_path, "w")
-        file.puts(params[:product][:preparation_body])
-        file.flush
-
-        @product.update_attributes(:preparation_render_path => render_file_path)
-      end
-
-      if params[:product][:principal_photo]
-        ProdPhoto.where("product_id=#{@product.id} and is_principal=true").limit(1).update_all(is_principal: false)
-        ProdPhoto.create(product_id: @product.id, is_principal: true,
-                         hash_id: random_hash_id(12).upcase,
-                         photo: params[:product][:principal_photo],)
-      end
-
-      image_params.each do |param|
-        @new_photo = ProdPhoto.create(product_id: @product.id,
-                               hash_id: random_hash_id(12).upcase,
-                               photo: param)
-      end if image_params
-
-      Warehouse.all.each do |w|
-        WarehouseProduct.create(warehouse_id: w.id, describes_total_stock: true,
-                product_id: @product.id, existence: 0, min_stock: 50,
-                hash_id: random_hash_id(12).upcase)
-      end
-
-      # set new custom_prices #
-      clients = ClientProduct.select(:client_id).uniq
-      clients.each do |client|
-        ClientProduct.create(client_id: client.client_id, product_id: @product.id, client_price: @product.price)
-      end
-
-      redirect_to controller: "admin/products"
+      redirect_to admin_products_path, flash: { success: 'Producto creado' }
     else
-      _new()
       flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
       render :new
     end
   end
 
   def show
-    authorization_result = @current_user.is_authorized?(@@category, "SHOW")
-    return if !process_authorization_result(authorization_result)
-
+    deny_access! and return unless @current_user.has_permission?('products@show')
     @product = Product.find_by!(hash_id: params[:id])
-    if @product.nil?
-      flash[:info] = "No se encontró el producto con clave: #{params[:id]}"
-      redirect_to admin_products_path
-      return
-    end
-
     @photos = @product.Photos
   end
 
   def edit
-    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_NAME", "UPDATE_PRODUCT_DATA",
-                                      "UPDATE_PRICE", "UPDATE_SHOW_IN_WEB_PAGE"])
-    return if !process_authorization_result(authorization_result)
-
-    @product = Product.find_by!(hash_id: params[:id])
-    if !@product.nil?
-      description_file = @@base_file_path + @product.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
-      preparation_file = @@base_file_path + @product.preparation_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
-
-      @product.description_body = File.open(description_file, "r"){|file| file.read }
-      @product.preparation_body = File.open(preparation_file, "r"){|file| file.read }
-    else
-      flash[:info] = "No se encontró el producto con clave: #{params[:id]}"
-      redirect_to admin_products_path
-      return
+    unless @current_user.has_permission?('products@update_name') or
+           @current_user.has_permission?('products@update_product_data') or
+           @current_user.has_permission?('products@update_price') or
+           @current_user.has_permission?('products@update_show_in_web_page')
+      deny_access! and return
     end
+    @product = Product.find_by!(hash_id: params[:id])
 
-    _edit()
+    description_file = @@base_file_path + @product.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
+    preparation_file = @@base_file_path + @product.preparation_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
+
+    @product.description = File.open(description_file, "r"){|file| file.read }
+    @product.preparation = File.open(preparation_file, "r"){|file| file.read }
+
+    @photos = @product.Photos
   end
 
   def update
-    authorization_result = @current_user.is_authorized?(@@category, ["UPDATE_NAME", "UPDATE_PRODUCT_DATA",
-                                      "UPDATE_PRICE", "UPDATE_SHOW_IN_WEB_PAGE"])
-    return if !process_authorization_result(authorization_result)
-
+    unless @current_user.has_permission?('products@update_name') or
+           @current_user.has_permission?('products@update_product_data') or
+           @current_user.has_permission?('products@update_price') or
+           @current_user.has_permission?('products@update_show_in_web_page')
+      deny_access! and return
+    end
     @product = Product.find_by!(hash_id: params[:id])
-    if @product.nil?
-      flash[:info] = "No se encontró el producto con clave: #{params[:id]}"
-      redirect_to admin_products_path
-      return
-    end
 
-    if @product.price != params[:product][:price].to_i or
-       @product.recommended_price != params[:product][:recommended_price].to_i or
-       @product.lowest_price != params[:product][:lowest_price].to_i
-       puts "--- prices changed ---"
-       client_products = ClientProduct.where(product_id: @product.id)
-       client_products.update_all(client_price: params[:product][:price])
-       clients = Client.where(deleted: false)
-       clients.each do |client|
-         if client.has_custom_prices
-           Notification.create(client_id: client.id, icon: "fa fa-comments-o",
-                           description: "El costo del producto #{@product.name} ha cambiado, favor de contactar a su distribuidor para negociar precio.",
-                           url: client_my_distributor_path)
-         end
-       end
-    end
-
+    update_client_prices if prices_have_changed?
     if @product.update_attributes(product_params)
-      if params[:product][:description_body]
-        render_file_path = @@replaceable_path + "product_" + @product.hash_id + "_description.html.erb"
-        file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
+      create_render_files_and_photos
 
-        file = File.open(file_path, "w")
-        file.puts(params[:product][:description_body])
-        file.flush
-
-        @product.update_attributes(:description_render_path => render_file_path)
-      end
-      if params[:product][:preparation_body]
-        render_file_path = @@replaceable_path + "product_" + @product.hash_id + "_preparation.html.erb"
-        file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
-
-        file = File.open(file_path, "w")
-        file.puts(params[:product][:preparation_body])
-        file.flush
-
-        @product.update_attributes(:preparation_render_path => render_file_path)
-      end
-
-      if params[:product][:principal_photo]
-        ProdPhoto.where(product_id: @product.id, is_principal: true).limit(1).update_all(is_principal: false)
-        ProdPhoto.create(product_id: @product.id, is_principal: true,
-                         hash_id: random_hash_id(12).upcase,
-                         photo: params[:product][:principal_photo],)
-      end
-
-      image_params.each do |param|
-        @new_photo = ProdPhoto.create(product_id: @product.id,
-                            hash_id: random_hash_id(12).upcase,
-                            photo: param)
-      end if image_params
       flash[:success] = "El producto se actualizó."
-      redirect_to controller: "admin/products"
-      return
+      redirect_to admin_products_path
     else
-      _edit()
+      @photos = @product.Photos
       flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
       render :edit
     end # if @product.update_attributes(product_params) #
   end
 
   def destroy
-    authorization_result = @current_user.is_authorized?(@@category, "DELETE")
-    return if !process_authorization_result(authorization_result)
-
+    deny_access! and return unless @current_user.has_permission?('products@delete')
     @product = Product.find_by!(hash_id: params[:id])
-    if @product.nil?
-      flash[:info] = "No se encontró el producto con clave: #{params[:id]}"
-      redirect_to admin_products_path
-      return
-    end
 
-    if @product.update_attributes(:deleted => true)
-      redirect_to controller: "admin/products"
+    if @product.destroy
+      flash[:success] = 'Producto eliminado'
     else
       flash[:danger] = 'Ocurrió un error al eliminar el trabajador, inténtalo de nuevo por favor.'
-      redirect_to controller: "admin/products"
     end
+    redirect_to admin_products_path
   end
 
   def set_principal_photo
-    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PRODUCT_DATA")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('products@update_product_data')
+    @product = Product.find_by!(hash_id: params[:id])
 
-    product_id = Product.find_by!(hash_id: params[:id]).id
-
-    ProdPhoto.where("product_id=#{product_id} and is_principal=true").limit(1).update_all(is_principal: false)
-    ProdPhoto.where("product_id=#{product_id} and hash_id='#{params[:photo_id]}'").limit(1).update_all(is_principal: true)
+    @photo = ProdPhoto.find_by!(params[:photo_id])
+    if @photo.product_id == @product.id
+      ProdPhoto.by_product(@product.id).is_principal.take.update_attributes(is_principal: false)
+      @photo.update_attributes(is_principal: true)
+    end
 
     respond_to do |format|
       format.js { render :set_principal_photo, layout: false}
@@ -255,8 +108,7 @@ class Admin::ProductsController < ApplicationController
   end
 
   def destroy_photo
-    authorization_result = @current_user.is_authorized?(@@category, "UPDATE_PRODUCT_DATA")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('products@update_product_data')
 
     photo = ProdPhoto.find_by!(hash_id: params[:photo_id])
     photo.destroy
@@ -274,49 +126,90 @@ class Admin::ProductsController < ApplicationController
                                       :presentation, :recommended_price)
     end
 
-    def image_params
+    def main_photo_param
+      params[:product][:principal_photo]
+    end
+
+    def photo_params
+      return Array.new unless params[:product][:photo]
       params[:product][:photo]
     end
 
-    def search_params
-      params[:product][:search] if params[:product]
+    def description_param
+      params[:product][:description]
     end
 
-    def _new
-      @url = admin_products_path
-
-      @actions = {"CREATE"=>false}
-      if !@current_user.is_admin
-        @user_permissions.each do |p|
-          # see if the permission category is equal to the one we need in these controller #
-          if p.category == @@category and p.name == "CREATE"
-            @actions[p.name] = true
-            break
-          end # if p.category == @@category #
-        end # @user_permissions.each end #
-      else
-        @actions = {"CREATE"=>true}
-      end # if !@current_user.is_admin end #
+    def preparation_param
+      params[:product][:preparation]
     end
 
-    def _edit
-      @url = admin_product_path(params[:id])
-      @photos = @product.Photos
-
-      # see if has permission to update #
-      @actions = {"UPDATE_NAME"=>false, "UPDATE_PRODUCT_DATA"=>false, "UPDATE_PRICE"=>false, "UPDATE_SHOW_IN_WEB_PAGE"=>false}
-      if !@current_user.is_admin
-        @user_permissions.each do |p|
-          # see if the permission category is equal to the one we need in these controller #
-          if p.category == @@category
-            if ["UPDATE_NAME", "UPDATE_PRODUCT_DATA", "UPDATE_PRICE",
-                "UPDATE_SHOW_IN_WEB_PAGE"].include? p.name
-              @actions[p.name] = true
-            end
-          end # if p.category == @@category #
-        end # @user_permissions.each end #
-      else
-        @actions = {"UPDATE_NAME"=>true, "UPDATE_PRODUCT_DATA"=>true, "UPDATE_PRICE"=>true, "UPDATE_SHOW_IN_WEB_PAGE"=>true}
-      end # if !@current_user.is_admin end #
+    def create_render_files_and_photos
+      # create the files containing the description and preparation texts
+      create_product_file(description_param, 'description') if description_param
+      create_product_file(preparation_param, 'preparation') if preparation_param
+      # create the main photo and other photos if any
+      create_photo(photo: main_photo_param, principal: true) if main_photo_param
+      photo_params.each do |photo|
+        create_photo(photo: photo, principal: false)
+      end
     end
+
+    def create_product_file(text, file_attr_name)
+      render_file_path = "#{@@replaceable_path}product_#{@product.hash_id}_#{file_attr_name}.html.erb"
+      file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
+
+      file = File.open(file_path, "w")
+      file.puts text
+      file.flush
+
+      @product.update_attributes("#{file_attr_name}_render_path" => render_file_path)
+    end
+
+    def create_photo(options = {})
+      return unless options[:photo].present?
+      options[:principal] = false unless options[:principal].present?
+
+      if options[:principal] = true
+        ProdPhoto.by_product(@product.id).is_principal.take.update_attributes(is_principal: false)
+      end
+      ProdPhoto.create(product_id: @product.id, is_principal: options[:principal],
+                       photo: options[:photo])
+    end
+
+    def create_warehouse_products
+      Warehouse.all.each do |w|
+        WarehouseProduct.create(warehouse_id: w.id, describes_total_stock: true,
+                product_id: @product.id, existence: 0, min_stock: 50)
+      end
+    end
+
+    def create_client_prices
+      clients = ClientProduct.select(:client_id).uniq
+      clients.each do |client|
+        ClientProduct.create(client_id: client.client_id, product_id: @product.id, client_price: @product.price)
+      end
+    end
+
+    def update_client_prices
+      client_products = ClientProduct.where(product_id: @product.id)
+      client_products.update_all(client_price: params[:product][:price])
+      clients = Client.where(deleted: false)
+      clients.each do |client|
+        if client.has_custom_prices
+          Notification.create(client_id: client.id, icon: "fa fa-comments-o",
+                          description: "El costo del producto #{@product.name} ha cambiado, favor de contactar a su distribuidor para negociar precio.",
+                          url: client_my_distributor_path)
+        end
+      end
+    end
+
+    def prices_have_changed?
+      if @product.price != params[:product][:price].to_f or
+         @product.recommended_price != params[:product][:recommended_price].to_f or
+         @product.lowest_price != params[:product][:lowest_price].to_f
+         return true
+      end
+      return false
+    end
+
 end

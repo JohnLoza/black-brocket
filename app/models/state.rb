@@ -7,8 +7,7 @@ class State < ApplicationRecord
   validates :country_id, presence: true, numericality: { only_integer: true }
   validates :name, presence: true
 
-  scope :order_by_name, -> (way = nil) {
-    way = :asc unless way.present?
+  scope :order_by_name, -> (way = :asc) {
     order(name: way)
   }
 

@@ -1,5 +1,4 @@
 class SiteWorker < ApplicationRecord
-  include Rails.application.routes.url_helpers
   include HashId
   include Searchable
   include SoftDeletable
@@ -40,8 +39,7 @@ class SiteWorker < ApplicationRecord
   scope :not, ->  (id) { where.not(id: id)}
 
   scope :recent, ->    { order(created_at: :desc) }
-  scope :order_by_name, -> (way = nil) {
-    way = :asc unless way.present?
+  scope :order_by_name, -> (way = :asc) {
     order(name: way)
   }
   scope :by_warehouse, -> (warehouse) { where(warehouse_id: warehouse) }

@@ -18,7 +18,7 @@ Rails.application.config.assets.precompile += %w( admin.js )
 Rails.application.config.assets.precompile += %w( static_pages.css )
 Rails.application.config.assets.precompile += %w( static_pages.js )
 
-Rails.application.config.assets.precompile += %w( summernote.css )
+Rails.application.config.assets.precompile += %w( summernote.css.erb )
 Rails.application.config.assets.precompile += %w( summernote.min.js )
 
 Rails.application.config.assets.precompile += %w( bootstrap-datetimepicker.min.css )

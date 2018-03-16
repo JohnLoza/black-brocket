@@ -34,8 +34,7 @@ class Distributor < ApplicationRecord
   mount_uploader :home_img, ImageUploader
 
   scope :recent, ->    { order(created_at: :desc) }
-  scope :order_by_name, -> (way = nil) {
-    way = :asc unless way.present?
+  scope :order_by_name, -> (way = :asc) {
     order(name: way)
   }
   scope :by_region, -> (options = {}) {

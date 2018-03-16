@@ -12,8 +12,7 @@ class City < ApplicationRecord
   validates :state_id, :name, presence: true
   validates :state_id, numericality: { only_integer: true }
 
-  scope :order_by_name, -> (way = nil) {
-    way = :asc unless way.present?
+  scope :order_by_name, -> (way = :asc) {
     order(name: way)
   }
 

@@ -3,28 +3,27 @@
 
     <div class="tabs-container">
       <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> Datos del producto</a></li>
-        <% if @actions["UPDATE_PRODUCT_DATA"] %>
+        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> Datos del producto</a></li>
+        <% if @current_user.has_permission?('products@update_product_data') %>
           <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false"> Imágenes</a></li>
-        <% end # if @actions["UPDATE_PRODUCT_DATA"] # %>
+        <% end %>
       </ul>
       <div class="tab-content">
 
         <div id="tab-1" class="tab-pane active">
           <div class="panel-body">
-            <%= form_for @product, url: @url, :html => {:id => "product_form", class: 'form-horizontal'} do |f| %>
+            <%= form_for [:admin, @product], :html => {:id => "product_form", class: 'form-horizontal'} do |f| %>
             <%= render :partial=>'/shared/error_messages', locals:{entity: @product} %>
 
-            <% if @actions["UPDATE_NAME"] %>
+            <% if @current_user.has_permission?('products@update_name') or
+                  @current_user.has_permission?('products@create') %>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
                 <div class="col-sm-10">
                   <%= f.text_field :hash_id, { class: 'form-control', :disabled => true } %>
                 </div>
               </div>
-            <% end # if @actions["UPDATE_NAME"] # %>
 
-            <% if @actions["UPDATE_NAME"] or @actions["CREATE"] %>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :name, "Nombre" %></label>
                 <div class="col-sm-10">
@@ -34,7 +33,8 @@
               </div>
             <% end # if @actions["UPDATE_NAME"] # %>
 
-            <% if @actions["UPDATE_PRICE"] or @actions["CREATE"] %>
+            <% if @current_user.has_permission?('products@update_price') or
+                  @current_user.has_permission?('products@create') %>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :price, "Precio máximo del producto" %></label>
                 <div class="col-sm-10">
@@ -59,7 +59,8 @@
               <div class="hr-line-dashed"></div>
             <% end # if @actions["UPDATE_PRICE"] # %>
 
-            <% if @actions["UPDATE_SHOW_IN_WEB_PAGE"] or @actions["CREATE"] %>
+            <% if @current_user.has_permission?('products@update_show_in_web_page') or
+                  @current_user.has_permission?('products@create') %>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :show, "Mostrar en la página web" %></label>
                 <div class="col-sm-10">
@@ -69,7 +70,8 @@
               <div class="hr-line-dashed"></div>
             <% end # if @actions["UPDATE_SHOW_IN_WEB_PAGE"] # %>
 
-            <% if @actions["UPDATE_PRODUCT_DATA"] or @actions["CREATE"] %>
+            <% if @current_user.has_permission?('products@update_product_data') or
+                  @current_user.has_permission?('products@create') %>
               <div class="form-group">
                 <%= f.label :iva, "IVA", class: "col-sm-2 control-label" %>
                 <div class="col-sm-10">
@@ -89,13 +91,13 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :description, "Descripción del producto" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_area :description_body, :id => "summernote", class: "form-control" %>
+                  <%= f.text_area :description, class: 'form-control summernote' %>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :preparation, "Preparación del producto" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_area :preparation_body, :id => "summernote2", class: 'form-control' %>
+                  <%= f.text_area :preparation, class: 'form-control summernote' %>
                 </div>
               </div>
               <div class="form-group">
@@ -161,7 +163,7 @@
           </div>
         </div>
 
-        <% if @actions["UPDATE_PRODUCT_DATA"] %>
+        <% if @current_user.has_permission?('products@update_product_data') %>
           <div id="tab-2" class="tab-pane">
             <div class="panel-body">
               <div class="table-responsive">
@@ -199,7 +201,7 @@
 
             </div>
           </div>
-        <% end # if @actions["UPDATE_PRODUCT_DATA"] # %>
+        <% end %>
 
       </div>
     </div>
@@ -218,13 +220,20 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
-    $('#summernote').summernote({
+    $('.summernote').summernote({
+      toolbar: [
+        ['misc', ['undo', 'redo']],
+        ['style', ['style']],
+        ['style', ['bold', 'italic', 'underline', 'clear']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['insert', ['link']],
+        ['view', ['codeview']]
+      ],
+      placeholder: "Escribe aquí...",
+      disableDragAndDrop: true,
+      shortcuts: false,
       height: "250px"
     });
-    $('#summernote2').summernote({
-       height: "250px"
-    });
-    $('.note-insert, .note-help').remove();
 
     // init parsley to validate the formularie
     $('#product_form').parsley();

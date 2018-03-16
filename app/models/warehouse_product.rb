@@ -1,4 +1,6 @@
 class WarehouseProduct < ApplicationRecord
+  include HashId
+  
   belongs_to :Warehouse, foreign_key: :warehouse_id
   belongs_to :Product, foreign_key: :product_id
 

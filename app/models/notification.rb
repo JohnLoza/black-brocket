@@ -3,4 +3,6 @@ class Notification < ApplicationRecord
   belongs_to :Distributor, foreign_key: :distributor_id
 
   validates :url, :icon, :description, presence: true
+
+  scope :recent, -> { order(created_at: :desc) }
 end

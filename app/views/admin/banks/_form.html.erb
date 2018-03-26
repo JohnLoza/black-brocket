@@ -3,7 +3,7 @@
   <div class="col-lg-12">
       <div class="ibox float-e-margins">
           <div class="ibox-content">
-            <%= form_for(@bank, :url => @url, :html => {class: 'form-horizontal', id: 'bank_form'}) do |f| %>
+            <%= form_for([:admin, @bank], :html => {class: 'form-horizontal', id: 'bank_form'}) do |f| %>
               <%= render :partial=>'/shared/error_messages', locals:{entity: @bank} %>
 
               <div class="form-group">

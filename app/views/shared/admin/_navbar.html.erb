@@ -113,12 +113,15 @@
           <% end if @current_user.has_permission_category?('web') %>
         </li>
 
-        <li>
-          <%= link_to admin_banks_path do %>
-            <%= content_tag(:i, nil, class: 'fa fa-bank') %>
-            <%= content_tag(:span, 'Cuentas Bancarias', class: 'nav-label') %>
-          <% end if @current_user.has_permission_category?('bank_accounts') %>
-        </li>
+        <% if @current_user.has_permission_category?('bank_accounts') or
+              @current_user.has_permission_category?('banks') %>
+          <li>
+            <%= link_to admin_banks_path do %>
+              <%= content_tag(:i, nil, class: 'fa fa-bank') %>
+              <%= content_tag(:span, 'Bancos y Cuentas', class: 'nav-label') %>
+            <% end %>
+          </li>
+        <% end %>
 
         <li>
           <%= link_to admin_mexico_db_path do %>

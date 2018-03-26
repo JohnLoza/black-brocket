@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    worker = SiteWorker.find_by!(email: params[:session][:email].downcase)
+    worker = SiteWorker.find_by(email: params[:session][:email].downcase)
     if worker && worker.authenticate(params[:session][:password])
       if today_is_birthday?(worker.birthday)
         flash[:info] = happy_birthday_message()
@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
       return
     end
 
-    distributor = Distributor.find_by!(email: params[:session][:email].downcase)
+    distributor = Distributor.find_by(email: params[:session][:email].downcase)
     if distributor && distributor.authenticate(params[:session][:password])
       if today_is_birthday?(distributor.birthday)
         flash[:info] = happy_birthday_message()
@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
       return
     end
 
-    client = Client.find_by!(email: params[:session][:email].downcase)
+    client = Client.find_by(email: params[:session][:email].downcase)
     if client && client.deleted == false && client.authenticate(params[:session][:password])
       if today_is_birthday?(client.birthday)
         flash[:info] = happy_birthday_message()

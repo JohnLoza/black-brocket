@@ -4,7 +4,7 @@
       <div class="ibox float-e-margins">
           <h2>Nueva cuenta para el banco <%= @bank.name %></h2>
           <div class="ibox-content">
-            <%= form_for(@bank_account, url: @url, :html => {class: 'form-horizontal'}) do |f| %>
+            <%= form_for([:admin, @bank_account], :html => {class: 'form-horizontal'}) do |f| %>
               <%= render :partial=>'/shared/error_messages', locals:{entity: @bank_account} %>
 
               <div class="form-group">

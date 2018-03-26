@@ -57,7 +57,7 @@ class Admin::SiteWorkersController < AdminController
     params[:city_id] = @worker.city_id
     params[:state_id] = @worker.City.state_id
     @cities = City.where(state_id: params[:state_id]).order_by_name
-    @states = State.by_name
+    @states = State.order_by_name
   end # def edit end #
 
   def update
@@ -101,7 +101,7 @@ class Admin::SiteWorkersController < AdminController
     @worker = SiteWorker.find_by!(hash_id: params[:id])
     deny_access! and return unless current_user_is_admin_or_same_warehouse?(@worker)
 
-    @user_permissions = @worker.permissions
+    @user_permissions = @worker.Permissions
 
     build_up_permission_arrays
   end # def edit_permissions end #
@@ -118,7 +118,7 @@ class Admin::SiteWorkersController < AdminController
         next unless params[:permission][key] == "1"
         category = key.split("-")[0].upcase
         permission_name = key.split("-")[1].upcase
-        @worker.permissions << Permission.new(category: category, name: permission_name)
+        @worker.Permissions << Permission.new(category: category, name: permission_name)
       end
     end
 
@@ -271,6 +271,9 @@ class Admin::SiteWorkersController < AdminController
       @web_category << {category: "web", name: "terms_of_service", description: "Términos y Condiciones"}
 
       @bank_category = []
+      @bank_category << {category: "banks", name: "create", description: "Dar de alta bancos"}
+      @bank_category << {category: "banks", name: "update", description: "Modificar bancos"}
+      @bank_category << {category: "banks", name: "delete", description: "Eliminar bancos"}
       @bank_category << {category: "bank_accounts", name: "show", description: "Mostrar cuentas bancarias"}
       @bank_category << {category: "bank_accounts", name: "create", description: "Dar de alta cuentas bancarias"}
       @bank_category << {category: "bank_accounts", name: "update", description: "Modificar cuentas bancarias"}

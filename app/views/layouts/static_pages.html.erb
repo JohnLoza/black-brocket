@@ -24,6 +24,15 @@
 
   <%= render '/shared/clients/navbar.html.erb' %>
 
+  <!--Alerts-->
+  <div id="dismissible_alerts">
+    <!-- Should have only 1 flash at the same time -->
+    <% flash.each do |message_type, message| %>
+      <%= render partial: "/shared/dismissible_alert", locals: {message_type: message_type, message: message.html_safe} %>
+    <% end %>
+  </div>
+  <!--End Alerts-->
+
   <!-- Content -->
   <%= yield %>
   <!--  Content end -->

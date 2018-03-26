@@ -5,32 +5,49 @@
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
 
-  	<div class="row">
-  	  <div class="col-lg-12">
-  	    <div class="ibox-content" style="display: block;">
-  	      <div class="row">
-  	        <div class="col-sm-9 b-r margin-bot-resp">
-  	           <h3 class="m-t-none m-b">Lista de Bancos con cuentas de BlackBrocket</h3>
-  	           <p>Aquí se visualizan los bancos disponibles para los clientes,
-                 donde estos podrán realizar los pagos de sus compras!!!</p>
-  		   	 </div>
-  		     <div class="hr-line-dashed pro-mobile"></div>
-             <% if @actions["CREATE"] %>
-               <div class="col-sm-3 text-center">
-                  <h4>Registrar Nuevo</h4>
-    	            <%= link_to "<i class='fa fa-bank med-icon'></i>".html_safe, new_admin_bank_path %>
-    	         </div>
-             <% end # if @actions["CREATE"] # %>
-  	       </div>
-  	    </div>
-  	  </div>
-  	</div><br>
+    <%= render partial: '/shared/admin/header_with_search',
+    locals: {title: 'Lista de Bancos', search_url: admin_banks_path,
+      new_permission: 'banks@create', new_url: new_admin_bank_path } %>
 
     <div class="row">
-      <%= render partial: "presentation_table" %>
+      <div class="col-lg-12">
+        <div class="ibox">
+          <div class="ibox-content">
+
+            <div class="row m-b-sm m-t-sm">
+              <div class="col-md-10">
+                <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
+              </div>
+              <div class="col-md-2">
+                <%= link_to(admin_banks_path, class: "btn btn-white btn-sm full-width") do %>
+                <i class="fa fa-refresh"></i> Actualizar
+                <% end %>
+              </div>
+            </div>
+
+            <table class="footable table table-stripped  toggle-arrow-tiny" data-filter=#filter>
+              <thead>
+                <tr>
+                  <th>Imagen</th>
+                  <th>Nombre del banco</th>
+                  <th>A nombre de</th>
+                  <th>Email</th>
+                  <th>RFC</th>
+                  <th data-sort-ignore="true">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= render @banks %>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>
 </div>
-<!--End content whit animation-->
-<br><br>
+  <!--End content whit animation-->
+  <br><br>

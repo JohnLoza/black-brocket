@@ -193,7 +193,7 @@ Rails.application.routes.draw do
     put 'web/services/:id' => 'web#update_services', :as => :web_service
 
     # tips & recipes #
-    resources :tips, :except => [:show, :destroy]
+    resources :tip_recipes, :except => [:show]
 
     # commissions #
     get '/commissions' => 'commissions#index', :as => :commissions

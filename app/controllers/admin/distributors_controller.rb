@@ -136,7 +136,7 @@ class Admin::DistributorsController < AdminController
     def fields_to_search
       return ['cities.name','states.name','distributors.name',
         'distributors.lastname','distributors.mother_lastname',
-        'distributors.hash_id']
+        'distributors.hash_id', 'distributors.username']
     end
 
 end

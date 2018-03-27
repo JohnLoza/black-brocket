@@ -1,0 +1,52 @@
+<% provide(:title, "Tips") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Tips y Recetas", labels: ['Tips y Recetas']} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <%= render partial: '/shared/admin/header_with_search',
+    locals: {title: 'Lista de Tips y Recetas', search_url: admin_tip_recipes_path,
+      new_permission: 'tips_&_recipes@all', new_url: new_admin_tip_recipe_path } %>
+
+  	<div class="row">
+  	  <div class="col-lg-12">
+  	    <div class="ibox-content" style="display: block;">
+
+          <table class="footable table table-stripped  toggle-arrow-tiny" data-filter=#filter>
+            <thead>
+              <tr>
+                  <th data-sort-ignore="true"></th>
+                  <th data-sort-ignore="true"></th>
+                  <th data-hide="phone"><i class="fa fa-search"></i> Título</th>
+                  <th data-hide="phone" data-sort-ignore="true">Fecha de creación</th>
+                  <th data-sort-ignore="true">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= render @tips %>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="7">
+                  <div class="pull-right">
+                    <%= will_paginate @tips, renderer: BootstrapPagination::Rails %>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+
+  	    </div>
+  	  </div>
+  	</div>
+
+  </div>
+</div>
+<!--End content whit animation-->
+
+<script>
+$(document).ready(function() {
+  $('.footable').footable();
+});
+</script>

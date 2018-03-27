@@ -18,14 +18,18 @@
       <%= select_tag :state_id, options_from_collection_for_select(
         @states, "id", "name"), class: "form-control m-b", onchange: "state_selected(this);" %>
 
-      <% if @actions["UPDATE"] or @actions["CREATE"] %>
-        <%= link_to "Ver poblaciones", admin_mexico_state_path(@states[0].id), class: "btn btn-white btn-sm m-b", id: "see_cities" %>
+      <% if @current_user.has_permission?('mexico_db@create') or
+            @current_user.has_permission?('mexico_db@update_city_name') or
+            @current_user.has_permission?('mexico_db@update_city_lada') %>
+        <%= link_to "Ver poblaciones", admin_mexico_state_path(@states[0].id),
+          class: "btn btn-white btn-sm m-b", id: "see_cities" %>
       <% end %>
       <br>
-      <% if @actions["UPDATE_STATE_LADA"] %>
+
+      <% if @current_user.has_permission?('mexico_db@update_state_lada') %>
         <label id="change_lada_title">Cambiar el LADA para el estado de: "<%= @states[0].name %>"</label>
         <%= form_for(:state, url: admin_mexico_state_path(@states[0].id), method: :put, html: {id: "state_LADA_form"}) do |f| %>
-           <%= f.number_field "LADA", { class: "form-control m-b", min: 0, max: 99999, step: 1} %>
+           <%= f.number_field :lada, { class: "form-control m-b", min: 0, max: 99999, step: 1} %>
            <%= f.submit "Editar LADA", class: "btn btn-primary btn-sm",
              data: { confirm: "Seguro(a) de modificar el LADA?" } %>
         <% end # form_for end # %>

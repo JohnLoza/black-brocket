@@ -131,7 +131,7 @@
         </li>
 
         <li>
-          <%= link_to admin_tips_path do %>
+          <%= link_to admin_tip_recipes_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-book') %>
             <%= content_tag(:span, 'Consejos y Recetas', class: 'nav-label') %>
           <% end if @current_user.has_permission_category?('tips_&_recipes') %>

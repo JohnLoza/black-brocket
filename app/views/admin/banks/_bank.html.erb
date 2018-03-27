@@ -17,7 +17,7 @@
 
     <% if @current_user.has_permission?('banks@delete') %>
 			<%= link_to "<i class='fa fa-trash'></i> Eliminar".html_safe,
-        admin_bank_path(bank), class: "btn btn-white btn-sm hidden-button",
+        admin_bank_path(bank), class: "btn btn-danger btn-sm hidden-button",
         method: "delete", data: { confirm: "Estas seguro(a) de eliminarlo?" } %>
     <% end # if @actions["DELETE"] # %>
 	</td>

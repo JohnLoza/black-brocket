@@ -1,0 +1,25 @@
+<tr>
+  <td></td>
+  <td class="project-people">
+    <% if !tip_recipe.video.blank? %>
+      <%= link_to "<i class='fa fa-file-video-o fa-3x'></i>".html_safe,
+          tip_recipe.video.url, target: "_blank" %>
+    <% elsif !tip_recipe.image.blank? %>
+      <%= image_tag tip_recipe.image.url(:thumb) %>
+    <% else %>
+      <strong>Sin foto</strong>
+    <% end %>
+  </td>
+  <td><%= tip_recipe.title %></td>
+  <td><%= tip_recipe.created_at %></td>
+  <td>
+    <%= link_to "<i class='fa fa-pencil'></i> Editar".html_safe,
+        edit_admin_tip_recipe_path(tip_recipe.id),
+        class: "btn btn-white btn-sm hidden-button" if @current_user.has_permission?('tips_&_recipes@all') %>
+
+    <%= link_to "<i class='fa fa-trash'></i> Eliminar".html_safe,
+        admin_tip_recipe_path(tip_recipe.id), method: :delete,
+        class: "btn btn-danger btn-sm hidden-button",
+        data: {confirm: 'Seguro(a) de eliminar el registro?'} if @current_user.has_permission?('tips_&_recipes@all') %>
+  </td>
+</tr>

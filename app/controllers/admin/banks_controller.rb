@@ -55,7 +55,7 @@ class Admin::BanksController < AdminController
     if @bank.destroy
       flash[:success] = "Registro de banco eliminado definitivamente"
     else
-      flash[:danger] = "Ocurrió un error al eliminar el registro, inténtalo de nuevo por favor"
+      flash[:info] = "Ocurrió un error al eliminar el registro, inténtalo de nuevo por favor"
     end # @bank_account and @bank_account.destroy #
 
     redirect_to admin_bank_accounts_path

@@ -63,7 +63,7 @@ class Client::OrdersController < ApplicationController
     @products.each do |product|
       # puts "--- existence: #{product.existence}, buying: #{session[:e_cart][product.hash_id]}"
       if product.existence < session[:e_cart][product.hash_id].to_i
-        flash[:danger] = "Lo sentimos pero no queda suficiente inventario del producto con clave #{product.Product.hash_id} su existencia actual es de: #{product.existence}"
+        flash[:info] = "Lo sentimos pero no queda suficiente inventario del producto con clave #{product.Product.hash_id} su existencia actual es de: #{product.existence}"
         redirect_to client_ecart_path(@current_user.hash_id)
         return
       end
@@ -134,7 +134,7 @@ class Client::OrdersController < ApplicationController
       redirect_to client_orders_path(@current_user.hash_id)
       return
     else
-      flash[:danger] = "Ocurrió un error al guardar tu pedido, vuelve a intentarlo por favor..."
+      flash[:info] = "Ocurrió un error al guardar tu pedido, vuelve a intentarlo por favor..."
       redirect_to client_ecart_path(@current_user.hash_id)
     end
   end
@@ -183,7 +183,7 @@ class Client::OrdersController < ApplicationController
     if @saved
       flash[:success] = "Pago guardado, esperando confirmación"
     else
-      flash[:danger] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: pdf, jpg y png."
+      flash[:info] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: pdf, jpg y png."
     end
     redirect_to client_orders_path(@current_user.hash_id)
   end
@@ -227,7 +227,7 @@ class Client::OrdersController < ApplicationController
   private
     def verify_fiscal_data
       if params[:invoice]=="1" and @current_user.FiscalData.nil?
-        flash[:danger] = 'Llena tus datos fiscales primero por favor.'
+        flash[:info] = 'Llena tus datos fiscales primero por favor.'
         redirect_to new_client_fiscal_datum_path
         return
       end

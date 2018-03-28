@@ -33,7 +33,7 @@ class Distributor::VisitsController < ApplicationController
       flash[:success] = "Visita guardada"
       redirect_to distributor_clients_path
     else
-      flash[:danger] = "Ocurrió un error al guardar la visita"
+      flash[:info] = "Ocurrió un error al guardar la visita"
       redirect_to distributor_client_visits_path(@client.hash_id)
     end
   end

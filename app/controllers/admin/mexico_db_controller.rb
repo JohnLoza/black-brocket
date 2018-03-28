@@ -48,7 +48,7 @@ class Admin::MexicoDbController < AdminController
     if city.save
       flash[:success] = "La ciudad " + city.name + " se creó correctamente."
     else
-      flash[:danger] = "Oops, algo no salió como lo planeado.s"
+      flash[:info] = "Oops, algo no salió como lo planeado.s"
     end
 
     redirect_to admin_mexico_state_path(params[:new_city][:state_id])

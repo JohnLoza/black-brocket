@@ -87,7 +87,7 @@ class Admin::ProductsController < AdminController
     if @product.destroy
       flash[:success] = 'Producto eliminado'
     else
-      flash[:danger] = 'Ocurrió un error al eliminar el trabajador, inténtalo de nuevo por favor.'
+      flash[:info] = 'Ocurrió un error al eliminar el trabajador, inténtalo de nuevo por favor.'
     end
     redirect_to admin_products_path
   end
@@ -158,9 +158,7 @@ class Admin::ProductsController < AdminController
       render_file_path = "#{@@replaceable_path}product_#{@product.hash_id}_#{file_attr_name}.html.erb"
       file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
 
-      file = File.open(file_path, "w")
-      file.puts text
-      file.flush
+      File.open(file_path, "w"){|file| file.write(text) }
 
       @product.update_attributes("#{file_attr_name}_render_path" => render_file_path)
     end

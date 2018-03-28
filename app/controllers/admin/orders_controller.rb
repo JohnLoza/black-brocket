@@ -148,7 +148,7 @@ class Admin::OrdersController < ApplicationController
     if @saved==true
       flash[:success]=t(@order.state)
     else
-      flash[:danger]="Ocurrió un error al procesar el pago, inténtalo de nuevo por favor"
+      flash[:info]="Ocurrió un error al procesar el pago, inténtalo de nuevo por favor"
     end
 
     redirect_to admin_orders_path(type: "ACCEPT_REJECT_PAYMENT")
@@ -209,7 +209,7 @@ class Admin::OrdersController < ApplicationController
       flash[:success] = "La orden se canceló correctamente."
     end
 
-    flash[:danger] = "Oops, algo no salió como lo esperado..." if flash[:success].nil?
+    flash[:info] = "Oops, algo no salió como lo esperado..." if flash[:success].nil?
     redirect_to admin_orders_path(type: "CANCEL")
   end # def cancel #
 
@@ -227,7 +227,7 @@ class Admin::OrdersController < ApplicationController
       flash[:success] = "Estado de orden guardado"
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Inspeccionó la orden")
     else
-      flash[:danger] = "Ocurrió un error al guardar la información"
+      flash[:info] = "Ocurrió un error al guardar la información"
     end
 
     redirect_to admin_orders_path + "?type=INSPECTION"
@@ -299,7 +299,7 @@ class Admin::OrdersController < ApplicationController
           # if the product with the given key and batch doesn't exist stop the execution #
           if !product_detail
             puts "--- product not found ---"
-            flash[:danger] = "No existe el producto con clave #{params[:product_id][indx]} y No. de lote #{params[:batch][indx]}."
+            flash[:info] = "No existe el producto con clave #{params[:product_id][indx]} y No. de lote #{params[:batch][indx]}."
             raise ActiveRecord::Rollback
             break
           end # if !product_detail #
@@ -310,7 +310,7 @@ class Admin::OrdersController < ApplicationController
                           product_detail.existence - params[:quantity][indx].to_i)
           else
             puts "--- no enough existence for delivery ---"
-            flash[:danger] = "No hay existencias suficientes."
+            flash[:info] = "No hay existencias suficientes."
             raise ActiveRecord::Rollback
             break
           end
@@ -334,7 +334,7 @@ class Admin::OrdersController < ApplicationController
           # if a product hasn't been captured stop the execution #
           if !product_captured
             puts "--- a product hasn't been captured ---"
-            flash[:danger] = "No se esta surtiendo el pedido completo."
+            flash[:info] = "No se esta surtiendo el pedido completo."
             raise ActiveRecord::Rollback
             break
           end
@@ -351,7 +351,7 @@ class Admin::OrdersController < ApplicationController
 
           if order_detail.quantity != shipment_quantity
             puts "--- quantities don't match ---"
-            flash[:danger] = "La cantidad de productos a enviar no es correcta."
+            flash[:info] = "La cantidad de productos a enviar no es correcta."
             raise ActiveRecord::Rollback
             break
           else
@@ -370,7 +370,7 @@ class Admin::OrdersController < ApplicationController
       flash[:success] = "Números de lote y cantidades guardadas"
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
     else
-      flash[:danger] = "Ocurrió un error al guardar, verifica la información introducida" if flash[:danger].blank?
+      flash[:info] = "Ocurrió un error al guardar, verifica la información introducida" if flash[:info].blank?
     end
     redirect_to admin_orders_path + "?type=CAPTURE_BATCHES"
 
@@ -394,7 +394,7 @@ class Admin::OrdersController < ApplicationController
       flash[:success] = "Orden actualizada correctamente"
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Capturó código de rastreo")
     else
-      flash[:danger] = "Ocurrió un error al guardar la información"
+      flash[:info] = "Ocurrió un error al guardar la información"
     end
     redirect_to admin_orders_path + "?type=CAPTURE_TRACKING_CODE"
   end
@@ -411,7 +411,7 @@ class Admin::OrdersController < ApplicationController
       flash[:success]="Status de la orden actualizado"
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Estableció como entregado")
     else
-      flash[:danger]="Ocurrió un error al guardar la información"
+      flash[:info]="Ocurrió un error al guardar la información"
     end
     redirect_to admin_orders_path + "?type=SENT"
   end # def save_as_delivered #
@@ -428,7 +428,7 @@ class Admin::OrdersController < ApplicationController
       flash[:success]="Status de la orden actualizado"
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Facturó")
     else
-      flash[:danger]="Ocurrió un error al guardar la información"
+      flash[:info]="Ocurrió un error al guardar la información"
     end
     redirect_to admin_orders_path + "?type=INVOICES"
   end # def invoice_delivered #

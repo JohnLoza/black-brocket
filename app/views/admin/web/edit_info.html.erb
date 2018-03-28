@@ -18,11 +18,12 @@
           </div>
           <div class="ibox-content">
 
-              <%= form_for @web_info, url: admin_web_info_path(params[:name]), :html => {class: 'form-horizontal'}, method: :put do |f| %>
+              <%= form_for @web_info, url: admin_web_info_path(params[:name]),
+                :html => {class: 'form-horizontal'}, method: :put do |f| %>
 
                 <div class="form-group">
                   <div class="col-sm-12">
-                    <%= f.text_area :body, :id => "summernote", class: "form-control" %>
+                    <%= f.text_area :body, class: "form-control summernote" %>
                   </div>
                 </div>
 
@@ -52,10 +53,20 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
- $('#summernote').summernote({
+  $('.summernote').summernote({
+    toolbar: [
+      ['misc', ['undo', 'redo']],
+      ['style', ['style']],
+      ['style', ['bold', 'italic', 'underline', 'clear']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      ['insert', ['link']],
+      ['view', ['codeview']]
+    ],
+    placeholder: "Escribe aquí...",
+    disableDragAndDrop: true,
+    shortcuts: false,
     height: "250px"
   });
-  $('.note-insert, .note-help').remove();
 });
 </script>
 

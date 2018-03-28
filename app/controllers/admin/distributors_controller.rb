@@ -102,7 +102,7 @@ class Admin::DistributorsController < AdminController
       @distributor.Regions.update_all(distributor_id: nil)
       flash[:success] = 'Distribuidor eliminado.'
     else
-      flash[:danger] = 'Ocurrió un error al eliminar el trabajador, inténtalo de nuevo por favor.'
+      flash[:info] = 'Ocurrió un error al eliminar el trabajador, inténtalo de nuevo por favor.'
     end
     redirect_to admin_distributors_path
   end

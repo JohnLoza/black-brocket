@@ -54,7 +54,7 @@ class Distributor::ClientsController < ApplicationController
     end # if @client #
 
     flash[:success] = "Precios de #{@client.name} #{@client.lastname} actualizados" if success
-    flash[:danger] = "Ocurrió un error al actualizar los precios" if !success
+    flash[:info] = "Ocurrió un error al actualizar los precios" if !success
     redirect_to distributor_clients_path
   end
 

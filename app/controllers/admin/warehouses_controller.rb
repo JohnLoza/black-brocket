@@ -160,7 +160,7 @@ class Admin::WarehousesController < ApplicationController
       @warehouse.Regions.update_all(warehouse_id: nil)
       redirect_to controller: "admin/warehouses"
     else
-      flash[:danger] = 'Ocurrió un error al eliminar el trabajador, inténtalo de nuevo por favor.'
+      flash[:info] = 'Ocurrió un error al eliminar el trabajador, inténtalo de nuevo por favor.'
       redirect_to controller: "admin/warehouses"
     end
   end

@@ -75,7 +75,7 @@ class Admin::CommissionsController < ApplicationController
     end
 
     flash[:success] = "Comisión creada!" if saved
-    flash[:danger] = "Ocurrió un error al guardar la información" if !saved
+    flash[:info] = "Ocurrió un error al guardar la información" if !saved
     redirect_to admin_orders_path(distributor: @distributor.hash_id, type: "DELIVERED")
   end
 
@@ -116,7 +116,7 @@ class Admin::CommissionsController < ApplicationController
     saved = true if commission.update_attributes(attributes)
 
     flash[:success] = "Pago cargado exitosamente." if saved
-    flash[:danger] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: jpg, jpeg, png y pdf" if !saved
+    flash[:info] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: jpg, jpeg, png y pdf" if !saved
     redirect_to admin_commissions_path
   end
 

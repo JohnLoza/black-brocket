@@ -177,7 +177,7 @@ class Admin::ClientsController < ApplicationController
     end
 
     if !saved
-      flash[:danger] = "Ocurrió un error al guardar la encuesta"
+      flash[:info] = "Ocurrió un error al guardar la encuesta"
       render :new_supervisor_visit
       return
     end

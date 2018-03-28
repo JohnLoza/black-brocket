@@ -89,7 +89,7 @@ class Admin::ParcelsController < ApplicationController
     if @parcel.destroy
       flash[:success] = "Paquetería eliminada..."
     else
-      flash[:danger] = "Ocurrió un error inesperado..."
+      flash[:info] = "Ocurrió un error inesperado..."
     end
 
     redirect_to admin_warehouse_parcels_path(params[:warehouse_id])

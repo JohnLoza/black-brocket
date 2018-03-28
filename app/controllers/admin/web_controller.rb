@@ -1,34 +1,14 @@
-class Admin::WebController < ApplicationController
-  before_action :logged_in?
-  before_action :current_user_is_a_worker?
-  layout 'admin_layout.html.erb'
-
-  @@category = "WEB"
+class Admin::WebController < AdminController
 
   @@base_file_path = "app/views"
   @@replaceable_path = "/shared/web/"
 
   def index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
-    return if !process_authorization_result(authorization_result)
-
-    # determine the actions the user can do, so we can display them in screen #
-    @actions = {"VIDEO"=>false,"GALLERY_IMAGES"=>false,"OFFERS"=>false,"TEXTS"=>false,"SOCIAL_NETWORKS"=>false,"PRIVACY_POLICY"=>false,"TERMS_OF_SERVICE"=>false,"FOOTER_DETAILS"=>false}
-    if !@current_user.is_admin
-      @user_permissions.each do |p|
-        # see if the permission category is equal to the one we need in these controller #
-        if p.category == @@category
-          @actions[p.name]=true
-        end # if p.category == @@category #
-      end # @user_permissions.each end #
-    else
-      @actions = {"VIDEO"=>true,"GALLERY_IMAGES"=>true,"OFFERS"=>true,"TEXTS"=>true,"SOCIAL_NETWORKS"=>true,"PRIVACY_POLICY"=>true,"TERMS_OF_SERVICE"=>true,"FOOTER_DETAILS"=>true}
-    end # if !@current_user.is_admin end #
+    deny_access! and return unless @current_user.has_permission_category?('web')
   end
 
   def photos
-    authorization_result = @current_user.is_authorized?(@@category, "GALLERY_IMAGES")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@gallery_images')
 
     @photos = WebPhoto.where(name: "GALLERY")
     @log_in_initial = WebPhoto.where('name != "GALLERY"')
@@ -36,8 +16,7 @@ class Admin::WebController < ApplicationController
   end
 
   def upload_photos
-    authorization_result = @current_user.is_authorized?(@@category, "GALLERY_IMAGES")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@gallery_images')
 
     success = true
 
@@ -72,67 +51,61 @@ class Admin::WebController < ApplicationController
   end
 
   def destroy_photo
-    authorization_result = @current_user.is_authorized?(@@category, "GALLERY_IMAGES")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@gallery_images')
 
-    photo = WebPhoto.find(params[:id])
-    if photo and photo.destroy
+    photo = WebPhoto.find_by!(id: params[:id])
+    if photo.destroy
       flash[:success] = "Imagen eliminada"
     else
-      flash[:danger] = "La imagen no se pudo eliminar"
+      flash[:info] = "La imagen no se pudo eliminar"
     end
 
     redirect_to admin_web_photos_path
   end
 
   def offers
-    authorization_result = @current_user.is_authorized?(@@category, "OFFERS")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@offers')
 
     @offers = WebOffer.all
     @new_offer = WebOffer.new
   end
 
   def upload_offers
-    authorization_result = @current_user.is_authorized?(@@category, "OFFERS")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@offers')
 
-    photo = WebOffer.new({ photo: params[:web_offer][:offer],
-                           url: params[:web_offer][:url] })
-    success = true if photo.save
+    offer = WebOffer.new(web_offer_params)
 
-    if success
-      type = :success
-      message = "Imágenes cargadas al sitio"
+    if offer.save
+      flash[:success] = "Imágenes cargadas al sitio"
     else
-      type = :danger
-      message = "Alguna o todas las imágenes no han podido ser cargadas, verifica que las imágenes sean del formato correcto, jpg, jpeg, png"
+      flash[:info] = "Alguna o todas las imágenes no han podido ser cargadas, verifica que las imágenes sean del formato correcto, jpg, jpeg, png"
     end
 
-    flash[type] = message
     redirect_to admin_web_offers_path
   end
 
   def destroy_offer
-    authorization_result = @current_user.is_authorized?(@@category, "OFFERS")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@offers')
 
-    photo = WebOffer.find(params[:id])
-    if photo and photo.destroy
+    offer = WebOffer.find_by!(id: params[:id])
+    if offer.destroy
       flash[:success] = "Imagen eliminada"
     else
-      flash[:danger] = "La imagen no se pudo eliminar"
+      flash[:info] = "La imagen no se pudo eliminar"
     end
 
     redirect_to admin_web_offers_path
   end
 
   def edit_info
-    permission_name = params[:name]
-    permission_name = "TEXTS" if permission_name == "WELCOME_MESSAGE" or permission_name == "ECART_NOTICE"
-
-    authorization_result = @current_user.is_authorized?(@@category, permission_name)
-    return if !process_authorization_result(authorization_result)
+    case params[:name]
+    when 'TERMS_OF_SERVICE'
+      deny_access! and return unless @current_user.has_permission?('web@terms_of_service')
+    when 'PRIVACY_POLICY'
+      deny_access! and return unless @current_user.has_permission?('web@privacy_policy')
+    else
+      deny_access! and return unless @current_user.has_permission?('web@texts')
+    end
 
     @web_info = WebInfo.where(name: params[:name]).take
     if @web_info
@@ -143,26 +116,25 @@ class Admin::WebController < ApplicationController
   end
 
   def update_info
-    permission_name = params[:name]
-    permission_name = "TEXTS" if permission_name == "WELCOME_MESSAGE" or permission_name == "ECART_NOTICE"
-
-    authorization_result = @current_user.is_authorized?(@@category, permission_name)
-    return if !process_authorization_result(authorization_result)
+    case params[:name]
+    when 'TERMS_OF_SERVICE'
+      deny_access! and return unless @current_user.has_permission?('web@terms_of_service')
+    when 'PRIVACY_POLICY'
+      deny_access! and return unless @current_user.has_permission?('web@privacy_policy')
+    else
+      deny_access! and return unless @current_user.has_permission?('web@texts')
+    end
 
     web_info = WebInfo.where(name: params[:name]).take
     if !web_info.blank?
       render_file_path = @@replaceable_path + params[:name].downcase + ".html.erb"
-      # The render_file_path should not have the starting underscore, but #
-      # as we are generating the real file_path we need to add it, just for that #
       file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
 
       # erasing contents of file and openning it to rewrite, to append use "a" as second argument #
-      file = File.open(file_path, "w")
-      file.puts(params[:web_info][:body])
-      file.flush
+      File.open(file_path, "w"){|file| file.write(params[:web_info][:body]) }
 
       web_info.update_attributes(:description_render_path => render_file_path) if web_info.description_render_path != render_file_path
-      flash[:success]= t(params[:name]) + " actualizado!"
+      flash[:success] = t(params[:name]) + " actualizado!"
     else
       flash[:info] = "La página que buscas, no existe..."
     end
@@ -170,44 +142,36 @@ class Admin::WebController < ApplicationController
   end
 
   def videos
-    authorization_result = @current_user.is_authorized?(@@category, "VIDEO")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@video')
 
     @video = WebVideo.first
     @video = WebVideo.new if !@video
   end
 
   def upload_video
-    authorization_result = @current_user.is_authorized?(@@category, "VIDEO")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@video')
 
     @video = WebVideo.first
     if @video
       if @video.update_attributes(video: params[:web_video][:video])
-        flash_type = :success
-        message = "Video actualizado"
+        flash[:success] = "Video actualizado"
       else
-        flash_type = :danger
-        message = "Ocurrió un error, recuerda que el video debe ser mp4"
+        flash[:info] = "Ocurrió un error, recuerda que el video debe ser mp4"
       end
     else
       @video = WebVideo.new({ video: params[:web_video][:video] })
       if @video.save
-        flash_type = :success
-        message = "Video actualizado"
+        flash[:success] = "Video actualizado"
       else
-        flash_type = :danger
-        message = "Ocurrió un error, recuerda que el video debe ser mp4"
+        flash[:info] = "Ocurrió un error, recuerda que el video debe ser mp4"
       end
     end
 
-    flash[flash_type] = message
     redirect_to admin_web_videos_path
   end
 
   def reset_videos
-    authorization_result = @current_user.is_authorized?(@@category, "VIDEO")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@video')
 
     video = WebVideo.first
     video.destroy if video
@@ -216,60 +180,47 @@ class Admin::WebController < ApplicationController
   end
 
   def social_networks
-    authorization_result = @current_user.is_authorized?(@@category, "SOCIAL_NETWORKS")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@social_networks')
 
     @networks = SocialNetwork.all
   end
 
   def update_social_networks
-    authorization_result = @current_user.is_authorized?(@@category, "SOCIAL_NETWORKS")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@social_networks')
 
-    @network = SocialNetwork.find(params[:id])
-    if @network
-      if @network.update_attributes(url: params[:social_network][:url])
-        flash[:success] = @network.name + " actualizado"
-      else
-        flash[:danger] = "Error al actualizar, inténtelo de nuevo por favor."
-      end
+    @network = SocialNetwork.find_by!(id: params[:id])
+    if @network.update_attributes(url: params[:social_network][:url])
+      flash[:success] = @network.name + " actualizado"
+    else
+      flash[:info] = "Error al actualizar, inténtelo de nuevo por favor."
     end
 
     redirect_to admin_web_social_networks_path
   end
 
   def footer_details
-    authorization_result = @current_user.is_authorized?(@@category, "FOOTER_DETAILS")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@footer_details')
 
     @details = FooterExtraDetail.all
   end
 
   def create_footer_detail
-    authorization_result = @current_user.is_authorized?(@@category, "FOOTER_DETAILS")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@footer_details')
 
     detail = FooterExtraDetail.new(footer_params)
-    saved=false
     if detail.save
-      saved=true
+      flash[:success] = "Detalle guardado!"
+    else
+      flash[:info] = "Ocurrió un error al guardar"
     end
 
-    flash[:success] = "Detalle guardado!" if saved
-    flash[:danger] = "Ocurrió un error al guardar" if !saved
     redirect_to admin_web_footer_details_path
   end
 
   def delete_footer_detail
-    authorization_result = @current_user.is_authorized?(@@category, "FOOTER_DETAILS")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@footer_details')
 
-    detail = FooterExtraDetail.find(params[:id])
-    if detail.nil?
-      flash[:warning] = "No se encontró el detalle"
-      redirect_to admin_web_footer_details_path
-      return
-    end
+    detail = FooterExtraDetail.find_by!(id: params[:id])
 
     detail.destroy
     flash[:success] = "Detalle eliminado!"
@@ -277,8 +228,7 @@ class Admin::WebController < ApplicationController
   end
 
   def services
-    authorization_result = @current_user.is_authorized?(@@category, "TEXTS")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@texts')
 
     @infos = WebInfo.where(name: ["HIGH_QUALITY","DISCOUNTS","EASY_SHOPPING","DISTRIBUTORS"])
     @infos.each do |info|
@@ -289,20 +239,15 @@ class Admin::WebController < ApplicationController
   end
 
   def update_services
-    authorization_result = @current_user.is_authorized?(@@category, "TEXTS")
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission?('web@texts')
 
     web_info = WebInfo.find(params[:id])
     if !web_info.blank?
       render_file_path = @@replaceable_path + web_info.name.downcase + ".html.erb"
-      # The render_file_path should not have the starting underscore, but #
-      # as we are generating the real file_path we need to add it, just for that #
       file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
 
       # erasing contents of file and openning it to rewrite, to append use "a" as second argument #
-      file = File.open(file_path, "w")
-      file.puts(params[:web_info][:body])
-      file.flush
+      File.open(file_path, "w"){|file| file.write(params[:web_info][:body]) }
 
       web_info.update_attributes(:description_render_path => render_file_path) if web_info.description_render_path != render_file_path
       flash[:success] = "Servicio actualizado!"
@@ -315,5 +260,9 @@ class Admin::WebController < ApplicationController
   private
     def footer_params
       params.require(:footer_extra_detail).permit(:name, :detail)
+    end
+
+    def web_offer_params
+      params.require(:web_offer).permit(:photo, :url)
     end
 end

@@ -77,7 +77,7 @@ class Admin::WarehouseProductsController < ApplicationController
     end
 
     flash[:success] = "Stock modificado" if success
-    flash[:danger] = "Ocurrió un error al modificar el stock." if !success
+    flash[:info] = "Ocurrió un error al modificar el stock." if !success
     redirect_to admin_warehouse_products_stock_details_path(warehouse.hash_id, product.id)
   end
 
@@ -273,7 +273,7 @@ class Admin::WarehouseProductsController < ApplicationController
     end if !session[:shipment_products].blank? #transaction end#
 
     flash[:success] = "Envío registrado!" if success
-    flash[:danger] = "Ocurrió un error al guardar el envío verifica que los datos introducidos como lotes y fechas de caducidad sean correctos." if !success
+    flash[:info] = "Ocurrió un error al guardar el envío verifica que los datos introducidos como lotes y fechas de caducidad sean correctos." if !success
     if shipment.shipment_type == "TRANSFER"
       redirect_to admin_warehouse_products_path(params[:warehouse_id])
     else
@@ -310,7 +310,7 @@ class Admin::WarehouseProductsController < ApplicationController
     end
 
     flash[:success] = "Envío eliminado." if success
-    flash[:danger] = "Ocurrió un error al eliminar el envío." if !success
+    flash[:info] = "Ocurrió un error al eliminar el envío." if !success
     redirect_to admin_chief_shipments_path(params[:warehouse_id])
   end
 
@@ -347,7 +347,7 @@ class Admin::WarehouseProductsController < ApplicationController
     end
 
     flash[:success] = "Se añadieron los productos al stock actual!" if saved
-    flash[:danger] = "Ocurrió un error inesperado, por favor intentelo de nuevo" if !saved
+    flash[:info] = "Ocurrió un error inesperado, por favor intentelo de nuevo" if !saved
     redirect_to admin_shipments_path(warehouse.hash_id)
   end
 
@@ -412,7 +412,7 @@ class Admin::WarehouseProductsController < ApplicationController
     end
 
     flash[:success] = "Se añadieron los productos al stock actual!" if saved
-    flash[:danger] = "Ocurrió un error inesperado, por favor intentelo de nuevo" if !saved
+    flash[:info] = "Ocurrió un error inesperado, por favor intentelo de nuevo" if !saved
     redirect_to admin_warehouse_products_path(warehouse.hash_id)
   end
 
@@ -441,7 +441,7 @@ class Admin::WarehouseProductsController < ApplicationController
     end # transaction end #
 
     flash[:success] = "Reporte enviado a los jefes de almacén..." if @saved
-    flash[:danger] = "Ocurrió un error inesperado..." if !@saved
+    flash[:info] = "Ocurrió un error inesperado..." if !@saved
     redirect_to admin_shipments_path(params[:warehouse_id])
   end
 
@@ -471,7 +471,7 @@ class Admin::WarehouseProductsController < ApplicationController
 
     @product = Product.find_by!(hash_id: params[:product_qr][:product])
     if @product.blank?
-      flash[:danger] = "No se encontró el producto con clave #{params[:product_qr][:product]}."
+      flash[:info] = "No se encontró el producto con clave #{params[:product_qr][:product]}."
       redirect_to admin_chief_warehouse_products_path(params[:product_qr][:warehouse])
       return
     end

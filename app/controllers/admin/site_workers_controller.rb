@@ -125,7 +125,7 @@ class Admin::SiteWorkersController < AdminController
     if @worker.save
       flash[:success] = "Permisos guardados"
     else
-      flash[:danger] = "Ocurrió un error inesperado"
+      flash[:info] = "Ocurrió un error inesperado"
     end
     redirect_to admin_site_workers_path
   end # def update_permissions end #
@@ -266,6 +266,7 @@ class Admin::SiteWorkersController < AdminController
       @web_category << {category: "web", name: "gallery_images", description: "Galería / Imágenes"}
       @web_category << {category: "web", name: "offers", description: "Promociones"}
       @web_category << {category: "web", name: "texts", description: "Textos"}
+      @web_category << {category: "web", name: "footer_details", description: "Detalles del pie de página"}
       @web_category << {category: "web", name: "social_networks", description: "Redes Sociales"}
       @web_category << {category: "web", name: "privacy_policy", description: "Aviso de Privacidad"}
       @web_category << {category: "web", name: "terms_of_service", description: "Términos y Condiciones"}

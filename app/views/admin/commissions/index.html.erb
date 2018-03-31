@@ -5,27 +5,12 @@
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
 
-    <div class="ibox">
-        <div class="ibox-content text-center">
-            <h3 class="m-b-xxs">Listado de comisiones</h3>
-            <small>En este apartado se muestra la lista de las comisiones registradas de las órdenes entregadas,
-              aquí puedes ver los detalles de la comisión y cargar su respectivo comprobante de pago.</small>
-        </div>
-    </div>
+    <%= render partial: '/shared/admin/header_with_search',
+      locals: {title: 'Lista de Comisiones', search_url: admin_commissions_path,
+      new_permission: nil, new_url: nil } %>
 
     <div class="ibox">
     	<div class="ibox-content">
-
-    			<div class="row m-b-sm m-t-sm">
-            <div class="col-md-10">
-              <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
-            </div>
-    				<div class="col-md-2">
-    					<%= link_to(admin_commissions_path, class: "btn btn-white btn-sm full-width") do %>
-    						<i class="fa fa-refresh"></i> Actualizar
-    					<% end %>
-    				</div>
-    			</div>
 
           <table class="footable table table-stripped  toggle-arrow-tiny" data-filter=#filter>
               <thead>
@@ -41,63 +26,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% @commissions.each do |c| %>
-                  <tr>
-                    <td><%= c.hash_id %></td>
-                    <td>$ <%= c.total %></td>
-                    <% distributor = c.Distributor %>
-                    <td><%= link_to distributor.username,
-                                    admin_distributor_path(distributor.hash_id) %></td>
-                    <td>
-                      <% case t(c.state)
-                        when "Por pagar"%>
-                        <label class="label label-danger"><%=t(c.state)%></label>
-                      <%when "Pago depositado"%>
-                        <label class="label label-primary"><%=t(c.state)%></label>
-                      <%when "Pagado y se recibió factura"%>
-                        <label class="label label-success"><%=t(c.state)%></label>
-                      <%else%>
-                        <label class="label label-information"><%=t(c.state)%></label>
-                      <%end%>
-                    </td>
-                    <td class="text-center">
-                      <% if !c.payment_img.blank? %>
-                        <%= link_to image_tag(c.payment_img.url(:mini), class: "img-rounded", :style =>"width:60px;"),
-                            image_path(c.payment_img.url), :data => {:toggle => "lightbox", :title => "Pago de la comisión: " + c.hash_id } %>
-                      <% elsif !c.payment_pdf.blank? %>
-                        <%= link_to "<i class='fa fa-file-pdf-o fa-5x'></i>".html_safe,
-                            c.payment_pdf.url, target: "_blank" %>
-                      <% end %>
-                    </td>
-                    <td><%= l(Time.parse(c.payment_day), format: :long) if !c.payment_day.blank? %></td>
-                    <td class="text-center">
-                      <% if !c.invoice.blank? %>
-                        <%= link_to "<i class='fa fa-file-archive-o fa-5x'></i>".html_safe,
-                            admin_download_commission_invoice_path(c.hash_id), target: "_blank" %>
-                        <% if c.invoice_downloaded %>
-                          <i class="fa fa-download fa-3x" style="color: #8BC34A"></i>
-                        <% end %>
-                      <% end %>
-                    </td>
-                    <td>
-                      <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
-                                  admin_commission_details_path(c.hash_id),
-                                  class: "btn btn-white btn-sm m-b-xs" %>
-
-                        <%= form_for(Commission.new, url: admin_upload_commission_payment_path(c.hash_id)) do |f| %>
-                          <a onclick="$('#payment_field_<%=c.hash_id%>').click();" class="btn btn-white btn-sm m-b-xs">
-                            <i class="fa fa-upload"></i> Subir comprobante de pago
-                          </a>
-
-                          <%= f.file_field :payment, id: "payment_field_#{c.hash_id}",
-                              :style =>"display: none;", :multiple => false,
-                              :onchange => "$('#payment_commit_#{c.hash_id}').click();" %>
-                          <%= f.submit "commit", id: "payment_commit_#{c.hash_id}", style: "display: none;",
-                              data: {confirm: "Estas seguro(a) de ser el archivo correcto?"} %>
-                        <% end #form end# %>
-                    </td>
-                  </tr>
-                <% end %>
+                <%= render @commissions %>
               </tbody>
               <tfoot>
                 <tr>
@@ -109,12 +38,6 @@
                 </tr>
               </tfoot>
           </table>
-
-          <script>
-              $(document).ready(function() {
-
-              });
-          </script>
 
     	</div>
     </div>

@@ -17,8 +17,6 @@ class Distributor < ApplicationRecord
   has_many :Notifications, class_name: :Notification, foreign_key: :distributor_id
   has_many :Commissions, class_name: :Commission, foreign_key: :distributor_id
 
-  validates :city_id, numericality: { only_integer: true }
-
   validates :password, length: { minimum: 6 }, :on => :create
 
   validates :city_id, :name, :email, :username, :fiscal_number,
@@ -29,6 +27,8 @@ class Distributor < ApplicationRecord
 
   validates :name, :lastname, :mother_lastname,
         format: { with: /\A[a-zA-ZÑñáéíóúü\s\.']+\z/ }
+
+  validates :commission, presence: true, numericality: true
 
   mount_uploader :photo, AvatarUploader
   mount_uploader :home_img, ImageUploader

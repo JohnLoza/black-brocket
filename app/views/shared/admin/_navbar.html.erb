@@ -55,12 +55,17 @@
           <% end if @current_user.has_permission_category?('distributor_work') %>
         </li>
 
-        <li>
-          <%= link_to admin_warehouses_path do %>
-            <%= content_tag(:i, nil, class: 'fa fa-cubes') %>
-            <%= content_tag(:span, 'Almacenes', class: 'nav-label') %>
-          <% end if @current_user.has_permission_category?('warehouses') %>
-        </li>
+        <% if @current_user.has_permission_category?('warehouses') or
+              @current_user.has_permission_category?('parcels') or
+              @current_user.has_permission_category?('warehouse_products') or
+              @current_user.has_permission_category?('warehouse_manager') %>
+          <li>
+           <%= link_to admin_warehouses_path do %>
+             <%= content_tag(:i, nil, class: 'fa fa-cubes') %>
+             <%= content_tag(:span, 'Almacenes', class: 'nav-label') %>
+           <% end %>
+          </li>
+        <% end %>
 
         <li>
           <%= link_to admin_products_path do %>

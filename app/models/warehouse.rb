@@ -24,4 +24,12 @@ class Warehouse < ApplicationRecord
   def to_s
     name
   end
+
+  def telephone_with_lada
+    "(#{self.City.lada}) #{self.telephone}"
+  end
+
+  def location
+    "#{self.City} #{self.City.State}"
+  end
 end

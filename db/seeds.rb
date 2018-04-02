@@ -12,7 +12,6 @@ if !warehouses.any?
   Warehouse.create(name: "Almacén Guadalajara", address: "Some address",
                    telephone: "xx xx xx xx", city_id: 19597, hash_id: "A0001",
                    shipping_cost: 250, wholesale: 1999)
-
 end
 
 if SiteWorker.where(is_admin: true).take.blank?

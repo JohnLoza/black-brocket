@@ -1,0 +1,23 @@
+<tr>
+    <td>
+      <%= image_tag(parcel.image.url(:mini)) unless parcel.image.blank? %>
+    </td>
+    <td><%= parcel.parcel_name %></td>
+    <td><%= parcel.cost %></td>
+    <td><%= l(parcel.created_at, format: :long) %></td>
+    <td><%= l(parcel.updated_at, format: :long) %></td>
+    <td>
+      <% if @current_user.has_permission?('parcels@update') %>
+        <%= link_to "<i class='fa fa-pencil'></i> Modificar".html_safe,
+          admin_warehouse_edit_parcel_path(@warehouse, parcel),
+          class: 'btn btn-white btn-sm m-b-xs' %>
+      <% end %>
+
+      <% if @current_user.has_permission?('parcels@delete') %>
+        <%= link_to "<i class='fa fa-trash'></i> Eliminar".html_safe,
+          admin_warehouse_parcel_path(@warehouse.hash_id, parcel.id),
+          class: 'btn btn-danger btn-sm m-b-xs', method: :delete,
+          data: { confirm:"Estas seguro(a) de eliminarla?" } %>
+      <% end %>
+    </td>
+</tr>

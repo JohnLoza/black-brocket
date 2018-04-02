@@ -1,0 +1,46 @@
+<tr>
+  <td><%= warehouse.hash_id %></td>
+  <td><%= warehouse.name %></td>
+  <td><%= warehouse.telephone_with_lada %></td>
+  <td><%= warehouse.location %></td>
+  <td><%= l(warehouse.created_at, format: :long) %></td>
+  <td><%= l(warehouse.updated_at, format: :long) %></td>
+  <td>
+    <% if @current_user.has_permission?('warehouses@show') %>
+    <%= link_to "<i class='fa fa-eye'></i> Ver".html_safe, admin_warehouse_path(warehouse),
+      class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+    <% end %>
+
+    <% if @current_user.has_permission_category?('warehouse_products') %>
+    <%= link_to "<i class='fa fa-cube'></i> Productos".html_safe,
+      admin_warehouse_products_path(warehouse.hash_id),
+      class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+    <% end %>
+
+    <% if @current_user.has_permission?('warehouses@update_regions') %>
+    <%= link_to "<i class='fa fa-globe'></i> Zonas de distribución".html_safe,
+      admin_warehouse_regions_path(warehouse.hash_id),
+      class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+    <% end %>
+
+    <% if @current_user.has_permission_category?('parcels') %>
+    <%= link_to "<i class='fa fa-truck'></i> Paqueterías".html_safe,
+      admin_warehouse_parcels_path(warehouse.hash_id),
+      class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+    <% end %>
+
+    <% if @current_user.has_permission?('warehouses@update_warehouse_data') or
+          @current_user.has_permission?('warehouses@update_shipping_cost') or
+          @current_user.has_permission?('warehouses@update_wholesale') %>
+    <%= link_to "<i class='fa fa-pencil'></i> Modificar".html_safe,
+      edit_admin_warehouse_path(warehouse.hash_id),
+      class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+    <% end %>
+
+    <% if @current_user.has_permission?('warehouses@delete') %>
+    <%= link_to "<i class='fa fa-trash'></i> Eliminar".html_safe,
+      admin_warehouse_path(warehouse.hash_id), class: "btn btn-white btn-sm m-b-xs hidden-button" ,
+      method: "delete", data: { confirm: "Estas seguro(a) de eliminarlo?" } %>
+    <% end %>
+  </td>
+</tr>

@@ -4,33 +4,42 @@
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
+    <%= render partial: '/shared/admin/header_with_search',
+      locals: {title: 'Lista de Paqueterías', search_url: admin_warehouse_parcels_path(params[:warehouse_id]),
+      new_permission: 'parcels@create', new_url: admin_warehouse_new_parcel_path(params[:warehouse_id]) } %>
 
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="ibox-content" style="display: block;">
-          <div class="row">
-            <div class="col-sm-9 b-r margin-bot-resp">
-      	       <h3 class="m-t-none m-b">Lista de paqueterías</h3>
-      	       <p>Aquí puedes realizar diversas acciones como dar de alta una nueva paquetería, modificar, eliminarlo o simplemente ver su información!!!</p>
-      	    </div>
-      		  <div class="hr-line-dashed pro-mobile"></div>
-            <% if @actions["CREATE"] %>
-              <div class="col-sm-3 text-center"><h4>Registrar Nueva</h4>
-                 <p class="text-center">
-                   <%= link_to "<i class='fa fa-truck med-icon'></i>".html_safe, admin_warehouse_new_parcel_path(params[:id]) %>
-                 </p>
-              </div>
-            <% end %>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="ibox">
+            <div class="ibox-content">
+
+              <table class="footable table table-stripped  toggle-arrow-tiny" data-filter=#filter>
+                <thead>
+                  <tr>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Costo</th>
+                    <th>Fecha de creación</th>
+                    <th>Última modificación</th>
+                    <th data-sort-ignore="true">Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%= render @parcels %>
+                </tbody>
+              </table>
+
+            </div>
           </div>
         </div>
+
       </div>
-    </div><br>
 
-    <div class="row">
-      <%= render "presentation_table" %>
     </div>
-
   </div>
-</div>
-<!--End content whit animation-->
-</br></br>
+  <!--End content whit animation-->
+  <script>
+  $(document).ready(function() {
+    $('.footable').footable();
+  });
+</script>

@@ -10,7 +10,7 @@
               </div>
           </div>
           <div class="ibox-content">
-            <%= form_for(@parcel, url: @url, method: @method, :html => {class: 'form-horizontal'}) do |f| %>
+            <%= form_for([:admin, @warehouse, @parcel], :html => {class: 'form-horizontal'}) do |f| %>
             <%= render :partial=>'/shared/error_messages', locals:{entity: @parcel} %>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :parcel_name, "Nombre" %></label>

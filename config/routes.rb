@@ -103,11 +103,11 @@ Rails.application.routes.draw do
     put 'chief/warehouses/:warehouse_id/products/:id/update_min_stock' => 'warehouse_products#update_min_stock', :as => :update_product_min_stock
 
     # warehouse parcels #
-    get 'warehouses/:id/parcels' => 'parcels#index', :as => :warehouse_parcels
-    get 'warehouses/:id/parcels/new' => 'parcels#new', :as => :warehouse_new_parcel
-    post 'warehouses/:id/parcels' => 'parcels#create'
+    get 'warehouses/:warehouse_id/parcels' => 'parcels#index', :as => :warehouse_parcels
+    get 'warehouses/:warehouse_id/parcels/new' => 'parcels#new', :as => :warehouse_new_parcel
+    post 'warehouses/:warehouse_id/parcels' => 'parcels#create'
     get 'warehouses/:warehouse_id/parcel/:id/edit' => 'parcels#edit', :as => :warehouse_edit_parcel
-    put 'warehouses/:warehouse_id/parcel/:id' => 'parcels#update', :as => :warehouse_parcel
+    patch 'warehouses/:warehouse_id/parcel/:id' => 'parcels#update', :as => :warehouse_parcel
     delete 'warehouses/:warehouse_id/parcel/:id' => 'parcels#destroy'
 
     # shipments #

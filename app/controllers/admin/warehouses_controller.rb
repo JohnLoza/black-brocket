@@ -10,7 +10,6 @@ class Admin::WarehousesController < AdminController
 
     @warehouses = Warehouse.active.search(key_words: search_params, fields: ['hash_id', 'name'])
       .order_by_name.paginate(page: params[:page], per_page: 25).includes(City: :State)
-
   end
 
   def show
@@ -112,7 +111,7 @@ class Admin::WarehousesController < AdminController
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
 
-    @products_in_stock = @warehouse.Products.joins(:Product).where(products: {deleted: false})
+    @products_in_stock = @warehouse.Products.joins(:Product).where(products: {deleted_at: nil})
                           .where(warehouse_id: @warehouse.id, describes_total_stock: true)
                           .order(product_id: :asc).includes(:Product)
 

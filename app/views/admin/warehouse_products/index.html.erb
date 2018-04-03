@@ -9,7 +9,7 @@
       <%= render partial: "presentation_table" %>
     </div>
 
-    <% if @actions["TRANSFER_MERCANCY"] %>
+    <% if @current_user.has_permission?('warehouse_manager@transfer_mercancy') %>
       <div class="row">
         <div class="col-lg-12">
           <div class="ibox ibox-content">
@@ -48,7 +48,7 @@
 
 <%= render "shared/modal" %>
 
-<% if @actions["TRANSFER_MERCANCY"] %>
+<% if @current_user.has_permission?('warehouse_manager@transfer_mercancy') %>
 <script type="text/javascript">
   function update_shipment_preparations_form(product_name, product_id, warehouse_product_id, existencia) {
     modal = $('#modal')

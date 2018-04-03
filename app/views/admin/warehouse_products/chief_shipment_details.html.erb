@@ -1,5 +1,8 @@
 <% provide(:title, "Almacenes") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Envíos de almacén", labels: ['Almacenes', @warehouse.name, "Envíos", "Detalles"], links: [admin_warehouses_path, admin_warehouse_products_path(@warehouse.hash_id), admin_chief_shipments_path(@warehouse.hash_id)]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Envíos de almacén",
+  labels: ['Almacenes', @warehouse.name, "Envíos", "Detalles"],
+  links: [admin_warehouses_path, admin_warehouse_products_path(@warehouse.hash_id),
+    admin_chief_shipments_path(@warehouse.hash_id)]} %>
 
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
@@ -45,10 +48,12 @@
             </p>
             <% end %>
 
-          <% if (@report and @shipment.reviewed == false) or (@actions["REJECT_SHIPMENT_STOCK"] and @report and @shipment.reviewed == false) %>
-            <%= link_to "Aceptar y agregar a existencias", admin_add_report_quantity_to_stock_path(@warehouse.hash_id, @shipment.id),
-                { class: "btn btn-primary", method: :post, data:
-                  {:confirm => "Estas seguro(a) de agregar a existencia los productos? la existencia que se agregará sera la especificada por la persona que recibió el producto."}} %>
+          <% if @current_user.has_permission?('warehouse_products@reject_shipment_stock') and
+            @report and @shipment.reviewed == false %>
+            <%= link_to "Aceptar y agregar a existencias",
+              admin_add_report_quantity_to_stock_path(@warehouse.hash_id, @shipment.id),
+              { class: "btn btn-primary", method: :post, data:
+                {:confirm => "Estas seguro(a) de agregar a existencia los productos? la existencia que se agregará sera la especificada por la persona que recibió el producto."}} %>
           <% end %>
 
         </div>

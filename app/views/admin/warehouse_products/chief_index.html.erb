@@ -9,7 +9,7 @@
       <%= render partial: "presentation_table_chief" %>
     </div>
 
-    <% if @actions["CREATE_SHIPMENTS"] %>
+    <% if @current_user.has_permission?('warehouse_products@create_shipments') %>
       <div class="row">
           <div class="col-lg-12">
               <div class="ibox float-e-margins">
@@ -54,7 +54,7 @@
 
 <%= render "shared/modal" %>
 
-<% if @actions["CREATE_SHIPMENTS"] %>
+<% if @current_user.has_permission?('warehouse_products@create_shipments') %>
 <script type="text/javascript">
   function update_shipment_preparations_form(product_name, product_id) {
     modal = $('#modal')
@@ -72,7 +72,7 @@
 </script>
 <% end # if @actions["CREATE_SHIPMENTS"] # %>
 
-<% if @actions["UPDATE_MIN_STOCK"] %>
+<% if @current_user.has_permission?('warehouse_products@update_min_stock') %>
 <script type="text/javascript">
   function update_min_existence_form(product_name, product_id){
     modal = $('#modal')

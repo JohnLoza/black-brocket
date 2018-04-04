@@ -1,4 +1,8 @@
 class Client < ApplicationRecord
+  include HashId
+  include Searchable
+  include SoftDeletable
+  include User
   attr_accessor :remember_token
 
   before_save { self.email = email.downcase }
@@ -32,28 +36,6 @@ class Client < ApplicationRecord
         format: { with: /\A[a-zA-ZÑñáéíóúü\s\.']+\z/ }
 
   mount_uploader :photo, AvatarUploader
-
-  def Client.search(search_params, page)
-    search = search_params
-    page = 1 if !page
-
-    if search.at(",") == ","
-      search=search.gsub(/\s+/, "")
-      search=search.gsub(',','|')
-      operator = "REGEXP"
-    else
-      search = "%"+search+"%"
-      operator = "LIKE"
-    end
-
-    clients = Client.joins(City: :State).where("(cities.name #{operator} :search or
-      states.name #{operator} :search or
-      clients.username #{operator} :search or
-      clients.email #{operator} :search or
-      clients.name #{operator} :search or
-      clients.hash_id #{operator} :search)", search: search).order(created_at: :DESC).paginate(:page =>  page, :per_page => 20).includes(City: :State)
-    return clients
-  end
 
   def getAddress()
     city = self.City

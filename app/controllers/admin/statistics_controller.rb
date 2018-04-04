@@ -1,24 +1,17 @@
-class Admin::StatisticsController < ApplicationController
-  before_action :logged_in?
-  before_action :current_user_is_a_worker?
-  layout 'admin_layout.html.erb'
-
-  @@category = "STATISTICS"
+class Admin::StatisticsController < AdminController
   @@noProcessableOrders = ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED","ORDER_CANCELED"]
 
   def index
-    authorization_result = @current_user.is_authorized?(@@category, nil)
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission_category?('statistics')
 
     if params[:type] and params[:type]=="sales"
-      @products = Product.select("id, name").where(deleted: :false)
-      @distributors = Distributor.select("id, username").where(deleted: :false)
+      @products = Product.select("id, name").active
+      @distributors = Distributor.select("id, username").active
     end
   end
 
   def sales
-    authorization_result = @current_user.is_authorized?(@@category, nil)
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission_category?('statistics')
     # params[:products].sort! { |x,y| x.to_i <=> y.to_i } if params[:products]
 
     # get the orders details given the parameters the user entered #
@@ -30,14 +23,16 @@ class Admin::StatisticsController < ApplicationController
 
       # fetch the products #
       if params[:products] and params[:products].any?
-        @products = Product.select(:id, :hash_id, :name).where(deleted: false, id: params[:products]).order(id: :ASC)
+        @products = Product.select(:id, :hash_id, :name).active
+          .where(id: params[:products]).order(id: :ASC)
       else
-        @products = Product.select(:id, :hash_id, :name).where(deleted: false).order(id: :ASC)
+        @products = Product.select(:id, :hash_id, :name).active.order(id: :ASC)
       end
 
       # fetch the distributors #
       if params[:distributors] and params[:distributors].any?
-        @distributors = Distributor.select(:id, :hash_id, :username).where(deleted: false, id: params[:distributors]).order(id: :ASC)
+        @distributors = Distributor.select(:id, :hash_id, :username).active
+          .where(id: params[:distributors]).order(id: :ASC)
       else
         @distributors = Array.new
       end
@@ -48,8 +43,7 @@ class Admin::StatisticsController < ApplicationController
   end
 
   def best_distributors
-    authorization_result = @current_user.is_authorized?(@@category, nil)
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission_category?('statistics')
 
     selection = "sum(order_details.quantity) as sum_q, orders.distributor_id as dist_id, distributors.username as dist_username"
 
@@ -61,8 +55,7 @@ class Admin::StatisticsController < ApplicationController
   end
 
   def best_clients
-    authorization_result = @current_user.is_authorized?(@@category, nil)
-    return if !process_authorization_result(authorization_result)
+    deny_access! and return unless @current_user.has_permission_category?('statistics')
 
     selection = "sum(order_details.quantity) as sum_q, orders.client_id as client_id, clients.username as client_username"
 

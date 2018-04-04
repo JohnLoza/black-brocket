@@ -12,7 +12,6 @@ class Admin::DistributorRegionsController < AdminController
 
   def create
     deny_access! and return unless @current_user.has_permission?('distributors@update_distribution_regions')
-
     @saved = false
     @city = City.find_by!(id: params[:city_id])
 

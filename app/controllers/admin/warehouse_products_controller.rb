@@ -280,11 +280,13 @@ class Admin::WarehouseProductsController < AdminController
     shipment = Shipment.find(params[:id])
     if shipment.reviewed == false
       warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
-      saved = update_stock_from_shipment(warehouse, shipment)
+      if update_stock_from_shipment(warehouse, shipment)
+        flash[:success] = "Se añadieron los productos al stock actual!"
+      else
+        flash[:info] = "Ocurrió un error inesperado, por favor intentelo de nuevo"
+      end
     end
 
-    flash[:success] = "Se añadieron los productos al stock actual!" if saved
-    flash[:info] = "Ocurrió un error inesperado, por favor intentelo de nuevo" if !saved
     redirect_to admin_shipments_path(warehouse.hash_id)
   end
 
@@ -316,12 +318,13 @@ class Admin::WarehouseProductsController < AdminController
     if shipment.reviewed == false
       warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
       report = shipment.DifferenceReport
-
-      saved = update_stock_from_shipment(warehouse, shipment, report)
+      if update_stock_from_shipment(warehouse, shipment, report)
+        flash[:success] = "Se añadieron los productos al stock actual!"
+      else
+        flash[:info] = "Ocurrió un error inesperado, por favor intentelo de nuevo"
+      end
     end
 
-    flash[:success] = "Se añadieron los productos al stock actual!" if saved
-    flash[:info] = "Ocurrió un error inesperado, por favor intentelo de nuevo" if !saved
     redirect_to admin_warehouse_products_path(warehouse.hash_id)
   end
 
@@ -330,10 +333,10 @@ class Admin::WarehouseProductsController < AdminController
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @shipment = Shipment.find(params[:id])
-    @saved = false
 
     ActiveRecord::Base.transaction do
-      @shipment.update_attributes(:got_safe_to_destination => false, :worker_id => @current_user.id, :reviewed => false)
+      @shipment.update_attributes(:got_safe_to_destination => false,
+        :worker_id => @current_user.id, :reviewed => false)
       @report = ShipmentDifferenceReport.create!(shipment_id: @shipment.id,
       worker_id: @current_user.id, observations: params[:observations])
 
@@ -345,11 +348,10 @@ class Admin::WarehouseProductsController < AdminController
             shipment_detail_id: string_id, difference: params[p])
         end
       end
-      @saved = true
+      flash[:success] = "Reporte enviado a los jefes de almacén..."
     end # transaction end #
 
-    flash[:success] = "Reporte enviado a los jefes de almacén..." if @saved
-    flash[:info] = "Ocurrió un error inesperado..." if !@saved
+    flash[:info] = "Ocurrió un error inesperado..." unless flash[:sucess].present?
     redirect_to admin_shipments_path(params[:warehouse_id])
   end
 

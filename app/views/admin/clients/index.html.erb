@@ -5,26 +5,52 @@
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
 
-    <div class="ibox">
-      <div class="ibox-content">
-        <h3 class="m-b">Lista de clientes</h3>
-        <p>Aquí se te mostrará un listado de todos los clientes registrados en la página web.</p>
-        <p>En la búsqueda, separa los parámetros con "," ejemplo: Guadalajara, Querétaro, C0009 </p>
-
-
-        <%= form_for(:client, url: admin_clients_path, method: :get) do |f| %>
-          <div class="input-group">
-            <%= f.text_field :search, { class: "input form-control", placeholder: "Buscar cliente(s) en toda la lista...", maxlength: 50 } %>
-            <span class="input-group-btn">
-            <%= f.submit "Buscar".html_safe, class: "btn btn btn-success" %>
-            </span>
-          </div>
-       <% end %>
-      </div>
-    </div>
+    <%= render partial: '/shared/admin/header_with_search',
+      locals: {title: 'Lista de Clientes', search_url: admin_clients_path,
+      new_permission: nil, new_url: nil } %>
 
     <div class="row">
-      <%= render partial: "presentation_table" %>
+      <div class="col-lg-12">
+        <div class="ibox">
+        	<div class="ibox-content">
+
+            <table class="footable table table-stripped  toggle-arrow-tiny" data-filter=#filter>
+                <thead>
+                  <tr>
+                      <th data-sort-ignore="true"></th>
+                      <th data-hide="phone" data-sort-ignore="true"></th>
+                      <th data-hide="phone">Clave</th>
+                      <th>Nombre comercial o de usuario</th>
+                      <th data-hide="phone">Ubicación</th>
+                      <th data-hide="all">Teléfono</th>
+                      <th data-hide="phone">Acciones</th>
+                      <th data-hide="all">Última revisión</th>
+                      <th data-hide="all">Última visita</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%= render @clients %>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="7">
+                      <div class="pull-right">
+                        <%= will_paginate @clients, renderer: BootstrapPagination::Rails %>
+                      </div>
+                    </td>
+                  </tr>
+                </tfoot>
+            </table>
+
+        	</div>
+        </div>
+      </div>
+
+      <script>
+      $(document).ready(function() {
+        $('.footable').footable();
+      });
+      </script>
     </div>
 
   </div>

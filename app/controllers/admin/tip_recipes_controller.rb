@@ -1,5 +1,4 @@
 class Admin::TipRecipesController < AdminController
-
   @@base_file_path = "app/views"
   @@replaceable_path = "/shared/tips_recipes/"
 

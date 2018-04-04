@@ -79,11 +79,7 @@ class ProductsController < ApplicationController
     @question = ProdQuestion.new(product_id: product.id, client_id: @current_user.id,
                 hash_id: random_hash_id(12).upcase,
                 description: params[:prod_question][:description])
-
-    @saved = false
-    if @question.save
-      @saved = true
-    end
+    @saved = @question.save ? true : false
 
     respond_to do |format|
       format.js { render :ask, :layout => false }

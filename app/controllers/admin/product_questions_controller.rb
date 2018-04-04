@@ -22,12 +22,11 @@ class Admin::ProductQuestionsController < AdminController
     @question = ProdQuestion.find_by!(hash_id: params[:prod_answer][:question_id])
     @answer.question_id = @question.id
 
+    @saved = false
     if @answer.save and @question.update_attributes(answered: true)
       @saved = true
       notification = Notification.create(client_id: @question.client_id, icon: "fa fa-comments-o",
                       description: "Pregunta respondida", url: client_question_answer_path(@question))
-    else
-      @saved = false
     end
 
     respond_to do |format|

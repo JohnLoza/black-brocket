@@ -35,7 +35,6 @@ class Admin::CommissionsController < AdminController
     end
     total = (total * @distributor.commission) / 100
 
-    saved = false
     commission = Commission.new({hash_id: Utils.new_alphanumeric_token.upcase,
       distributor_id: @distributor_id, worker_id: @current_user.id,
       state: 'WAITING_FOR_PAYMENT', total: total })
@@ -45,11 +44,10 @@ class Admin::CommissionsController < AdminController
       @orders.each do |o|
         CommissionDetail.create(commission_id: commission.id, order_id: o.id)
       end
-      saved = true
+      flash[:success] = "Comisión creada!"
     end
 
-    flash[:success] = "Comisión creada!" if saved
-    flash[:info] = "Ocurrió un error al guardar la información" if !saved
+    flash[:info] = "Ocurrió un error al guardar la información" unless flash[:success].present?
     redirect_to admin_orders_path(distributor: @distributor.hash_id, type: "DELIVERED")
   end
 
@@ -75,10 +73,9 @@ class Admin::CommissionsController < AdminController
     end
     attributes[:state] = "PAYMENT_DEPOSITED"
     attributes[:payment_day] = Time.now.to_formatted_s(:db)
-    saved = true if commission.update_attributes(attributes)
+    flash[:success] = "Pago cargado exitosamente." if commission.update_attributes(attributes)
 
-    flash[:success] = "Pago cargado exitosamente." if saved
-    flash[:info] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: jpg, jpeg, png y pdf" if !saved
+    flash[:info] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: jpg, jpeg, png y pdf" unless flash[:success].present?
     redirect_to admin_commissions_path
   end
 

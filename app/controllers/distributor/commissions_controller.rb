@@ -28,10 +28,12 @@ class Distributor::CommissionsController < ApplicationController
       return
     end
 
-    saved = true if commission.update_attributes(invoice: params[:commission][:invoice], state: "PAID_&_INVOICE")
+    if commission.update_attributes(invoice: params[:commission][:invoice], state: "PAID_&_INVOICE")
+      flash[:success] = "Factura cargada exitosamente."
+    else
+      flash[:info] = "Ocurrió un error al guardar la factura, recuerda que debes subirla en un archivo compreso rar o zip incluyendo el pdf y xml."
+    end
 
-    flash[:success] = "Factura cargada exitosamente." if saved
-    flash[:info] = "Ocurrió un error al guardar la factura, recuerda que debes subirla en un archivo compreso rar o zip incluyendo el pdf y xml." if !saved
     redirect_to distributor_commissions_path
   end
 end

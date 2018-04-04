@@ -24,6 +24,4 @@ class Admin::WelcomeController < AdminController
     @notifications = @current_user.Notifications.recent.paginate(page: params[:page], per_page: 25)
   end
 
-  private
-
 end

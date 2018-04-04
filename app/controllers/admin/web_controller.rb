@@ -1,5 +1,4 @@
 class Admin::WebController < AdminController
-
   @@base_file_path = "app/views"
   @@replaceable_path = "/shared/web/"
 

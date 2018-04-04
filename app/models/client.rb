@@ -37,6 +37,11 @@ class Client < ApplicationRecord
 
   mount_uploader :photo, AvatarUploader
 
+  scope :recent, ->    { order(created_at: :desc) }
+  scope :order_by_name, -> (way = :asc) {
+    order(name: way)
+  }
+
   def getAddress()
     city = self.City
     state_name = State.find(city.state_id).name

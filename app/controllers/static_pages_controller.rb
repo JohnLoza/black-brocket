@@ -55,10 +55,9 @@ class StaticPagesController < ApplicationController
   end
 
   def create_suggestion
-    @saved = false
     if !params[:name].blank? and !params[:email].blank? and !params[:message].blank?
       suggestion = Suggestion.new(suggestion_params)
-      @saved = true if suggestion.save
+      @saved = suggestion.save ? true : false
     end
 
     respond_to do |format|

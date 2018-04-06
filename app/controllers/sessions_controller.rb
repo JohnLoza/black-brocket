@@ -35,7 +35,7 @@ class SessionsController < ApplicationController
     end
 
     client = Client.find_by(email: params[:session][:email].downcase)
-    if client && client.deleted == false && client.authenticate(params[:session][:password])
+    if client && client.deleted_at == nil && client.authenticate(params[:session][:password])
       if today_is_birthday?(client.birthday)
         flash[:info] = happy_birthday_message()
       end

@@ -26,7 +26,7 @@ class Api::ProductsController < ApplicationController
 
       products = warehouse.Products.joins(:Product)
           .where(products:{
-              show:true, deleted: false, "#{params[:category]}" => true},
+              show:true, deleted_at: nil, "#{params[:category]}" => true},
               describes_total_stock: true)
           .paginate(:page => params[:page], :per_page => 18).includes(:Product)
 
@@ -34,7 +34,7 @@ class Api::ProductsController < ApplicationController
 
       products = warehouse.Products.joins(:Product)
           .where(products:{
-              show:true, deleted: false},
+              show:true, deleted_at: nil},
               describes_total_stock: true)
           .where("products.name like '%#{params[:search]}%'")
           .paginate(:page => params[:page], :per_page => 18).includes(:Product)
@@ -43,7 +43,7 @@ class Api::ProductsController < ApplicationController
 
       products = warehouse.Products.joins(:Product)
           .where(products:{
-              show:true, deleted: false},
+              show:true, deleted_at: nil},
               describes_total_stock: true)
           .paginate(:page => params[:page], :per_page => 18).includes(:Product)
 

@@ -19,7 +19,7 @@ class Api::DistributorApi::PricesController < ApplicationController
     end
 
     product_prices = client.ProductPrices
-    products = Product.where(deleted: false).order(name: :asc)
+    products = Product.where(deleted_at: nil).order(name: :asc)
     @current_user.updateRevision(client)
 
     data = Array.new

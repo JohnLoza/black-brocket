@@ -4,25 +4,20 @@ class Client::FiscalDataController < ApplicationController
 
   def new
     @fiscal_data = FiscalData.new
-    @states = State.all.order(:name)
+    @states = State.order_by_name
     @cities = Array.new
-    @url = client_fiscal_data_path
   end
 
   def edit
     @fiscal_data = @current_user.FiscalData
-    if !@fiscal_data
-      redirect_to new_client_fiscal_datum_path
-      return
-    end
+    redirect_to new_client_fiscal_datum_path and return unless @fiscal_data
 
     city = @fiscal_data.City
-    @city_id = city.id
-    @state_id = city.state_id
+    params[:city_id] = city.id
+    params[:state_id] = city.state_id
 
-    @states = State.all.order(:name)
-    @cities = City.where(state_id: @state_id)
-    @url = client_fiscal_datum_path
+    @states = State.order_by_name
+    @cities = City.where(state_id: params[:state_id]).order_by_name
   end
 
   def create
@@ -34,14 +29,12 @@ class Client::FiscalDataController < ApplicationController
     if @fiscal_data.save
       flash[:success] = "Información fiscal guardada."
       redirect_to client_ecart_path(@current_user.hash_id)
-      return
     else
-      @state_id = params[:state_id]
-      @city_id = params[:city_id]
+      params[:state_id] = params[:state_id]
+      params[:city_id] = params[:city_id]
 
-      @states = State.all.order(:name)
-      @cities = City.where(state_id: @state_id).order(:name)
-      @url = client_fiscal_data_path
+      @states = State.order_by_name
+      @cities = City.where(state_id: params[:state_id]).order_by_name
       render :new
     end
   end
@@ -57,12 +50,11 @@ class Client::FiscalDataController < ApplicationController
       redirect_to products_path(@current_user.hash_id)
     else
       city = @fiscal_data.City
-      @city_id = city.id
-      @state_id = city.state_id
+      params[:city_id] = city.id
+      params[:state_id] = city.state_id
 
-      @states = State.all.order(:name)
-      @cities = City.where(state_id: @state_id)
-      @url = client_fiscal_datum_path
+      @states = State.order_by_name
+      @cities = City.where(state_id: params[:state_id]).order_by_name
       render :edit
     end
   end

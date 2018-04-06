@@ -7,7 +7,9 @@
     <td><%= account.owner %></td>
   </tr>
 <% end %>
+<% if accounts.any? %>
 <tr>
   <td>Contacto:</td>
   <td><%= accounts[0].email %></td>
 </tr>
+<% end %>

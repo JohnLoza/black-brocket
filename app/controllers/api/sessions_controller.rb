@@ -13,7 +13,7 @@ class Api::SessionsController < ApplicationController
     if !user.blank?
       user_type = "DISTRIBUTOR" if user_type == nil
     else
-      user = Client.where(email: params[:email], deleted: false).take if user.blank?
+      user = Client.where(email: params[:email], deleted_at: nil).take if user.blank?
     end
 
     if !user.blank?

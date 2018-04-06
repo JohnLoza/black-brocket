@@ -24,7 +24,7 @@ class Client::ClientsController < ApplicationController
       @client_image = @current_user.avatar_url(:mini)
       @client_username = @current_user.username
 
-      @distributor_image = User.avatar_url(@distributor, :mini)
+      @distributor_image = @distributor.avatar_url(:mini)
       @distributor_username = @distributor.username
     end
   end
@@ -66,9 +66,8 @@ class Client::ClientsController < ApplicationController
 
   def new
     @client = Client.new
-    @states = State.all.order(:name)
+    @states = State.order_by_name
     @cities = Array.new
-    @url = client_clients_path
   end
 
   def create
@@ -85,10 +84,9 @@ class Client::ClientsController < ApplicationController
       flash[:success] = "Bienvenido a Black Brocket, por ser su primera compra y para brindarle un mejor servicio, nuestro distribuidor de zona se pondrá en contacto o un representante de ventas se comunicará con usted. Si es una Pyme, dueño de una cafetería, tiene negocio relacionado con alimentos o es mayorista le ofrecemos precios y descuentos preferenciales bastante atractivos. Estos se los dará nuestro  representante de ventas, así como una demostración de nuestros productos. Una vez hecho el pago de su pedido los descuentos no se bonifican. Puede contactarnos en el menú en la opción \“distribuidores en la zona\”."
       redirect_to products_path
     else
-      @url = client_clients_path
-      @states = State.all.order(:name)
+      @states = State.order_by_name
       @cities = City.where(state_id: @state_id)
-      flash.now[:danger] = 'Ocurrió un error al guardar.'
+      flash.now[:info] = 'Ocurrió un error al guardar.'
       render :new
     end
   end
@@ -96,12 +94,11 @@ class Client::ClientsController < ApplicationController
   def edit
     @client = @current_user
     client_city = @client.City
-    @city_id = client_city.id
-    @state_id = client_city.state_id
+    params[:city_id] = client_city.id
+    params[:state_id] = client_city.state_id
 
-    @states = State.all.order(:name)
-    @cities = City.where(state_id: @state_id)
-    @url = client_client_path(@current_user.hash_id)
+    @states = State.order_by_name
+    @cities = City.where(state_id: params[:state_id]).order_by_name
   end
 
   def update
@@ -114,11 +111,10 @@ class Client::ClientsController < ApplicationController
       return
     else
       flash.now[:danger] = 'Ocurrió un error al guardar.'
-      @url = client_client_path(params[:id])
-      @city_id = params[:city_id]
-      @state_id = params[:state_id]
-      @states = State.all.order(:name)
-      @cities = City.where(state_id: @state_id)
+      params[:city_id] = params[:city_id]
+      params[:state_id] = params[:state_id]
+      @states = State.order_by_name
+      @cities = City.where(state_id: params[:state_id]).order_by_name
       render :edit
     end
   end

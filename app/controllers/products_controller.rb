@@ -14,16 +14,16 @@ class ProductsController < ApplicationController
 
       if params[:category]
         if params[:category] == "hot" or params[:category] == "cold" or params[:category] == "frappe"
-          @products = @warehouse.Products.joins(:Product).where(products:{show:true, deleted: false, "#{params[:category]}" => true}, describes_total_stock: true).paginate(:page => params[:page], :per_page => 18).includes(:Product)
+          @products = @warehouse.Products.joins(:Product).where(products:{show:true, deleted_at: nil, "#{params[:category]}" => true}, describes_total_stock: true).paginate(:page => params[:page], :per_page => 18).includes(:Product)
         else
           flash[:info] = "Categoría no encontrada."
           redirect_to products_path
           return
         end
       elsif !params[:search].blank?
-        @products = @warehouse.Products.joins(:Product).where(products:{show:true, deleted: false}, describes_total_stock: true).where("products.name like '%#{params[:search]}%'").paginate(:page => params[:page], :per_page => 18).includes(:Product)
+        @products = @warehouse.Products.joins(:Product).where(products:{show:true, deleted_at: nil}, describes_total_stock: true).where("products.name like '%#{params[:search]}%'").paginate(:page => params[:page], :per_page => 18).includes(:Product)
       else
-        @products = @warehouse.Products.joins(:Product).where(products:{show:true, deleted: false}, describes_total_stock: true).paginate(:page => params[:page], :per_page => 18).includes(:Product)
+        @products = @warehouse.Products.joins(:Product).where(products:{show:true, deleted_at: nil}, describes_total_stock: true).paginate(:page => params[:page], :per_page => 18).includes(:Product)
       end
 
       @product_prices = @current_user.ProductPrices
@@ -34,16 +34,16 @@ class ProductsController < ApplicationController
       # when the user hasn't logged in #
       if params[:category]
         if params[:category] == "hot" or params[:category] == "cold" or params[:category] == "frappe"
-          @products = Product.where(show: true, deleted: false, "#{params[:category]}" => true).paginate(:page => params[:page], :per_page => 18)
+          @products = Product.where(show: true, deleted_at: nil, "#{params[:category]}" => true).paginate(:page => params[:page], :per_page => 18)
         else
           flash[:info] = "Categoría no encontrada."
           redirect_to products_path
           return
         end
       elsif !params[:search].blank?
-        @products = Product.where(show: true, deleted: false).where("products.name like '%#{params[:search]}%'").paginate(:page => params[:page], :per_page => 18)
+        @products = Product.where(show: true, deleted_at: nil).where("products.name like '%#{params[:search]}%'").paginate(:page => params[:page], :per_page => 18)
       else
-        @products = Product.where(show: true, deleted: false).paginate(:page => params[:page], :per_page => 18)
+        @products = Product.where(show: true, deleted_at: nil).paginate(:page => params[:page], :per_page => 18)
       end
       @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.id}) if @products
     end # if logged_in? and session[:user_type] == 'c' #
@@ -52,12 +52,6 @@ class ProductsController < ApplicationController
   def show
     if logged_in? and session[:user_type] == 'c'
       @w_product = WarehouseProduct.find_by!(hash_id: params[:id])
-
-      if @w_product.nil?
-        flash[:info] = "No se encontró el producto con clave: #{params[:id]}."
-        redirect_to products_path
-        return
-      end
 
       @warehouse = @w_product.Warehouse
       @product = @w_product.Product

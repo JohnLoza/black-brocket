@@ -191,7 +191,7 @@ class Admin::ProductsController < AdminController
     def update_client_prices
       client_products = ClientProduct.where(product_id: @product.id)
       client_products.update_all(client_price: params[:product][:price])
-      clients = Client.where(deleted: false)
+      clients = Client.where(deleted_at: nil)
       clients.each do |client|
         if client.has_custom_prices
           Notification.create(client_id: client.id, icon: "fa fa-comments-o",

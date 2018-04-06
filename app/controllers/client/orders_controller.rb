@@ -203,8 +203,8 @@ class Client::OrdersController < ApplicationController
 
   def get_bank_payment_info
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
-    @bank = Bank.find_by!(id: @order.payment_method) if @order
-    @bank_accounts = @bank.Accounts if @bank
+    @bank = Bank.find_by!(id: @order.payment_method)
+    @bank_accounts = @bank.Accounts
 
     respond_to do |format|
       format.js { render :get_bank_payment_info, :layout => false }

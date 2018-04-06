@@ -66,7 +66,7 @@
           <strong>Sub total:</strong>
         </div>
         <div class="col-md-2" >
-          $ <label id="order-sub-total" style="font-size:20px;"><%= @total %></label>
+          $ <label id="order-sub-total" style="font-size:20px;"><%= @total %></label> MXN
         </div>
 
         <div class="col-md-10 text-right">
@@ -81,7 +81,7 @@
               <% shipping_cost_is_present = "YES" %>
               <%= @warehouse.shipping_cost %>
             <% end %>
-          </label>
+          </label> MXN
         </div>
 
         <div class="col-md-10 text-right">
@@ -89,7 +89,7 @@
         </div>
         <div class="col-md-2" >
           <% @total += @warehouse.shipping_cost if @total < @warehouse.wholesale %>
-          $ <label id="order-grand-total" style="font-size:20px;"><%= @total %></label>
+          $ <label id="order-grand-total" style="font-size:20px;"><%= @total %></label> MXN
         </div>
   </div>
 
@@ -98,7 +98,7 @@
         <div class="col-sm-10 text-right">
           <h3 class="iconbox-title">Método de pago</h3>
           <% @banks.each do |bank| %>
-            <%= radio_button_tag 'payment_method', bank.id %>
+            <%= radio_button_tag 'payment_method', bank.id, required: true %>
             <%= image_tag bank.image.url(:mini) %><br>
           <% end %>
         </div>
@@ -144,10 +144,12 @@
     </div>
 </div>
 
-<%= link_to ".",
-    client_ecart_update_quantity_path(@current_user.hash_id) + "?product=abc&new_quantity=123&current_existence=123",
-    method: :put, remote: true, id: "update_quantity_link",
-    style: "visibility: hidden;" %>
+<%= form_tag client_ecart_update_quantity_path(@current_user), method: :put,
+  remote: true, id: 'update_price_form', style: 'visibility: hidden;' do %>
+  <%= text_field_tag :product, nil %>
+  <%= number_field_tag :new_quantity, nil, min: 1, step: 1 %>
+  <%= number_field_tag :current_existence, nil, step: 1 %>
+<% end %>
 
 <label id="shipping_cost" style="display: none;">
   <%= @warehouse.shipping_cost %>
@@ -161,19 +163,10 @@
 
 <script type="text/javascript">
   function update_quantity(product, new_quantity, current_existence) {
-    var _href = $('#update_quantity_link').attr('href');
-    $('#update_quantity_link').attr('href',
-      _href.replace(/product=[^&]+/, 'product=' + product));
-
-    _href = $('#update_quantity_link').attr('href');
-    $('#update_quantity_link').attr('href',
-      _href.replace(/new_quantity=[^&]+/, 'new_quantity=' + new_quantity));
-
-    _href = $('#update_quantity_link').attr('href');
-    $('#update_quantity_link').attr('href',
-      _href.replace(/current_existence=[^&]+/, 'current_existence=' + current_existence));
-
-    $('#update_quantity_link').click();
+    $("#product").val(product);
+    $("#new_quantity").val(new_quantity);
+    $("#current_existence").val(current_existence);
+    $("#update_price_form").submit();
   }
 
   function money_format(number){

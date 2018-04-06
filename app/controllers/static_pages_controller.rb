@@ -40,7 +40,7 @@ class StaticPagesController < ApplicationController
   end
 
   def new_distributor_request
-    @states = State.all.order(:name)
+    @states = State.order_by_name
     @cities = Array.new
   end
 

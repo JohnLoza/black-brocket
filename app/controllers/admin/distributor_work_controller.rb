@@ -32,7 +32,7 @@ class Admin::DistributorWorkController < AdminController
 
     @product_prices = @client.ProductPrices
     @client_city = @client.City
-    @products = Product.where(deleted: false).order(name: :asc)
+    @products = Product.where(deleted_at: nil).order(name: :asc)
   end
 
   def create_prices

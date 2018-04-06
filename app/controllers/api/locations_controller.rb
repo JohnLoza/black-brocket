@@ -1,6 +1,6 @@
 class Api::LocationsController < ApplicationController
   def states
-    states = State.all.order(:name)
+    states = State.order_by_name
     data = Array.new
     states.each do |state|
       data << {id: state.id, name: state.name}

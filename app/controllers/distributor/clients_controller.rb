@@ -32,7 +32,7 @@ class Distributor::ClientsController < ApplicationController
     if @client
       @product_prices = @client.ProductPrices
       @client_city = @client.City
-      @products = Product.where(deleted: false).order(name: :asc)
+      @products = Product.where(deleted_at: nil).order(name: :asc)
 
       @current_user.updateRevision(@client)
     end # if @client #
@@ -40,21 +40,17 @@ class Distributor::ClientsController < ApplicationController
 
   def create_prices
     @client = Client.find_by!(hash_id: params[:id])
-    success = false
-    if @client
-      ActiveRecord::Base.transaction do
-        @client.ProductPrices.delete_all
-        params[:product].each do |param|
-          ClientProduct.create(client_id: @client.id, product_id: param[0], client_price: param[1])
-        end
-
-        @client.update_attributes(has_custom_prices: true, is_new: false)
-        success = true
+    ActiveRecord::Base.transaction do
+      @client.ProductPrices.destroy_all
+      params[:product].each do |product_id|
+        ClientProduct.create(client_id: @client.id, product_id: product_id, client_price: params[:product][product_id])
       end
-    end # if @client #
 
-    flash[:success] = "Precios de #{@client.name} #{@client.lastname} actualizados" if success
-    flash[:info] = "Ocurrió un error al actualizar los precios" if !success
+      @client.update_attributes(has_custom_prices: true, is_new: false)
+      flash[:success] = "Precios de #{@client.name} #{@client.lastname} actualizados"
+    end
+
+    flash[:info] = "Ocurrió un error al actualizar los precios" unless flash[:success].present?
     redirect_to distributor_clients_path
   end
 
@@ -64,8 +60,7 @@ class Distributor::ClientsController < ApplicationController
 
     if !@client
       flash[:info] = "No encontramos a tu cliente."
-      redirect_to distributor_clients_path
-      return
+      redirect_to distributor_clients_path and return
     end # if @client and @client.is_new #
 
     if params[:notification]
@@ -77,13 +72,13 @@ class Distributor::ClientsController < ApplicationController
     @messages = @current_user.ClientMessages.where(client_id: @client.id)
                   .order(created_at: :desc).paginate(page: params[:page], per_page: 50)
 
-    @client_image = User.avatar_url(@client, :mini)
+    @client_image = @client.avatar_url(:mini)
     @client_username = @client.username
 
     @distributor_image = @current_user.avatar_url(:mini)
     @distributor_username = @current_user.username
 
-    @create_message_url = distributor_client_messages_path(@client.hash_id)
+    @create_message_url = distributor_client_messages_path(@client)
   end
 
   def create_message

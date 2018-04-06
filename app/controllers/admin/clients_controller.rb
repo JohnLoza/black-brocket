@@ -57,7 +57,7 @@ class Admin::ClientsController < AdminController
     @client = Client.find_by!(hash_id: params[:id])
 
     @client_city = @client.City
-    @products = Product.where(deleted: false).order(name: :asc).paginate(page: params[:page], per_page: 15)
+    @products = Product.where(deleted_at: nil).order(name: :asc).paginate(page: params[:page], per_page: 15)
     @prices = @client.ProductPrices
 
   end

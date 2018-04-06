@@ -9,7 +9,7 @@ class Client < ApplicationRecord
   has_secure_password
 
   belongs_to :City, foreign_key: :city_id
-  belongs_to :Worker, class_name: :SiteWorker, foreign_key: :worker_id
+  belongs_to :Worker, class_name: :SiteWorker, foreign_key: :worker_id, optional: true
   has_many :ProductPrices, class_name: :ClientProduct, foreign_key: :client_id
   has_many :Orders
   has_many :ProdQuestions

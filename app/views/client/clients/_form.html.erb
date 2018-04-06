@@ -1,4 +1,4 @@
-<%= form_for @client, url: @url, :html => {id: "client_form"} do |f| %>
+<%= form_for [:client, @client], :html => {id: "client_form"} do |f| %>
 	<%= render :partial=>'/shared/error_messages', locals:{entity: @client} %>
 	<div class="col-md-6">
 		<p>Datos de usuario</p>

@@ -12,14 +12,15 @@
 
     <div class="ibox">
       <div class="ibox-content text-center">
-          <h3 class="m-b-xxs">Listado de órdenes de los clientes</h3>
+          <h3 class="m-b-xxs">Listado de órdenes</h3>
           <small>Aquí verás la lista de las órdenes realizadas por los clientes desde la página web.</small>
       </div>
     </div>
 
     <!--Table-->
     <div class="row">
-      <% if @actions["CREATE_COMMISION"] and params[:type] == "DELIVERED" %>
+      <% if @current_user.has_permission?('commissions@create') and
+          params[:type] == "DELIVERED" and params[:distributor].present? %>
         <%= form_tag(admin_commissions_path(distributor: params[:distributor])) do %>
           <div class="col-lg-12">
             <div class="ibox">

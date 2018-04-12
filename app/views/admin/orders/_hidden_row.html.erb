@@ -8,7 +8,7 @@
   </p>
 <% end %>
 
-<% if @actions["ACCEPT_REJECT_PAYMENT"] and params[:type] == "ACCEPT_REJECT_PAYMENT" %>
+<% if @current_user.has_permission?('orders@accept_reject_payment') and params[:type] == "ACCEPT_REJECT_PAYMENT" %>
   <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
     <%= link_to admin_download_payment_path(o.download_payment_key),
                 target: "_blank" do %>
@@ -16,6 +16,7 @@
       <i class="fa fa-file-o fa-3x"></i>
     <% end %><br>
   <% end # if !o.pay_img.blank? # %>
+  
   <%= form_tag admin_accept_order_pay_path(o.hash_id,"true"), method: :put do  %>
     <%= label_tag :payment_folio, 'Folio del pago' %>
     <%= text_field_tag :payment_folio, '', class: 'form-control', required: true %>
@@ -27,7 +28,7 @@
             onclick: "update_reject_pay_form('#{o.hash_id}')" %>
 <% end # if o.state == "PAYMENT_DEPOSITED" # %>
 
-<% if @actions["CAPTURE_TRACKING_CODE"] and params[:type] == "CAPTURE_TRACKING_CODE" %>
+<% if @current_user.has_permission?('orders@capture_tracking_code') and params[:type] == "CAPTURE_TRACKING_CODE" %>
   <%= form_tag(admin_capture_tracking_code_path(o.hash_id), method: :put) do %>
     <br>
     <%= label_tag :parcel_id, "Paquetería" %>

@@ -2,17 +2,6 @@
   <div class="ibox">
     <div class="ibox-content">
 
-      <div class="row m-b-sm m-t-sm">
-        <div class="col-md-10">
-          <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="20" placeholder="Buscar en tabla">
-        </div>
-        <div class="col-md-2">
-          <%= link_to(admin_orders_path, class: "btn btn-white btn-sm full-width") do %>
-            <i class="fa fa-refresh"></i> Actualizar
-          <% end %>
-        </div>
-      </div>
-
       <%= render "navigation_labels" %>
 
       <table class="footable table table-stripped toggle-arrow-tiny" data-filter=#filter>
@@ -93,14 +82,7 @@
 
 <script type="text/javascript">
   function update_cancel_form(target){
-    boot_modal = $("#modal");
-    title = boot_modal.find(".modal-title");
-    title.html("Cancelar orden/pedido");
-
-    body = boot_modal.find(".modal-body");
-    body.html("<%= j render 'cancel_order_form' %>");
-
-    boot_modal.modal("show");
+    $("#cancel_modal").modal("show");
 
     new_action = "<%= admin_cancel_order_path(0) %>";
     new_action = new_action.replace("0", target);
@@ -109,14 +91,7 @@
   }
 
   function update_reject_pay_form(target){
-    boot_modal = $("#modal");
-    title = boot_modal.find(".modal-title");
-    title.html("Rechazar pago de orden/pedido");
-
-    body = boot_modal.find(".modal-body");
-    body.html("<%= j render 'reject_order_pay_form' %>");
-
-    boot_modal.modal("show");
+    $("#reject_modal").modal("show");
 
     new_action = "<%= admin_accept_order_pay_path(0,'false') %>";
     new_action = new_action.replace("0", target);
@@ -124,3 +99,54 @@
     $("#reject_pay_form").attr("action", new_action);
   }
 </script>
+
+<!-- Modal -->
+<div class="modal inmodal in" id="cancel_modal" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Cancelar orden/pedido</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_for :order, url: admin_cancel_order_path(0), method: :delete, html: {id: "cancel_form"} do |f| %>
+          <%= f.label :cancel_description, "Descripción del por qué se cancela esta orden/pedido" %>
+          <%= f.text_area :cancel_description, class: "form-control m-b", placeholder: "Escribe la razón de la cancelación...", required: true %>
+          <%= f.submit "Cancelar la orden", class: "btn btn-danger btn-sm", data:{confirm: "¿Seguro(a) de cancelar la orden?"} %>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-greenbeauty"
+                data-dismiss="modal"> Cerrar </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal inmodal in" id="reject_modal" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Rechazar pago de orden/pedido</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_for :order, url: admin_accept_order_pay_path(0,"false"),
+              method: :put, html: {id: "reject_pay_form"} do |f| %>
+          <%= f.label :reject_description, "Descripción del por qué se rechaza el pago de esta orden/pedido" %>
+          <%= f.text_area :reject_description, class: "form-control m-b-sm", required: true %>
+          <%= f.submit "Rechazar pago", class: "btn btn-danger btn-sm", data:{confirm: "Seguro(a) de rechazar el pago?"} %>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-greenbeauty"
+                data-dismiss="modal"> Cerrar </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

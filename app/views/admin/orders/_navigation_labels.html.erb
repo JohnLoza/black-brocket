@@ -8,47 +8,47 @@
       end
         %>
 
-      <% if @actions["SEARCH"] %>
+      <% if @current_user.has_permission?('orders@search') %>
         <%= link_to "Buscar", admin_orders_search_path,
             class: "btn btn-white m-b-xs" %>
       <% end %>
 
-      <% if @actions["CANCEL"] %>
+      <% if @current_user.has_permission?('orders@cancel') %>
         <%= link_to "Sin depósito", url + 'CANCEL',
             class: "btn btn-white m-b-xs CANCEL" %>
       <% end %>
 
-      <% if @actions["ACCEPT_REJECT_PAYMENT"] %>
+      <% if @current_user.has_permission?('orders@accept_reject_payment') %>
         <%= link_to "Con depósito", url + 'ACCEPT_REJECT_PAYMENT',
             class: "btn btn-white m-b-xs ACCEPT_REJECT_PAYMENT" %>
       <% end %>
 
-      <% if @actions["CAPTURE_BATCHES"] %>
+      <% if @current_user.has_permission?('orders@capture_batches') %>
       <%= link_to "Por capturar", url + 'CAPTURE_BATCHES',
       class: "btn btn-white m-b-xs CAPTURE_BATCHES" %>
       <% end %>
 
-      <% if @actions["INSPECTION"] %>
+      <% if @current_user.has_permission?('orders@inspection') %>
         <%= link_to "Inspeccionar", url + 'INSPECTION',
             class: "btn btn-white m-b-xs INSPECTION" %>
       <% end %>
 
-      <% if @actions["CAPTURE_TRACKING_CODE"] %>
+      <% if @current_user.has_permission?('orders@capture_tracking_code') %>
         <%= link_to "Código de rastreo", url + 'CAPTURE_TRACKING_CODE',
             class: "btn btn-white m-b-xs CAPTURE_TRACKING_CODE" %>
       <% end %>
 
-      <% if @actions["SHOW"] %>
+      <% if @current_user.has_permission?('orders@show') %>
         <%= link_to "Enviadas", url + 'SENT',
             class: "btn btn-white m-b-xs SENT" %>
       <% end %>
 
-      <% if @actions["SHOW"] %>
+      <% if @current_user.has_permission?('orders@show') %>
         <%= link_to "Entregadas", url + 'DELIVERED',
             class: "btn btn-white m-b-xs DELIVERED" %>
       <% end %>
 
-      <% if @actions["INVOICES"] %>
+      <% if @current_user.has_permission?('orders@invoices') %>
         <%= link_to "Por facturar", url + 'INVOICES',
             class: "btn btn-white m-b-xs INVOICES" %>
         <% if params[:type] == "INVOICES" %>
@@ -62,7 +62,7 @@
         <% end %>
       <% end %>
   </div>
-  <% if @actions['ACCEPT_REJECT_PAYMENT'] and params[:type] == 'ACCEPT_REJECT_PAYMENT' %>
+  <% if @current_user.has_permission?('orders@accept_reject_payment') and params[:type] == 'ACCEPT_REJECT_PAYMENT' %>
       <br><div class="btn-group m-b">
           <%= link_to 'Reporte Bancario', admin_bank_report_path,
               class: 'btn btn-primary' %>

@@ -1,4 +1,7 @@
-class Api::UsersController < ApplicationController
+class Api::UsersController < ApiController
+  skip_before_action :authenticate_user!, only: :create
+  @@user_type = :client
+
   def create
     client = Client.new(user_params)
     client.city_id = params[:city_id]
@@ -20,17 +23,6 @@ class Api::UsersController < ApplicationController
   end
 
   def show
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     u = @current_user
     data = {username: u.username, email: u.email, street: u.street,
             colony: u.col, intnumber: u.intnumber, extnumber: u.extnumber,
@@ -44,34 +36,12 @@ class Api::UsersController < ApplicationController
   end
 
   def get_username_n_photo
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     render :status => 200,
            :json => { :success => true, :info => "USER_DATA",
                       :data => {username: @current_user.username, photo: @current_user.getImage }}
   end
 
   def update
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     @current_user.city_id = params[:city_id]
     if @current_user.update_attributes(user_params)
       render :status => 200,
@@ -83,18 +53,7 @@ class Api::UsersController < ApplicationController
   end
 
   def destroy
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    if !@current_user.authenticate(params[:password])
+    unless @current_user.authenticate(params[:password])
       render :status => 200,
              :json => { :success => false, :info => "PASSWORD_NOT_MATCH" }
       return
@@ -114,17 +73,6 @@ class Api::UsersController < ApplicationController
   end
 
   def notifications
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     notifications = @current_user.Notifications
     data = Array.new
     notifications.each do |notification|
@@ -142,23 +90,7 @@ class Api::UsersController < ApplicationController
   end
 
   def update_distributor_visit
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    visit = DistributorVisit.find(params[:visit])
-    if visit.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "VISIT_NOT_FOUND" }
-      return
-    end
+    visit = DistributorVisit.find_by!(id: params[:visit])
 
     if visit.update_attributes(visit_params)
       render :status => 200,

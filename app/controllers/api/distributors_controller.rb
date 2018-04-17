@@ -1,4 +1,6 @@
-class Api::DistributorsController < ApplicationController
+class Api::DistributorsController < ApiController
+  @@user_type = :client
+
   def create_candidate
     candidate = DistributorCandidate.new(distributor_request_params)
     if candidate.save
@@ -11,28 +13,11 @@ class Api::DistributorsController < ApplicationController
   end
 
   def show
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     distributor_is_a_worker = false
     distributor = @current_user.City.Distributor
     if !distributor and !@current_user.worker_id.blank?
       distributor = @current_user.Worker
       distributor_is_a_worker = true
-    end
-
-    if distributor.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "DISTRIBUTOR_NOT_FOUND" }
-      return
     end
 
     city = distributor.City
@@ -52,17 +37,6 @@ class Api::DistributorsController < ApplicationController
   end
 
   def messages
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     if !params[:notification].blank?
       notification = Notification.find(params[:notification])
       notification.update_attributes(seen: true)
@@ -81,19 +55,6 @@ class Api::DistributorsController < ApplicationController
   end
 
   def create_message
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    distributor_is_a_worker = false
-    distributor = nil
     if !@current_user.worker_id.blank?
       distributor = @current_user.Worker
       distributor_is_a_worker = true

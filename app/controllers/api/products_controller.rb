@@ -1,26 +1,11 @@
-class Api::ProductsController < ApplicationController
+class Api::ProductsController < ApiController
+  @@user_type = :client
+
   @@base_file_path = "app/views"
   @@replaceable_path = "/shared/products/"
 
   def index
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     warehouse = @current_user.City.State.Warehouse
-
-    if warehouse.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "WE_DONT_SELL_IN_YOUR_ZONE_YET" }
-      return
-    end
 
     if params[:category] and ["hot","cold","frappe"].include? params[:category]
 
@@ -92,23 +77,7 @@ class Api::ProductsController < ApplicationController
   end
 
   def show
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     w_product = WarehouseProduct.find_by!(hash_id: params[:id])
-    if w_product.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "PRODUCT_NOT_FOUND", :data => data }
-      return
-    end
 
     product = w_product.Product
     description_file = @@base_file_path + product.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')

@@ -1,22 +1,8 @@
-class Api::DistributorApi::PricesController < ApplicationController
+class Api::DistributorApi::PricesController < ApiController
+  @@user_type = :distributor
+
   def index
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     client = Client.find_by!(hash_id: params[:id])
-    if client.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
-      return
-    end
 
     product_prices = client.ProductPrices
     products = Product.where(deleted_at: nil).order(name: :asc)
@@ -43,23 +29,7 @@ class Api::DistributorApi::PricesController < ApplicationController
   end
 
   def update
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     client = Client.find_by!(hash_id: params[:id])
-    if client.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
-      return
-    end
 
     ActiveRecord::Base.transaction do
       client.ProductPrices.delete_all

@@ -1,24 +1,7 @@
-class Api::WorkersApi::WarehouseProductsController < ApplicationController
-  @@category = "ORDERS"
-  
+class Api::WorkersApi::WarehouseProductsController < ApiController
+  @@user_type = :site_worker
+
   def index
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
-    if !authorization_result.any?
-      render :status => 200,
-             :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
-    end
-
     warehouse_products = @current_user.Warehouse.Products.joins(:Product).where(:describes_total_stock => true, products: {deleted_at: nil}).includes(:Product).order("products.name asc").paginate(page: params[:page], per_page: 20)
     data = Array.new
     warehouse_products.each do |w_p|

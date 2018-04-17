@@ -1,30 +1,8 @@
-class Api::WorkersApi::ClientsController < ApplicationController
-  @@category = "ORDERS"
+class Api::WorkersApi::ClientsController < ApiController
+  @@user_type = :site_worker
 
   def show
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
-    if !authorization_result.any?
-      render :status => 200,
-             :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
-    end
-
     order = Order.find_by!(hash_id: params[:id])
-    if order.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "ORDER_NOT_FOUND" }
-      return
-    end
     c = order.Client
 
     data = {username: c.username, email: c.email, street: c.street,

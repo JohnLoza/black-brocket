@@ -119,10 +119,4 @@ module SessionsHelper
     end
   end
 
-  def api_authentication_failed
-    render :status => 401,
-          :json => { :success => false,
-                      :info => "AUTHENTICATION_ERROR" }
-  end
-
 end

@@ -1,16 +1,7 @@
-class Api::DistributorApi::DistributorsController < ApplicationController
+class Api::DistributorApi::DistributorsController < ApiController
+  @@user_type = :distributor
+
   def index
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     regions = @current_user.Regions
     home_img = @current_user.home_img.url
     avatar = @current_user.getImage
@@ -29,17 +20,6 @@ class Api::DistributorApi::DistributorsController < ApplicationController
   end
 
   def update_home_image
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     if !params[:distributor][:home_img].blank?
       if @current_user.update_attribute(:home_img, params[:distributor][:home_img])
         render :status => 200,
@@ -58,34 +38,12 @@ class Api::DistributorApi::DistributorsController < ApplicationController
   end
 
   def get_username_n_photo
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     render :status => 200,
            :json => { :success => true, :info => "USER_DATA",
                       :data => {username: @current_user.username, photo: @current_user.getImage }}
   end
 
   def notifications
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     notifications = @current_user.Notifications
     data = Array.new
     notifications.each do |notification|

@@ -1,22 +1,8 @@
-class Api::DistributorApi::VisitsController < ApplicationController
+class Api::DistributorApi::VisitsController < ApiController
+  @@user_type = :distributor
+
   def index
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     client = Client.find_by!(hash_id: params[:id])
-    if client.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
-      return
-    end
 
     visits = client.DistributorVisits.where.not(client_recognizes_visit: nil)
             .order(:created_at => :desc).paginate(page: params[:page], per_page: 25)
@@ -32,34 +18,15 @@ class Api::DistributorApi::VisitsController < ApplicationController
   end
 
   def create
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     client = Client.find_by!(hash_id: params[:id])
-    if client.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
-      return
-    end
 
-    success = false
     today = Time.now.year.to_s+"-"+Time.now.month.to_s+"-"+Time.now.day.to_s
     visit = DistributorVisit.new(
                       distributor_id: @current_user.id,
                       client_id: client.id,
                       visit_date: today)
 
-    success = true if visit.save and client.update_attribute(:last_distributor_visit, today)
-
-    if success
+    if visit.save and client.update_attribute(:last_distributor_visit, today)
       render :status => 200,
              :json => { :success => true, :info => "SAVED" }
       return

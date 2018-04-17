@@ -1,4 +1,6 @@
-class Api::InformationController < ApplicationController
+class Api::InformationController < ApiController
+  skip_before_action :authenticate_user!, except: :ecart_info
+  @@user_type = :client
 
   def privacy_policy
     data = WebInfo.where(name: "PRIVACY_POLICY").take
@@ -36,23 +38,7 @@ class Api::InformationController < ApplicationController
   end
 
   def ecart_info
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     warehouse = @current_user.City.State.Warehouse
-    if warehouse.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "WAREHOUSE_NOT_FOUND" }
-      return
-    end
 
     notice = WebInfo.where(name: "ECART_NOTICE").take
     data = {shipping_cost: warehouse.shipping_cost, wholesale: warehouse.wholesale, ecart_notice: notice.description}

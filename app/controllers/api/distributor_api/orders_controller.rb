@@ -1,16 +1,7 @@
-class Api::DistributorApi::OrdersController < ApplicationController
+class Api::DistributorApi::OrdersController < ApiController
+  @@user_type = :distributor
+
   def index
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     if params[:client].blank?
       orders = @current_user.Orders.order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State).includes(:Client, City: :State)
     else
@@ -38,23 +29,7 @@ class Api::DistributorApi::OrdersController < ApplicationController
   end
 
   def show
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     order = @current_user.Orders.where(hash_id: params[:id]).take
-    if order.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "ORDER_NOT_FOUND" }
-      return
-    end
 
     fiscal_data = order.Client.FiscalData
     warehouse = order.Warehouse

@@ -1,16 +1,7 @@
-class Api::OrdersController < ApplicationController
+class Api::OrdersController < ApiController
+  @@user_type = :client
+
   def index
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     orders = @current_user.Orders.where.not(state: "ORDER_CANCELED").order(created_at: :desc).paginate(:page => params[:page], :per_page => 10).includes(City: :State)
     data = Array.new
     data<<{per_page: 10}
@@ -34,17 +25,6 @@ class Api::OrdersController < ApplicationController
   end
 
   def payment_steps
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     data = Hash.new
     data[:step1]="Realice el pago total de su compra a una de las siguientes cuentas."
     data[:step2]="Tome una foto, escanee o guarde el archivo del comprobante de pago."
@@ -64,17 +44,6 @@ class Api::OrdersController < ApplicationController
   end
 
   def show
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     if !params[:notification].blank?
       notification = Notification.find(params[:notification])
       notification.update_attributes(seen: true)
@@ -121,17 +90,6 @@ class Api::OrdersController < ApplicationController
   end
 
   def create
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     if params[:invoice]=="1" and @current_user.FiscalData.nil?
       render :status => 200,
              :json => { :success => false, :info => "FISCAL_DATA_NOT_FOUND" }
@@ -236,23 +194,7 @@ class Api::OrdersController < ApplicationController
   end
 
   def cancel
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     order = @current_user.Orders.where(hash_id: params[:id]).take
-    if order.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "ORDER_NOT_FOUND" }
-      return
-    end
 
     ActiveRecord::Base.transaction do
       details = OrderDetail.where(order_id: order.id)
@@ -276,23 +218,7 @@ class Api::OrdersController < ApplicationController
   end
 
   def upload_payment
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     order = @current_user.Orders.find_by!(hash_id: params[:id])
-    if order.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "ORDER_NOT_FOUND" }
-      return
-    end
 
     if params[:payment].blank?
       render :status => 200,

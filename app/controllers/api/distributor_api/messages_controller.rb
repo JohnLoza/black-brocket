@@ -1,27 +1,13 @@
-class Api::DistributorApi::MessagesController < ApplicationController
+class Api::DistributorApi::MessagesController < ApiController
+  @@user_type = :distributor
+
   def index
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    if !params[:notification].blank?
+    if params[:notification].present?
       notification = Notification.find(params[:notification])
       notification.update_attributes(seen: true)
     end
 
     client = Client.find_by!(hash_id: params[:id])
-    if client.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
-      return
-    end
 
     messages = @current_user.ClientMessages.where(client_id: client.id)
                   .order(created_at: :desc).paginate(page: params[:page], per_page: 50)
@@ -44,23 +30,7 @@ class Api::DistributorApi::MessagesController < ApplicationController
   end
 
   def create
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     client = Client.find_by!(hash_id: params[:id])
-    if client.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
-      return
-    end
 
     message = ClientDistributorComment.new(
             {client_id: client.id, distributor_id: @current_user.id,

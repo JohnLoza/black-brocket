@@ -1,32 +1,9 @@
-class Api::WorkersApi::DistributorsController < ApplicationController
-  @@category = "ORDERS"
+class Api::WorkersApi::DistributorsController < ApiController
+  @@user_type = :site_worker
 
   def show
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
-    if !authorization_result.any?
-      render :status => 200,
-             :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
-    end
-
     order = Order.find_by!(hash_id: params[:id])
     distributor = order.Distributor
-
-    if distributor.blank?
-      render :status => 200,
-             :json => { :success => true, :info => "NO_DISTRIBUTOR" }
-      return
-    end
 
     data = Hash.new
     city = distributor.City

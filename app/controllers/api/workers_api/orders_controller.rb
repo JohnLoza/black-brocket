@@ -1,24 +1,7 @@
-class Api::WorkersApi::OrdersController < ApplicationController
-  @@category = "ORDERS"
+class Api::WorkersApi::OrdersController < ApiController
+  @@user_type = :site_worker
 
   def count
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
-    if !authorization_result.any?
-      render :status => 200,
-             :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
-    end
-
     orders_count = Order.where(state: "PAYMENT_ACCEPTED", warehouse_id: @current_user.warehouse_id).size
 
     render :status => 200,
@@ -26,23 +9,6 @@ class Api::WorkersApi::OrdersController < ApplicationController
   end
 
   def index
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
-    if !authorization_result.any?
-      render :status => 200,
-             :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
-    end
-
     orders = Order.where(state: "PAYMENT_ACCEPTED", warehouse_id: @current_user.warehouse_id)
               .order(created_at: :asc).paginate(page: params[:page], per_page: 25)
 
@@ -56,29 +22,7 @@ class Api::WorkersApi::OrdersController < ApplicationController
   end
 
   def show
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
-    if !authorization_result.any?
-      render :status => 200,
-             :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
-    end
-
     order = Order.find_by!(hash_id: params[:id])
-    if order.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "ORDER_NOT_FOUND" }
-      return
-    end
 
     warehouse = order.Warehouse
     details = order.Details
@@ -106,23 +50,6 @@ class Api::WorkersApi::OrdersController < ApplicationController
   end
 
   def supplied
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
-    if !authorization_result.any?
-      render :status => 200,
-             :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
-    end
-
     orders = Order.where(state: "BATCHES_CAPTURED", warehouse_id: @current_user.warehouse_id).order(created_at: :asc).paginate(page: params[:page], per_page: 25)
     data = Array.new
     orders.each do |order|
@@ -134,31 +61,8 @@ class Api::WorkersApi::OrdersController < ApplicationController
   end
 
   def save_details
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
-    authorization_result = @current_user.is_authorized?(@@category, "CAPTURE_BATCHES")
-    if !authorization_result.any?
-      render :status => 200,
-             :json => { :success => false, :info => "NO_ENOUGH_PERMISSIONS" }
-    end
-
     success = false
     @order = Order.find_by!(hash_id: params[:id])
-
-    if @order.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "ORDER_NOT_FOUND" }
-      return
-    end
 
     if @order.state == "PAYMENT_ACCEPTED"
       ActiveRecord::Base.transaction do

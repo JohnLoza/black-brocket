@@ -1,16 +1,7 @@
-class Api::FiscalDataController < ApplicationController
+class Api::FiscalDataController < ApiController
+  @@user_type = :client
+
   def show
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     fiscal_data = @current_user.FiscalData
 
     if !fiscal_data.blank?
@@ -24,17 +15,6 @@ class Api::FiscalDataController < ApplicationController
   end
 
   def create
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     @fiscal_data = FiscalData.new(fiscal_params)
     @fiscal_data.city_id = params[:city_id]
     @fiscal_data.client_id = @current_user.id
@@ -50,17 +30,6 @@ class Api::FiscalDataController < ApplicationController
   end
 
   def update
-    if params[:authentication_token].blank?
-      api_authentication_failed
-      return
-    end
-
-    @current_user = Client.find_by!(authentication_token: params[:authentication_token])
-    if @current_user.blank?
-      api_authentication_failed
-      return
-    end
-
     @fiscal_data = @current_user.FiscalData
     @fiscal_data.city_id = params[:city_id]
     @fiscal_data.lastname = params[:fiscal_data][:lastname]==""

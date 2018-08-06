@@ -61,6 +61,35 @@ class SessionsController < ApplicationController
     redirect_to root_path
   end
 
+  def recover_password
+    if params[:session] and params[:session][:email]
+      user = Client.find_by(email: params[:session][:email])
+      if user
+        user.update_attributes(recover_pass_digest: user.new_token)
+        SendRecoverPasswordEmailJob.perform_later(user)
+        flash[:success] = "Hemos enviado un correo a tu dirección con las instrucciones de recuperación."
+      else
+        flash[:info] = "La dirección especificada no está registrada, puedes registrarte <a href=\"#{client_sign_up_path}\">aquí</a>"
+      end
+    end
+
+    render :recover_password, layout: false
+  end
+
+  def update_password
+    user = Client.find_by!(recover_pass_digest: params[:token])
+
+    if params[:session] and params[:session][:password]
+      user.update_attributes(recover_pass_digest: nil,
+        password: params[:session][:password],
+        password_confirmation: params[:session][:password])
+      flash[:success] = "La contraseña ha sido actualizada!"
+      redirect_to root_path and return
+    end
+
+    render :update_password, layout: false
+  end
+
   private
     def today_is_birthday?(birthday)
       now = Time.now

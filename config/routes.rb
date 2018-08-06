@@ -18,6 +18,10 @@ Rails.application.routes.draw do
   get 'log_in/' => 'sessions#new'
   post   'log_in/'   => 'sessions#create'
   delete 'log_out/'  => 'sessions#destroy'
+  get 'recover_password' => 'sessions#recover_password'
+  post 'recover_password' => 'sessions#recover_password'
+  get 'update_password/:token' => 'sessions#update_password', :as => :update_password
+  post 'update_password/:token' => 'sessions#update_password'
 
   # product paths (what the client sees) #
   get '/products' => 'products#index', :as => :products

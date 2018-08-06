@@ -21,10 +21,15 @@
       a.button {
         color: #333;
       }
+
+      .logo{
+        width: 85px;
+      }
     </style>
   </head>
 
   <body>
+    <% image_tag 'BBGLogo.png', class: 'logo' %><br>
     <%= yield %>
   </body>
 </html>

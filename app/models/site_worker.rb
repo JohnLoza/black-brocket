@@ -12,7 +12,7 @@ class SiteWorker < ApplicationRecord
   belongs_to :City, class_name: :City, foreign_key: :city_id
   belongs_to :Warehouse, class_name: :Warehouse, foreign_key: :warehouse_id
   has_many :Permissions, class_name: :Permission, foreign_key: :worker_id
-  has_many :clients, foreign_key: :worker_id
+  has_many :Clients, foreign_key: :worker_id
 
   has_many :ClientMessages, class_name: :ClientDistributorComment, foreign_key: :worker_id
   has_many :Notifications, class_name: :Notification, foreign_key: :worker_id

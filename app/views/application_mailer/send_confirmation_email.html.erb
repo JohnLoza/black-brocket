@@ -1,0 +1,11 @@
+<p>Hola, <%= @user.name %>!</p>
+
+<p>¡Te damos la bienvenida a BlackBrocket! Antes de empezar,
+  debes confirmar tu dirección de correo electrónico.</p>
+
+<%= link_to 'Confirmar Correo',
+  client_email_confirmation_url(@user.validate_email_digest, host: '192.168.1.66:3000'),
+  class: 'button' %>
+
+<p>Gracias, </br>
+  El equipo de BlackBrocket.</p>

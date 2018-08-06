@@ -234,6 +234,8 @@ Rails.application.routes.draw do
   namespace :client do
     # notifications #
     get 'user/:id/notifications' => 'clients#notifications', :as => :notifications
+    get 'user/:token/email_confirmation' => 'clients#email_confirmation', :as => :email_confirmation
+    get 'user/:id/resend_email_confirmation' => 'clients#resend_email_confirmation', :as => :resend_email_confirmation
 
     # distributor visits #
     put '/user/visits/:id' => 'clients#update_distributor_visit', :as => :update_distributor_visit
@@ -309,6 +311,8 @@ Rails.application.routes.draw do
     post 'my_orders/:id/payment' => 'orders#upload_payment'
     post 'my_orders/:id/cancel' => 'orders#cancel'
     get 'orders/payment_steps' => 'orders#payment_steps'
+    get 'orders/available_banks' => 'orders#available_banks'
+    post 'orders/update_payment_method' => 'orders#update_payment_method'
 
     namespace :distributor_api do
       get "index" => "distributors#index"

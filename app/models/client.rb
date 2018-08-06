@@ -6,6 +6,7 @@ class Client < ApplicationRecord
   attr_accessor :remember_token
 
   before_save { self.email = email.downcase }
+  before_save { self.validate_email_digest = self.new_token }
   has_secure_password
 
   belongs_to :City, foreign_key: :city_id

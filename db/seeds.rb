@@ -39,8 +39,6 @@ info_names.each do |info_name|
   end
 end
 
-
-
 # methods used to populate clients and products FOR TESTING ONLY #
 def generateAlphKey(letter, number)
   if number <= 9
@@ -128,12 +126,11 @@ end
 
 # Generate arbitraty clients in the database for testing purposes
 sample_names.each do |name|
-  username = ('a'..'z').to_a.shuffle[0..7].join
-  email = username+'@client.com'
+  email = name+'@client.com'
 
   client = Client.new({
       birthday: '1999-06-12', name: name, city_id: 19597,
-      username: username,
+      username: name,
       email: email, email_confirmation: email,
       password: 'foobar', password_confirmation: 'foobar',
       lastname: sample_last_names.shuffle[0],
@@ -190,5 +187,12 @@ sample_coffe_names.each do |coffe_name|
     product.errors.each do |field, msg|
       puts "--- #{field}: #{msg} ---"
     end
+  end
+end
+
+Product.all.each do |product|
+  Warehouse.all.each do |w|
+    WarehouseProduct.create(warehouse_id: w.id, describes_total_stock: true,
+            product_id: product.id, existence: 0, min_stock: 50)
   end
 end

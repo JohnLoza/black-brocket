@@ -135,8 +135,4 @@ class Admin::WarehousesController < AdminController
     def warehouse_params
       params.require(:warehouse).permit(:name, :address, :telephone, :shipping_cost, :wholesale)
     end
-
-    def search_params
-      params[:warehouse][:search] if params[:warehouse]
-    end
 end

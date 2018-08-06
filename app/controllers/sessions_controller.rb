@@ -42,6 +42,10 @@ class SessionsController < ApplicationController
       log_in(client, 'c')
       remember(client, 'c') if params[:session][:remember_me] == '1'
 
+      if !client.email_verified
+        flash[:info] = "Por favor confirma tu correo electrónico, en caso de no recibirlo puedes <a href=\"#{client_resend_email_confirmation_path(client.hash_id)}\">reenviarlo</a>."
+      end
+
       redirect_to controller: "products"
       return
     end

@@ -10,11 +10,11 @@ class Api::OrdersController < ApiController
       if !order.parcel_id.blank?
         extra_data = {hash_id: order.hash_id, date: l(order.created_at, format: :long),
           total: order.total, status: t(order.state), tracking_code: order.tracking_code, parcel: order.Parcel.image.url(:mini),
-          parcel_url: order.Parcel.tracking_url}
+          parcel_url: order.Parcel.tracking_url, payment_method: order.payment_method}
       else
         extra_data = {hash_id: order.hash_id, date: l(order.created_at, format: :long),
           total: order.total, status: t(order.state), tracking_code: order.tracking_code, parcel: "",
-          parcel_url: ""}
+          parcel_url: "", payment_method: order.payment_method}
       end
 
       data << extra_data
@@ -31,7 +31,10 @@ class Api::OrdersController < ApiController
     data[:step3]="Seleccione el comprobante de pago dando click en \“Enviar comprobante de pago\”"
     data[:note]="Si por error eligió un archivo equivocado y desea enviar otro, solo de click nuevamente en \“Enviar comprobante de pago\” y seleccione el correcto."
 
-    bank_accounts = BankAccount.all
+    order = @current_user.Orders.find_by!(hash_id: params[:id])
+    bank = Bank.find_by!(id: order.payment_method)
+    bank_accounts = bank.Accounts
+
     extra_data = Array.new
     bank_accounts.each do |account|
       extra_data << {bank_name: account.bank_name, account_number: account.account_number, interbank_clabe: account.interbank_clabe,
@@ -109,6 +112,7 @@ class Api::OrdersController < ApiController
     order.client_id = @current_user.id
     order.city_id = @current_user.city_id
     order.invoice = params[:invoice] if !params[:invoice].blank?
+    @order.payment_method = params[:payment_method]
     order.state = "WAITING_FOR_PAYMENT"
 
     order.hash_id = random_hash_id(12).upcase
@@ -247,4 +251,28 @@ class Api::OrdersController < ApiController
              :json => { :success => false, :info => "SAVE_ERROR" }
     end
   end
+
+  def available_banks
+    banks = Bank.all
+    data = Array.new
+
+    banks.each do |bank|
+      extra_data = {bank_name: bank.name, image_url: bank.image.url(:mini), id: bank.id}
+      data << extra_data
+    end
+
+    render :status => 200,
+           :json => { success: true, info: 'DATA_RETURNED', data: data}
+  end
+
+  def update_payment_method
+    render_404 if params[:order].nil? or params[:order][:payment_method].nil?
+    order = @current_user.Orders.find_by!(hash_id: params[:id])
+
+    order.update_attributes(payment_method: params[:order][:payment_method])
+
+    render :status => 200,
+           :json => { success: true, info: 'SAVED'}
+  end
+
 end

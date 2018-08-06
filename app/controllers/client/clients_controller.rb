@@ -79,6 +79,7 @@ class Client::ClientsController < ApplicationController
 
     if @client.save
       @client.update_attribute(:hash_id, generateAlphKey("C", @client.id))
+      SendConfirmationEmailJob.perform_later(@client)
 
       log_in(@client, 'c')
       flash[:success] = "Bienvenido a Black Brocket, por ser su primera compra y para brindarle un mejor servicio, nuestro distribuidor de zona se pondrá en contacto o un representante de ventas se comunicará con usted. Si es una Pyme, dueño de una cafetería, tiene negocio relacionado con alimentos o es mayorista le ofrecemos precios y descuentos preferenciales bastante atractivos. Estos se los dará nuestro  representante de ventas, así como una demostración de nuestros productos. Una vez hecho el pago de su pedido los descuentos no se bonifican. Puede contactarnos en el menú en la opción \“distribuidores en la zona\”."
@@ -152,6 +153,17 @@ class Client::ClientsController < ApplicationController
     redirect_to client_my_distributor_path
   end
 
+  def email_confirmation
+    @user = Client.find_by!(validate_email_digest: params[:token])
+    @user.update_attributes(email_verified: true)
+  end
+
+  def resend_email_confirmation
+    SendConfirmationEmailJob.perform_later(@current_user)
+    flash[:success] = 'El correo electrónico ha sido enviado'
+    redirect_to products_path
+  end
+
   private
     def client_params
       params.require(:client).permit(:username, :email, :email_confirmation, :rfc,
@@ -166,6 +178,8 @@ class Client::ClientsController < ApplicationController
       params.require(:distributor_visit).permit(:client_recognizes_visit,
                                          :treatment_answer, :extra_comments)
     end
+
+
 
     def message_params
       {client_id: @current_user.id, comment: params[:comment],

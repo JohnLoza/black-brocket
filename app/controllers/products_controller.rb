@@ -29,7 +29,6 @@ class ProductsController < ApplicationController
       @product_prices = @current_user.ProductPrices
 
       @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.product_id})
-
     else
       # when the user hasn't logged in #
       if params[:category]

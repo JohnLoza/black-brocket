@@ -1,7 +1,7 @@
 class Admin::WelcomeController < AdminController
 
   def index
-    # Mailer.say_hello("lozabucio.jony@gmail.com").deliver_now
+    
   end
 
   def suggestions

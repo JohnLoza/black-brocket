@@ -1,0 +1,23 @@
+<% provide(:title, "Gracias!") %>
+
+<div class="col-md-12">
+    <center>
+      <h1 class="module-title long-up-2x">!Gracias por confirmar tu correo¡</h1>
+    </center>
+    <br><br>
+</div>
+<div class="show-tips-container">
+  <div class="row">
+    <p>Acontinuación serás redirigido a la página principal,
+      de no funcionar por favor haz click en el siguiente
+      <%= link_to 'enlace', root_path %></p>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function (){
+    setTimeout(function () {
+         window.location.href = "<%= root_url %>";
+      }, 10000); //will call the function after 10 secs.
+  });
+</script>

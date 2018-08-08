@@ -9,6 +9,6 @@ class ProdPhoto < ApplicationRecord
   mount_uploader :photo, ProductImageUploader
 
   scope :by_product, -> (product_id) { where(product_id: product_id) }
-  scope :only_principal, -> { where(is_principal: true) }
+  scope :principal, -> { where(is_principal: true) }
   scope :not_principal, -> { where(is_principal: false) }
 end

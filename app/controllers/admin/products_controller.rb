@@ -7,7 +7,7 @@ class Admin::ProductsController < AdminController
     @products = Product.active.order_by_name
       .search(key_words: search_params, fields: [:hash_id, :name])
       .paginate(page: params[:page], per_page: 20)
-    @photos = ProdPhoto.by_product(@products.map(&:id).uniq).only_principal
+    @photos = ProdPhoto.by_product(@products.map(&:id).uniq).principal
   end
 
   def new
@@ -98,7 +98,7 @@ class Admin::ProductsController < AdminController
 
     @photo = ProdPhoto.find_by!(params[:photo_id])
     if @photo.product_id == @product.id
-      ProdPhoto.by_product(@product.id).is_principal.take.update_attributes(is_principal: false)
+      ProdPhoto.by_product(@product.id).principal.take.update_attributes(is_principal: false)
       @photo.update_attributes(is_principal: true)
     end
 
@@ -168,7 +168,8 @@ class Admin::ProductsController < AdminController
       options[:principal] = false unless options[:principal].present?
 
       if options[:principal] = true
-        ProdPhoto.by_product(@product.id).is_principal.take.update_attributes(is_principal: false)
+        current_principal = ProdPhoto.by_product(@product.id).principal.take
+        current_principal.update_attributes(is_principal: false) if current_principal
       end
       ProdPhoto.create(product_id: @product.id, is_principal: options[:principal],
                        photo: options[:photo])

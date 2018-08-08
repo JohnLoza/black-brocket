@@ -24,7 +24,7 @@ class Api::DistributorsController < ApiController
     data = {address: "", city: city.name, state: city.State.name, username: distributor.username, name: distributor.name,
             lastname: distributor.lastname, mother_lastname: distributor.mother_lastname,
             email: distributor.email, telephone: distributor.telephone, cellphone: distributor.cellphone,
-            photo: User.avatar_url(distributor)}
+            photo: distributor.avatar_url}
 
     if !distributor_is_a_worker
       if distributor.show_address

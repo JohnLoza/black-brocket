@@ -3,7 +3,7 @@
   <td class="project-people">
     <% if !tip_recipe.video.blank? %>
       <%= link_to "<i class='fa fa-file-video-o fa-3x'></i>".html_safe,
-          tip_recipe.video.url, target: "_blank" %>
+          tip_recipe.video, target: "_blank" %>
     <% elsif !tip_recipe.image.blank? %>
       <%= image_tag tip_recipe.image.url(:thumb) %>
     <% else %>

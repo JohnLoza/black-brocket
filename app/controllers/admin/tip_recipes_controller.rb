@@ -19,15 +19,6 @@ class Admin::TipRecipesController < AdminController
     deny_access! and return unless @current_user.has_permission_category?('tips_&_recipes')
 
     @tip =  TipRecipe.new(tip_recipe_params)
-    if params[:tip_recipe] and params[:tip_recipe][:multimedia]
-      content_type = params[:tip_recipe][:multimedia].content_type
-      if content_type.include? "video"
-        @tip.video = params[:tip_recipe][:multimedia]
-        @tip.video_type = "LOCAL_VIDEO"
-      elsif content_type.include? "image"
-        @tip.image = params[:tip_recipe][:multimedia]
-      end
-    end
 
     render_file_path = @@replaceable_path + "tip_or_recipe_#{Time.now.to_i}.html.erb"
     file_path = @@base_file_path + render_file_path.sub(@@replaceable_path, @@replaceable_path + "_")
@@ -58,28 +49,16 @@ class Admin::TipRecipesController < AdminController
     deny_access! and return unless @current_user.has_permission_category?('tips_&_recipes')
 
     @tip = TipRecipe.find_by!(id: params[:id])
-    @tip.title = params[:tip_recipe][:title]
-
-    if params[:tip_recipe] and params[:tip_recipe][:multimedia]
-      content_type = params[:tip_recipe][:multimedia].content_type
-      if content_type.include? "video"
-        @tip.video = params[:tip_recipe][:multimedia]
-        @tip.video_type = "LOCAL_VIDEO"
-        @tip.remove_image!
-      elsif content_type.include? "image"
-        @tip.image = params[:tip_recipe][:multimedia]
-        @tip.remove_video!
-      end
-    end
 
     file_path = @@base_file_path + @tip.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
     File.open(file_path, "w"){|file| file.write(params[:tip_recipe][:body]) }
 
-    if @tip.save
+    if @tip.update_attributes(tip_recipe_params)
       flash[:success] = "Tip o Receta Actualizada!"
     else
       flash[:info] = "Ocurrió un error al guardar..."
     end
+    
     redirect_to admin_tip_recipes_path
   end
 
@@ -97,6 +76,6 @@ class Admin::TipRecipesController < AdminController
 
   private
     def tip_recipe_params
-      params.require(:tip_recipe).permit(:title)
+      params.require(:tip_recipe).permit(:title, :image, :video)
     end
 end

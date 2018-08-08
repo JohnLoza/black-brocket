@@ -9,7 +9,7 @@ class Api::DistributorApi::ClientsController < ApiController
     data<<{per_page: 20}
     clients.each do |client|
       data << {hash_id: client.hash_id, username: client.username, city: client.City.name, state: client.City.State.name,
-               last_visit: client.last_distributor_visit, last_revision: client.last_distributor_revision, photo: User.avatar_url(client),
+               last_visit: client.last_distributor_visit, last_revision: client.last_distributor_revision, photo: client.avatar_url,
                telephone: client.telephone, cellphone: client.cellphone, lada: client.City.lada}
     end
 

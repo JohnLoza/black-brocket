@@ -17,18 +17,19 @@
                 <div class="caption" style="height: 50px; padding-top: 15px;">
                   <h4><%= t.title %></h4>
                 </div>
+
                 <% if !t.video.blank? %>
-                  <div class="caption divider-row-top" style="min-height: 200px; padding: 0;">
-                    <video width="320" height="200" controls>
-                      <source src="<%= t.video.url %>" type="video/mp4">
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
+                  <iframe width="325" height="215"
+                    src="<%= t.video %>"
+                    frameborder="0" allow="autoplay; encrypted-media"
+                    allowfullscreen>
+                  </iframe>
                 <% elsif !t.image.blank? %>
                   <div class="caption divider-row-top tip-image" style="background-image: url('<%= t.image.url %>');">
                     <% image_tag(t.image.url , { class: "img-responsive full-width", :style =>"margin-bottom: 10px;", :align =>"left" }) %>
                   </div>
                 <% end %>
+
                 <div class="caption divider-row-top tip-desc-200">
                     <div class="menu-detail cortar">
                       <!-- For heroku not crashing -->

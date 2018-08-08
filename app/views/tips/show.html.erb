@@ -7,12 +7,9 @@
     <%= @tip.title %></h1>
   <div class="row divider-row-top">
     <div class="col-md-12">
-        <% if !@tip.video.blank? %>
-          <video controls>
-            <source src="<%= @tip.video.url %>" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        <% elsif !@tip.image.blank? %>
+        <% if @tip.video.present? %>
+          <%= render partial: '/shared/embed_video', locals: {url: @tip.video} %>
+        <% elsif @tip.image.present? %>
           <%= image_tag(@tip.image.url , { class: "img-responsive full-width show-tip-image", :align =>"left" }) %>
         <% end %>
 

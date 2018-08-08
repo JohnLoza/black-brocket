@@ -123,13 +123,10 @@
         <h3 class="module-subtitle prep-font"><i class="icon-book-open menu-icon"></i> ~ Formas de preparación</h3>
         <br>
       </div>
-      <div class="col-sm-6">
-        <video controls style="width:100%;">
-          <source src="<%= @product.video.url %>" type="video/mp4">
-          Your browser does not support the video tag.
-        </video><br><br>
+      <div class="col-sm-12">
+        <%= render partial: '/shared/embed_video', locals: {url: @product.video} %>
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-12">
         <%= render @product.preparation_render_path %>
       </div>
     </div><br>

@@ -109,47 +109,54 @@
               </div>
 
               <h3>Categorías</h3>
-                  <table class="table">
-                    <tbody>
-                    <tr>
-                        <td>Caliente</td>
-                        <td align="right"><%= f.check_box :hot, class: "js-switch" %></td>
-                    </tr>
-                    <tr>
-                        <td>Helado</td>
-                        <td align="right"><%= f.check_box :cold, class: "js-switch" %></td>
-                    </tr>
-                    <tr>
-                        <td>Frappé</td>
-                        <td align="right"><%= f.check_box :frappe, class: "js-switch" %></td>
-                    </tr>
-                    </tbody>
-                  </table>
+              <table class="table">
+                <tbody>
+                <tr>
+                    <td>Caliente</td>
+                    <td align="right"><%= f.check_box :hot, class: "js-switch" %></td>
+                </tr>
+                <tr>
+                    <td>Helado</td>
+                    <td align="right"><%= f.check_box :cold, class: "js-switch" %></td>
+                </tr>
+                <tr>
+                    <td>Frappé</td>
+                    <td align="right"><%= f.check_box :frappe, class: "js-switch" %></td>
+                </tr>
+                </tbody>
+              </table>
 
               <div class="form-group">
-                <% if !@product.video.blank? %>
-                  <video controls>
-                    <source src="<%= @product.video.url %>" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
-                <% end %>
-                <label class="col-sm-2 control-label"><%= f.label :video, "Cargar video" %></label>
+                <label class="col-sm-2 control-label"><%= f.label :video, "Incluir Video de Youtube" %></label>
                 <div class="col-sm-10">
-                  <%= f.file_field :video %>
+                  <%= f.text_field :video, class: 'form-control',
+                    placeholder: 'youtube.com/watch?v=6A83BS718GS', maxlength: 50 %>
                 </div>
               </div>
+
+              <div class="col-sm-12">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10">
+                  <% if !@product.video.blank? %>
+                    <%= render partial: '/shared/embed_video', locals: {url: @product.video} %>
+                  <% end %>
+                </div>
+              </div>
+
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :principal_photo, "Cargar fotografía de portada" %></label>
                 <div class="col-sm-10">
                   <%= f.file_field :principal_photo, :multiple => false %>
                 </div>
               </div>
+
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :photo, "Cargar fotografías secundarias" %></label>
                 <div class="col-sm-10">
                   <%= f.file_field :photo, :multiple => true %>
                 </div>
               </div>
+
               <div class="hr-line-dashed"></div>
             <% end # if @actions["UPDATE_PRODUCT_DATA"] # %>
 

@@ -120,10 +120,9 @@ class Admin::ProductsController < AdminController
 
   private
     def product_params
-      params.require(:product).permit(:name, :price, :show,
+      params.require(:product).permit(:name, :price, :show, :presentation,
                                       :hot, :cold, :frappe, :ieps, :iva,
-                                      :lowest_price, :video,
-                                      :presentation, :recommended_price)
+                                      :lowest_price, :recommended_price, :video)
     end
 
     def main_photo_param

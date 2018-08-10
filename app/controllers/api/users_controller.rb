@@ -38,7 +38,7 @@ class Api::UsersController < ApiController
   def get_username_n_photo
     render :status => 200,
            :json => { :success => true, :info => "USER_DATA",
-                      :data => {username: @current_user.username, photo: @current_user.getImage }}
+                      :data => {username: @current_user.username, photo: @current_user.avatar_url }}
   end
 
   def update

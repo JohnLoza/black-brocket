@@ -46,7 +46,7 @@ class Api::ProductsController < ApiController
       data<<{per_page: 18, new_visit: false, visit_id: nil, distributor_image: nil, distributor_name: nil, visit_date: nil}
     end
 
-    data << {user_data: {username: @current_user.username, photo: @current_user.getImage}}
+    data << {user_data: {username: @current_user.username, photo: @current_user.avatar_url}}
 
     products.each do |w_product|
       p = w_product.Product

@@ -1,19 +1,20 @@
-class Api::SessionsController < ApplicationController
+class Api::SessionsController < ApiController
+  skip_before_action :authenticate_user!, only: :create
 
   def create
     user_type = nil
-    user = SiteWorker.find_by!(email: params[:email])
+    user = SiteWorker.find_by(email: params[:email])
 
     if !user.blank?
       user_type = "WORKER" if user_type == nil
     else
-      user = Distributor.find_by!(email: params[:email])
+      user = Distributor.find_by(email: params[:email])
     end
 
     if !user.blank?
       user_type = "DISTRIBUTOR" if user_type == nil
     else
-      user = Client.where(email: params[:email], deleted_at: nil).take if user.blank?
+      user = Client.find_by(email: params[:email], deleted_at: nil)
     end
 
     if !user.blank?
@@ -25,16 +26,19 @@ class Api::SessionsController < ApplicationController
       return
     end
 
-    user.update_attribute(:authentication_token, SecureRandom.urlsafe_base64(16))
+    unless user.authentication_token.present?
+      user.update_attribute(:authentication_token, SecureRandom.urlsafe_base64(16))
+    end
+
     render :status => 200,
            :json => { :success => true, :info => "AUTHORIZED",
                       :data => { :auth_token => user.authentication_token, :user_type => user_type} }
   end
 
   def destroy
-    user = SiteWorker.find_by!(authentication_token: params[:authentication_token])
-    user = Distributor.find_by!(authentication_token: params[:authentication_token])
-    user = Client.find_by!(authentication_token: params[:authentication_token])
+    user = SiteWorker.find_by(authentication_token: params[:authentication_token])
+    user = Distributor.find_by(authentication_token: params[:authentication_token]) unless user
+    user = Client.find_by(authentication_token: params[:authentication_token]) unless user
 
     if user.blank?
       api_authentication_failed

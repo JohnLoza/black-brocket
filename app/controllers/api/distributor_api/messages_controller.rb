@@ -16,7 +16,7 @@ class Api::DistributorApi::MessagesController < ApiController
     data[:per_page] = 50
     data[:client_image] = client.avatar_url
     data[:client_username] = client.username
-    data[:distributor_image] = @current_user.getImage
+    data[:distributor_image] = @current_user.avatar_url
     data[:distributor_username] = @current_user.username
 
     array = Array.new

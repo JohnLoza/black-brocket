@@ -12,7 +12,7 @@ class Api::DistributorApi::PricesController < ApiController
     products.each do |product|
       hash = {id: product.id, name: product.name, lowest_price: product.lowest_price,
               recommended_price: product.recommended_price, max_price: product.price, current_price: 0}
-      if product_prices.any?
+      if product_prices
         product_prices.each do |price|
           if price.product_id == product.id
             hash[:current_price] = price.client_price

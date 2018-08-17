@@ -1,6 +1,8 @@
 class Api::InformationController < ApiController
   skip_before_action :authenticate_user!, except: :ecart_info
   @@user_type = :client
+  @@base_file_path = "app/views"
+  @@replaceable_path = "/shared/tips_recipes/"
 
   def privacy_policy
     data = WebInfo.where(name: "PRIVACY_POLICY").take
@@ -20,9 +22,19 @@ class Api::InformationController < ApiController
     tips = TipRecipe.all.order(updated_at: :desc)
             .paginate(page: params[:page], per_page: 15)
 
+    data = Array.new
+    tips.each do |tip|
+      file_path = @@base_file_path + tip.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
+      description = File.open(file_path, "r"){|file| file.read }
+      # description = ActionController::Base.helpers.strip_tags(description) # get rid of html tags
+
+      data << { id: tip.id, title: tip.title, image: { url: tip.image.url, thumb: tip.image.url(:thumb) },
+        description: description, video: tip.video, created_at: tip.created_at, updated_at: tip.updated_at}
+    end
+
     render :status => 200,
            :json => { :success => true, :info => "DATA_RETURNED",
-                      :data => tips, :per_page => 15 }
+                      :data => data, :per_page => 15 }
   end
 
   def contact
@@ -41,7 +53,10 @@ class Api::InformationController < ApiController
     warehouse = @current_user.City.State.Warehouse
 
     notice = WebInfo.where(name: "ECART_NOTICE").take
-    data = {shipping_cost: warehouse.shipping_cost, wholesale: warehouse.wholesale, ecart_notice: notice.description}
+    description_file = @@base_file_path + notice.description_render_path.sub("/shared/web/", "/shared/web/_")
+    description = File.open(description_file, "r"){|file| file.read }
+
+    data = {shipping_cost: warehouse.shipping_cost, wholesale: warehouse.wholesale, ecart_notice: description}
     render :status => 200,
            :json => { :success => true, :info => "DATA_RETURNED", data: data }
   end

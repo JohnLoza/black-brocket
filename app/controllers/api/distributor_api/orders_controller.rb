@@ -21,7 +21,7 @@ class Api::DistributorApi::OrdersController < ApiController
     data = Array.new
     orders.each do |order|
       data << {hash_id: order.hash_id, client_username: order.Client.username, client_hash_id: order.Client.hash_id,
-        date: l(order.created_at, format: :long), total: order.total, status: t(order.state), city: order.City.name, state: order.City.State.name }
+        date: I18n.l(order.created_at, format: :long), total: order.total, status: I18n.t(order.state), city: order.City.name, state: order.City.State.name }
     end
 
     render :status => 200,
@@ -44,8 +44,8 @@ class Api::DistributorApi::OrdersController < ApiController
 
     data[:warehouse_data] = warehouse_data
     data[:fiscal_data] = fiscal_data
-    data[:state_name] = fiscal_data.City.State.name
-    data[:city_name] = fiscal_data.City.name
+    data[:state_name] = fiscal_data.City.State.name if fiscal_data
+    data[:city_name] = fiscal_data.City.name if fiscal_data
 
     details_data = Array.new
     details.each do |detail|

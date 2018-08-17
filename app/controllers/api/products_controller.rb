@@ -41,7 +41,7 @@ class Api::ProductsController < ApiController
     visit = @current_user.DistributorVisits.where(client_recognizes_visit: nil).take
     if !visit.blank?
       data<<{per_page: 18, new_visit: true, visit_id: visit.id, distributor_image: visit.Distributor.avatar_url(:mini),
-        distributor_name: visit.Distributor.getName, visit_date: l(visit.visit_date, format: :long)}
+        distributor_name: visit.Distributor.getName, visit_date: I18n.l(visit.visit_date, format: :long)}
     else
       data<<{per_page: 18, new_visit: false, visit_id: nil, distributor_image: nil, distributor_name: nil, visit_date: nil}
     end
@@ -88,6 +88,6 @@ class Api::ProductsController < ApiController
     preparation = File.open(preparation_file, "r"){|file| file.read }
     render :status => 200,
            :json => { :success => true, :info => "PRODUCT_DATA",
-                      :data => { description: description,preparation: preparation,presentation: product.presentation}}
+                      :data => { description: description, preparation: preparation, presentation: product.presentation}}
   end
 end

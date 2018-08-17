@@ -59,10 +59,10 @@ class Api::UsersController < ApiController
       return
     end
 
-    @current_user.deleted=true
-    @current_user.delete_account_hash= random_hash_id(12).upcase
+    @current_user.delete_account_hash = @current_user.new_token
 
-    if @current_user.save
+    if @current_user.destroy
+      @current_user.update_attributes(authentication_token: nil)
       render :status => 200,
              :json => { :success => true, :info => "SAVED", delete_folio: @current_user.delete_account_hash }
     else

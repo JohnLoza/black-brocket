@@ -22,7 +22,7 @@ class Api::SessionsController < ApiController
     end
 
     if user.blank? or !user.authenticate(params[:password])
-      api_authentication_failed
+      render_authentication_error
       return
     end
 
@@ -41,7 +41,7 @@ class Api::SessionsController < ApiController
     user = Client.find_by(authentication_token: params[:authentication_token]) unless user
 
     if user.blank?
-      api_authentication_failed
+      render_authentication_error
       return
     end
 

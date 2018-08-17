@@ -8,7 +8,7 @@ class Api::DistributorApi::CommissionsController < ApiController
     data<<{per_page: 25}
     commissions.each do |commission|
       data << {hash_id: commission.hash_id, total: commission.total,
-        status: t(commission.state), date: l(commission.created_at, format: :long),
+        status: I18n.t(commission.state), date: I18n.l(commission.created_at, format: :long),
         payment_img: commission.payment_img.url, payment_pdf: commission.payment_pdf.url}
     end
 
@@ -24,7 +24,7 @@ class Api::DistributorApi::CommissionsController < ApiController
     data = Array.new
     orders.each do |order|
       data << {hash_id: order.hash_id, total: order.total, client_username: order.Client.username,
-        client_hash_id: order.Client.hash_id, status: t(order.state), payment_img: commission.payment_img.url, payment_pdf: commission.payment_pdf.url}
+        client_hash_id: order.Client.hash_id, status: I18n.t(order.state), payment_img: commission.payment_img.url, payment_pdf: commission.payment_pdf.url}
     end
 
     render :status => 200,

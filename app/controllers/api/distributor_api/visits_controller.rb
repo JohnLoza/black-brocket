@@ -10,7 +10,7 @@ class Api::DistributorApi::VisitsController < ApiController
     data = Array.new
     data<<{per_page: 25}
     visits.each do |visit|
-      data << {date: l(visit.visit_date, format: :long), visit_recognized: visit.client_recognizes_visit, treatment: visit.treatment_answer, extra_comments: visit.extra_comments}
+      data << {date: I18n.l(visit.visit_date, format: :long), visit_recognized: visit.client_recognizes_visit, treatment: visit.treatment_answer, extra_comments: visit.extra_comments}
     end
 
     render :status => 200,

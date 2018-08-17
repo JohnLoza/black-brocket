@@ -1,4 +1,5 @@
 class Api::DistributorsController < ApiController
+  skip_before_action :authenticate_user!, only: :create_candidate
   @@user_type = :client
 
   def create_candidate
@@ -47,7 +48,7 @@ class Api::DistributorsController < ApiController
 
     data = Array.new
     messages.each do |message|
-      data << {is_from_client: message.is_from_client, comment: message.comment, datetime: l(message.created_at, format: :long)}
+      data << {is_from_client: message.is_from_client, comment: message.comment, datetime: I18n.l(message.created_at, format: :long)}
     end
 
     render :status => 200,

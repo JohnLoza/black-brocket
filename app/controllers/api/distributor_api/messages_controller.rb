@@ -21,7 +21,7 @@ class Api::DistributorApi::MessagesController < ApiController
 
     array = Array.new
     messages.each do |msg|
-      array << {date: l(msg.created_at, format: :long), comment: msg.comment, is_from_client: msg.is_from_client}
+      array << {date: I18n.l(msg.created_at, format: :long), comment: msg.comment, is_from_client: msg.is_from_client}
     end
     data[:messages] = array
 

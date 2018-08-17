@@ -6,6 +6,7 @@ class Client::FiscalDataController < ApplicationController
     @fiscal_data = FiscalData.new
     @states = State.order_by_name
     @cities = Array.new
+    @url = client_fiscal_data_path
   end
 
   def edit
@@ -18,6 +19,7 @@ class Client::FiscalDataController < ApplicationController
 
     @states = State.order_by_name
     @cities = City.where(state_id: params[:state_id]).order_by_name
+    @url = client_fiscal_datum_path @fiscal_data
   end
 
   def create
@@ -35,6 +37,7 @@ class Client::FiscalDataController < ApplicationController
 
       @states = State.order_by_name
       @cities = City.where(state_id: params[:state_id]).order_by_name
+      @url = client_fiscal_data_path
       render :new
     end
   end
@@ -47,7 +50,7 @@ class Client::FiscalDataController < ApplicationController
 
     if @fiscal_data.update_attributes(fiscal_params)
       flash[:success] = "Información fiscal guardada."
-      redirect_to products_path(@current_user.hash_id)
+      redirect_to products_path
     else
       city = @fiscal_data.City
       params[:city_id] = city.id
@@ -55,6 +58,7 @@ class Client::FiscalDataController < ApplicationController
 
       @states = State.order_by_name
       @cities = City.where(state_id: params[:state_id]).order_by_name
+      @url = client_fiscal_datum_path @fiscal_data
       render :edit
     end
   end

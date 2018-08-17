@@ -17,7 +17,7 @@ class ApiController < ActionController::API
       render_404 and return
     end
 
-    @current_user = model.find_by!(authentication_token: params[:authentication_token])
+    @current_user = model.find_by(authentication_token: params[:authentication_token])
     render_authentication_error and return unless @current_user.present?
 
     if @@user_type == :site_worker

@@ -33,8 +33,8 @@ class Api::DistributorApi::PricesController < ApiController
 
     ActiveRecord::Base.transaction do
       client.ProductPrices.delete_all
-      params[:product].each do |param|
-        ClientProduct.create(client_id: client.id, product_id: param[0], client_price: param[1])
+      params[:product].each do |product_id|
+        ClientProduct.create(client_id: client.id, product_id: product_id, client_price: params[:product][product_id])
       end
 
       client.update_attributes(has_custom_prices: true, is_new: false)

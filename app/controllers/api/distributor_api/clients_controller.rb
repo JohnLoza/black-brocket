@@ -2,11 +2,11 @@ class Api::DistributorApi::ClientsController < ApiController
   @@user_type = :distributor
 
   def index
-    regions = @current_user.Regions.map(&:id)
-    clients = Client.where(id: regions).order(updated_at: :DESC).paginate(:page => params[:page], :per_page => 20).includes(City: :State)
+    region_ids = @current_user.Regions.map(&:id)
+    clients = Client.where(city_id: region_ids).order(updated_at: :DESC).paginate(:page => params[:page], :per_page => 20).includes(City: :State)
 
     data = Array.new
-    data<<{per_page: 20}
+    data << {per_page: 20}
     clients.each do |client|
       data << {hash_id: client.hash_id, username: client.username, city: client.City.name, state: client.City.State.name,
                last_visit: client.last_distributor_visit, last_revision: client.last_distributor_revision, photo: client.avatar_url,

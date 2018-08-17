@@ -8,12 +8,12 @@ class Api::OrdersController < ApiController
     orders.each do |order|
 
       if !order.parcel_id.blank?
-        extra_data = {hash_id: order.hash_id, date: l(order.created_at, format: :long),
-          total: order.total, status: t(order.state), tracking_code: order.tracking_code, parcel: order.Parcel.image.url(:mini),
+        extra_data = {hash_id: order.hash_id, date: I18n.l(order.created_at, format: :long),
+          total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, parcel: order.Parcel.image.url(:mini),
           parcel_url: order.Parcel.tracking_url, payment_method: order.payment_method}
       else
-        extra_data = {hash_id: order.hash_id, date: l(order.created_at, format: :long),
-          total: order.total, status: t(order.state), tracking_code: order.tracking_code, parcel: "",
+        extra_data = {hash_id: order.hash_id, date: I18n.l(order.created_at, format: :long),
+          total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, parcel: "",
           parcel_url: "", payment_method: order.payment_method}
       end
 
@@ -112,7 +112,7 @@ class Api::OrdersController < ApiController
     order.client_id = @current_user.id
     order.city_id = @current_user.city_id
     order.invoice = params[:invoice] if !params[:invoice].blank?
-    @order.payment_method = params[:payment_method]
+    order.payment_method = params[:payment_method]
     order.state = "WAITING_FOR_PAYMENT"
 
     order.hash_id = random_hash_id(12).upcase

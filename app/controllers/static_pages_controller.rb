@@ -3,7 +3,8 @@ class StaticPagesController < ApplicationController
   layout "static_pages.html.erb"
 
   def index
-    if !session[:user_type].blank?
+    @current_user = current_user
+    if session[:user_type].present?
       if session[:user_type] == 'w'
         redirect_to admin_welcome_path
         return

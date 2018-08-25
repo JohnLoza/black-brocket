@@ -12,9 +12,6 @@
 !/log/.keep
 /tmp
 
-# Ignore the db schema file
-/db/schema.rb
-
 # Ignore the uploaded files and assets
 /public/uploads*
 /public/assets*

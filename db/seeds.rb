@@ -190,7 +190,10 @@ sample_coffe_names.each do |coffe_name|
   end
 end
 
+default_photo = File.open('public/default_product.jpeg')
 Product.all.each do |product|
+  ProdPhoto.create(product_id: product.id, is_principal: true, photo: default_photo)
+
   Warehouse.all.each do |w|
     WarehouseProduct.create(warehouse_id: w.id, describes_total_stock: true,
             product_id: product.id, existence: 0, min_stock: 50)

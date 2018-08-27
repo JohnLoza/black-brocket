@@ -115,7 +115,7 @@ class Api::OrdersController < ApiController
     order.payment_method = params[:payment_method]
     order.state = "WAITING_FOR_PAYMENT"
 
-    order.hash_id = random_hash_id(12).upcase
+    order.hash_id = @current_user.new_token
 
     # find the products the client want to buy #
     products = WarehouseProduct.where("hash_id in (?) and describes_total_stock = 1",
@@ -159,7 +159,7 @@ class Api::OrdersController < ApiController
       total_ieps = (current_product_price-total_iva)-((current_product_price-total_iva)*100/(p.Product.ieps+100))
 
       order_details << OrderDetail.new(product_id: p.product_id,
-                  hash_id: random_hash_id(12).upcase, iva: p.Product.iva,
+                  hash_id: @current_user.new_token, iva: p.Product.iva,
                   quantity: params[:product_details][p.hash_id], sub_total: subtotal,
                   w_product_id: p.id, ieps: p.Product.ieps, price: current_product_price,
                   total_iva: total_iva * params[:product_details][p.hash_id].to_i,

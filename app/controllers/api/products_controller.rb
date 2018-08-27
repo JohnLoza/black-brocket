@@ -6,6 +6,10 @@ class Api::ProductsController < ApiController
 
   def index
     warehouse = @current_user.City.State.Warehouse
+    unless warehouse
+      render :status => 200,
+             :json => { :success => false, :info => "WAREHOUSE_NOT_FOUND" }
+    end
 
     if params[:category] and ["hot","cold","frappe"].include? params[:category]
 

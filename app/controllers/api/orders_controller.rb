@@ -37,7 +37,7 @@ class Api::OrdersController < ApiController
 
     extra_data = Array.new
     bank_accounts.each do |account|
-      extra_data << {bank_name: account.bank_name, account_number: account.account_number, interbank_clabe: account.interbank_clabe,
+      extra_data << {bank_name: bank.name, account_number: account.account_number, interbank_clabe: account.interbank_clabe,
                      owner: account.owner, email: account.email, RFC: account.RFC}
     end
 

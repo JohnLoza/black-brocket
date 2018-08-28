@@ -3,6 +3,20 @@ class ApiController < ActionController::API
 
   @@user_type = :default
 
+  # rescue_from Exception, with: :method not working somehow
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render_404
+  end
+  rescue_from ActionController::UnknownFormat do |e|
+    render_404
+  end
+  rescue_from ActionController::UnknownController do |e|
+    render_404
+  end
+  rescue_from ActionController::RoutingError do |e|
+    render_404
+  end
+
   def authenticate_user!
     render_authentication_error and return unless params[:authentication_token].present?
 
@@ -34,6 +48,10 @@ class ApiController < ActionController::API
   def deny_access!
     render :status => 200,
            :json => { :success => false, :info => "ACCESS_DENIED" }
+  end
+
+  def render_404
+    head :not_found
   end
 
   def search_params

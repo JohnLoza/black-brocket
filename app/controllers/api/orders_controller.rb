@@ -266,10 +266,10 @@ class Api::OrdersController < ApiController
   end
 
   def update_payment_method
-    render_404 if params[:order].nil? or params[:order][:payment_method].nil?
+    render_404 and return if params[:payment_method].nil?
     order = @current_user.Orders.find_by!(hash_id: params[:id])
 
-    order.update_attributes(payment_method: params[:order][:payment_method])
+    order.update_attributes(payment_method: params[:payment_method])
 
     render :status => 200,
            :json => { success: true, info: 'SAVED'}

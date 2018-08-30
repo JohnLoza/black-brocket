@@ -484,9 +484,9 @@ class Admin::OrdersController < AdminController
     deny_access! and return unless @current_user.has_permission?('orders@accept_reject_payment')
     order = Order.find_by!(download_payment_key: params[:payment_key])
 
-    if !order.pay_img.file.nil?
+    if order.pay_img.present?
       send_file order.pay_img.path
-    elsif !order.pay_pdf.file.nil?
+    elsif order.pay_pdf.present?
       send_file order.pay_pdf.path
     end
   end

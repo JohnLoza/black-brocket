@@ -115,7 +115,7 @@ class Api::OrdersController < ApiController
     order.payment_method = params[:payment_method]
     order.state = "WAITING_FOR_PAYMENT"
 
-    order.hash_id = @current_user.new_token
+    order.hash_id = random_hash_id(12).upcase
 
     # find the products the client want to buy #
     products = WarehouseProduct.where("hash_id in (?) and describes_total_stock = 1",
@@ -242,6 +242,7 @@ class Api::OrdersController < ApiController
       return
     end
     order.state = "PAYMENT_DEPOSITED"
+    order.download_payment_key = SecureRandom.urlsafe_base64 if order.download_payment_key.nil?
 
     if order.save
       render :status => 200,

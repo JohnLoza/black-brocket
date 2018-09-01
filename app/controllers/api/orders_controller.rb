@@ -276,4 +276,21 @@ class Api::OrdersController < ApiController
            :json => { success: true, info: 'SAVED'}
   end
 
+  private
+    def random_hash_id(number)
+      hash_id = Array.new
+      index = 0
+      while index < number
+        i = SecureRandom.random_number(alphanumericArray.size)
+        hash_id << alphanumericArray[i]
+        index += 1
+      end
+      return hash_id.join
+    end
+
+    def alphanumericArray
+      ['q','w','e','r','t','y','u','p','a','s','d','f','g','h','j','k','z',
+        'x','c','v','b','n','m','1','2','3','4','5','6','7','8','9','0']
+    end
+
 end

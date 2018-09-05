@@ -7,14 +7,13 @@ class Api::OrdersController < ApiController
     data<<{per_page: 10}
     orders.each do |order|
 
-      if !order.parcel_id.blank?
-        extra_data = {hash_id: order.hash_id, date: I18n.l(order.created_at, format: :long),
-          total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, parcel: order.Parcel.image.url(:mini),
-          parcel_url: order.Parcel.tracking_url, payment_method: order.payment_method}
-      else
-        extra_data = {hash_id: order.hash_id, date: I18n.l(order.created_at, format: :long),
-          total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, parcel: "",
-          parcel_url: "", payment_method: order.payment_method}
+      extra_data = {hash_id: order.hash_id, date: I18n.l(order.created_at, format: :long),
+        total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, parcel: "",
+        parcel_url: "", payment_method: order.payment_method, download_payment_key: order.download_payment_key}
+
+      if order.parcel_id.present?
+        extra_data[:parcel_url] = order.Parcel.tracking_url
+        extra_data[:parcel] = order.Parcel.image.url(:mini)
       end
 
       data << extra_data
@@ -276,21 +275,14 @@ class Api::OrdersController < ApiController
            :json => { success: true, info: 'SAVED'}
   end
 
-  private
-    def random_hash_id(number)
-      hash_id = Array.new
-      index = 0
-      while index < number
-        i = SecureRandom.random_number(alphanumericArray.size)
-        hash_id << alphanumericArray[i]
-        index += 1
-      end
-      return hash_id.join
-    end
+  def download_payment
+    order = Order.find_by!(download_payment_key: params[:payment_key])
 
-    def alphanumericArray
-      ['q','w','e','r','t','y','u','p','a','s','d','f','g','h','j','k','z',
-        'x','c','v','b','n','m','1','2','3','4','5','6','7','8','9','0']
+    if order.pay_img.present?
+      send_file order.pay_img.path
+    elsif order.pay_pdf.present?
+      send_file order.pay_pdf.path
     end
+  end
 
 end

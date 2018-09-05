@@ -314,6 +314,7 @@ Rails.application.routes.draw do
     post 'my_orders' => 'orders#create'
     post 'my_orders/:id/payment' => 'orders#upload_payment'
     post 'my_orders/:id/cancel' => 'orders#cancel'
+    get 'orders/get_payment/:payment_key' => 'orders#download_payment'
     get 'orders/payment_steps' => 'orders#payment_steps'
     get 'orders/available_banks' => 'orders#available_banks'
     post 'orders/update_payment_method' => 'orders#update_payment_method'

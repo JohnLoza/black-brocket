@@ -5,8 +5,14 @@ class Api::WorkersApi::DistributorsController < ApiController
     order = Order.find_by!(hash_id: params[:id])
     distributor = order.Distributor
 
+    unless distributor
+      render :status => 200,
+             :json => { :success => false, :info => "DISTRIBUTOR_NOT_FOUND" }
+    end
+
     data = Hash.new
     city = distributor.City
+
 
     data = {address: "", city: city.name, state: city.State.name, username: distributor.username, name: distributor.name,
             lastname: distributor.lastname, mother_lastname: distributor.mother_lastname,

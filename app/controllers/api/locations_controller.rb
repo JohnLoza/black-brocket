@@ -1,5 +1,4 @@
 class Api::LocationsController < ApiController
-  skip_before_action :authenticate_user!
 
   def states
     states = State.order_by_name

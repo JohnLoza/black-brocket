@@ -21,7 +21,7 @@
   				<div class="col-sm-12 form-group">
   					<%= f.label :name, "Nombre(s) / Razón Social", id:"label_name" %>
             <%= f.text_field :name, class: 'form-control form-control-black',
-                  maxlength: 99, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+                  maxlength: 99, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
             <span class="help-text">Solo se admite letras, espacios y puntos para nombre y appellidos</span>
   				</div>
   			</div><!-- .row -->
@@ -32,7 +32,7 @@
     				<div class="col-sm-12 form-group">
     					<%= f.label :lastname, "Apellido paterno" %>
               <%= f.text_field :lastname, class: 'form-control form-control-black',
-                    maxlength: 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+                    maxlength: 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
     				</div>
     			</div><!-- .row -->
 
@@ -40,7 +40,7 @@
     				<div class="col-sm-12 form-group">
     					<%= f.label :mother_lastname, "Apellido materno" %>
               <%= f.text_field :mother_lastname, class: 'form-control form-control-black',
-                      maxlength: 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúü\\s\\.']+$/" %>
+                      maxlength: 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
             </div>
     			</div><!-- .row -->
         </div>

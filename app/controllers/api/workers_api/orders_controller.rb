@@ -1,5 +1,7 @@
 class Api::WorkersApi::OrdersController < ApiController
-  @@user_type = :site_worker
+  before_action do
+    authenticate_user!(:site_worker)
+  end
 
   def count
     orders_count = Order.where(state: "PAYMENT_ACCEPTED", warehouse_id: @current_user.warehouse_id).size
@@ -10,11 +12,21 @@ class Api::WorkersApi::OrdersController < ApiController
 
   def index
     orders = Order.where(state: "PAYMENT_ACCEPTED", warehouse_id: @current_user.warehouse_id)
-              .order(created_at: :asc).paginate(page: params[:page], per_page: 25)
+              .order(created_at: :asc).paginate(page: params[:page], per_page: 25).includes(:Client, :Distributor)
 
     data = Array.new
     orders.each do |order|
-      data << {folio: order.hash_id, date: order.created_at, client: order.client_id, distributor: order.distributor_id}
+      client = order.Client
+      distributor = order.Distributor
+      hash = {folio: order.hash_id, date: order.created_at, client: order.client_id,
+        client_avatar: client.avatar_url, client_username: client.username,
+        distributor: order.distributor_id, distributor_avatar: nil, distributor_username: nil}
+
+      if distributor
+        hash[:distributor_avatar] = distributor.avatar_url
+        hash[:distributor_username] = distributor.username
+      end
+      data << hash
     end
 
     render :status => 200,

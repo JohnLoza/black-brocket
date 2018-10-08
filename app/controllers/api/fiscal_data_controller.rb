@@ -1,5 +1,7 @@
 class Api::FiscalDataController < ApiController
-  @@user_type = :client
+  before_action do
+    authenticate_user!(:client)
+  end
 
   def show
     fiscal_data = @current_user.FiscalData

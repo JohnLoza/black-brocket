@@ -1,8 +1,4 @@
 class ApiController < ActionController::API
-  before_action :authenticate_user!
-
-  @@user_type = :default
-
   # rescue_from Exception, with: :method not working somehow
   rescue_from ActiveRecord::RecordNotFound do |e|
     render_404
@@ -17,10 +13,11 @@ class ApiController < ActionController::API
     render_404
   end
 
-  def authenticate_user!
+  def authenticate_user!(type)
+    render_authentication_error and return unless type.present?
     render_authentication_error and return unless params[:authentication_token].present?
 
-    case @@user_type
+    case type
     when :site_worker
       model = SiteWorker
     when :distributor
@@ -34,7 +31,7 @@ class ApiController < ActionController::API
     @current_user = model.find_by(authentication_token: params[:authentication_token])
     render_authentication_error and return unless @current_user.present?
 
-    if @@user_type == :site_worker
+    if type == :site_worker
       deny_access! and return unless @current_user.has_permission?('orders@capture_batches')
     end
   end

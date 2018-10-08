@@ -1,5 +1,7 @@
 class Api::DistributorApi::CommissionsController < ApiController
-  @@user_type = :distributor
+  before_action do
+    authenticate_user!(:distributor)
+  end
 
   def index
     commissions = @current_user.Commissions.order(created_at: :desc)

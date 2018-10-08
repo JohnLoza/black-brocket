@@ -1,5 +1,7 @@
 class Api::DistributorApi::OrdersController < ApiController
-  @@user_type = :distributor
+  before_action do
+    authenticate_user!(:distributor)
+  end
 
   def index
     if params[:client].blank?

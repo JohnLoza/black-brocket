@@ -1,5 +1,7 @@
 class Api::WorkersApi::ClientsController < ApiController
-  @@user_type = :site_worker
+  before_action do
+    authenticate_user!(:site_worker)
+  end
 
   def show
     order = Order.find_by!(hash_id: params[:id])

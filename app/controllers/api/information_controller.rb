@@ -1,6 +1,9 @@
 class Api::InformationController < ApiController
-  skip_before_action :authenticate_user!, except: :ecart_info
-  @@user_type = :client
+
+  before_action only: :ecart_info do
+    authenticate_user!(:client)
+  end
+  
   @@base_file_path = "app/views"
   @@replaceable_path = "/shared/tips_recipes/"
 

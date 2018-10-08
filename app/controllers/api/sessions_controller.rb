@@ -1,5 +1,7 @@
 class Api::SessionsController < ApiController
-  skip_before_action :authenticate_user!, only: :create
+  before_action except: :create do
+    authenticate_user!(:client)
+  end
 
   def create
     user_type = nil

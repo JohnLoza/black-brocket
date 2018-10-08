@@ -1,5 +1,7 @@
 class Api::DistributorApi::ClientsController < ApiController
-  @@user_type = :distributor
+  before_action do
+    authenticate_user!(:distributor)
+  end
 
   def index
     region_ids = @current_user.Regions.map(&:id)

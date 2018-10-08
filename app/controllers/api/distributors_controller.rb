@@ -1,6 +1,7 @@
 class Api::DistributorsController < ApiController
-  skip_before_action :authenticate_user!, only: :create_candidate
-  @@user_type = :client
+  before_action do
+    authenticate_user!(:client)
+  end
 
   def create_candidate
     candidate = DistributorCandidate.new(distributor_request_params)
@@ -16,9 +17,15 @@ class Api::DistributorsController < ApiController
   def show
     distributor_is_a_worker = false
     distributor = @current_user.City.Distributor
+
     if !distributor and !@current_user.worker_id.blank?
       distributor = @current_user.Worker
       distributor_is_a_worker = true
+    end
+
+    unless distributor
+      render :status => 200,
+             :json => { :success => false, :info => "DISTRIBUTOR_NOT_FOUND" } and return
     end
 
     city = distributor.City

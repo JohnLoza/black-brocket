@@ -3,7 +3,7 @@ class DistributorCandidate < ApplicationRecord
 
   validates :name, :lastname, :city_id, :email, presence: true
   validates :name, :lastname, :mother_lastname,
-        format: { with: /\A[a-zA-ZÑñáéíóúü\s\.']+\z/ }
+        format: { with: /\A[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\s\.']+\z/ }
 
   def getFullName
     return self.name + " " + self.lastname + " " + self.mother_lastname

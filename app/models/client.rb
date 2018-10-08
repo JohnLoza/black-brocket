@@ -6,7 +6,7 @@ class Client < ApplicationRecord
   attr_accessor :remember_token
 
   before_save { self.email = email.downcase }
-  before_save { self.validate_email_digest = self.new_token }
+  before_create { self.validate_email_digest = self.new_token }
   has_secure_password
 
   belongs_to :City, foreign_key: :city_id
@@ -34,7 +34,7 @@ class Client < ApplicationRecord
   validates :email_confirmation, :presence =>true, :on => :create
 
   validates :name, :lastname, :mother_lastname,
-        format: { with: /\A[a-zA-ZÑñáéíóúü\s\.']+\z/ }
+        format: { with: /\A[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\s\.']+\z/ }
 
   mount_uploader :photo, AvatarUploader
 

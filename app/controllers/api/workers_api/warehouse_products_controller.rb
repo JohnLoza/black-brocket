@@ -1,5 +1,7 @@
 class Api::WorkersApi::WarehouseProductsController < ApiController
-  @@user_type = :site_worker
+  before_action do
+    authenticate_user!(:site_worker)
+  end
 
   def index
     warehouse_products = @current_user.Warehouse.Products.joins(:Product).where(:describes_total_stock => true, products: {deleted_at: nil}).includes(:Product).order("products.name asc").paginate(page: params[:page], per_page: 20)

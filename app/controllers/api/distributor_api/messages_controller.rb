@@ -1,5 +1,7 @@
 class Api::DistributorApi::MessagesController < ApiController
-  @@user_type = :distributor
+  before_action do
+    authenticate_user!(:distributor)
+  end
 
   def index
     if params[:notification].present?

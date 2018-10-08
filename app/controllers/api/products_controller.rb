@@ -1,5 +1,7 @@
 class Api::ProductsController < ApiController
-  @@user_type = :client
+  before_action do
+    authenticate_user!(:client)
+  end
 
   @@base_file_path = "app/views"
   @@replaceable_path = "/shared/products/"
@@ -8,7 +10,7 @@ class Api::ProductsController < ApiController
     warehouse = @current_user.City.State.Warehouse
     unless warehouse
       render :status => 200,
-             :json => { :success => false, :info => "WAREHOUSE_NOT_FOUND" }
+             :json => { :success => false, :info => "WAREHOUSE_NOT_FOUND" } and return
     end
 
     if params[:category] and ["hot","cold","frappe"].include? params[:category]

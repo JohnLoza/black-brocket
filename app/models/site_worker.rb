@@ -30,7 +30,7 @@ class SiteWorker < ApplicationRecord
   validates :email, :confirmation => true
 
   validates :name, :lastname, :mother_lastname,
-        format: { with: /\A[a-zA-ZÑñáéíóúü\s\.']+\z/ }
+        format: { with: /\A[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\s\.']+\z/ }
 
   mount_uploader :photo, AvatarUploader
 

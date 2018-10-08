@@ -1,6 +1,8 @@
 class Api::UsersController < ApiController
-  skip_before_action :authenticate_user!, only: :create
-  @@user_type = :client
+  
+  before_action except: :create do
+    authenticate_user!(:client)
+  end
 
   def create
     client = Client.new(user_params)
@@ -104,7 +106,7 @@ class Api::UsersController < ApiController
 
   private
   def user_params
-    params.require(:client).permit(:username, :email,
+    params.require(:client).permit(:username, :email, :email_confirmation,
                                    :street, :col, :intnumber, :extnumber,
                                    :cp, :street_ref1, :street_ref2, :telephone,
                                    :password, :password_confirmation, :birthday,
@@ -115,5 +117,19 @@ class Api::UsersController < ApiController
   def visit_params
     params.require(:distributor_visit).permit(:client_recognizes_visit,
                                        :treatment_answer, :extra_comments)
+  end
+
+  def generateAlphKey(letter, number)
+    if number <= 9
+      new_key = "000"+(number).to_s
+    elsif number >= 10 and number < 100
+      new_key = "00"+(number).to_s
+    elsif number >= 100 and number < 1000
+      new_key = "0"+(number).to_s
+    else
+      new_key = (number).to_s
+    end
+
+    return letter + new_key
   end
 end

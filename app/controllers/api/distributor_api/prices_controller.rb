@@ -1,5 +1,7 @@
 class Api::DistributorApi::PricesController < ApiController
-  @@user_type = :distributor
+  before_action do
+    authenticate_user!(:distributor)
+  end
 
   def index
     client = Client.find_by!(hash_id: params[:id])

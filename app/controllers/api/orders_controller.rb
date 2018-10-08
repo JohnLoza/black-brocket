@@ -1,5 +1,7 @@
 class Api::OrdersController < ApiController
-  @@user_type = :client
+  before_action do
+    authenticate_user!(:client)
+  end
 
   def index
     orders = @current_user.Orders.where.not(state: "ORDER_CANCELED").order(created_at: :desc).paginate(:page => params[:page], :per_page => 10).includes(City: :State)

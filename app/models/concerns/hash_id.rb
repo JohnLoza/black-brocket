@@ -16,7 +16,7 @@ module HashId
   private
   def generate_hash_id
     loop do
-      self.hash_id = Utils.new_alphanumeric_token
+      self.hash_id = Utils.new_alphanumeric_token unless self.hash_id.present?
       break unless hash_id_taken?(self.hash_id)
     end
   end

@@ -346,6 +346,7 @@ Rails.application.routes.draw do
       get "order/:id/client" => "clients#show"
       get "order/:id/distributor" => "distributors#show"
       get "warehouse_products" => "warehouse_products#index"
+      get "warehouse_products/existence" => "warehouse_products#existence"
 
       get "orders/count" => "orders#count"
       get "orders" => "orders#index"

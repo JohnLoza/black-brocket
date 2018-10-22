@@ -13,7 +13,7 @@ class CreateBank < ActiveRecord::Migration[5.1]
     add_column :bank_accounts, :bank_id, :integer
 
     create_table :bank_report_views do |t|
-      t.integer :worker_id
+      t.bigint :worker_id
       t.date :from_date
       t.date :to_date
       t.string :details

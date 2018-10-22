@@ -12,6 +12,12 @@
     						<i class="fa fa-truck"></i> Envíos a mi almacén
     					<% end %>
             <% end %>
+
+            <% if @current_user.has_permission?('warehouse_manager@update_stock') %>
+              <%= link_to(admin_inventory_reports_path, class: "btn btn-white btn-sm full-width") do %>
+                <i class="fa fa-file-text-o"></i> Reportes de Inventario
+              <% end %>
+            <% end %>
   				</div>
   			</div>
 

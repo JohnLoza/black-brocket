@@ -16,7 +16,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # clients #
     create_table :clients do |t|
-      t.integer :city_id
+      t.bigint :city_id
       t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :email
       t.boolean :email_verified, default: false
@@ -46,7 +46,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # distributors #
     create_table :distributors do |t|
-      t.integer :city_id
+      t.bigint :city_id
       t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :name
       t.string :lastname
@@ -72,8 +72,8 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # fiscal_data #
     create_table :fiscal_data do |t|
-      t.integer :client_id
-      t.integer :city_id
+      t.bigint :client_id
+      t.bigint :city_id
       t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :rfc
       t.string :name
@@ -92,7 +92,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # notifications #
     create_table :notifications do |t|
-      t.integer :client_id
+      t.bigint :client_id
       t.string :icon
       t.string :url
       t.string :description
@@ -104,9 +104,9 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # orders #
     create_table :orders do |t|
-      t.integer :client_id
-      t.integer :city_id
-      t.integer :distributor_id
+      t.bigint :client_id
+      t.bigint :city_id
+      t.bigint :distributor_id
       t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :address
       t.decimal :total, precision: 8, scale: 2
@@ -125,11 +125,11 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # order_details #
     create_table :order_details do |t|
-      t.integer :order_id
-      t.integer :product_id
-      t.integer :w_product_id
+      t.bigint :order_id
+      t.bigint :product_id
+      t.bigint :w_product_id
       t.string :hash_id, null: false, collation: "utf8_bin"
-      t.integer :quantity
+      t.bigint :quantity
       t.decimal :sub_total, precision: 8, scale: 2
 
       t.timestamps
@@ -139,7 +139,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # permissions #
       create_table :permissions do |t|
-        t.integer :worker_id
+        t.bigint :worker_id
         t.string :category
         t.string :name
       end
@@ -148,8 +148,8 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # prod_answers #
     create_table :prod_answers do |t|
-      t.integer :question_id
-      t.integer :site_worker_id
+      t.bigint :question_id
+      t.bigint :site_worker_id
       t.text :description
 
       t.timestamps
@@ -158,7 +158,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # prod_photos #
     create_table :prod_photos do |t|
-      t.integer :product_id
+      t.bigint :product_id
       t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :photo
       t.boolean :is_principal, :default => false
@@ -170,8 +170,8 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # prod_questions #
     create_table :prod_questions do |t|
-      t.integer :product_id
-      t.integer :client_id
+      t.bigint :product_id
+      t.bigint :client_id
       t.string :hash_id, null: false, collation: "utf8_bin"
       t.text :description
       t.boolean :answered, default: false
@@ -205,8 +205,8 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # site_workers #
     create_table :site_workers do |t|
-      t.integer :city_id
-      t.integer :warehouse_id
+      t.bigint :city_id
+      t.bigint :warehouse_id
       t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :name
       t.string :lastname
@@ -291,7 +291,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # warehouses #
     create_table :warehouses do |t|
-      t.integer :city_id
+      t.bigint :city_id
       t.string :hash_id, null: false, collation: "utf8_bin"
       t.string :name
       t.string :address
@@ -308,10 +308,10 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
     # warehouse_products #
     create_table :warehouse_products do |t|
       t.string :hash_id, null: false, collation: "utf8_bin"
-      t.integer :warehouse_id
-      t.integer :product_id
-      t.integer :existence, default: 0
-      t.integer :min_stock
+      t.bigint :warehouse_id
+      t.bigint :product_id
+      t.bigint :existence, default: 0
+      t.bigint :min_stock
     end
     add_index :warehouse_products, :hash_id, unique: true
     # warehouse_products #

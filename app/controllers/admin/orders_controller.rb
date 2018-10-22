@@ -212,6 +212,7 @@ class Admin::OrdersController < AdminController
 
   def save_details
     deny_access! and return unless @current_user.has_permission?('orders@capture_batches')
+    deny_access! and return if params[:product_id].nil?
 
     success = false
     @order = Order.find_by!(hash_id: params[:id])

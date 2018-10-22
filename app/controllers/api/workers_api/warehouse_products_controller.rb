@@ -33,4 +33,34 @@ class Api::WorkersApi::WarehouseProductsController < ApiController
     render :status => 200,
            :json => { :success => true, :info => "DATA_RETURNED", :data => data }
   end
+
+  def create_inventory_report
+    unless params[:report].present?
+      render :status => 200,
+             :json => { :success => false, :info => "REPORT_DETAILS_REQUIRED" }
+      return
+    end
+
+    inventory_report = InventoryReport.new(inventory_report_params)
+    inventory_report.worker_id = @current_user.id
+    inventory_report.warehouse_id = @current_user.warehouse_id
+
+    if inventory_report.save
+      worker = SiteWorker.joins(:Permissions).where(permissions: {category: 'WAREHOUSE_MANAGER', name: 'UPDATE_STOCK'}).take
+
+      Notification.create(worker_id: worker.id, icon: "fa fa-file-text-o",
+        description: "Nuevo reporte de inventario", url: inventory_report_path(inventory_report.id))
+
+      render :status => 200,
+             :json => { :success => true, :info => "SAVED" }
+    else
+      render :status => 200,
+             :json => { :success => false, :info => "NOT_SAVED" }
+    end
+  end
+
+  private
+    def inventory_report_params
+      params.require(:report).permit(:product_id, :batch, :comment)
+    end
 end

@@ -1,0 +1,78 @@
+<% provide(:title, "Reportes de Inventario") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Reportes de Inventario", labels: ['Almacenes', 'Reportes de Inventario'], links: [admin_warehouses_path]} %>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <%= render "/shared/warehouse_head_bar" %>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox">
+        	<div class="ibox-content">
+
+        			<div class="row m-b-sm m-t-sm">
+                <div class="col-md-12">
+                  <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
+                </div>
+        			</div>
+
+        			<table class="footable table table-stripped  toggle-arrow-tiny" data-page-size="15" data-filter=#filter>
+        					<thead>
+          					<tr>
+                        <th data-sort-ignore="true"></th>
+                        <th>Emitió</th>
+          					    <th>Producto</th>
+          					    <th>Número de Lote</th>
+                        <th>Fecha de Registro</th>
+                        <th>Acciones</th>
+          					</tr>
+        					</thead>
+        					<tbody>
+                    <% @reports.each do |report| %>
+                      <tr>
+                        <td></td>
+                        <td>
+                          <% worker = report.Worker %>
+                          <%= link_to worker.name, admin_site_worker_path(worker) %>
+                        </td>
+                        <td>
+                          <% product = report.Product%>
+                          <%= link_to product.name, admin_product_path(product) %>
+                        </td>
+                        <%= content_tag :td, report.batch %>
+                        <%= content_tag :td, l(report.created_at, format: :short) %>
+                        <td>
+                          <%= link_to "Ver detalles", admin_inventory_report_path(report), class: 'btn btn-sm btn-white' %>
+
+                          <% if report.done %>
+                            <i class="fa fa-check fa-2x" style="color: rgb(139, 195, 74)">
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+        					</tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="7">
+                        <div class="pull-right">
+                          <%= will_paginate @reports, renderer: BootstrapPagination::Rails %>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+        			</table>
+
+              <script>
+                  $(document).ready(function() {
+                      $('.footable').footable();
+                  });
+              </script>
+
+        	</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

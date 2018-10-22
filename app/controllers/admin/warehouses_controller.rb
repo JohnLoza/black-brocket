@@ -131,6 +131,31 @@ class Admin::WarehousesController < AdminController
     render :inventory, layout: false
   end
 
+  def inventory_reports
+    @warehouse = @current_user.Warehouse
+    @reports = InventoryReport.where(warehouse_id: @warehouse.id).order(created_at: :desc)
+      .paginate(page: params[:page], per_page: 25)
+  end
+
+  def inventory_report_details
+    @report = InventoryReport.find(params[:id])
+    @warehouse = @report.Warehouse
+
+    deny_access! and return unless @current_user.warehouse_id == @warehouse.id
+
+    if params[:notification].present?
+      notification = Notification.find(params[:notification])
+      notification.update_attributes(seen: true) unless notification.seen
+    end
+  end
+
+  def inventory_report_solved
+    @report = InventoryReport.find(params[:id])
+    @report.update_attributes(done: :true)
+    flash[:success] = 'Reporte guardado exitosamente.'
+    redirect_to admin_inventory_reports_path
+  end
+
   private
     def warehouse_params
       params.require(:warehouse).permit(:name, :address, :telephone, :shipping_cost, :wholesale)

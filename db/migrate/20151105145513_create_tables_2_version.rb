@@ -3,8 +3,8 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
   # Commissions #
     create_table :commissions do |t|
       t.string :hash_id, null: false, collation: "utf8_bin"
-      t.integer :distributor_id
-      t.integer :worker_id
+      t.bigint :distributor_id
+      t.bigint :worker_id
       t.decimal :total, precision: 8, scale: 2
       t.string :payment_img
       t.string :payment_pdf
@@ -19,8 +19,8 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     add_index :commissions, :deleted_at
 
     create_table :commission_details do |t|
-      t.integer :commission_id
-      t.integer :order_id
+      t.bigint :commission_id
+      t.bigint :order_id
     end
 
     add_column :distributors, :commission, :decimal, precision: 5, scale: 2
@@ -29,14 +29,14 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
 
   # Supervision #
     create_table :supervisor_visits do |t|
-      t.integer :worker_id
-      t.integer :client_id
+      t.bigint :worker_id
+      t.bigint :client_id
 
       t.timestamps
     end
 
     create_table :supervisor_visit_details do |t|
-      t.integer :visit_id
+      t.bigint :visit_id
       t.string :client_type
       # Profile #
       t.string :location
@@ -84,8 +84,8 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     end
 
     create_table :distributor_supervisions do |t|
-      t.integer :supervisor_id
-      t.integer :distributor_id
+      t.bigint :supervisor_id
+      t.bigint :distributor_id
 
       t.timestamps
     end
@@ -97,15 +97,15 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
 
   # New Distributor System #
     create_table :distributor_client_revisions do |t|
-      t.integer :distributor_id
-      t.integer :client_id
+      t.bigint :distributor_id
+      t.bigint :client_id
 
       t.timestamps
     end
 
     create_table :distributor_visits do |t|
-      t.integer :distributor_id
-      t.integer :client_id
+      t.bigint :distributor_id
+      t.bigint :client_id
       t.date :visit_date
       t.boolean :client_recognizes_visit
       t.string :treatment_answer
@@ -115,15 +115,15 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     end
 
     create_table :client_products do |t|
-      t.integer :client_id
-      t.integer :product_id
+      t.bigint :client_id
+      t.bigint :product_id
       t.decimal :client_price, precision: 8, scale: 2
 
       t.timestamps
     end
 
     create_table :distributor_candidates do |t|
-      t.integer :city_id
+      t.bigint :city_id
       t.string :name
       t.string :lastname
       t.string :mother_lastname
@@ -133,8 +133,8 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     end
 
     create_table :client_distributor_comments do |t|
-      t.integer :client_id
-      t.integer :distributor_id
+      t.bigint :client_id
+      t.bigint :distributor_id
       t.text :comment
       t.boolean :is_from_client
 
@@ -157,11 +157,11 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
 
   # New Warehouses System Using Batches #
     create_table :shipments do |t|
-      t.integer :origin_warehouse_id
-      t.integer :target_warehouse_id
-      t.integer :chief_id
-      t.integer :worker_id
-      t.integer :freight_worker_id
+      t.bigint :origin_warehouse_id
+      t.bigint :target_warehouse_id
+      t.bigint :chief_id
+      t.bigint :worker_id
+      t.bigint :freight_worker_id
       t.boolean :got_safe_to_destination
       t.string :shipment_type
 
@@ -169,17 +169,17 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     end
 
     create_table :shipment_details do |t|
-      t.integer :shipment_id
-      t.integer :product_id
-      t.integer :quantity
+      t.bigint :shipment_id
+      t.bigint :product_id
+      t.bigint :quantity
       t.string :batch
       t.string :expiration_date
     end
 
     create_table :shipment_difference_reports do |t|
-      t.integer :shipment_id
-      t.integer :worker_id
-      t.integer :chief_id
+      t.bigint :shipment_id
+      t.bigint :worker_id
+      t.bigint :chief_id
       t.boolean :reviewed, :default => false
       t.text :observations
 
@@ -187,9 +187,9 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     end
 
     create_table :shipment_difference_report_details do |t|
-      t.integer :difference_report_id
-      t.integer :shipment_detail_id
-      t.integer :difference
+      t.bigint :difference_report_id
+      t.bigint :shipment_detail_id
+      t.bigint :difference
     end
 
     add_column :warehouses, :shipping_cost, :decimal, :precision => 8, :scale => 2
@@ -201,14 +201,14 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
 
   # New Orders System #
     create_table :order_product_shipment_details do |t|
-      t.integer :order_id
-      t.integer :product_id
-      t.integer :quantity
+      t.bigint :order_id
+      t.bigint :product_id
+      t.bigint :quantity
       t.string :batch
     end
 
     create_table :parcels do |t|
-      t.integer :warehouse_id
+      t.bigint :warehouse_id
       t.string :parcel_name
       t.decimal :cost, :precision => 8, :scale => 2
       t.string :tracking_url
@@ -236,8 +236,8 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     end
 
     create_table :tip_recipe_comments do |t|
-      t.integer :tip_recipe_id
-      t.integer :client_id
+      t.bigint :tip_recipe_id
+      t.bigint :client_id
       t.text :comment
 
       t.timestamps
@@ -296,8 +296,8 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     add_column :commissions, :invoice_pdf, :string
 
     create_table :order_actions do |t|
-      t.integer :order_id
-      t.integer :worker_id
+      t.bigint :order_id
+      t.bigint :worker_id
       t.string :description
 
       t.timestamps

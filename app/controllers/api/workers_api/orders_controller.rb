@@ -37,7 +37,7 @@ class Api::WorkersApi::OrdersController < ApiController
     order = Order.find_by!(hash_id: params[:id])
 
     warehouse = order.Warehouse
-    details = order.Details
+    details = order.Details.includes(:Product)
 
     data = Hash.new
     data[:shipping_cost] = order.shipping_cost

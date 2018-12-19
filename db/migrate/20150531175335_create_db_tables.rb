@@ -17,7 +17,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
     # clients #
     create_table :clients do |t|
       t.bigint :city_id
-      t.string :hash_id, null: false, collation: "utf8_bin"
+      t.string :hash_id, null: false, collation: "UTF8"
       t.string :email
       t.boolean :email_verified, default: false
       t.string :username, unique: true
@@ -47,7 +47,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
     # distributors #
     create_table :distributors do |t|
       t.bigint :city_id
-      t.string :hash_id, null: false, collation: "utf8_bin"
+      t.string :hash_id, null: false, collation: "UTF8"
       t.string :name
       t.string :lastname
       t.string :mother_lastname
@@ -74,7 +74,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
     create_table :fiscal_data do |t|
       t.bigint :client_id
       t.bigint :city_id
-      t.string :hash_id, null: false, collation: "utf8_bin"
+      t.string :hash_id, null: false, collation: "UTF8"
       t.string :rfc
       t.string :name
       t.string :lastname
@@ -107,7 +107,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
       t.bigint :client_id
       t.bigint :city_id
       t.bigint :distributor_id
-      t.string :hash_id, null: false, collation: "utf8_bin"
+      t.string :hash_id, null: false, collation: "UTF8"
       t.string :address
       t.decimal :total, precision: 8, scale: 2
       t.string :pay_img
@@ -128,7 +128,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
       t.bigint :order_id
       t.bigint :product_id
       t.bigint :w_product_id
-      t.string :hash_id, null: false, collation: "utf8_bin"
+      t.string :hash_id, null: false, collation: "UTF8"
       t.bigint :quantity
       t.decimal :sub_total, precision: 8, scale: 2
 
@@ -159,7 +159,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
     # prod_photos #
     create_table :prod_photos do |t|
       t.bigint :product_id
-      t.string :hash_id, null: false, collation: "utf8_bin"
+      t.string :hash_id, null: false, collation: "UTF8"
       t.string :photo
       t.boolean :is_principal, :default => false
 
@@ -172,7 +172,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
     create_table :prod_questions do |t|
       t.bigint :product_id
       t.bigint :client_id
-      t.string :hash_id, null: false, collation: "utf8_bin"
+      t.string :hash_id, null: false, collation: "UTF8"
       t.text :description
       t.boolean :answered, default: false
 
@@ -183,7 +183,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # products #
     create_table :products do |t|
-      t.string :hash_id, null: false, collation: "utf8_bin"
+      t.string :hash_id, null: false, collation: "UTF8"
       t.string :name
       t.text :description
       t.decimal :price, precision: 8, scale: 2
@@ -207,7 +207,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
     create_table :site_workers do |t|
       t.bigint :city_id
       t.bigint :warehouse_id
-      t.string :hash_id, null: false, collation: "utf8_bin"
+      t.string :hash_id, null: false, collation: "UTF8"
       t.string :name
       t.string :lastname
       t.string :mother_lastname
@@ -292,7 +292,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
     # warehouses #
     create_table :warehouses do |t|
       t.bigint :city_id
-      t.string :hash_id, null: false, collation: "utf8_bin"
+      t.string :hash_id, null: false, collation: "UTF8"
       t.string :name
       t.string :address
       t.string :telephone
@@ -307,7 +307,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
 
     # warehouse_products #
     create_table :warehouse_products do |t|
-      t.string :hash_id, null: false, collation: "utf8_bin"
+      t.string :hash_id, null: false, collation: "UTF8"
       t.bigint :warehouse_id
       t.bigint :product_id
       t.bigint :existence, default: 0

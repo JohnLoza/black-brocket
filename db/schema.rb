@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
 
   create_table "clients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "city_id"
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.string "email"
     t.boolean "email_verified", default: false
     t.string "username"
@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
   end
 
   create_table "commissions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.integer "distributor_id"
     t.integer "worker_id"
     t.decimal "total", precision: 8, scale: 2
@@ -173,7 +173,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
 
   create_table "distributors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "city_id"
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.string "name"
     t.string "lastname"
     t.string "mother_lastname"
@@ -208,7 +208,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
   create_table "fiscal_data", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "client_id"
     t.integer "city_id"
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.string "rfc"
     t.string "name"
     t.string "lastname"
@@ -268,7 +268,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
     t.integer "order_id"
     t.integer "product_id"
     t.integer "w_product_id"
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.integer "quantity"
     t.decimal "sub_total", precision: 8, scale: 2
     t.datetime "created_at", null: false
@@ -292,7 +292,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
     t.integer "client_id"
     t.integer "city_id"
     t.integer "distributor_id"
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.string "address"
     t.decimal "total", precision: 8, scale: 2
     t.string "pay_img"
@@ -347,7 +347,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
 
   create_table "prod_photos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "product_id"
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.string "photo"
     t.boolean "is_principal", default: false
     t.datetime "created_at", null: false
@@ -358,7 +358,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
   create_table "prod_questions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "product_id"
     t.integer "client_id"
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.text "description"
     t.boolean "answered", default: false
     t.datetime "created_at", null: false
@@ -367,7 +367,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
   end
 
   create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.string "name"
     t.string "description_render_path"
     t.decimal "price", precision: 8, scale: 2
@@ -430,7 +430,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
   create_table "site_workers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "city_id"
     t.integer "warehouse_id"
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.string "name"
     t.string "lastname"
     t.string "mother_lastname"
@@ -548,7 +548,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
   end
 
   create_table "warehouse_products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.integer "warehouse_id"
     t.integer "product_id"
     t.integer "existence", default: 0
@@ -563,7 +563,7 @@ ActiveRecord::Schema.define(version: 20181019174153) do
 
   create_table "warehouses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "city_id"
-    t.string "hash_id", null: false, collation: "UTF8"
+    t.string "hash_id", null: false
     t.string "name"
     t.string "address"
     t.string "telephone"

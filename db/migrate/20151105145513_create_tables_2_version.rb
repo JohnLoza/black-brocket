@@ -2,7 +2,7 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
   def change
   # Commissions #
     create_table :commissions do |t|
-      t.string :hash_id, null: false, collation: "UTF8"
+      t.string :hash_id, null: false
       t.bigint :distributor_id
       t.bigint :worker_id
       t.decimal :total, precision: 8, scale: 2

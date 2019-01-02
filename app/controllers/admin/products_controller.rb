@@ -96,7 +96,7 @@ class Admin::ProductsController < AdminController
     deny_access! and return unless @current_user.has_permission?('products@update_product_data')
     @product = Product.find_by!(hash_id: params[:id])
 
-    @photo = ProdPhoto.find_by!(params[:photo_id])
+    @photo = ProdPhoto.find_by!(hash_id: params[:photo_id])
     if @photo.product_id == @product.id
       ProdPhoto.by_product(@product.id).principal.take.update_attributes(is_principal: false)
       @photo.update_attributes(is_principal: true)
@@ -166,7 +166,7 @@ class Admin::ProductsController < AdminController
       return unless options[:photo].present?
       options[:principal] = false unless options[:principal].present?
 
-      if options[:principal] = true
+      if options[:principal] == true
         current_principal = ProdPhoto.by_product(@product.id).principal.take
         current_principal.update_attributes(is_principal: false) if current_principal
       end

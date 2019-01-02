@@ -7,7 +7,7 @@ class AdminController < ApplicationController
   def authenticate_user!
     unless logged_in?
       store_location
-      redirect_to log_in_path
+      redirect_to log_in_path and return
     end
 
     redirect_to root_path unless session[:user_type] == "w"

@@ -10,7 +10,7 @@ class Admin::WebController < AdminController
     deny_access! and return unless @current_user.has_permission?('web@gallery_images')
 
     @photos = WebPhoto.where(name: "GALLERY")
-    @log_in_initial = WebPhoto.where('name != "GALLERY"')
+    @log_in_initial = WebPhoto.where.not(name: "GALLERY")
     @new_photo = WebPhoto.new
   end
 

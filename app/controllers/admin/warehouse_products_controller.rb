@@ -76,7 +76,7 @@ class Admin::WarehouseProductsController < AdminController
     end
 
     session[:shipment_products] = Hash.new if session[:shipment_products].nil?
-    session[:shipment_products] = { :warehouse => params[:warehouse_id] }
+    session[:shipment_products][:warehouse] = params[:warehouse_id] unless session[:shipment_products][:warehouse].present?
 
     @hash = Hash.new
     @hash_id = random_hash_id(12).upcase

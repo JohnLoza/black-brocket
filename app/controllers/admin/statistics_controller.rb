@@ -49,7 +49,7 @@ class Admin::StatisticsController < AdminController
 
     @details = OrderDetail.select(selection).joins(Order: :Distributor)
                   .where.not(orders: {:state => @@noProcessableOrders})
-                  .group("dist_id").order("sum_q desc").limit(params[:dist_quantity])
+                  .group("dist_id, dist_username").order("sum_q desc").limit(params[:dist_quantity])
 
     @dist_names = @details.map{|detail| detail.dist_username}.to_json
   end
@@ -61,7 +61,7 @@ class Admin::StatisticsController < AdminController
 
     @details = OrderDetail.select(selection).joins(Order: :Client)
                   .where.not(orders: {:state => @@noProcessableOrders})
-                  .group("client_id").order("sum_q desc").limit(params[:client_quantity])
+                  .group("client_id, client_username").order("sum_q desc").limit(params[:client_quantity])
 
     @client_names = @details.map{|detail| detail.client_username}.to_json
   end

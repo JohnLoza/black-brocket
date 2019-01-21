@@ -14,9 +14,9 @@ class Admin::WelcomeController < AdminController
     deny_access! and return unless @current_user.has_permission?('comments_and_suggestions@answer')
 
     suggestion = Suggestion.find(params[:id])
-    sugestion.update_attributes(answered: true)
+    suggestion.update_attributes(answered: true)
 
-    flash[:success] = "Respuesta a #{s.name} enviada!."
+    flash[:success] = "Respuesta a #{suggestion.name} enviada!."
     redirect_to admin_suggestions_path
   end
 

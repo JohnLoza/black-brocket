@@ -81,7 +81,7 @@
         <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>
           <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id), remote: true,
                 class: 'darklink label-custom-2', style: 'cursor:pointer; color: #FEFEFE;' do %>
-            <span class="fa fa-exclamation fa-rotate-180"></span> Información para realizar el pago...
+            <span class="btn btn-custom-1 btn-sm pull-right"> <strong>Información para pagar</strong></span><br>
           <% end %>
         <% else %>
           <!--span class="icon-check" style="font-size: 20px;color: #F5D76E;"></span> <b>Orden pagada con exito</b-->
@@ -97,8 +97,8 @@
               :onchange => "$('#pay_img_commit_#{o.hash_id}').click();" %></br>
         </div>
         <div class="col-sm-4">
-          <i onclick="$('#field_<%=o.hash_id%>').click();"
-             class="btn btn-custom-1 btn-sm pull-right">Enviar comprobante de pago</i>
+          <span onclick="$('#field_<%=o.hash_id%>').click();"
+             class="btn btn-custom-1 btn-sm pull-right">Enviar comprobante de pago</span>
 
           <%= f.submit "Subir foto del pago".html_safe,
               id: "pay_img_commit_#{o.hash_id}", style: "display: none;" %>

@@ -1,6 +1,6 @@
 class Client::ClientsController < ApplicationController
-  before_action :logged_in?, except:  [ :new, :create ]
-  before_action :current_user_is_a_client?, except:  [ :new, :create ]
+  before_action :logged_in?, except:  [ :new, :create, :email_confirmation ]
+  before_action :current_user_is_a_client?, except:  [ :new, :create, :email_confirmation ]
 
   def distributor
     if params[:notification]
@@ -155,7 +155,7 @@ class Client::ClientsController < ApplicationController
 
   def email_confirmation
     @user = Client.find_by!(validate_email_digest: params[:token])
-    @user.update_attributes(email_verified: true)
+    @user.update_attributes(email_verified: true, validate_email_digest: nil)
   end
 
   def resend_email_confirmation

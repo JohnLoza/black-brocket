@@ -45,9 +45,17 @@ class Api::WorkersApi::WarehouseProductsController < ApiController
     inventory_report.worker_id = @current_user.id
     inventory_report.warehouse_id = @current_user.warehouse_id
 
-    if inventory_report.save
-      worker = SiteWorker.joins(:Permissions).where(permissions: {category: 'WAREHOUSE_MANAGER', name: 'UPDATE_STOCK'}).take
+    worker = SiteWorker.joins(:Permissions)
+      .where(warehouse_id: @current_user.warehouse_id)
+      .where(permissions: {category: 'WAREHOUSE_MANAGER', name: 'UPDATE_STOCK'}).take
 
+    unless worker.present?
+      render :status => 200,
+             :json => { :success => false, :info => "NO_ONE_TO_REPORT_AT" }
+      return
+    end
+
+    if inventory_report.save
       Notification.create(worker_id: worker.id, icon: "fa fa-file-text-o",
         description: "Nuevo reporte de inventario", url: inventory_report_path(inventory_report.id))
 

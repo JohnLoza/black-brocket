@@ -36,10 +36,10 @@ class Admin::CommissionsController < AdminController
     total = (total * @distributor.commission) / 100
 
     commission = Commission.new({hash_id: Utils.new_alphanumeric_token.upcase,
-      distributor_id: @distributor_id, worker_id: @current_user.id,
+      distributor_id: @distributor.id, worker_id: @current_user.id,
       state: 'WAITING_FOR_PAYMENT', total: total })
     ActiveRecord::Base.transaction do
-      commission.save
+      commission.save!
       @orders.update_all(commission_in_progress: true)
       @orders.each do |o|
         CommissionDetail.create(commission_id: commission.id, order_id: o.id)

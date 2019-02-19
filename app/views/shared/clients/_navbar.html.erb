@@ -30,7 +30,7 @@
             <% end %>
             <span class="ecart-badge <%= "badge" if !session[:e_cart].nil? %>"
               style="background-color: #f0ad4e;position: absolute;top: 10px;left: 35px;">
-              <%= session[:e_cart].size if !session[:e_cart].nil? %>
+              <%= session[:e_cart].size - 1 if !session[:e_cart].nil? %>
             </span>
           </button>
 

@@ -74,13 +74,7 @@
         </div>
         <div class="col-md-2" >
           $ <label id="order-shipping-cost" style="font-size:20px;">
-            <% if @total >= @warehouse.wholesale %>
-              <% shipping_cost_is_present = "NO" %>
-              0.00
-            <% else %>
-              <% shipping_cost_is_present = "YES" %>
-              <%= @warehouse.shipping_cost %>
-            <% end %>
+            0.00
           </label> MXN
         </div>
 
@@ -88,20 +82,35 @@
           <strong>Total:</strong>
         </div>
         <div class="col-md-2" >
-          <% @total += @warehouse.shipping_cost if @total < @warehouse.wholesale %>
+          <% @total %>
           $ <label id="order-grand-total" style="font-size:20px;"><%= @total %></label> MXN
         </div>
   </div>
 
   <div class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;margin-bottom: 40px;">
     <%= form_tag client_create_order_path(@current_user.hash_id), method: :post do %>
-        <div class="col-sm-10 text-right">
-          <h3 class="iconbox-title">Método de pago</h3>
-          <% @banks.each do |bank| %>
-            <%= radio_button_tag 'payment_method', bank.id, required: true %>
+      <div class="row col-sm-12 text-right">
+        <h3 class="iconbox-title">Método de envío</h3>
+        <% @parcels.each do |parcel| %>
+          <div style="display: inline-block">
+            <%= radio_button_tag 'parcel_id', parcel.id, false,
+              onchange: "fetchParcelPrices(this)", required: true %>
+            <%= image_tag parcel.image.url(:mini) %><br>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="row col-sm-12 text-right">
+        <h3 class="iconbox-title">Método de pago</h3>
+        <% @banks.each do |bank| %>
+          <div style="display: inline-block">
+            <%= radio_button_tag 'payment_method', bank.id, false, required: true %>
             <%= image_tag bank.image.url(:mini) %><br>
-          <% end %>
-        </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="row col-sm-12" style="padding-top: 2em;">
         <div class="col-sm-10 text-right">
           <%= label_tag "invoice", "Requiero factura" %>&nbsp;&nbsp;
           <%= check_box_tag "invoice" %>
@@ -110,6 +119,7 @@
           <%= submit_tag "Comprar", class: "btn btn-block btn-custom-1",
               data: {confirm: "Seguro(a) de realizar la compra?"} %>
         </div>
+      </div>
     <% end %>
   </div>
 </div>
@@ -151,14 +161,11 @@
   <%= number_field_tag :current_existence, nil, step: 1 %>
 <% end %>
 
-<label id="shipping_cost" style="display: none;">
-  <%= @warehouse.shipping_cost %>
-</label>
 <label id="wholesale" style="display: none;">
   <%= @warehouse.wholesale %>
 </label>
 <label id="shipping_cost_is_present" style="display: none;">
-  <%= shipping_cost_is_present %>
+  NO
 </label>
 
 <script type="text/javascript">
@@ -172,6 +179,17 @@
   function money_format(number){
     return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
       return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
+    });
+  }
+
+  function fetchParcelPrices(trigger){
+    original_target = "<%= Rails.application.routes.url_helpers.client_ecart_parcel_prices_path(@current_user, 'replace_with_id', format: :js) %>";
+    new_target = original_target.replace("replace_with_id", trigger.value);
+    $.ajax({
+      url: new_target,
+      context: document.body
+    }).done(function(body) {
+      console.log("Parcel Prices Fetched");
     });
   }
 

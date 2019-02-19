@@ -3,7 +3,8 @@
   // save values into variables
   var product = "<%=params[:product]%>";
   var product_prev_cost = parseFloat($("#"+product+"-cost").text().replace(",",""));
-  var shipping_cost = parseFloat($("#shipping_cost").text());
+  var last_shipping_cost = parseFloat($("#order-shipping-cost").text());
+
   var wholesale = parseFloat($("#wholesale").text());
 
   // obtain the cost per unit of a product
@@ -20,7 +21,7 @@
   // obtain the current_sub_total
   var current_sub_total = current_grand_total;
   if($("#shipping_cost_is_present").text().trim() == "YES"){
-    current_sub_total = current_grand_total - shipping_cost;
+    current_sub_total = current_grand_total - last_shipping_cost;
     console.log("take out the shipping_cost!!!");
   } // if $("#shipping_cost_is_present").text() == "YES" end
   console.log("current_sub_total: " + current_sub_total);
@@ -30,12 +31,25 @@
   console.log("new_sub_total: " + new_sub_total);
   var new_shipping_cost = 0.00;
   var new_grand_total = 0;
+
   if(new_sub_total < wholesale){
     $("#shipping_cost_is_present").text("YES");
-    new_shipping_cost = shipping_cost;
+    
+    if(typeof parcel_prices !== 'undefined'){
+      found = false;
+      max_weight.every(function(value, index, array) {
+        if(value > <%= session[:e_cart]["total_weight"] %> && !found){
+          // set shipping price
+          new_shipping_cost = parcel_prices[index];
+          found = true;
+        }
+      });
+    }
+
   }else{
     $("#shipping_cost_is_present").text("NO");
   }
+
   console.log("new_shipping_cost: " + new_shipping_cost);
   new_grand_total = new_shipping_cost + new_sub_total;
   console.log("new_grand_total: " + new_grand_total);

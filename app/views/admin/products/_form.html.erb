@@ -107,6 +107,13 @@
                         required: true, maxlength: 50 %>
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><%= f.label :total_weight, "Peso total con Empaque (grs)" %></label>
+                <div class="col-sm-10">
+                  <%= f.number_field :total_weight, class: 'form-control', placeholder: "1535",
+                        required: true, min: 1, max: 999999, step: 1 %>
+                </div>
+              </div>
 
               <h3>Categorías</h3>
               <table class="table">

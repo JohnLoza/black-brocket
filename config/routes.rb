@@ -114,6 +114,13 @@ Rails.application.routes.draw do
     patch 'warehouses/:warehouse_id/parcel/:id' => 'parcels#update', as: :warehouse_parcel
     delete 'warehouses/:warehouse_id/parcel/:id' => 'parcels#destroy'
 
+    get 'warehouses/:warehouse_id/parcel/:id/prices' => 'parcel_prices#index', as: :warehouse_parcel_parcel_prices
+    get 'warehouses/:warehouse_id/parcel/:id/prices/new' => 'parcel_prices#new', as: :new_parcel_price
+    post 'warehouses/:warehouse_id/parcel/:id/prices' => 'parcel_prices#create'
+    get 'warehouses/:warehouse_id/parcel/:parcel_id/price/:id/edit' => 'parcel_prices#edit', as: :edit_parcel_price
+    patch 'warehouses/:warehouse_id/parcel/:parcel_id/price/:id' => 'parcel_prices#update', as: :warehouse_parcel_parcel_price
+    delete 'warehouses/:warehouse_id/parcel/:parcel_id/price/:id' => 'parcel_prices#destroy'
+
     # shipments #
     get 'chief/warehouses/:warehouse_id/shipments' => 'warehouse_products#chief_shipments', as: :chief_shipments
     post 'chief/warehouses/:warehouse_id/shipments' => 'warehouse_products#create_shipment'
@@ -265,6 +272,7 @@ Rails.application.routes.draw do
     put 'products/:id/add_to_cart' => 'ecarts#add_to_cart', as: :add_to_cart
     put 'user/:user_id/ecart/remove/:product' => "ecarts#remove_from_cart", as: :remove_from_cart
     put 'user/:user_id/ecart/change_quantity' => "ecarts#update_quantity", as: :ecart_update_quantity
+    get 'user/:user_id/ecart/parcel/:id/prices' => "ecarts#parcel_prices", as: :ecart_parcel_prices
 
     get 'user/:user_id/orders/' => "orders#index", as: :orders
     get 'user/:user_id/orders/:id' => "orders#show", as: :order

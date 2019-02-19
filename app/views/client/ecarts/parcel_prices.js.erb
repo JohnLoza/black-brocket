@@ -1,0 +1,36 @@
+// set prices and max weight
+var max_weight = new Array();
+var parcel_prices = new Array();
+
+<% @prices.each do |price| %>
+  parcel_prices.push(<%= price.price %>);
+  max_weight.push(<%= price.max_weight %>);
+<% end %>
+
+wholesale = parseFloat($("#wholesale").text());
+prev_total = $("#order-grand-total").text();
+
+found = false;
+// calculate total including shipping cost
+if(prev_total >= wholesale){
+  found = true;
+  $("#order-shipping-cost").text(money_format("0.00"));
+  $("#shipping_cost_is_present").text("NO");
+}
+
+max_weight.every(function(value, index, array) {
+
+  if(value > <%= session[:e_cart]["total_weight"] %> && !found){
+    // set shipping price
+    $("#order-shipping-cost").text(money_format(parcel_prices[index].toString()));
+    $("#shipping_cost_is_present").text("YES");
+
+    prev_total = parseFloat(prev_total);
+    new_total = prev_total + parcel_prices[index];
+
+    // replace total
+    $("#order-grand-total").text(money_format(new_total.toString()));
+    found = true;
+  }
+
+});

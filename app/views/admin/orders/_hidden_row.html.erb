@@ -32,9 +32,7 @@
   <%= form_tag(admin_capture_tracking_code_path(o.hash_id), method: :put) do %>
     <br>
     <%= label_tag :parcel_id, "Paquetería" %>
-    <%= select_tag :parcel_id, options_from_collection_for_select(
-        @parcels, :id, :parcel_name), prompt: :Selecciona,
-        class: "form-control m-b", required: true %>
+    <%= image_tag(o.Parcel.image.url(:mini)) %><br>
 
     <%= label_tag :tracking_code, "Código de rastreo" %>
     <%= text_field_tag :tracking_code, "",

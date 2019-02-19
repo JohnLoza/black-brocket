@@ -65,13 +65,13 @@ class Admin::OrdersController < AdminController
           .where(where_warehouse)
           .order(order_statement)
           .paginate(:page =>  params[:page], :per_page => 25)
-          .includes(City: :State).includes(:Distributor, :Client)
+          .includes(City: :State).includes(:Distributor, :Client, :Parcel)
     else
       @orders = Order.where(where_statement)
           .where(where_warehouse)
           .order(order_statement)
           .paginate(:page =>  params[:page], :per_page => 25)
-          .includes(City: :State).includes(:Distributor, :Client)
+          .includes(City: :State).includes(:Distributor, :Client, :Parcel)
     end # if !params[:distributor].nil? #
 
   end # def index #
@@ -314,7 +314,6 @@ class Admin::OrdersController < AdminController
     @order = Order.find_by!(hash_id: params[:id])
 
     @order.tracking_code = params[:tracking_code]
-    @order.parcel_id = params[:parcel_id]
     @order.state = "SENT"
     success = true if @order.save
 

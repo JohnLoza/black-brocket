@@ -52,6 +52,7 @@ class Client::OrdersController < ApplicationController
     @order.city_id = @current_user.city_id
     @order.invoice = params[:invoice] if params[:invoice]
     @order.payment_method = params[:payment_method]
+    @order.parcel_id = params[:parcel_id]
     @order.state = "WAITING_FOR_PAYMENT"
 
     @order.hash_id = random_hash_id(12).upcase
@@ -108,8 +109,14 @@ class Client::OrdersController < ApplicationController
 
     shipping_cost = 0.0
     if total < @warehouse.wholesale
-      total = total + @warehouse.shipping_cost
-      shipping_cost = @warehouse.shipping_cost
+      prices = Parcel.find(params[:parcel_id]).Prices.order(max_weight: :asc)
+      prices.each do |price|
+        if session[:e_cart]["total_weight"] < price.max_weight
+          shipping_cost = price.price
+          break
+        end
+      end
+      total = total + shipping_cost
     end
     @order.total = total
     @order.shipping_cost = shipping_cost

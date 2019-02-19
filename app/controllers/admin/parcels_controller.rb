@@ -12,8 +12,6 @@ class Admin::ParcelsController < AdminController
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @parcel = Parcel.new
-    # @url = admin_warehouse_parcels_path(params[:id])
-    # @method = :post
   end
 
   def create
@@ -27,10 +25,8 @@ class Admin::ParcelsController < AdminController
       flash[:success] = "Paquetería creada..."
       redirect_to admin_warehouse_parcels_path(@warehouse.hash_id)
     else
-      # @url = admin_warehouse_parcels_path(params[:id])
-      # @method = :post
       flash.now[:danger] = "Ocurrió un error al guardar la paquetería"
-      render :new_parcel
+      render :new
     end
   end
 
@@ -39,8 +35,6 @@ class Admin::ParcelsController < AdminController
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @parcel = Parcel.find(params[:id])
-    # @url = admin_warehouse_parcel_path(params[:warehouse_id], params[:id])
-    # @method = :put
   end
 
   def update
@@ -53,10 +47,8 @@ class Admin::ParcelsController < AdminController
       flash[:success] = "Paquetería actualizada..."
       redirect_to admin_warehouse_parcels_path(@warehouse.hash_id)
     else
-      # @url = admin_warehouse_parcel_path(params[:warehouse_id], params[:id])
-      # @method = :put
       flash.now[:danger] = "Ocurrió un error al guardar la paquetería"
-      render :new_parcel
+      render :edit
     end
   end
 
@@ -75,7 +67,7 @@ class Admin::ParcelsController < AdminController
 
   private
     def parcel_params
-      params.require(:parcel).permit(:parcel_name, :cost, :image, :tracking_url)
+      params.require(:parcel).permit(:parcel_name, :image, :tracking_url)
     end
 
 end

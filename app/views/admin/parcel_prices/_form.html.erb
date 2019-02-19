@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Datos de la paquetería</h5>
+          <div class="ibox-tools">
+            <a class="collapse-link">
+              <i class="fa fa-chevron-up"></i>
+            </a>
+          </div>
+        </div>
+        <div class="ibox-content">
+          <%= form_for([:admin, @warehouse, @parcel, @price], :html => {class: 'form-horizontal'}) do |f| %>
+          <%= render :partial=>'/shared/error_messages', locals:{entity: @price} %>
+            <div class="form-group">
+              <label class="col-sm-2 control-label"><%= f.label :max_weight, "Peso máximo en Kilogramos" %></label>
+              <div class="col-sm-10">
+                <%= f.number_field :max_weight, class: 'form-control', placeholder: "10", min: 1, max: 999, required: true %>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label"><%= f.label :price, "Precio" %></label>
+              <div class="col-sm-10">
+                <%= f.number_field :price, class: 'form-control', placeholder: "249.99",
+                  min: 0.11, max: 999999, step: 0.01, required: true %>
+              </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <div class="col-sm-4 col-sm-offset-2">
+                    <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
+                    <%= f.submit "Guardar cambios", class: "btn btn-primary" %>
+                </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+  </div>
+</div>

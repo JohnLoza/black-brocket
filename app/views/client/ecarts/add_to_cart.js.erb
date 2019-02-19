@@ -1,7 +1,7 @@
 <% if @quantity_is_correct %>
   badge = $(".ecart-badge");
   badge.addClass("badge");
-  badge.text("<%= session[:e_cart].size %>");
+  badge.text("<%= session[:e_cart].size - 1 %>");
   $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Añadido al carrito de compras.'} %>");
 <% else %>
   <% if params[:quantity].to_i <= 0 %>

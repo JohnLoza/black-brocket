@@ -9,6 +9,7 @@ var parcel_prices = new Array();
 
 wholesale = parseFloat($("#wholesale").text());
 prev_total = $("#order-grand-total").text();
+prev_total = parseFloat(prev_total);
 
 found = false;
 // calculate total including shipping cost
@@ -16,16 +17,18 @@ if(prev_total >= wholesale){
   found = true;
   $("#order-shipping-cost").text(money_format("0.00"));
   $("#shipping_cost_is_present").text("NO");
+  console.log("BIG SALE! skipping shipping_cost");
 }
 
-max_weight.every(function(value, index, array) {
-
+max_weight.forEach(function(value, index, array) {
+  console.log("iterating to find correct price");
+  console.log(value + " " + index + " ");
   if(value > <%= session[:e_cart]["total_weight"] %> && !found){
+    console.log("here! " + value + " " + index);
     // set shipping price
     $("#order-shipping-cost").text(money_format(parcel_prices[index].toString()));
     $("#shipping_cost_is_present").text("YES");
 
-    prev_total = parseFloat(prev_total);
     new_total = prev_total + parcel_prices[index];
 
     // replace total

@@ -37,7 +37,7 @@
     
     if(typeof parcel_prices !== 'undefined'){
       found = false;
-      max_weight.every(function(value, index, array) {
+      max_weight.forEach(function(value, index, array) {
         if(value > <%= session[:e_cart]["total_weight"] %> && !found){
           // set shipping price
           new_shipping_cost = parcel_prices[index];

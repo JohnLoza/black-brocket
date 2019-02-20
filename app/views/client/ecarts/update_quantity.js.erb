@@ -3,7 +3,7 @@
   // save values into variables
   var product = "<%=params[:product]%>";
   var product_prev_cost = parseFloat($("#"+product+"-cost").text().replace(",",""));
-  var last_shipping_cost = parseFloat($("#order-shipping-cost").text());
+  var last_shipping_cost = parseFloat($("#order-shipping-cost").text().replace(",",""));
 
   var wholesale = parseFloat($("#wholesale").text());
 
@@ -22,7 +22,6 @@
   var current_sub_total = current_grand_total;
   if($("#shipping_cost_is_present").text().trim() == "YES"){
     current_sub_total = current_grand_total - last_shipping_cost;
-    console.log("take out the shipping_cost!!!");
   } // if $("#shipping_cost_is_present").text() == "YES" end
   console.log("current_sub_total: " + current_sub_total);
 

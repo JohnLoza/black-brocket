@@ -3,6 +3,7 @@
       <%= image_tag(parcel.image.url(:mini)) unless parcel.image.blank? %>
     </td>
     <td><%= parcel.parcel_name %></td>
+    <td><%= parcel.delivery_time %></td>
     <td><%= l(parcel.created_at, format: :long) %></td>
     <td><%= l(parcel.updated_at, format: :long) %></td>
     <td>

@@ -17,12 +17,9 @@
     <%end%>
   </td>
   <td class="text-center">
-    <% if !commission.payment_img.blank? %>
-      <%= link_to image_tag(commission.payment_img.url(:mini), class: "img-rounded", :style =>"width:60px;"),
-          image_path(commission.payment_img.url), :data => {:toggle => "lightbox", :title => "Pago de la comisión: " + commission.hash_id } %>
-    <% elsif !commission.payment_pdf.blank? %>
+    <% if commission.payment_img.present? or commission.payment_pdf.present? %>
       <%= link_to "<i class='fa fa-file-pdf-o fa-5x'></i>".html_safe,
-          commission.payment_pdf.url, target: "_blank" %>
+          admin_download_commission_payment_path(commission.hash_id), target: "_blank" %>
     <% end %>
   </td>
   <td><%= l(Time.parse(commission.payment_day), format: :long) if !commission.payment_day.blank? %></td>

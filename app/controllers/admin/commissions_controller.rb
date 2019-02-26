@@ -79,6 +79,19 @@ class Admin::CommissionsController < AdminController
     redirect_to admin_commissions_path
   end
 
+  def download_payment
+    deny_access! and return unless @current_user.has_permission_category?('commissions')
+
+    commission = Commission.find_by!(hash_id: params[:id])
+
+    render_404 and return unless commission.payment_pdf.present? or commission.payment_img.present?
+
+    file_path = commission.payment_pdf.path if commission.payment_pdf.present?
+    file_path = commission.payment_img.path if commission.payment_img.present?
+
+    send_file file_path
+  end
+
   def download_invoice
     deny_access! and return unless @current_user.has_permission_category?('commissions')
 

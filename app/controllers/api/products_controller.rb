@@ -56,9 +56,12 @@ class Api::ProductsController < ApiController
 
     products.each do |w_product|
       p = w_product.Product
-      sub_data = {hash_id: w_product.hash_id, name: p.name, price: p.price,
-                  existence: w_product.existence, category_cold: p.cold,
-                  category_hot: p.hot, category_frappe: p.frappe, p_key: p.hash_id}
+      sub_data = {
+        hash_id: w_product.hash_id, name: p.name, price: p.price,
+        existence: w_product.existence, category_cold: p.cold,
+        category_hot: p.hot, category_frappe: p.frappe, 
+        p_key: p.hash_id, total_weight: p.total_weight
+      }
 
       # get the photo for the product #
       photos.each do |photo|

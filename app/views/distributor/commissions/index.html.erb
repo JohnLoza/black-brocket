@@ -56,19 +56,16 @@
                       <%end%>
                     </td>
                     <td class="text-center">
-                      <% if !c.payment_img.blank? %>
-                        <%= link_to image_tag(c.payment_img.url(:mini), class: "img-rounded", :style =>"width:60px;"),
-                            image_path(c.payment_img.url), :data => {:toggle => "lightbox", :title => "Pago de la comisión: " + c.hash_id } %>
-                      <% elsif !c.payment_pdf.blank? %>
+                      <% if c.payment_img.present? or c.payment_pdf.present? %>
                         <%= link_to "<i class='fa fa-file-pdf-o fa-5x'></i>".html_safe,
-                            c.payment_pdf.url, target: "_blank" %>
+                            distributor_download_commission_payment_path(c.hash_id), target: "_blank" %>
                       <% end %>
                     </td>
                     <td><%= l(Time.parse(c.payment_day), format: :long) if !c.payment_day.blank? %></td>
                     <td class="text-center">
                       <% if !c.invoice.blank? %>
                         <%= link_to "<i class='fa fa-file-archive-o fa-5x'></i>".html_safe,
-                            c.invoice.url, target: "_blank" %>
+                            distributor_download_commission_invoice_path(c.hash_id), target: "_blank" %>
                       <% end %>
                     </td>
                     <td>

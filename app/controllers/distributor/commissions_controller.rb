@@ -9,7 +9,7 @@ class Distributor::CommissionsController < ApplicationController
   end
 
   def details
-    commission = Commission.find_by!(hash_id: params[:id])
+    commission = @current_user.Commissions.find_by!(hash_id: params[:id])
     if commission.nil?
       flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
       redirect_to distributor_commissions_path
@@ -21,7 +21,7 @@ class Distributor::CommissionsController < ApplicationController
   end
 
   def upload_invoice
-    commission = Commission.find_by!(hash_id: params[:id])
+    commission = @current_user.Commissions.find_by!(hash_id: params[:id])
     if commission.nil?
       flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
       redirect_to distributor_commissions_path
@@ -35,5 +35,21 @@ class Distributor::CommissionsController < ApplicationController
     end
 
     redirect_to distributor_commissions_path
+  end
+
+  def download_payment
+    commission = @current_user.Commissions.find_by!(hash_id: params[:id])
+
+    render_404 and return unless commission.payment_pdf.present? or commission.payment_img.present?
+
+    file_path = commission.payment_pdf.path if commission.payment_pdf.present?
+    file_path = commission.payment_img.path if commission.payment_img.present?
+
+    send_file file_path
+  end
+
+  def download_invoice
+    commission = @current_user.Commissions.find_by!(hash_id: params[:id])
+    send_file commission.invoice.path
   end
 end

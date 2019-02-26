@@ -212,6 +212,7 @@ Rails.application.routes.draw do
     get '/commissions/:id/details' => 'commissions#details', as: :commission_details
     post '/commissions/:id/upload_payment' => 'commissions#upload_payment', as: :upload_commission_payment
     get '/commissions/:id/invoice' => 'commissions#download_invoice', as: :download_commission_invoice
+    get '/commissions/:id/payment' => 'commissions#download_payment', as: :download_commission_payment
 
     get 'warehouse/inventory_reports' => 'warehouses#inventory_reports', as: :inventory_reports
     get 'warehouse/inventory_reports/:id' => 'warehouses#inventory_report_details', as: :inventory_report
@@ -244,6 +245,8 @@ Rails.application.routes.draw do
     get '/commissions' => 'commissions#index', as: :commissions
     get '/commissions/:id/details' => 'commissions#details', as: :commission_details
     post '/commissions/:id/upload_invoice' => 'commissions#upload_invoice', as: :upload_commission_invoice
+    get '/commissions/:id/invoice' => 'commissions#download_invoice', as: :download_commission_invoice
+    get '/commissions/:id/payment' => 'commissions#download_payment', as: :download_commission_payment
   end
 
   namespace :client do
@@ -329,6 +332,7 @@ Rails.application.routes.draw do
     get 'orders/get_payment/:payment_key' => 'orders#download_payment'
     get 'orders/payment_steps' => 'orders#payment_steps'
     get 'orders/available_banks' => 'orders#available_banks'
+    get 'orders/available_parcels' => 'orders#available_parcels'
     post 'orders/update_payment_method' => 'orders#update_payment_method'
 
     namespace :distributor_api do

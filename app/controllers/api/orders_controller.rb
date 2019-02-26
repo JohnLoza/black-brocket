@@ -114,6 +114,7 @@ class Api::OrdersController < ApiController
     order.city_id = @current_user.city_id
     order.invoice = params[:invoice] if !params[:invoice].blank?
     order.payment_method = params[:payment_method]
+    order.parcel_id = params[:parcel_id]
     order.state = "WAITING_FOR_PAYMENT"
 
     order.hash_id = random_hash_id(12).upcase
@@ -169,9 +170,16 @@ class Api::OrdersController < ApiController
 
     shipping_cost = 0.0
     if total < warehouse.wholesale
-      total = total + warehouse.shipping_cost
-      shipping_cost = warehouse.shipping_cost
+      prices = Parcel.find(params[:parcel_id]).Prices.order(max_weight: :asc)
+      prices.each do |price|
+        if params[:total_weight].to_i < price.max_weight
+          shipping_cost = price.price
+          break
+        end
+      end
+      total = total + shipping_cost
     end
+
     order.total = total
     order.shipping_cost = shipping_cost
 
@@ -265,6 +273,28 @@ class Api::OrdersController < ApiController
 
     render :status => 200,
            :json => { success: true, info: 'DATA_RETURNED', data: data}
+  end
+
+  def available_parcels
+    warehouse = @current_user.City.State.Warehouse
+    parcels = warehouse.Parcels
+    data = Array.new
+
+    parcels.each do |parcel|
+      extra_data = Hash.new
+      extra_data[parcel.parcel_name] = {image: parcel.image.url(:mini), id: parcel.id}
+      parcel_prices = Array.new
+      parcel.Prices.order(max_weight: :asc).each do |price|
+        parcel_prices << { max_weight: price.max_weight, price: price.price }
+      end
+      extra_data[parcel.parcel_name][:prices] = parcel_prices
+
+      data << extra_data
+    end
+
+    render status: 200,
+      json: { success: true, info: 'DATA_RETURNED', data: data }
+
   end
 
   def update_payment_method

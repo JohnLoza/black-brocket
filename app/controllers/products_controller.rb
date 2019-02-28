@@ -69,7 +69,7 @@ class ProductsController < ApplicationController
 
   def ask
     product = Product.find_by!(hash_id: params[:id])
-    @question = ProdQuestion.new(product_id: product.id, client_id: @current_user.id,
+    @question = ProdQuestion.new(product_id: product.id, client_id: current_user.id,
                 hash_id: random_hash_id(12).upcase,
                 description: params[:prod_question][:description])
     @saved = @question.save ? true : false

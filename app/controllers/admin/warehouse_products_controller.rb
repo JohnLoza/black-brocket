@@ -351,7 +351,7 @@ class Admin::WarehouseProductsController < AdminController
       flash[:success] = "Reporte enviado a los jefes de almacén..."
     end # transaction end #
 
-    flash[:info] = "Ocurrió un error inesperado..." unless flash[:sucess].present?
+    flash[:info] = "Ocurrió un error inesperado..." if flash.empty?
     redirect_to admin_shipments_path(params[:warehouse_id])
   end
 

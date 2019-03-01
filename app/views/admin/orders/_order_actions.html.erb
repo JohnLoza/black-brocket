@@ -1,4 +1,5 @@
 
+
 <% if @current_user.has_permission?('orders@show') %>
   <%= link_to "<i class='fa fa-eye'></i> Ver pedido".html_safe,
       admin_order_details_path(o.hash_id),
@@ -33,10 +34,16 @@
         } %>
 <% end %>
 
-<% if @current_user.has_permission?('orders@invoices') and o.invoice_sent and params[:type] == "INVOICES" %>
+
+
+<% if @current_user.has_permission?('orders@invoices') and params[:type] == "INVOICES" %>
   <td>
-    <i class="fa fa-check-circle-o fa-3x"
-       style="color: #1d9d74"></i>
+    <% if !o.invoice %>
+      <label class="label label-info">General</label>
+    <% end %>
+    <% if o.invoice_sent %>
+      <i class="fa fa-check-circle-o fa-3x" style="color: #1d9d74"></i>
+    <% end %>
   </td>
 <% end %>
 

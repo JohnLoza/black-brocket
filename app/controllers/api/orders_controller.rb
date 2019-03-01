@@ -288,6 +288,7 @@ class Api::OrdersController < ApiController
         parcel_prices << { max_weight: price.max_weight, price: price.price }
       end
       extra_data[parcel.parcel_name][:prices] = parcel_prices
+      extra_data[parcel.parcel_name][:delivery_time] = parcel.delivery_time
 
       data << extra_data
     end

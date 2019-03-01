@@ -120,7 +120,7 @@ class Api::OrdersController < ApiController
     order.hash_id = random_hash_id(12).upcase
 
     # find the products the client want to buy #
-    products = WarehouseProduct.where("hash_id in (?) and describes_total_stock = 1",
+    products = WarehouseProduct.where("hash_id in (?) and describes_total_stock = true",
                       params[:product_details].keys).includes(:Product)
 
     products.each do |product|

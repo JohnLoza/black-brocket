@@ -188,7 +188,7 @@ DEPENDENCIES
   mysql2 (>= 0.3.18, < 0.5)
   pg
   puma (~> 3.7)
-  rails (~> 5.1.4)
+  rails (~> 5.1.6)
   rqrcode-with-patches (~> 0.5.4)
   sass-rails
   selenium-webdriver

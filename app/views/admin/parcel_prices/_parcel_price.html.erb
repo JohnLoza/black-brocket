@@ -4,7 +4,7 @@
   <td>
     <% if @current_user.has_permission?('parcels@update') %>
       <%= link_to "<i class='fa fa-pencil'></i> Modificar".html_safe,
-        admin_edit_parcel_price_path(params[:warehouse_id], params[:id]),
+        admin_edit_parcel_price_path(params[:warehouse_id], params[:id], parcel_price),
         class: 'btn btn-white btn-sm m-b-xs' %>
     <% end %>
 

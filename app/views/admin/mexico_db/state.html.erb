@@ -68,7 +68,7 @@
     $("#update_city_title").text("Actualizar la población: " +
                               select.options[select.selectedIndex].textContent);
 
-    $("#city_LADA").val($("#current_ladas")[0].options[select.selectedIndex].textContent);
+    $("#city_lada").val($("#current_ladas")[0].options[select.selectedIndex].textContent);
     $("#city_name").val(select.options[select.selectedIndex].textContent);
 
     new_destination = "<%= admin_mexico_city_path(0) %>";

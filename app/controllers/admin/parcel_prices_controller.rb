@@ -9,7 +9,7 @@ class Admin::ParcelPricesController < AdminController
   def new
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @parcel = Parcel.find(params[:id])
-    @price = ParcelPrice.new
+    @price = ParcelPrice.new(max_weight: 0)
   end
 
   def create
@@ -63,7 +63,7 @@ class Admin::ParcelPricesController < AdminController
     end
 
     def verify_permissions
-      deny_access! and return unless @current_user.has_permission?('parcels#update')
+      deny_access! and return unless @current_user.has_permission?('parcels@update')
     end
 
 end

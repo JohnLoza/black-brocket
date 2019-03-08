@@ -166,22 +166,22 @@ sample_coffe_names.each do |coffe_name|
     product.update_attribute(:hash_id, generateAlphKey("P", product.id))
 
     render_file_path = "/shared/products/" + "product_" + product.hash_id + "_description.html.erb"
-        file_path = "app/views" + render_file_path.sub("/shared/products/", "/shared/products/" + "_")
+    file_path = "app/views" + render_file_path.sub("/shared/products/", "/shared/products/" + "_")
 
-        file = File.open(file_path, "w")
-        file.puts('Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id gravida libero. Donec imperdiet dui vitae turpis egestas tristique. Maecenas varius, ex quis ultrices rutrum, diam lacus ornare magna, nec molestie mauris nibh vel orci. In convallis nulla nisl, vel aliquam dolor fermentum et. In euismod, velit ut laoreet sodales, ipsum purus ultrices enim, a luctus nulla neque sit amet purus. Curabitur posuere vulputate interdum. Donec lacinia et ligula vitae auctor. Nunc ultrices placerat quam quis auctor. Sed quis dui non felis consectetur dictum ut ut massa. Vivamus velit ipsum, porta at quam eget, fermentum porttitor purus. Duis nec egestas leo, nec sodales lacus. Fusce vulputate mi tempus nisi congue tincidunt. Integer lacus nibh, fermentum porttitor lobortis ut, venenatis in erat. Donec metus dolor, tempus in dolor vitae, mattis interdum lacus. Pellentesque eu finibus felis. Etiam id odio leo.')
-        file.flush
+    file = File.open(file_path, "w")
+    file.puts('Editame...')
+    file.flush
 
-        product.update_attributes(:description_render_path => render_file_path)
+    product.update_attributes(:description_render_path => render_file_path)
 
     render_file_path = "/shared/products/" + "product_" + product.hash_id + "_preparation.html.erb"
-        file_path = "app/views" + render_file_path.sub("/shared/products/", "/shared/products/" + "_")
+    file_path = "app/views" + render_file_path.sub("/shared/products/", "/shared/products/" + "_")
 
-        file = File.open(file_path, "w")
-        file.puts('Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id gravida libero. Donec imperdiet dui vitae turpis egestas tristique. Maecenas varius, ex quis ultrices rutrum, diam lacus ornare magna, nec molestie mauris nibh vel orci. In convallis nulla nisl, vel aliquam dolor fermentum et. In euismod, velit ut laoreet sodales, ipsum purus ultrices enim, a luctus nulla neque sit amet purus. Curabitur posuere vulputate interdum. Donec lacinia et ligula vitae auctor. Nunc ultrices placerat quam quis auctor. Sed quis dui non felis consectetur dictum ut ut massa. Vivamus velit ipsum, porta at quam eget, fermentum porttitor purus. Duis nec egestas leo, nec sodales lacus. Fusce vulputate mi tempus nisi congue tincidunt. Integer lacus nibh, fermentum porttitor lobortis ut, venenatis in erat. Donec metus dolor, tempus in dolor vitae, mattis interdum lacus. Pellentesque eu finibus felis. Etiam id odio leo.')
-        file.flush
+    file = File.open(file_path, "w")
+    file.puts('Editame...')
+    file.flush
 
-        product.update_attributes(:preparation_render_path => render_file_path)
+    product.update_attributes(:preparation_render_path => render_file_path)
   else
     puts "--- cant save product, error(s): ---"
     product.errors.each do |field, msg|

@@ -2,7 +2,7 @@
 
 How to set it up:
 
-## 1. [*Install Ruby on Rails*](https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-18-04)
+## 1. [Install Ruby on Rails](https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-18-04)
 
 ## 2. Install and configure the database manager
 [Install Mysql Server](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04) for development machines.

@@ -23,11 +23,19 @@ class PayUploader < CarrierWave::Uploader::Base
      %w(jpg jpeg png)
   end
 
-  version :mini do
-    process :resize_to_fill => [150, 150]
+  def rotate_according_to_exif
+    manipulate! do |img|
+      img.tap(&:auto_orient)
+    end
   end
 
+  process :rotate_according_to_exif
   process :resize_to_limit => [1200, 1000], :if => :scale_image?
+
+  version :mini do
+    process :rotate_according_to_exif
+    process :resize_to_fill => [150, 150]
+  end
 
   def image
     @image ||= MiniMagick::Image.open(self.file.file)

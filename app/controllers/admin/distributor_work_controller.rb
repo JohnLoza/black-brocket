@@ -12,7 +12,7 @@ class Admin::DistributorWorkController < AdminController
     deny_access! and return unless @current_user.has_permission_category?('distributor_work')
 
     client = Client.find_by!(hash_id: params[:id])
-    deny_access! and return unless @current_user.worker_id.nil?
+    deny_access! and return unless client.worker_id.nil?
     client.update_attribute(:worker_id, @current_user.id)
 
     flash[:success] = "Cliente añadido a tu repertorio."

@@ -196,6 +196,26 @@
     });
   }
 
+  function pickGuide(weight, available_weights){
+    for (let index = available_weights.length; index < available_weights.length; index++) {
+      if(weight <= available_weights[index]){
+        return index;
+      }
+    }
+  }
+
+  function calculateDeliveryCost(){
+    var current_weight = 72;
+    var weights = [5, 20];
+    var prices = [80, 199];
+
+    var keep_looping = true;
+
+    while (keep_looping) {
+      picked_weight = pickGuide(current_weight, weights);
+    }
+  }
+
   $(document).ready(function(){
     costs = $(".individual-cost");
     costs.each(function(){

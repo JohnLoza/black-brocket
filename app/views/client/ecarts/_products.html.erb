@@ -197,8 +197,9 @@
   }
 
   function pickGuide(weight, available_weights){
-    for (let index = available_weights.length; index < available_weights.length; index++) {
-      if(weight <= available_weights[index]){
+    for (let index = available_weights.length; index >= 0; index--) {
+      if(weight - available_weights[index] >= 0 ){
+        console.log(`leftover_weight: ${weight - available_weights[index]}`);
         return index;
       }
     }
@@ -209,10 +210,13 @@
     var weights = [5, 20];
     var prices = [80, 199];
 
+    var guides_tag = "";
     var keep_looping = true;
 
     while (keep_looping) {
-      picked_weight = pickGuide(current_weight, weights);
+      picked_price = pickGuide(current_weight, weights);
+      guides_tag += `$${prices[picked_price]}|`;
+      current_weight -= weights[picked_price];
     }
   }
 

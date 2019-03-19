@@ -20,11 +20,19 @@ class AvatarUploader < CarrierWave::Uploader::Base
      %w(jpg jpeg png gif)
   end
 
-  version :mini do
-    process :resize_to_fill => [75, 75]
+  def rotate_according_to_exif
+    manipulate! do |img|
+      img.tap(&:auto_orient)
+    end
   end
 
-  process :resize_to_fill => [250, 250]
+  process :rotate_according_to_exif
+  process :resize_to_limit => [250, 250]
+
+  version :mini do
+    process :rotate_according_to_exif
+    process :resize_to_fill => [75, 75]
+  end
 
   #convert the base64
   #class FilelessIO < StringIO

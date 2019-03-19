@@ -9,6 +9,10 @@ How to set it up:
 
 [Install PostgreSql](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04) for a production server.
 
+Postgres gem ´pg´ may require to install this library as a dependency
+
+    $ sudo apt install libpq-dev
+
 ## 3. Install Mysql Client as a dependency for mysql2 gem.
 
     apt install mysql-client
@@ -51,7 +55,6 @@ or login to the psql console and execute the files there.
     $ psql -U <username> -d <database>
     =# \i /path_to_project/vendor/states.sql
     =# \i /path_to_project/vendor/cities.sql
-
 
 ## 8. Run the Web Server
 Once the steps above are completed just run the app on a web server

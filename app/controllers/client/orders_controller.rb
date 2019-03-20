@@ -107,19 +107,9 @@ class Client::OrdersController < ApplicationController
                   total_ieps: total_ieps * session[:e_cart][p.hash_id].to_i)
     end # @products.each do #
 
-    shipping_cost = 0.0
-    if total < @warehouse.wholesale
-      prices = Parcel.find(params[:parcel_id]).Prices.order(max_weight: :asc)
-      prices.each do |price|
-        if session[:e_cart]["total_weight"] < price.max_weight
-          shipping_cost = price.price
-          break
-        end
-      end
-      total = total + shipping_cost
-    end
-    @order.total = total
-    @order.shipping_cost = shipping_cost
+    @order.shipping_cost = params[:delivery_cost]
+    @order.guides = params[:guides]
+    @order.total = total + params[:delivery_cost].to_f
 
     # finally save all the stuff to the database #
     @saved = false

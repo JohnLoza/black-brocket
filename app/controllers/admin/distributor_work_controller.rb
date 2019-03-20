@@ -99,4 +99,15 @@ class Admin::DistributorWorkController < AdminController
               .order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 
+  def transfer_client
+    deny_access! and return unless @current_user.has_permission_category?('distributor_work')
+    client = Client.find_by!(hash_id: params[:id])
+    deny_access! and return unless client.worker_id == @current_user.id
+
+    client.update_attributes(worker_id: nil)
+    @current_user.ClientMessages.where(client_id: client.id).delete_all
+    flash[:success] = "Cliente transferido, si cometió un error puede buscarlo de nuevo en 'clientes sin distribuidor'"
+    redirect_to admin_distributor_work_my_clients_path
+  end
+
 end

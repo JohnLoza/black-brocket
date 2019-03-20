@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190220153340) do
+ActiveRecord::Schema.define(version: 20190320160650) do
 
   create_table "bank_accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "bank_name"
@@ -314,6 +314,7 @@ ActiveRecord::Schema.define(version: 20190220153340) do
     t.string "download_payment_key"
     t.integer "payment_method"
     t.string "payment_folio"
+    t.string "guides"
     t.index ["hash_id"], name: "index_orders_on_hash_id", unique: true
     t.index ["payment_folio"], name: "index_orders_on_payment_folio", unique: true
   end

@@ -81,6 +81,7 @@ Rails.application.routes.draw do
 
     get 'distributor_work/client/:id/messages' => 'distributor_work#messages', as: :distributor_work_client_messages
     post 'distributor_work/client/:id/messages' => 'distributor_work#create_message'
+    post 'distributor_work/client/:id/transfer' => 'distributor_work#transfer_client', as: :distributor_work_transfer_client
 
     # products #
     resources :products

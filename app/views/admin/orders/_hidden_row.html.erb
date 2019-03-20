@@ -34,6 +34,9 @@
     <%= label_tag :parcel_id, "Paquetería" %>
     <%= image_tag(o.Parcel.image.url(:mini)) %><br>
 
+    <%= label_tag :guides, "Guías" %>
+    <%= content_tag :p, o.guides %><br>
+
     <%= label_tag :tracking_code, "Código de rastreo" %>
     <%= text_field_tag :tracking_code, "",
         {class: "form-control m-b", maxlength: 20, required: true} %>

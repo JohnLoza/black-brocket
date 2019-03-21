@@ -4,7 +4,7 @@ class Admin::SiteWorkersController < AdminController
     deny_access! and return unless @current_user.has_permission_category?('site_workers')
 
     @workers =
-      SiteWorker.non_admin.not(@current_user.id).active.order_by_name.by_warehouse(@current_user.warehouse_id)
+      SiteWorker.non_admin.not(@current_user.id).active.order_by_name
         .search(key_words: search_params, joins: {City: :State}, fields: fields_to_search)
         .paginate(page: params[:page], per_page: 20).includes(City: :State)
   end # def index end #

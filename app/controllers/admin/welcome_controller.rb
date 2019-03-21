@@ -21,7 +21,7 @@ class Admin::WelcomeController < AdminController
   end
 
   def notifications
-    @notifications = @current_user.Notifications.recent.paginate(page: params[:page], per_page: 25)
+    @notifications = @current_user.Notifications.recent.limit(100).paginate(page: params[:page], per_page: 25)
   end
 
 end

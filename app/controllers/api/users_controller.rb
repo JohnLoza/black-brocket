@@ -75,7 +75,8 @@ class Api::UsersController < ApiController
   end
 
   def notifications
-    notifications = @current_user.Notifications
+    notifications = @current_user.Notifications.order(created_at: :desc)
+      .limit(50).paginate(page: params[:page], per_page: 15)
     data = Array.new
     notifications.each do |notification|
       if notification.url.include? "/client/my_distributor"

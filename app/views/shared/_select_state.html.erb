@@ -25,7 +25,6 @@ function fetchCities(state){
 function updateCities(cities){
   select = $("#city_id");
   select.html("");
-
   select.append(selectOption("", ""));
   for (var i = 0; i < cities.length; i++) {
     obj = cities[i];

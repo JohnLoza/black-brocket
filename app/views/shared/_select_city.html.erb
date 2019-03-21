@@ -4,7 +4,15 @@
     <div class="col-sm-10">
       <%= select_tag :city_id, options_from_collection_for_select(
           cities, "id", "name", selected: params[:city_id]),
-          prompt: "Selecciona...", class: "input form-control", required: true %>
+          prompt: "Selecciona...", class: "input form-control", 
+          onchange: "updateLada()",required: true %>
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+function updateLada(trigger){
+  lada = $("#city_id").children("option:selected")[0].getAttribute("lada");
+  $("#client_lada_preview").text(lada);
+}
+</script>

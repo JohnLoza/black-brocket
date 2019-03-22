@@ -131,12 +131,11 @@ class Admin::WarehouseProductsController < AdminController
 
     warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
 
+    # Is the shipment a transfer?
     if params[:shipment] and params[:shipment][:type] == "TRANSFER"
-      puts "--- the shipment is a transfer ---"
       shipment = Shipment.new(target_warehouse_id: params[:shipment][:target_warehouse_id],
       origin_warehouse_id: warehouse.id, chief_id: @current_user.id, shipment_type: "TRANSFER")
-    else
-      puts "--- the shipment is not a transfer ---"
+    else # or not?
       shipment = Shipment.new(target_warehouse_id: warehouse.id,
       chief_id: @current_user.id, shipment_type: "NEW_BATCHES")
     end
@@ -144,14 +143,12 @@ class Admin::WarehouseProductsController < AdminController
     success = true
     ActiveRecord::Base.transaction do
       session[:shipment_products].delete("warehouse")
-      puts "--- loading products ---"
       products = Product.select(:id, :hash_id).where("hash_id in (?)", session[:shipment_products].keys)
-      puts "--- loading inventaries ---"
-      warehouse_products = WarehouseProduct.where("product_id in (?)",
-        products.map(&:id)).where(describes_total_stock: false)
 
+      # iterate the shipment details
       session[:shipment_products].keys.each do |k|
         session[:shipment_products][k].delete("name")
+        # search for the product id that matches this details
         session[:shipment_products][k].keys.each do |s_k|
           product_id = 0
           products.each do |p|
@@ -164,37 +161,30 @@ class Admin::WarehouseProductsController < AdminController
           hash = session[:shipment_products][k][s_k]
           product_expiration_date = hash["expiration_date"]
 
-          if params[:shipment] and params[:shipment][:type] == "TRANSFER"
-            product_exist = false
-            warehouse_products.each do |wp|
-              if wp.product_id == product_id and wp.batch == hash["batch"]
-                product_expiration_date = wp.expiration_date
-                product_exist = true
-                break
-              elsif wp.product_id != product_id and wp.batch == hash["batch"]
-                success = false
-                puts "--- Raising a rollback cuz cant repeat batch! ---"
-                raise ActiveRecord::Rollback, "Can't repeat batch!"
-              end # if wp.product_id == product_id and ...#
-            end # warehouse_products.each #
+          product_exist = false
+          warehouse_product = WarehouseProduct.where(batch: hash["batch"]).take
+          if warehouse_product and warehouse_product.product_id == product_id
+            # Same product with same batch its ok #
+            product_expiration_date = warehouse_product.expiration_date
+            product_exist = true
+          elsif warehouse_product and warehouse_product.product_id != product_id
+            success = false
+            raise ActiveRecord::Rollback, "Can't have 2 products with the same batch!"
           end
 
           # Raise an exception if the product doesn't exist and the shipment is a transfer #
           if params[:shipment] and params[:shipment][:type] == "TRANSFER" and !product_exist
             success = false
-            puts "--- Raising a rollback cuz product didn't exist ---"
-            raise ActiveRecord::Rollback, "Product doesnt exist and is needed for transfer"
+            raise ActiveRecord::Rollback, "Product doesnt exist and is needed for transfer, aka product with batch"
           end
 
           success = false and break unless shipment.save
-          puts "--- creating new detail for the shipment ---"
           detail = ShipmentDetail.new(shipment_id: shipment.id, product_id: product_id,
             quantity: hash["quantity"], batch: hash["batch"],
             expiration_date: product_expiration_date)
           success = false and break unless detail.save
 
           if shipment.shipment_type == "TRANSFER"
-            puts "--- updating full stock descriptor and batch descriptor ---"
             master_product = WarehouseProduct.where(warehouse_id: warehouse.id,
                 product_id: product_id, describes_total_stock: true).take
 
@@ -210,7 +200,6 @@ class Admin::WarehouseProductsController < AdminController
       end # session[:shipment_products].keys.each #
 
       session[:shipment_products] = nil if success
-
     end
 
     flash[:success] = "Envío registrado!" if success
@@ -385,7 +374,6 @@ class Admin::WarehouseProductsController < AdminController
 
   private
     def update_stock_from_shipment(warehouse, shipment, report = nil)
-      puts "--- inside update stock from shipment ---"
       details = shipment.Details
       report_details = report.Details if !report.nil?
 
@@ -394,21 +382,17 @@ class Admin::WarehouseProductsController < AdminController
       saved = false
       ids_are_different = false
       ActiveRecord::Base.transaction do
-        puts "--- iterating details ---"
         details.each do |d|
           has_a_report = false
           quantity_to_add = 0
 
           if product_id == d.product_id
-            puts "--- ids are the same ---"
             ids_are_different = false
           else
-            puts "--- ids are different ---"
             ids_are_different = true
           end
 
           if ids_are_different
-            puts "--- product changed adding the quantities to full stock descriptor ---"
             update_principal_warehouse_product_stock(warehouse.id, product_id, total)
             product_id = d.product_id
             total = 0
@@ -416,10 +400,8 @@ class Admin::WarehouseProductsController < AdminController
           end # if product_id == d.product_id else end #
 
           if !report.nil?
-            puts "--- there is a report going to iterate it ---"
             report_details.each do |r_d|
               if r_d.shipment_detail_id == d.id
-                puts "--- found a complain adding difference: #{r_d.difference} ---"
                 has_a_report = true
                 quantity_to_add = r_d.difference
                 total += r_d.difference
@@ -427,7 +409,6 @@ class Admin::WarehouseProductsController < AdminController
               end
             end # report_details.each end #
             if !has_a_report
-              puts "--- didn't get a complain for current product in the report adding normal quantity: #{d.quantity} ---"
               total += d.quantity
               quantity_to_add = d.quantity
             end
@@ -436,7 +417,6 @@ class Admin::WarehouseProductsController < AdminController
             quantity_to_add = d.quantity
           end # if report end #
 
-          puts "--- creating new descriptor with id: #{product_id}, and existence: #{quantity_to_add} ---"
           existing_batch = WarehouseProduct.where(batch: d.batch, warehouse_id: warehouse.id, product_id: product_id).take
           if !existing_batch.nil?
             existing_batch.update_attributes(existence: existing_batch.existence + quantity_to_add)

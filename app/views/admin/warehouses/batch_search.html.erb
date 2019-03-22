@@ -26,6 +26,18 @@
 
       <h3>Nombre del producto: <strong><%= @products_in_warehouse[0].Product.name %></strong></h3>
       <p><strong>Fecha de caducidad:</strong>  <i class="fa fa-calendar"></i> <%= @products_in_warehouse[0].expiration_date %></p>
+      <%= form_for(:product_qr,
+        url: admin_print_qr_path,
+        method: :post, :html => {target: "_blank"}) do |f| %>
+
+        <%= f.hidden_field :warehouse, value: @products_in_warehouse[0].Warehouse.hash_id %>
+        <%= f.hidden_field :product, value: @products_in_warehouse[0].Product.hash_id %>
+        <%= f.hidden_field :batch, value: @products_in_warehouse[0].batch %>
+        <%= f.hidden_field :quantity, value: @products_in_warehouse[0].existence %>
+        <%= f.hidden_field :expiration_date, value: @products_in_warehouse[0].expiration_date %>
+        <%= f.submit "Reimprimir código qr".html_safe, class: "btn btn-info btn-sm" %>
+      <% end %><br>
+
       <address>
           <strong>Productos en almacén:</strong><br><br>
           <div class="row">

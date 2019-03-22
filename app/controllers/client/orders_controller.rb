@@ -64,7 +64,7 @@ class Client::OrdersController < ApplicationController
     @products.each do |product|
       # puts "--- existence: #{product.existence}, buying: #{session[:e_cart][product.hash_id]}"
       if product.existence < session[:e_cart][product.hash_id].to_i
-        flash[:info] = "Lo sentimos pero no queda suficiente inventario del producto con clave #{product.Product.hash_id} su existencia actual es de: #{product.existence}"
+        flash[:info] = "Lo sentimos pero no queda suficiente inventario del producto #{product.Product.name} su existencia actual es de: #{product.existence}"
         redirect_to client_ecart_path(@current_user.hash_id)
         return
       end
@@ -116,7 +116,7 @@ class Client::OrdersController < ApplicationController
     ActiveRecord::Base.transaction do
       @order.save
       @products.each do |p|
-        p.update_attributes(existence: (p.existence-session[:e_cart][p.hash_id].to_i))
+        p.update_attributes(existence: ( p.existence - session[:e_cart][p.hash_id].to_i ))
       end
       @order_details.each do |detail|
         detail.order_id = @order.id

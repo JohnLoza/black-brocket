@@ -164,17 +164,18 @@ class Client::OrdersController < ApplicationController
 
   def upload_payment
     @order = Order.where(hash_id: params[:id]).take
-    if params[:order] and @order
-        if params[:order][:pay_img].content_type == "application/pdf"
-          @order.remove_pay_img! if !@order.pay_img.blank?
-          @order.pay_pdf = params[:order][:pay_img]
-        else
-          @order.remove_pay_pdf! if !@order.pay_pdf.blank?
-          @order.pay_img = params[:order][:pay_img]
-        end
-        @order.state = "PAYMENT_DEPOSITED"
-        @order.download_payment_key = SecureRandom.urlsafe_base64 if @order.download_payment_key.nil?
-        @saved = true if @order.save!
+    if params[:order] and @order and 
+      ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED", "PAYMENT_REJECTED"].include? @order.state
+      if params[:order][:pay_img].content_type == "application/pdf"
+        @order.remove_pay_img! if !@order.pay_img.blank?
+        @order.pay_pdf = params[:order][:pay_img]
+      else
+        @order.remove_pay_pdf! if !@order.pay_pdf.blank?
+        @order.pay_img = params[:order][:pay_img]
+      end
+      @order.state = "PAYMENT_DEPOSITED"
+      @order.download_payment_key = SecureRandom.urlsafe_base64 if @order.download_payment_key.nil?
+      @saved = true if @order.save!
     end
 
     if @saved

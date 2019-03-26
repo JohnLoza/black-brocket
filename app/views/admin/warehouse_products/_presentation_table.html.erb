@@ -14,7 +14,7 @@
             <% end %>
 
             <% if @current_user.has_permission_category?('warehouse_manager') %>
-              <%= link_to(admin_inventory_reports_path, class: "btn btn-white btn-sm full-width") do %>
+              <%= link_to(admin_inventory_reports_path(@warehouse.hash_id), class: "btn btn-white btn-sm full-width") do %>
                 <i class="fa fa-file-text-o"></i> Reportes de Inventario
               <% end %>
             <% end %>

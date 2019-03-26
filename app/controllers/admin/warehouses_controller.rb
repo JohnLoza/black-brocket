@@ -134,7 +134,7 @@ class Admin::WarehousesController < AdminController
   end
 
   def inventory_reports
-    @warehouse = @current_user.Warehouse
+    @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @reports = InventoryReport.where(warehouse_id: @warehouse.id).order(created_at: :desc)
       .paginate(page: params[:page], per_page: 25)
   end

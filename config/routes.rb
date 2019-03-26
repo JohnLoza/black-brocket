@@ -215,9 +215,9 @@ Rails.application.routes.draw do
     get '/commissions/:id/invoice' => 'commissions#download_invoice', as: :download_commission_invoice
     get '/commissions/:id/payment' => 'commissions#download_payment', as: :download_commission_payment
 
-    get 'warehouse/inventory_reports' => 'warehouses#inventory_reports', as: :inventory_reports
-    get 'warehouse/inventory_reports/:id' => 'warehouses#inventory_report_details', as: :inventory_report
-    post 'warehouse/inventory_reports/:id/solved' => 'warehouses#inventory_report_solved', as: :inventory_report_solved
+    get 'warehouse/:warehouse_id/inventory_reports' => 'warehouses#inventory_reports', as: :inventory_reports
+    get 'warehouse/:warehouse_id/inventory_report/:id' => 'warehouses#inventory_report_details', as: :inventory_report
+    post 'warehouse/:warehouse_id/inventory_reports/:id/solved' => 'warehouses#inventory_report_solved', as: :inventory_report_solved
   end
 
   namespace :distributor do

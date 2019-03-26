@@ -3,10 +3,10 @@
 
 <br>
 <div class="ibox">
-    <div class="ibox-content text-center">
-        <h3 class="m-b-xxs">Búsqueda por lote</h3>
-        <small>Aquí puedes escribir el nombre del lote para encontrar los detalles de este.</small>
-    </div>
+  <div class="ibox-content text-center">
+    <h3 class="m-b-xxs">Búsqueda por lote</h3>
+    <small>Aquí puedes escribir el nombre del lote para encontrar los detalles de este.</small>
+  </div>
 </div>
 
 <div class="col-md-12">
@@ -39,8 +39,8 @@
       <% end %><br>
 
       <address>
-          <strong>Productos en almacén:</strong><br><br>
-          <div class="row">
+        <strong>Productos en almacén:</strong><br><br>
+        <div class="row">
           <% @products_in_warehouse.each do |p_in_w| %>
             <div class="col-md-12">
               <div class="panel panel-success">
@@ -53,12 +53,28 @@
               </div>
             </div>
           <% end %>
-          </div>
+        </div>
 
-          <strong>Productos preparados para enviar al cliente:</strong><br><br>
-          <div class="row">
+        <strong>Reportes de inventario</strong><br><br>
+        <div class="row">
+          <% @inventory_reports.each do |report| %>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <strong>Emitió reporte:</strong> <%= link_to report.Worker.name, admin_site_worker_path(report.Worker) %>
+                </div>
+                <div class="panel-body">
+                  <p><strong>Descripción:</strong> <%= report.description %></p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <strong>Productos preparados para enviar al cliente:</strong><br><br>
+        <div class="row">
           <% @products_to_ship.each do |ps| %>
-          <% client = ps.Order.Client %>
+            <% client = ps.Order.Client %>
             <div class="col-sm-6 col-md-4 col-lg-3">
               <div class="panel panel-default">
                 <div class="panel-heading">
@@ -74,12 +90,12 @@
               </div>
             </div>
           <% end %>
-          </div>
+        </div>
 
-          <strong>Productos enviados a clientes:</strong><br><br>
-          <div class="row">
+        <strong>Productos enviados a clientes:</strong><br><br>
+        <div class="row">
           <% @products_shipped.each do |ps| %>
-          <% client = ps.Order.Client %>
+            <% client = ps.Order.Client %>
             <div class="col-sm-6 col-md-4 col-lg-3">
               <div class="panel panel-default">
                 <div class="panel-heading">
@@ -95,14 +111,14 @@
               </div>
             </div>
           <% end %>
-          </div>
+        </div>
       </address>
 
       <% elsif params[:batch] %>
         <div class="hr-line-dashed"></div>
         <div class="alert alert-danger alert-dismissable">
-            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-            <i class="fa fa-times-circle-o"></i> No se encontró el lote específicado.
+          <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+          <i class="fa fa-times-circle-o"></i> No se encontró el lote específicado.
         </div>
       <% end %>
     </div>

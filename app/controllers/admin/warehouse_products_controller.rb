@@ -20,7 +20,10 @@ class Admin::WarehouseProductsController < AdminController
   end # def index #
 
   def stock_details
-    deny_access! and return unless @current_user.has_permission?('warehouse_manager@update_stock')
+    unless @current_user.has_permission_category?('warehouse_manager') or
+      @current_user.has_permission_category?('warehouse_products')
+      deny_access! and return 
+    end
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @product = Product.find(params[:id])
@@ -28,7 +31,7 @@ class Admin::WarehouseProductsController < AdminController
   end # def stock_details #
 
   def update_stock
-    deny_access! and return unless @current_user.has_permission?('warehouse_manager@update_stock')
+    deny_access! and return unless @current_user.has_permission?('warehouse_products@update_stock')
 
     warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     product = Product.find(params[:id])

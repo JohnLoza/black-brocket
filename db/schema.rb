@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190320160650) do
+ActiveRecord::Schema.define(version: 20190326161223) do
 
   create_table "bank_accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "bank_name"
@@ -239,6 +239,7 @@ ActiveRecord::Schema.define(version: 20190320160650) do
     t.boolean "done", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
     t.index ["product_id"], name: "index_inventory_reports_on_product_id"
     t.index ["warehouse_id"], name: "index_inventory_reports_on_warehouse_id"
     t.index ["worker_id"], name: "index_inventory_reports_on_worker_id"

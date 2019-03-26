@@ -13,7 +13,7 @@
     					<% end %>
             <% end %>
 
-            <% if @current_user.has_permission?('warehouse_manager@update_stock') %>
+            <% if @current_user.has_permission_category?('warehouse_manager') %>
               <%= link_to(admin_inventory_reports_path, class: "btn btn-white btn-sm full-width") do %>
                 <i class="fa fa-file-text-o"></i> Reportes de Inventario
               <% end %>
@@ -44,11 +44,9 @@
                           onclick="update_shipment_preparations_form('<%=p.name%>', '<%=p.hash_id%>', <%=wp.id%>, <%=wp.existence%>);">
                           <%= wp.existence %>
                   </button>
-                  <% if @current_user.has_permission?('warehouse_manager@update_stock') %>
-                    <%= link_to "Detalles",
-                    admin_warehouse_products_stock_details_path(params[:warehouse_id], p.id),
-                    class: "btn btn-white btn-sm" %>
-                  <% end %>
+                  <%= link_to "Detalles",
+                  admin_warehouse_products_stock_details_path(params[:warehouse_id], p.id),
+                  class: "btn btn-white btn-sm" %>
                 </td>
     						<td>
                   <button type="button" class="btn btn-warning btn-sm m-r-sm">

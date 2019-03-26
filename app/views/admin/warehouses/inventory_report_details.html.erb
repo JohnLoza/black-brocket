@@ -1,5 +1,5 @@
 <% provide(:title, "Reportes de Inventario") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Reportes de Inventario", labels: ['Almacenes', 'Reportes de Inventario'], links: [admin_warehouses_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Reportes de Inventario", labels: ['Almacenes', 'Reportes de Inventario', 'Reporte'], links: [admin_warehouses_path, admin_inventory_reports_path]} %>
 
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
@@ -18,10 +18,11 @@
 
             <%= content_tag :p, "<strong>Lote:</strong> #{@report.batch}".html_safe %>
             <%= content_tag :p, "<strong>Fecha del reporte:</strong> #{l(@report.created_at, format: :long)}".html_safe %>
+            <p><strong>Descripción:</strong> <%= @report.description %></p>
             <p><strong>Commentario:</strong> </p>
             <%= content_tag :p, @report.comment %><br>
 
-            <%= link_to "solucionado", admin_inventory_report_solved_path(@report), class: 'btn btn-primary',
+            <%# link_to "solucionado", admin_inventory_report_solved_path(@report), class: 'btn btn-primary',
               method: :post, data: {confirm: 'Estás seguro de la solución? Esto no puede deshacerse.'} %>
 
         	</div>

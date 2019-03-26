@@ -96,6 +96,8 @@ class Admin::WarehousesController < AdminController
     if params[:batch]
       @products_in_warehouse = WarehouseProduct.where(batch: params[:batch]).includes(:Warehouse)
 
+      @inventory_reports = InventoryReport.where(batch: params[:batch]).includes(:Worker)
+
       @products_to_ship = OrderProductShipmentDetail.joins(:Order)
                           .where(orders: {state: ["BATCHES_CAPTURED", "INSPECTIONED"]})
                           .where(batch: params[:batch]).includes(Order: :Client)

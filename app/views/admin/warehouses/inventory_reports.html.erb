@@ -23,6 +23,7 @@
                         <th>Emitió</th>
           					    <th>Producto</th>
           					    <th>Número de Lote</th>
+                        <th>Descripción</th>
                         <th>Fecha de Registro</th>
                         <th>Acciones</th>
           					</tr>
@@ -40,6 +41,7 @@
                           <%= link_to product.name, admin_product_path(product) %>
                         </td>
                         <%= content_tag :td, report.batch %>
+                        <%= content_tag :td, report.description %>
                         <%= content_tag :td, l(report.created_at, format: :short) %>
                         <td>
                           <%= link_to "Ver detalles", admin_inventory_report_path(report), class: 'btn btn-sm btn-white' %>

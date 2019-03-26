@@ -215,14 +215,12 @@ class Admin::SiteWorkersController < AdminController
       @warehouse_manager_category = []
       @warehouse_manager_category << {category: "warehouse_manager", name: "receive_shipments", description: "Recibir mercancías"}
       @warehouse_manager_category << {category: "warehouse_manager", name: "transfer_mercancy", description: "Traspasar mercancías"}
-      @warehouse_manager_category << {category: "warehouse_manager", name: "update_stock", description: "Modificar Stock"}
 
       @warehouse_category = []
       @warehouse_category << {category: "warehouses", name: "create", description: "Dar de alta un almacén"}
       @warehouse_category << {category: "warehouses", name: "show", description: "Mostrar información de los almacenes"}
       @warehouse_category << {category: "warehouses", name: "update_regions", description: "Modificar zonas de distribución"}
       @warehouse_category << {category: "warehouses", name: "update_warehouse_data", description: "Modificar información de almacenes"}
-      @warehouse_category << {category: "warehouses", name: "update_shipping_cost", description: "Modificar coste de envío"}
       @warehouse_category << {category: "warehouses", name: "update_wholesale", description: "Modificar coste de mayoreo"}
       @warehouse_category << {category: "warehouses", name: "delete", description: "Eliminar almacenes"}
 
@@ -240,6 +238,7 @@ class Admin::SiteWorkersController < AdminController
       @warehouse_product_category << {category: "warehouse_products", name: "show_shipments", description: "Mostrar envíos del almacén"}
       @warehouse_product_category << {category: "warehouse_products", name: "batch_search", description: "Rastreo o búsqueda por lote"}
       @warehouse_product_category << {category: "warehouse_products", name: "inventory", description: "Impresión de inventario"}
+      @warehouse_product_category << {category: "warehouse_products", name: "update_stock", description: "Modificar Stock"}
 
       @order_category = []
       @order_category << {category: "orders", name: "search", description: "Búsqueda de órdenes"}

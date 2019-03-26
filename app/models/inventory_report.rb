@@ -7,5 +7,6 @@ class InventoryReport < ApplicationRecord
 
   validates :batch, presence: true, length: { maximum: 20 }
 
-  validates :comment, presence: true, length: { maximum: 1024 }
+  validates :description, presence: true, length: { maximum: 25 }
+  validates :comment, length: { maximum: 1024 }
 end

@@ -23,7 +23,11 @@
             <td><button class="btn btn-primary btn-sm m-r-sm"><%= d.existence %></button></td>
             <td><%= d.batch %></td>
             <td><%= d.expiration_date %></td>
-            <td><a class="btn btn-white btn-sm" onclick="update_stock_form('<%=d.batch%>','<%=d.expiration_date%>');">Modificar</a></td>
+            <td>
+              <% if @current_user.has_permission?('warehouse_products@update_stock') %>
+                <a class="btn btn-white btn-sm" onclick="update_stock_form('<%=d.batch%>','<%=d.expiration_date%>');">Modificar</a>    
+              <% end %>
+            </td>
           </tr>
           <% end %>
         </tbody>

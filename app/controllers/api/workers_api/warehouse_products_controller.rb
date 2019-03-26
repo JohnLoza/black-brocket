@@ -47,7 +47,7 @@ class Api::WorkersApi::WarehouseProductsController < ApiController
 
     worker = SiteWorker.joins(:Permissions)
       .where(warehouse_id: @current_user.warehouse_id)
-      .where(permissions: {category: 'WAREHOUSE_MANAGER', name: 'UPDATE_STOCK'}).take
+      .where(permissions: {category: 'WAREHOUSE_MANAGER'}).take
 
     unless worker.present?
       render :status => 200,
@@ -69,6 +69,6 @@ class Api::WorkersApi::WarehouseProductsController < ApiController
 
   private
     def inventory_report_params
-      params.require(:report).permit(:product_id, :batch, :comment)
+      params.require(:report).permit(:product_id, :batch, :description, :comment)
     end
 end

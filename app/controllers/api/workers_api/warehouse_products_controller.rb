@@ -57,7 +57,7 @@ class Api::WorkersApi::WarehouseProductsController < ApiController
 
     if inventory_report.save
       Notification.create(worker_id: worker.id, icon: "fa fa-file-text-o",
-        description: "Nuevo reporte de inventario", url: "/admin/warehouse/#{@current_user.Warehouse.hash_id}/inventory_reports/#{inventory_report.id}")
+        description: "Nuevo reporte de inventario", url: "/admin/warehouse/#{@current_user.Warehouse.hash_id}/inventory_report/#{inventory_report.id}")
 
       render :status => 200,
              :json => { :success => true, :info => "SAVED" }

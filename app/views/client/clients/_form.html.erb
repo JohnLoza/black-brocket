@@ -140,11 +140,7 @@
 	       <%= f.label :telephone, "Teléfono fijo" %> -
 
 				 <label>Lada: (<span id="client_lada_preview">
-					 <% if @city_id %>
-					 	 <%= @client.City.lada %>
-					 <% else %>
-					 	 000
-					 <% end %>
+				  <%= params[:lada] ? params[:lada] : "000"  %>
 				 </span>)</label><br>
 
 	       <%= f.text_field :telephone, class: 'form-control form-control-black', placeholder: "0000 0000",

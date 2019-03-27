@@ -97,6 +97,7 @@ class Client::ClientsController < ApplicationController
     client_city = @client.City
     params[:city_id] = client_city.id
     params[:state_id] = client_city.state_id
+    params[:lada] = client_city.lada
 
     @states = State.order_by_name
     @cities = City.where(state_id: params[:state_id]).order_by_name

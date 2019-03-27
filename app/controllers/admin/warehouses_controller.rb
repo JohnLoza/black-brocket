@@ -143,7 +143,9 @@ class Admin::WarehousesController < AdminController
     @report = InventoryReport.find(params[:id])
     @warehouse = @report.Warehouse
 
-    deny_access! and return unless @current_user.warehouse_id == @warehouse.id
+    unless @current_user.warehouse_id == @warehouse.id or @current_user.is_admin
+      deny_access! and return 
+    end
 
     if params[:notification].present?
       notification = Notification.find(params[:notification])

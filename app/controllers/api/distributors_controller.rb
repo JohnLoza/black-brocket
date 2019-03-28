@@ -63,22 +63,20 @@ class Api::DistributorsController < ApiController
   end
 
   def create_message
-    if !@current_user.worker_id.blank?
-      distributor = @current_user.Worker
-      distributor_is_a_worker = true
-    else
-      distributor = @current_user.City.Distributor
+    distributor = @current_user.City.Distributor
+    if !distributor and !@current_user.worker_id.blank?
+      worker = @current_user.Worker
     end
 
     message = ClientDistributorComment.new({client_id: @current_user.id, comment: params[:comment], is_from_client: true})
-    if !distributor_is_a_worker
+    if distributor
       message.distributor_id = distributor.id
       Notification.create(distributor_id: distributor.id, icon: "fa fa-comments-o",
                       description: "El usuario " + @current_user.username + " te envió un mensaje",
                       url: distributor_client_messages_path(@current_user.hash_id))
-    else
-      message.worker_id = distributor.id
-      Notification.create(worker_id: distributor.id, icon: "fa fa-comments-o",
+    elsif worker
+      message.worker_id = worker.id
+      Notification.create(worker_id: worker.id, icon: "fa fa-comments-o",
                       description: "El usuario " + @current_user.username + " te envió un mensaje",
                       url: admin_distributor_work_client_messages_path(@current_user.hash_id))
     end

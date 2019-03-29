@@ -42,7 +42,7 @@
           <% if @current_user.has_permission?('warehouse_products@show') %>
             <% @products.each do |wp| %>
               <% p = wp.Product %>
-              <tr>
+              <tr class="<%= wp.existence < wp.min_stock ? 'bg-warning' : '' %>">
                 <td></td>
                 <td><%= p.hash_id %></td>
                 <td><%= p.name %></td>

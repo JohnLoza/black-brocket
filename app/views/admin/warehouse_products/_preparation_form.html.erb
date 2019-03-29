@@ -22,10 +22,7 @@
 <% end %>
 
 <br>
-<%= form_for(:product_qr,
-    url: admin_print_qr_path,
-    method: :post, :html => {target: "_blank"}) do |f| %>
-
+<%= form_for(:product_qr, url: admin_print_qr_path, method: :post, :html => {target: "_blank"}) do |f| %>
     <%= f.hidden_field :warehouse, value: @warehouse.hash_id %>
     <%= f.hidden_field :product %>
     <%= f.hidden_field :batch %>

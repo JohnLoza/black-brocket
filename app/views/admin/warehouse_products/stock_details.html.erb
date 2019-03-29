@@ -27,6 +27,17 @@
               <% if @current_user.has_permission?('warehouse_products@update_stock') %>
                 <a class="btn btn-white btn-sm" onclick="update_stock_form('<%=d.batch%>','<%=d.expiration_date%>');">Modificar</a>    
               <% end %>
+
+              <%= form_for(:product_qr, url: admin_print_qr_path, method: :post, 
+                :html => {target: "_blank", style: "display: inline-block"}) do |f| %>
+
+                <%= f.hidden_field :warehouse, value: params[:warehouse_id] %>
+                <%= f.hidden_field :product, value: d.Product.hash_id %>
+                <%= f.hidden_field :batch, value:d.batch %>
+                <%= f.hidden_field :quantity, value: d.existence %>
+                <%= f.hidden_field :expiration_date, value: d.expiration_date %>
+                <%= f.submit "Reimprimir código qr".html_safe, class: "btn btn-info btn-sm" %>
+              <% end %>
             </td>
           </tr>
           <% end %>

@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'noreply@blackbrocket.com'
+  # default from: 'noreply@blackbrocket.com'
   layout 'mailer'
 
   def send_confirmation_email

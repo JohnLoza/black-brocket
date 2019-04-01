@@ -14,6 +14,7 @@ class Admin::WelcomeController < AdminController
     deny_access! and return unless @current_user.has_permission?('comments_and_suggestions@answer')
 
     suggestion = Suggestion.find(params[:id])
+    SendAnswerToCommentJob.perform_later(suggestion, params[:answer])
     suggestion.update_attributes(answered: true)
 
     flash[:success] = "Respuesta a #{suggestion.name} enviada!."

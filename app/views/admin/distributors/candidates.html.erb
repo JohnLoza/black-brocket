@@ -31,29 +31,29 @@
           <thead>
             <tr>
               <th>Nombre del candidato</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Celular</th>
+              <th>Ubicación</th>
               <th>Fecha de solicitud</th>
-              <th>Status</th>
               <th>Acción</th>
             </tr>
           </thead>
           <tbody>
             <% @candidates.each do |candidate| %>
             <tr>
-              <td><%= candidate.getFullName %></td>
+              <%= content_tag :td, candidate.getFullName %>
+              <%= content_tag :td, candidate.email %>
+              <%= content_tag :td, candidate.telephone %>
+              <%= content_tag :td, candidate.cellphone %>
+              <%= content_tag :td, candidate.getLocation %>
               <td><%= l(candidate.created_at, format: :long) %></td>
               <td>
-                <% if !candidate.read %>
-                <span id="<%=candidate.id%>" class="label label-primary"> Nuevo </span>
+                <% if candidate.read %>
+                  <i class="fa fa-check-circle-o fa-3x" style="color: #1d9d74"></i>
                 <% else %>
-                <span id="<%=candidate.id%>" class="label label-default"> Visto </span>
+                  <a class="btn btn-white btn-sm" onclick="showForm(<%= candidate.id %>)">Responder</a>
                 <% end %>
-              </td>
-              <td>
-                <a onclick="showDetails('<%=candidate.id%>','<%=candidate.getFullName%>','<%=candidate.email%>',
-                  '<%=candidate.telephone%>','<%=candidate.cellphone%>','<%=candidate.getLocation%>')"
-                  class="btn btn-white btn-sm">
-                  Mostrar detalles
-                </a>
               </td>
             </tr>
             <% end %>
@@ -80,26 +80,24 @@
 
 <%= render "shared/modal" %>
 
-<%= link_to "candidate_seen", "#", remote: true, id: :candidate_seen_link, method: :post, style: "display: none;" %>
 <script type="text/javascript">
-function showDetails(new_button, fullname, email, telephone, cellphone, location){
+function showForm(candidate_id){
   modal = $("#modal");
 
   title = modal.find(".modal-title");
-  title.html(fullname);
+  title.html("Respuesta al candidato");
 
   body = modal.find(".modal-body");
-  body.html("<p><b>Nombre:</b> "+fullname+"</p><p><b>Correo electrónico:</b> "+email+"</p>"+
-  "<p><b>Teléfono:</b> "+telephone+"</p><p><b>Celular:</b> "+cellphone+"</p>"+
-  "<p><b>Ubicación:</b> "+location+"</p>");
+  body.html("<%= j render 'candidate_answer_form' %>");
+  $("#candidate_id").val(candidate_id);
+  $("#answer-candidate-form");
 
   $("#modal").modal("show");
-  $("#"+new_button).remove();
 
-  url = "<%=admin_update_candidate_path('x0x')%>";
-  url = url.replace("x0x", new_button);
-  $("#candidate_seen_link").attr('href', url);
-  $("#candidate_seen_link").click();
+  url = "<%= admin_answer_candidate_path('x0x') %>";
+  url = url.replace("x0x", candidate_id);
+
+  $("#modal form")[0].action = url;
 }
 </script>
 

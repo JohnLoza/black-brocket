@@ -1,0 +1,10 @@
+<p><%= @answer %></p>
+
+<br><hr>
+<p><strong>Datos del commentario</strong></p>
+<p><strong>Nombre:</strong> <%= @candidate.getFullName %></p>
+<p><strong>Correo electrónico:</strong> <%= @candidate.email %></p>
+<p><strong>Teléfono:</strong> <%= @candidate.telephone %></p>
+<p><strong>Celular:</strong> <%= @candidate.cellphone %></p>
+<p><strong>Ubicación:</strong> <%= @candidate.getLocation %></p>
+<p><strong>Fecha de la solicitud:</strong> <%= l(@candidate.created_at, format: :long) %></p>

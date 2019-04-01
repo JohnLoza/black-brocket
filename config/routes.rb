@@ -69,7 +69,7 @@ Rails.application.routes.draw do
     resources :distributors
     resources :distributor_regions, path: 'distributor/:dist_id/regions', except: [ :edit, :update, :show, :new ]
     get '/distributors/candidates/list' => 'distributors#candidates', as: :distributor_candidates
-    post '/distributors/candidates/update/:id' => 'distributors#update_candidate', as: :update_candidate
+    post '/distributors/candidate/:id/answer' => 'distributors#answer_candidate', as: :answer_candidate
 
     # distributor_work #
     get 'distributor_work/clients/' => 'distributor_work#index', as: :distributor_work_clients

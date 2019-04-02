@@ -31,13 +31,13 @@ class Admin::BanksController < AdminController
   def edit
     deny_access! and return unless @current_user.has_permission?('banks@update')
 
-    @bank = Bank.find_by!(id: params[:id])
+    @bank = Bank.find(params[:id])
   end
 
   def update
     deny_access! and return unless @current_user.has_permission?('banks@update')
 
-    @bank = Bank.find_by!(id: params[:id])
+    @bank = Bank.find(params[:id])
 
     if @bank.update_attributes(bank_params)
       flash[:success] = "Registro del banco actualizado!"
@@ -50,7 +50,7 @@ class Admin::BanksController < AdminController
   def destroy
     deny_access! and return unless @current_user.has_permission?('banks@delete')
 
-    @bank = Bank.find_by!(params[:id])
+    @bank = Bank.find(params[:id])
 
     if @bank.destroy
       flash[:success] = "Registro de banco eliminado definitivamente"
@@ -58,7 +58,7 @@ class Admin::BanksController < AdminController
       flash[:info] = "Ocurrió un error al eliminar el registro, inténtalo de nuevo por favor"
     end # @bank_account and @bank_account.destroy #
 
-    redirect_to admin_bank_accounts_path
+    redirect_to admin_banks_path
   end
 
   private

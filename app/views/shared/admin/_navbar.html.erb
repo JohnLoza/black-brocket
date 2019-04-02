@@ -142,6 +142,13 @@
           <% end if @current_user.has_permission_category?('tips_&_recipes') %>
         </li>
 
+        <li>
+          <a href="http://174.136.25.196/roundcube" target="_blank">
+            <i class="fa fa-envelope"></i>
+            <span class="nav-label">Correo electrónico</span>
+          </a>
+        </li>
+
         <li style="margin-bottom: 40px;"><%= link_to(log_out_path, method: "delete") do %><i class="fa fa-sign-out"></i> <span class="nav-label">Cerrar Sesión</span><% end %></li>
         <!--End Menu Items-->
       </ul>

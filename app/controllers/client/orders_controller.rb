@@ -37,7 +37,8 @@ class Client::OrdersController < ApplicationController
   end
 
   def create
-    verify_fiscal_data # only if requires invoice #
+    return unless verify_fiscal_data
+    return unless verify_client_address
     @order = Order.new
 
     # find the corresponding distributor #
@@ -226,8 +227,16 @@ class Client::OrdersController < ApplicationController
     def verify_fiscal_data
       if params[:invoice]=="1" and @current_user.FiscalData.nil?
         flash[:info] = 'Llena tus datos fiscales primero por favor.'
-        redirect_to new_client_fiscal_datum_path
-        return
+        redirect_to new_client_fiscal_datum_path and return false
       end
+      return true
+    end
+
+    def verify_client_address
+      if @current_user.street.nil?
+        flash[:info] = 'Por favor completa tus datos.'
+        redirect_to edit_client_client_path @current_user and return false
+      end
+      return true
     end
 end

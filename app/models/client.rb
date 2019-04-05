@@ -24,17 +24,18 @@ class Client < ApplicationRecord
 
   validates :city_id, presence: true, numericality: { only_integer: true }
 
-  validates :password, length: { minimum: 6 }, :on => :create
+  validates :password, length: { minimum: 6 }, on: :create
 
-  validates :email, :username, :street, :street_ref1, :street_ref2,
-            :cp, :col, :extnumber, presence: true
+  validates :name, :email, presence: true
 
-  validates :email, uniqueness: { case_sensitive: false }, :on => :create
-  validates :email, :confirmation => true
-  validates :email_confirmation, :presence =>true, :on => :create
+  validates :street, :street_ref1, :street_ref2, :cp, :col, :extnumber,
+    presence: true, on: :update
 
-  validates :name, :lastname, :mother_lastname,
-        format: { with: /\A[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\s\.']+\z/ }
+  validates :email, uniqueness: { case_sensitive: false }, on: :create
+  # validates :email, :confirmation => true
+  # validates :email_confirmation, :presence =>true, :on => :create
+
+  validates :name, format: { with: /\A[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙ\s\.']+\z/ }
 
   mount_uploader :photo, AvatarUploader
 

@@ -18,8 +18,8 @@
     					<tr>
                   <th data-sort-ignore="true"></th>
     					    <th data-hide="phone" data-sort-ignore="true"></th>
-    					    <th data-hide="phone">Clave</th>
-    					    <th>Nombre comercial o de usuario</th>
+    					    <th data-hide="phone">Nombre</th>
+    					    <th>Correo electrónico</th>
     					    <th data-hide="phone">Ubicación</th>
     					    <th data-hide="all">Teléfono</th>
                   <th data-hide="phone">Acciones</th>
@@ -41,12 +41,12 @@
                   <% end %>
     						</td>
     						<td>
-                  <%= c.hash_id %>
+                  <%= c.name %>
                   <% if c.is_new %><br>
                     <label class="label label-primary"> Nuevo </label>
                   <% end %>
                 </td>
-    						<td><%= c.username %></td>
+    						<td><%= c.email %></td>
     						<td><%= c.City.name %>, <%= c.City.State.name %></td>
     						<td>(<%=c.City.lada%>) <%= c.telephone %></td>
                 <td>

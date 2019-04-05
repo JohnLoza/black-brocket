@@ -6,10 +6,10 @@
     <% end %>
   </td>
   <td>
-    <%= content_tag(:p, client.hash_id) %>
+    <%= content_tag(:p, client.name) %>
     <%= content_tag(:label, 'Nuevo', class: 'label label-primary') if client.is_new %>
   </td>
-  <td><%= client.username %></td>
+  <td><%= client.email %></td>
   <td><%= client.location %></td>
   <td><%= client.telephone_with_lada %></td>
   <td>

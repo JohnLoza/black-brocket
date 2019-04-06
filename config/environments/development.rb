@@ -52,13 +52,14 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  # Mail configuration
   config.action_mailer.delivery_method = :smtp
   config.openssl_verify_mode = OpenSSL::SSL::VERIFY_NONE
   config.action_mailer.smtp_settings = {
-    address:              'mail.goodlock.mx',
+    address:              'mail.blackbrocket.com',
     port:                 587,
-    user_name:            'soporte@goodlock.mx',
-    password:             'Staralpha18',
+    user_name:            'noreply@blackbrocket.com',
+    password:             'Jf4TknV9iN',
     authentication:       'plain',
     enable_starttls_auto: false
   }

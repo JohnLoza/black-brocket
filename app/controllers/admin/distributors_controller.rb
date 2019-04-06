@@ -1,4 +1,5 @@
 class Admin::DistributorsController < AdminController
+  skip_before_action :verify_authenticity_token, only: :answer_candidate
 
   def index
     deny_access! unless @current_user.has_permission_category?('distributors')
@@ -114,13 +115,14 @@ class Admin::DistributorsController < AdminController
                     .paginate(page: params[:page], per_page: 20).includes(:City)
   end
 
-  def update_candidate
+  def answer_candidate
     deny_access! and return unless @current_user.has_permission?('distributors@requests')
-
     candidate = DistributorCandidate.find(params[:id])
-
     if candidate
+      SendAnswerToCandidateJob.perform_later(candidate, params[:answer])
       candidate.update_attribute(:read, true)
+      flash[:success] = "Respuesta a #{candidate.getFullName} enviada!."
+      redirect_to admin_distributor_candidates_path
     end
   end
 

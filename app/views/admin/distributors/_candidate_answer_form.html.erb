@@ -1,0 +1,10 @@
+<%= form_tag "#", method: :post do %>
+  <div class="form-group">
+    <label for="answer">Respuesta</label>
+    <%= text_area_tag :answer, "", class: "form-control", 
+      placeholder: "Inserta tu respuesta a aquí...", required: true %>
+  </div>
+  <%= hidden_field_tag :candidate_id %>
+  <%= submit_tag "Enviar respuesta", class: "btn btn-primary btn-sm", 
+    data: { confirm: "Estás seguro de enviar tu respuesta? esta acción no se puede deshacer." } %>
+<% end %><br/><br/>

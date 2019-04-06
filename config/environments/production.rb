@@ -89,16 +89,15 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # Gmail configuration
-  config.action_mailer.raise_delivery_errors = true
+  # Mail configuration
   config.action_mailer.delivery_method = :smtp
+  config.openssl_verify_mode = OpenSSL::SSL::VERIFY_NONE
   config.action_mailer.smtp_settings = {
-    address:              'smtp.gmail.com',
+    address:              'mail.blackbrocket.com',
     port:                 587,
-    domain:               'blackbrocket.com',
     user_name:            'noreply@blackbrocket.com',
-    password:             'Staralphanoreply',
+    password:             'Jf4TknV9iN',
     authentication:       'plain',
-    enable_starttls_auto: true
+    enable_starttls_auto: false
   }
-end
+  end

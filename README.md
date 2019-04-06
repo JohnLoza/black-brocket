@@ -5,30 +5,28 @@ How to set it up:
 ## 1. [Install Ruby on Rails](https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-18-04)
 
 ## 2. Install and configure the database manager
-[Install Mysql Server](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04) for development machines.
+[Install MySQL Server](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04) for development machines.
+MySQL gem ´mysql2´ may require to install this library as a dependency
 
-[Install PostgreSql](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04) for a production server.
+    $ apt install mysql-client
+
+[Install PostgreSQL](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04) for a production server.
 
 Postgres gem ´pg´ may require to install this library as a dependency
 
     $ sudo apt install libpq-dev
 
-## 3. Install Mysql Client as a dependency for mysql2 gem.
-
-    apt install mysql-client
-
-## 4. Install RMagick dependencies
-
+## 3. Install RMagick dependencies
     apt install imagemagick libmagickwand-dev
 
-## 5. Bundle install gems
+## 4. Bundle install gems
 ### For a development machine
     $ bundle install --without production
 
 ### Or a production server
     $ bundle install --deployment --without development test
 
-## 6. Setup database
+## 5. Setup database
 ### For a development machine
     $ rails db:create
     $ rails db:migrate
@@ -39,7 +37,7 @@ Postgres gem ´pg´ may require to install this library as a dependency
     $ rails db:migrate RAILS_ENV=production
     $ rails db:seed RAILS_ENV=production
 
-## 7. Execute the sql scripts in vendor
+## 6. Execute the sql scripts in vendor
 ### For MySql
     $ mysql -u <username> -p
     mysql > use black-brocket_development
@@ -56,7 +54,7 @@ or login to the psql console and execute the files there.
     =# \i /path_to_project/vendor/states.sql
     =# \i /path_to_project/vendor/cities.sql
 
-## 8. Run the Web Server
+## 7. Run the Web Server
 Once the steps above are completed just run the app on a web server
 either webrick, puma, apache, nginx, etc. In the login page use the credentials
 below to log in as the admin. These credentials can be changed once inside

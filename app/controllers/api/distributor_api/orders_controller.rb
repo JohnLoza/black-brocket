@@ -39,6 +39,8 @@ class Api::DistributorApi::OrdersController < ApiController
 
     data = Hash.new
     data[:shipping_cost] = order.shipping_cost
+    data[:cancel_description] = order.cancel_description
+    data[:reject_description] = order.reject_description
 
     city = warehouse.City
     warehouse_data = {address: warehouse.address, city: city.name,

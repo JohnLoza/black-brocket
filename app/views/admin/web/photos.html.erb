@@ -90,9 +90,13 @@
                     <%= link_to image_tag(photo.photo.url(:thumb), class: "img-thumbnail photo-gallery"),
                                 image_path(photo.photo.url), :data => {:toggle => "lightbox", :gallery => "session-gallery", :title => "Imagenes de inicio de sesión y portada del sitio" } %>
                     <% if photo.name == "LOGIN" %>
-                      <label> Inicio de sesión </label>
+                      <label>Inicio de sesión</label>
+                    <% elsif photo.name == "INITIAL" %>
+                      <label>Página principal</label>
+                    <% elsif photo.name == "LANDING_PAGE" %>
+                      <label>Landing Page</label>
                     <% else %>
-                      <label> Página principal </label>
+                      <label>Petición de distribuidor</label>
                     <% end %>
 
                     <%= link_to "<button type='button' class='btn btn-danger btn-sm m-t btn-block'><i class='fa fa-trash'></i> Eliminar</button>".html_safe, admin_web_destroy_photo_path(photo.id),
@@ -114,6 +118,10 @@
                   <%= f.radio_button :name, "LOGIN" %><br>
                   <%= label_tag(:name_initial, "Imagen para la página principal en móviles") %>
                   <%= f.radio_button :name, "INITIAL" %><br>
+                  <%= label_tag(:name_landpage, "Imagen para Landing Page") %>
+                  <%= f.radio_button :name, "LANDING_PAGE" %><br>
+                  <%= label_tag(:name_distributor_request, "Imagen para las peticiones de distribuidor") %>
+                  <%= f.radio_button :name, "DISTRIBUTOR_REQUEST" %><br>
 
                   <%= f.file_field :photo %>
                 </div>
@@ -158,11 +166,13 @@ $(document).ready(function(){
     }else{
       c=$("#web_photo_name_initial")[0].checked
       c2=$("#web_photo_name_login")[0].checked
+      c3=$("#web_photo_name_landpage")[0].checked
+      c4=$("#web_photo_name_distributor")[0].checked
 
-      if(c || c2){
+      if(c || c2 || c3 || c4){
         return true;
       }else{
-        $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Elige el tipo de imagen ya sea para inicio de sesión o portada.'} %>");
+        $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Elige el tipo de imagen ya sea para inicio de sesión, portada, etc.'} %>");
         return false;
       }
     }

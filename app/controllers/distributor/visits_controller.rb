@@ -21,13 +21,12 @@ class Distributor::VisitsController < ApplicationController
     @client = Client.find_by!(hash_id: params[:id])
 
     success = false
-    today = Time.now.year.to_s+"-"+Time.now.month.to_s+"-"+Time.now.day.to_s
     visit = DistributorVisit.new(
                       distributor_id: @current_user.id,
                       client_id: @client.id,
-                      visit_date: today)
+                      visit_date: params[:visit_date])
 
-    success = true if visit.save and @client.update_attribute(:last_distributor_visit, today)
+    success = true if visit.save and @client.update_attribute(:last_distributor_visit, params[:visit_date])
 
     if success
       flash[:success] = "Visita guardada"

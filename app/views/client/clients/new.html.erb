@@ -1,23 +1,22 @@
 <% provide(:title, "Sign up") %>
 
-<div class="row ">
-  <div class="col-md-12">
-      <center>
-        <h1 class="module-title long-up-2x">Registro</h1>
-    		<h2 class="module-subtitle">Completa todos los campos para realizar tus pedidos.</h2>
-      </center>
-      <br><br>
-  </div>
-</div>
+<h1 class="module-title long-up-2x text-center">Registro</h1>
+
 <div class="show-tips-container">
   <div class="row">
-    <%= render 'form' %>
+    <%= render 'landing_page_form' %>
   </div>
 </div>
-<div class="row">
-		<div class="col-sm-6 col-sm-offset-3">
-      <div class="devider m-b-xxl">
-        <%= image_tag("divider-down.svg") %>
-      </div>
-		</div>
-</div>
+
+<% image = WebPhoto.where(name: "LANDING_PAGE").take %>
+<% if image.blank? %>
+  <% url = image_url "person-woman-coffee-cup-large.jpg" %>
+<% else %>
+  <% url = image.photo.url %>
+<% end %>
+
+<style>
+body {
+  background: url('<%= url %>') center center / cover no-repeat;
+}
+</style>

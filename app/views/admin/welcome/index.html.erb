@@ -5,12 +5,52 @@
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
 
+
+
     <br><br>
     <center><h1>Bienvenido</h1>
       <!--<i class="fa fa-home big-icon"></i>-->
       <%= image_tag("BBGLogo.png", style:"width:160px;opacity: 0.1;") %>
     </center>
 
+    <div class="text-right">
+      <label for="color-ui">Tema de interfaz</label>
+      <select name="color-ui" id="color-ui" onchange="updateUI();">
+        <option value="skin-4">Default</option>
+        <option value="skin-cyan">Cyan</option>
+        <option value="skin-greenland">Greenland Green</option>
+        <option value="skin-red">Red</option>
+        <option value="skin-quince">Quince Jelly</option>
+        <option value="skin-pureapple">Pure Apple</option>
+        <option value="skin-purple">Purple</option>
+        <option value="skin-blurple">Blurple</option>
+        <option value="skin-deepcove">Deep Cove</option>
+      </select>
+      <%= link_to(log_out_path, method: "delete") do %><span class="btn btn-xs btn-danger"><i class="fa fa-sign-out"></i> Cerrar sesión</span><% end %>
+    </div>
+
   </div>
 </div>
 <!--End content whit animation-->
+
+<script type="text/javascript">
+function updateUI() {
+  body = document.querySelector("body");
+  select = document.querySelector("#color-ui");
+  
+  newSkin = select.options[select.selectedIndex].value;
+
+  body.className = "";
+  body.classList.add("canvas-menu", "skin", newSkin, "mini-navbar");
+
+  url = "<%= admin_update_ui_theme_path('replace', format: :json) %>";
+  url = url.replace("replace", newSkin);
+  $.ajax({
+    type: "POST",
+    url: url,
+    context: document.body
+  }).done(function(body) {
+
+  });
+}
+</script>

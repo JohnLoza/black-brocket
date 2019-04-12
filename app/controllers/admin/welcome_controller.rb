@@ -25,4 +25,9 @@ class Admin::WelcomeController < AdminController
     @notifications = @current_user.Notifications.recent.limit(100).paginate(page: params[:page], per_page: 25)
   end
 
+  def update_ui_theme
+    @current_user.update_attribute(:ui_theme, params[:theme])
+    render :status => 200, json: { success: true, new_theme: params[:theme] }
+  end
+
 end

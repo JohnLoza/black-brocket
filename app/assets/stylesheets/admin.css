@@ -18,6 +18,7 @@
  *= require footable.core
  *= require style
  *= require custom
+ *= require custom-skins
  *= require normalize
  *= require summernote-bs3
  *= require summernote

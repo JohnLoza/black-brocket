@@ -13,8 +13,7 @@ class Distributor::VisitsController < ApplicationController
       return
     end # if @client and @client.is_new #
     
-    @visits = @client.DistributorVisits.where("client_recognizes_visit is not null")
-            .order(:created_at => :desc).paginate(page: params[:page], per_page: 15)
+    @visits = @client.DistributorVisits.order(:created_at => :desc).paginate(page: params[:page], per_page: 15)
   end
 
   def create
@@ -35,5 +34,12 @@ class Distributor::VisitsController < ApplicationController
       flash[:info] = "Ocurrió un error al guardar la visita"
       redirect_to distributor_client_visits_path(@client.hash_id)
     end
+  end
+
+  def destroy
+    visit = DistributorVisit.find(params[:id])
+    visit.destroy if visit.client_recognizes_visit.nil?
+    flash[:success] = "La visita ha sido cancelada!"
+    redirect_to distributor_client_visits_path(params[:client_id])
   end
 end

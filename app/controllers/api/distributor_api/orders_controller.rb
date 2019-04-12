@@ -8,15 +8,15 @@ class Api::DistributorApi::OrdersController < ApiController
       orders = @current_user.Orders.order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State).includes(:Client, City: :State)
     else
 
-      client = Client.find_by!(hash_id: params[:client])
-      if !client.blank?
-        orders = Order.where(client_id: client.id).order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State)
-        @current_user.updateRevision(client)
-      else
-        render :status => 200,
-               :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
-        return
-      end
+    client = Client.find_by!(hash_id: params[:client])
+    if !client.blank?
+      orders = Order.where(client_id: client.id).order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State)
+      @current_user.updateRevision(client)
+    else
+      render :status => 200,
+              :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
+      return
+    end
 
     end
 
@@ -31,7 +31,7 @@ class Api::DistributorApi::OrdersController < ApiController
   end
 
   def show
-    order = @current_user.Orders.where(hash_id: params[:id]).take
+    order = Order.find_by!(hash_id: params[:id])
 
     fiscal_data = order.Client.FiscalData
     warehouse = order.Warehouse

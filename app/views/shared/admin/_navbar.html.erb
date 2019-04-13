@@ -26,29 +26,34 @@
         </li>
         <!--Menu Items-->
 
-        <li><%= link_to(admin_welcome_path) do %><i class="fa fa-home"></i> <span class="nav-label">Inicio</span><% end %></li>
-        <li>
+        <li class="welcome">
+          <%= link_to(admin_welcome_path) do %>
+            <i class="fa fa-home"></i> <span class="nav-label">Inicio</span>
+          <% end %>
+        </li>
+
+        <li class="site_workers">
           <%= link_to admin_site_workers_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-users') %>
             <%= content_tag(:span, 'Trabajadores', class: 'nav-label') %>
           <% end if @current_user.has_permission_category?('site_workers') %>
         </li>
 
-        <li>
+        <li class="distributors">
           <%= link_to admin_distributors_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-street-view') %>
             <%= content_tag(:span, 'Distribuidores', class: 'nav-label') %>
           <% end if @current_user.has_permission_category?('distributors') %>
         </li>
 
-        <li>
+        <li class="clients">
           <%= link_to admin_clients_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-users') %>
             <%= content_tag(:span, 'Clientes', class: 'nav-label') %>
           <% end if @current_user.has_permission_category?('clients') %>
         </li>
 
-        <li>
+        <li class="distributor_work">
           <%= link_to admin_distributor_work_clients_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-male') %>
             <%= content_tag(:span, 'Clientes sin Distribuidor', class: 'nav-label') %>
@@ -59,7 +64,7 @@
               @current_user.has_permission_category?('parcels') or
               @current_user.has_permission_category?('warehouse_products') or
               @current_user.has_permission_category?('warehouse_manager') %>
-          <li>
+          <li class="warehouses warehouse_products warehouse_manager parcels">
            <%= link_to admin_warehouses_path do %>
              <%= content_tag(:i, nil, class: 'fa fa-cubes') %>
              <%= content_tag(:span, 'Almacenes', class: 'nav-label') %>
@@ -67,28 +72,28 @@
           </li>
         <% end %>
 
-        <li>
+        <li class="products">
           <%= link_to admin_products_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-cube') %>
             <%= content_tag(:span, 'Productos', class: 'nav-label') %>
           <% end if @current_user.has_permission_category?('products') %>
         </li>
 
-        <li>
+        <li class="orders">
           <%= link_to admin_orders_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-truck') %>
             <%= content_tag(:span, 'Órdenes', class: 'nav-label') %>
           <% end if @current_user.has_permission_category?('orders') %>
         </li>
 
-        <li>
+        <li class="commissions">
           <%= link_to admin_commissions_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-money') %>
             <%= content_tag(:span, 'Comisiones', class: 'nav-label') %>
           <% end if @current_user.has_permission_category?('commissions') %>
         </li>
 
-        <li>
+        <li class="product_questions">
           <%= link_to admin_product_questions_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-question-circle') %>
             <%= content_tag(:span, 'Preguntas de Prod.', class: 'nav-label') %>
@@ -97,21 +102,21 @@
           <% end if @current_user.has_permission_category?('product_questions') %>
         </li>
 
-        <li>
+        <li class="suggestions">
           <%= link_to admin_suggestions_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-comments') %>
             <%= content_tag(:span, 'Comentarios y Sugerencias', class: 'nav-label') %>
           <% end if @current_user.has_permission_category?('comments_and_suggestions') %>
         </li>
 
-        <li>
+        <li class="statistics">
           <%= link_to admin_statistics_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-area-chart') %>
             <%= content_tag(:span, 'Estadísticas', class: 'nav-label') %>
           <% end if @current_user.has_permission_category?('statistics') %>
         </li>
 
-        <li>
+        <li class="web">
           <%= link_to admin_web_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-desktop') %>
             <%= content_tag(:span, 'Contenido del Sitio', class: 'nav-label') %>
@@ -120,7 +125,7 @@
 
         <% if @current_user.has_permission_category?('bank_accounts') or
               @current_user.has_permission_category?('banks') %>
-          <li>
+          <li class="bank_accounts banks">
             <%= link_to admin_banks_path do %>
               <%= content_tag(:i, nil, class: 'fa fa-bank') %>
               <%= content_tag(:span, 'Bancos y Cuentas', class: 'nav-label') %>
@@ -128,14 +133,14 @@
           </li>
         <% end %>
 
-        <li>
+        <li class="mexico_db">
           <%= link_to admin_mexico_db_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-map-marker') %>
             <%= content_tag(:span, 'Entidades de México', class: 'nav-label') %>
           <% end if @current_user.has_permission_category?('mexico_db') %>
         </li>
 
-        <li>
+        <li class="tip_recipes">
           <%= link_to admin_tip_recipes_path do %>
             <%= content_tag(:i, nil, class: 'fa fa-book') %>
             <%= content_tag(:span, 'Consejos y Recetas', class: 'nav-label') %>
@@ -154,3 +159,10 @@
       </ul>
   </div>
 </nav>
+
+<script type="text/javascript">
+  $(document).ready(() => {
+    let controllerName = "<%= params[:controller].split('/')[1] %>";
+    document.querySelector(`.${controllerName}`).classList.add('active');
+  });
+</script>

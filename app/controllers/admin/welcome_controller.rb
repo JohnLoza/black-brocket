@@ -6,6 +6,7 @@ class Admin::WelcomeController < AdminController
 
   def suggestions
     deny_access! and return unless @current_user.has_permission_category?('comments_and_suggestions')
+    params[:controller] = "admin/suggestions"
 
     @suggestions = Suggestion.unanswered.oldest.paginate(page: params[:page], per_page: 25)
   end

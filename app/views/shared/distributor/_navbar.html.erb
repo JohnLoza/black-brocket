@@ -20,14 +20,42 @@
         </li>
         <!--Menu Items-->
 
-        <li><%= link_to distributor_welcome_path do %><i class="fa fa-home"></i> <span class="nav-label">Inicio</span><% end %></li>
-        <li><%= link_to distributor_clients_path do %><i class="fa fa-users"></i> <span class="nav-label">Clientes</span><% end %></li>
-        <li><%= link_to distributor_orders_path do %><i class="fa fa-cubes"></i> <span class="nav-label">Órdenes</span><% end %></li>
-        <li><%= link_to distributor_commissions_path do %><i class="fa fa-money"></i> <span class="nav-label">Comisiones</span><% end %></li>
-        <li><%= link_to(log_out_path, method: "delete") do %><i class="fa fa-sign-out"></i> <span class="nav-label">Cerrar Sesión</span><% end %></li>
-        <li></li>
+        <li class="admin">
+          <%= link_to distributor_welcome_path do %>
+            <i class="fa fa-home"></i> <span class="nav-label">Inicio</span>
+          <% end %>
+        </li>
+        <li class="clients">
+          <%= link_to distributor_clients_path do %>
+            <i class="fa fa-users"></i> <span class="nav-label">Clientes</span>
+          <% end %>
+        </li>
+        <li class="orders">
+          <%= link_to distributor_orders_path do %>
+            <i class="fa fa-cubes"></i> <span class="nav-label">Órdenes</span>
+          <% end %>
+        </li>
+        <li class="commissions">
+          <%= link_to distributor_commissions_path do %>
+            <i class="fa fa-money"></i>
+            <span class="nav-label">Comisiones</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to(log_out_path, method: "delete") do %>
+            <i class="fa fa-sign-out"></i> 
+            <span class="nav-label">Cerrar Sesión</span>
+          <% end %>
+        </li>
         <!--End Menu Items-->
       </ul>
   </div>
 </nav>
 <!--End Menu-->
+
+<script type="text/javascript">
+  $(document).ready(() => {
+    let controllerName = "<%= params[:controller].split("/")[1] %>";
+    document.querySelector(`.${controllerName}`).classList.add("active");
+  });
+</script>

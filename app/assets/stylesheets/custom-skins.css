@@ -1,0 +1,442 @@
+/*
+ *  Skins defaults
+*/
+.skin .minimalize-styl-2 {
+  margin: 14px 5px 5px 30px;
+}
+.skin .navbar-top-links li:last-child {
+  margin-right: 30px;
+}
+.skin.fixed-nav .minimalize-styl-2 {
+  margin: 14px 5px 5px 15px;
+}
+.skin .breadcrumb {
+  background: transparent;
+}
+.skin .page-heading {
+  border: none;
+}
+.skin .nav > li > a {
+  color: #FEFEFE;
+}
+.skin.skin-4 .nav > li > a {
+  color: #676a6c;
+}
+.skin .wrapper-content {
+  padding: 15px 10px;
+}
+.skin #page-wrapper {
+  background: #f4f6fa;
+}
+.skin .ibox-title,
+.skin .ibox-content {
+  border-width: 1px;
+}
+.skin .ibox-content:last-child {
+  border-style: solid solid solid solid;
+}
+.skin .nav > li.active {
+  border: none;
+}
+.skin .nav-header {
+  padding: 35px 25px 25px 25px;
+}
+.skin .nav-header a.dropdown-toggle {
+  color: #fff;
+  margin-top: 10px;
+}
+.skin .nav-header a.dropdown-toggle .text-muted {
+  color: #fff;
+  opacity: 0.8;
+}
+.skin .img-circle {
+  border-radius: 5px;
+}
+.skin .text-muted,
+.skin a.close-canvas-menu{
+  color: #fefefe;
+}
+.skin.skin-4 .text-muted{
+  color: #888;
+}
+/*
+ *  Skins defaults
+*/
+
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Cyan
+*/
+.skin-cyan .spin-icon {
+  background: #1abc9c !important;
+}
+.skin-cyan .nav-header {
+  background: #16a085 !important;
+}
+.skin-cyan.mini-navbar .nav-second-level {
+  background: #16a085;
+}
+.skin-cyan .nav > li.active {
+  background: #16a085;
+}
+.skin-cyan .navbar-minimalize {
+  background: #16a085;
+  border-color: #FEFEFE;
+}
+body.skin-cyan {
+  background: #1abc9c;
+}
+body.skin-cyan nav.navbar-static-side {
+    background: #1abc9c;
+}
+.skin-cyan .navbar-static-top {
+  background: #1abc9c;
+}
+.skin-cyan .navbar-default .nav > li > a:hover,
+.skin-cyan .navbar-default .nav > li > a:focus {
+  background: #16a085;
+  color: #fff;
+}
+.skin-cyan #page-wrapper{
+  background-color: #9ae6d6;
+}
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Cyan
+*/
+
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Red
+*/
+.skin-red .spin-icon {
+  background: #ff7979 !important;
+}
+.skin-red .nav-header {
+  background: #eb4d4b !important;
+}
+.skin-red.mini-navbar .nav-second-level {
+  background: #eb4d4b;
+}
+.skin-red .nav > li.active {
+  background: #eb4d4b;
+}
+.skin-red .navbar-minimalize {
+  background: #eb4d4b !important;
+  border-color: #FEFEFE !important;
+}
+body.skin-red {
+  background: #ff7979;
+}
+body.skin-red nav.navbar-static-side {
+    background: #ff7979;
+}
+.skin-red .navbar-static-top {
+  background: #ff7979;
+}
+.skin-red .navbar-default .nav > li > a:hover,
+.skin-red .navbar-default .nav > li > a:focus {
+  background: #eb4d4b;
+  color: #fff;
+}
+.skin-red .btn.btn-primary,
+.skin-red .badge.badge-primary,
+.skin-red .label.label-primary{
+  background-color: #686de0;
+  border-color: #686de0;
+  color: #fefefe;
+}
+.skin-red #page-wrapper{
+  background-color: #ffb0b0;
+}
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Red
+*/
+
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Greenland Green
+*/
+.skin-greenland .spin-icon {
+  background: #7ed6df !important;
+}
+.skin-greenland .nav-header {
+  background: #22a6b3 !important;
+}
+.skin-greenland.mini-navbar .nav-second-level {
+  background: #22a6b3;
+}
+.skin-greenland .nav > li.active {
+  background: #22a6b3;
+}
+.skin-greenland .navbar-minimalize {
+  background: #22a6b3 !important;
+  border-color: #FEFEFE !important;
+}
+body.skin-greenland {
+  background: #7ed6df;
+}
+body.skin-greenland nav.navbar-static-side {
+    background: #7ed6df;
+}
+.skin-greenland .navbar-static-top {
+  background: #7ed6df;
+}
+.skin-greenland .navbar-default .nav > li > a:hover,
+.skin-greenland .navbar-default .nav > li > a:focus {
+  background: #22a6b3;
+  color: #fff;
+}
+.skin-greenland #page-wrapper{
+  background-color: #9ed2d8;
+}
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Greenland Green
+*/
+
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Purple
+*/
+.skin-purple .spin-icon {
+  background: #ab47bc !important;
+}
+.skin-purple .nav-header {
+  background: #9c27b0 !important;
+}
+.skin-purple.mini-navbar .nav-second-level {
+  background: #9c27b0;
+}
+.skin-purple .nav > li.active {
+  background: #9c27b0;
+}
+.skin-purple .navbar-minimalize {
+  background: #9c27b0 !important;
+  border-color: #FEFEFE !important;
+}
+body.skin-purple {
+  background: #ab47bc;
+}
+body.skin-purple nav.navbar-static-side {
+    background: #ab47bc;
+}
+.skin-purple .navbar-static-top {
+  background: #ab47bc;
+}
+.skin-purple .navbar-default .nav > li > a:hover,
+.skin-purple .navbar-default .nav > li > a:focus {
+  background: #9c27b0;
+  color: #fff;
+}
+.skin-purple .btn.btn-primary,
+.skin-purple .badge.badge-primary,
+.skin-purple .label.label-primary{
+  background-color: #9c27b0;
+  border-color: #9c27b0;
+  color: #fefefe;
+}
+.skin-purple #page-wrapper{
+  background-color: #b574c0;
+}
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Purple
+*/
+
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Blurple
+*/
+.skin-blurple .spin-icon {
+  background: #686de0 !important;
+}
+.skin-blurple .nav-header {
+  background: #4834d4 !important;
+}
+.skin-blurple.mini-navbar .nav-second-level {
+  background: #4834d4;
+}
+.skin-blurple .nav > li.active {
+  background: #4834d4;
+}
+.skin-blurple .navbar-minimalize {
+  background: #4834d4 !important;
+  border-color: #FEFEFE !important;
+}
+body.skin-blurple {
+  background: #686de0;
+}
+body.skin-blurple nav.navbar-static-side {
+    background: #686de0;
+}
+.skin-blurple .navbar-static-top {
+  background: #686de0;
+}
+.skin-blurple .navbar-default .nav > li > a:hover,
+.skin-blurple .navbar-default .nav > li > a:focus {
+  background: #4834d4;
+  color: #fff;
+}
+.skin-blurple .btn.btn-primary,
+.skin-blurple .badge.badge-primary,
+.skin-blurple .label.label-primary{
+  background-color: #4834d4;
+  border-color: #4834d4;
+  color: #fefefe;
+}
+.skin-blurple #page-wrapper{
+  background-color: #9b9ef1;
+}
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Blurple
+*/
+
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - DeepCove
+*/
+.skin-deepcove .spin-icon {
+  background: #30336b !important;
+}
+.skin-deepcove .nav-header {
+  background: #130f40 !important;
+}
+.skin-deepcove.mini-navbar .nav-second-level {
+  background: #130f40;
+}
+.skin-deepcove .nav > li.active {
+  background: #130f40;
+}
+.skin-deepcove .navbar-minimalize {
+  background: #130f40 !important;
+  border-color: #FEFEFE !important;
+}
+body.skin-deepcove {
+  background: #30336b;
+}
+body.skin-deepcove nav.navbar-static-side {
+    background: #30336b;
+}
+.skin-deepcove .navbar-static-top {
+  background: #30336b;
+}
+.skin-deepcove .navbar-default .nav > li > a:hover,
+.skin-deepcove .navbar-default .nav > li > a:focus {
+  background: #130f40;
+  color: #fff;
+}
+.skin-deepcove .btn.btn-primary,
+.skin-deepcove .badge.badge-primary,
+.skin-deepcove .label.label-primary{
+  background-color: #130f40;
+  border-color: #130f40;
+  color: #fefefe;
+}
+.skin-deepcove #page-wrapper{
+  background-color: #56598f;
+}
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Deep Cove
+*/
+
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Pure Apple
+*/
+.skin-pureapple .spin-icon {
+  background: #badc58 !important;
+}
+.skin-pureapple .nav-header {
+  background: #6ab04c !important;
+}
+.skin-pureapple.mini-navbar .nav-second-level {
+  background: #6ab04c;
+}
+.skin-pureapple .nav > li.active {
+  background: #6ab04c;
+}
+.skin-pureapple .navbar-minimalize {
+  background: #6ab04c !important;
+  border-color: #FEFEFE !important;
+}
+body.skin-pureapple {
+  background: #badc58;
+}
+body.skin-pureapple nav.navbar-static-side {
+    background: #badc58;
+}
+.skin-pureapple .navbar-static-top {
+  background: #badc58;
+}
+.skin-pureapple .navbar-default .nav > li > a:hover,
+.skin-pureapple .navbar-default .nav > li > a:focus {
+  background: #6ab04c;
+  color: #fff;
+}
+.skin-pureapple .btn.btn-primary,
+.skin-pureapple .badge.badge-primary,
+.skin-pureapple .label.label-primary{
+  background-color: #6ab04c;
+  border-color: #6ab04c;
+  color: #fefefe;
+}
+.skin-pureapple #page-wrapper{
+  background-color: #d2e98c;
+}
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Pure Apple
+*/
+
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Quince Jelly
+*/
+.skin-quince .spin-icon {
+  background: #ffbe76 !important;
+}
+.skin-quince .nav-header {
+  background: #f0932b !important;
+}
+.skin-quince.mini-navbar .nav-second-level {
+  background: #f0932b;
+}
+.skin-quince .nav > li.active {
+  background: #f0932b;
+}
+.skin-quince .navbar-minimalize {
+  background: #f0932b !important;
+  border-color: #FEFEFE !important;
+}
+body.skin-quince {
+  background: #ffbe76;
+}
+body.skin-quince nav.navbar-static-side {
+    background: #ffbe76;
+}
+.skin-quince .navbar-static-top {
+  background: #ffbe76;
+}
+.skin-quince .navbar-default .nav > li > a:hover,
+.skin-quince .navbar-default .nav > li > a:focus {
+  background: #f0932b;
+  color: #fff;
+}
+.skin-quince .btn.btn-primary,
+.skin-quince .badge.badge-primary,
+.skin-quince .label.label-primary{
+  background-color: #f0932b;
+  border-color: #f0932b;
+  color: #fefefe;
+}
+.skin-quince #page-wrapper{
+  background-color: #ffd5a6;
+}
+/*
+ *   INSPINIA SKIN - Responsive Admin Theme
+ *   NAME - Quince Jelly
+*/

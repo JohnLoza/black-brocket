@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190326161223) do
+ActiveRecord::Schema.define(version: 20190412180044) do
 
   create_table "bank_accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "bank_name"
@@ -201,6 +201,7 @@ ActiveRecord::Schema.define(version: 20190326161223) do
     t.string "home_img"
     t.date "birthday"
     t.string "authentication_token"
+    t.string "ui_theme", default: "skin-4"
     t.index ["deleted_at"], name: "index_distributors_on_deleted_at"
     t.index ["hash_id"], name: "index_distributors_on_hash_id", unique: true
   end
@@ -464,6 +465,7 @@ ActiveRecord::Schema.define(version: 20190326161223) do
     t.datetime "updated_at", null: false
     t.date "birthday"
     t.string "authentication_token"
+    t.string "ui_theme", default: "skin-4"
     t.index ["deleted_at"], name: "index_site_workers_on_deleted_at"
     t.index ["hash_id"], name: "index_site_workers_on_hash_id", unique: true
   end

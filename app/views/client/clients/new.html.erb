@@ -3,20 +3,15 @@
 <h1 class="module-title long-up-2x text-center">Registro</h1>
 
 <div class="show-tips-container">
-  <div class="row">
-    <%= render 'landing_page_form' %>
-  </div>
+  <%= render 'landing_page_form' %>
 </div>
 
+<style>
 <% image = WebPhoto.where(name: "LANDING_PAGE").take %>
 <% if image.blank? %>
   <% url = image_url "person-woman-coffee-cup-large.jpg" %>
 <% else %>
   <% url = image.photo.url %>
 <% end %>
-
-<style>
-body {
-  background: url('<%= url %>') center center / cover no-repeat;
-}
+body { background: url('<%= url %>') center center / cover no-repeat; }
 </style>

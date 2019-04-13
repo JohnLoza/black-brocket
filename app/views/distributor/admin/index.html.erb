@@ -22,7 +22,7 @@
             </div>
             <%= image_tag @current_user.avatar_url(:mini), class: "img-circle img-rounded m-b-md" %>
             <div class="m-sm pull-right-bottom">
-                <span class="btn btn-info" onclick="$('#distributor_home_img').click();">Cambiar imagen</span>
+                <span class="btn btn-primary" onclick="$('#distributor_home_img').click();">Cambiar imagen</span>
 
                 <%= form_for(@current_user, url: distributor_update_home_image_path, method: :post, html: {style: "display: none;"}) do |f| %>
                   <%= f.file_field :home_img,
@@ -43,12 +43,25 @@
               <% @regions.each do |region| %>
                 <% city_name = region.name %>
                 <%= link_to "https://maps.google.com.mx/maps/search/#{city_name}", { target: "_blank" } do %>
-                  <span class="badge badge-info f-size-16 m-sm" style="color: #FEFEFE;"> <%=city_name%> </span>
+                  <span class="badge badge-primary f-size-16 m-sm" style="color: #FEFEFE;"> <%=city_name%> </span>
                 <% end %>
               <% end %>
             </center>
             <div class="text-right">
-               <%= link_to(log_out_path, method: "delete") do %><span class="btn btn-xs btn-success"><i class="fa fa-sign-out"></i> Cerrar sesión</span><% end %>
+              <label for="color-ui">Tema de interfaz</label>
+              <select name="color-ui" id="color-ui" autocomplete="off" onchange="updateUI();">
+                <option value="" disabled selected>Selecciona un tema</option>
+                <option value="skin-4">Defecto</option>
+                <option value="skin-cyan">Cyan</option>
+                <option value="skin-greenland">Greenland Green</option>
+                <option value="skin-red">Red</option>
+                <option value="skin-quince">Quince Jelly</option>
+                <option value="skin-pureapple">Pure Apple</option>
+                <option value="skin-purple">Purple</option>
+                <option value="skin-blurple">Blurple</option>
+                <option value="skin-deepcove">Deep Cove</option>
+              </select>
+              <%= link_to(log_out_path, method: "delete") do %><span class="btn btn-xs btn-danger"><i class="fa fa-sign-out"></i> Cerrar sesión</span><% end %>
             </div>
         </div>
     </div>
@@ -56,3 +69,25 @@
   </div>
 </div>
 <!--End content whit animation-->
+
+<script type="text/javascript">
+function updateUI() {
+  body = document.querySelector("body");
+  select = document.querySelector("#color-ui");
+  
+  newSkin = select.options[select.selectedIndex].value;
+
+  body.className = "";
+  body.classList.add("canvas-menu", "skin", newSkin, "mini-navbar");
+
+  url = "<%= distributor_update_ui_theme_path('replace', format: :json) %>";
+  url = url.replace("replace", newSkin);
+  $.ajax({
+    type: "POST",
+    url: url,
+    context: document.body
+  }).done(function(body) {
+
+  });
+}
+</script>

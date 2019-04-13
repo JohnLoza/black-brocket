@@ -38,9 +38,8 @@ Rails.application.routes.draw do
     get '/' => 'welcome#index', as: :welcome
     get '/suggestions' => 'welcome#suggestions', as: :suggestions
     post '/suggestion/:id/send_answer' => 'welcome#answer_suggestion', as: :answer_suggestion
-    #get '/configurations' => 'welcome#configurations', as: :configurations
-    #post '/configurations' => 'welcome#update_configurations'
     get '/notifications' => 'welcome#notifications', as: :notifications
+    post '/update_ui_theme/:theme' => 'welcome#update_ui_theme', as: :update_ui_theme
 
     # clients #
     get '/clients' => 'clients#index', as: :clients
@@ -224,6 +223,7 @@ Rails.application.routes.draw do
     # distributor paths
     get '/' => 'admin#index', as: :welcome
     post '/update_home_image' => 'admin#update_home_image', as: :update_home_image
+    post '/update_ui_theme/:theme' => 'admin#update_ui_theme', as: :update_ui_theme
 
     get '/notifications' => 'admin#notifications', as: :notifications
 
@@ -238,6 +238,7 @@ Rails.application.routes.draw do
 
     get '/client/:id/visits' => 'visits#index', as: :client_visits
     post 'client/:id/visits' => 'visits#create'
+    delete '/client/:client_id/visit/:id' => 'visits#destroy', as: :destroy_client_visit
 
     get '/client/:id/messages' => 'clients#messages', as: :client_messages
     post '/client/:id/messages' => 'clients#create_message'
@@ -351,6 +352,7 @@ Rails.application.routes.draw do
 
       get "client/:id/visits" => "visits#index"
       post "client/:id/visits/new" => "visits#create"
+      post '/client/:client_id/visit/:id/destroy' => 'visits#destroy'
 
       get "orders" => "orders#index"
       get "order/:id" => "orders#show"

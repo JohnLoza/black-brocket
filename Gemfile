@@ -48,6 +48,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'carrierwave', '~> 1.2.1'
 # Use SCSS for stylesheets
 gem 'sass-rails'
+# Compress js
+gem 'uglifier'
 # MiniMagick gives you access to all the command line options ImageMagick has (it's used by carrierwave too, for image manipulation) #
 gem 'mini_magick', '~> 4.3.6'
 # WillPaginate is a pagination library #

@@ -46,7 +46,7 @@
           <% @clients.each do |c| %>
 
             <%
-              distributor = c.City.Distributor
+              distributor = c.City.distributor_id
               if distributor
                 c.update_attribute(:worker_id, nil)
                 next

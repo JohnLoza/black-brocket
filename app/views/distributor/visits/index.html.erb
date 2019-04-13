@@ -11,8 +11,8 @@
 
           <div class="form-group">
             <%= label_tag :visit_date, "Fecha de visita" %> <br>
-            <%= text_field_tag :visit_date, class: 'form-control',
-              maxlength: 15, placeholder: "yyyy-mm-dd" %>
+            <%= text_field_tag :visit_date, Date.today, class: 'form-control',
+              maxlength: 15, placeholder: "YYYY-MM-DD", required: true %>
           </div>
 
           <%= submit_tag 'Registrar visita', 
@@ -45,8 +45,8 @@
     options = {
                 locale: 'es',
                 format: 'YYYY-MM-DD',
-                date: new Date(),
-                maxDate: new Date(),
+                // date: new Date(),
+                // maxDate: new Date(),
                 icons: {
                     time: 'fa fa-clock-o',
                     date: 'fa fa-calendar',

@@ -28,8 +28,7 @@ class Client < ApplicationRecord
 
   validates :name, :email, presence: true
 
-  validates :street, :street_ref1, :street_ref2, :cp, :col, :extnumber,
-    presence: true, on: :update
+  # validates :street, :street_ref1, :street_ref2, :cp, :col, :extnumber, presence: true, on: :update
 
   validates :email, uniqueness: { case_sensitive: false }, on: :create
   # validates :email, :confirmation => true

@@ -18,9 +18,6 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::UnknownController do |e|
     render_404
   end
-  rescue_from ActionController::RoutingError do |e|
-    render_404
-  end
 
   def render_404
     respond_to do |format|

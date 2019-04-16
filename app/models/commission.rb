@@ -7,4 +7,9 @@ class Commission < ApplicationRecord
   mount_uploader :payment_pdf, PdfUploader
 
   mount_uploader :invoice, CompressedFileUploader
+
+  def self.by_distributor(distributor)
+    return all unless distributor.present?
+    where(distributor_id: distributor)
+  end
 end

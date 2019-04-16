@@ -28,11 +28,9 @@ class Client::OrdersController < ApplicationController
       @client_state = State.where(id: @client_city.state_id).take
 
       render :show, layout: false
-      return
     else
       flash[:info] = "No se encontró la orden con clave: #{params[:id]}"
       redirect_to client_orders_path(@current_user.hash_id)
-      return
     end
   end
 
@@ -140,7 +138,7 @@ class Client::OrdersController < ApplicationController
   def cancel
     @order = @current_user.Orders.where(hash_id: params[:id]).take
 
-    if !@order.blank?
+    if @order
       ActiveRecord::Base.transaction do
         @details = OrderDetail.where(order_id: @order.id)
 

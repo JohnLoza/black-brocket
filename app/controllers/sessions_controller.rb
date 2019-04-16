@@ -14,40 +14,26 @@ class SessionsController < ApplicationController
   def create
     worker = SiteWorker.find_by(email: params[:session][:email].downcase)
     if worker && worker.authenticate(params[:session][:password])
-      if today_is_birthday?(worker.birthday)
-        flash[:info] = happy_birthday_message()
-      end
       log_in(worker, 'w')
       remember(worker, 'w') if params[:session][:remember_me] == '1'
-      redirect_to controller: "admin/welcome", action: :index
-      return
+      redirect_to controller: "admin/welcome", action: :index and return
     end
 
     distributor = Distributor.find_by(email: params[:session][:email].downcase)
     if distributor && distributor.authenticate(params[:session][:password])
-      if today_is_birthday?(distributor.birthday)
-        flash[:info] = happy_birthday_message()
-      end
       log_in(distributor, 'd')
       remember(distributor, 'd') if params[:session][:remember_me] == '1'
-      redirect_to controller: "distributor/admin", action: :index
-      return
+      redirect_to controller: "distributor/admin", action: :index and return
     end
 
     client = Client.find_by(email: params[:session][:email].downcase)
     if client && client.deleted_at == nil && client.authenticate(params[:session][:password])
-      if today_is_birthday?(client.birthday)
-        flash[:info] = happy_birthday_message()
-      end
       log_in(client, 'c')
       remember(client, 'c') if params[:session][:remember_me] == '1'
-
       if !client.email_verified
         flash[:info] = "Por favor confirma tu correo electrónico, en caso de no recibirlo puedes <a href=\"#{client_resend_email_confirmation_path(client.hash_id)}\">reenviarlo</a>."
       end
-
-      redirect_to controller: "products"
-      return
+      redirect_to controller: "products" and return
     end
 
     flash.now[:danger] = 'Email o contraseña incorrecto'
@@ -89,19 +75,4 @@ class SessionsController < ApplicationController
 
     render :update_password, layout: false
   end
-
-  private
-    def today_is_birthday?(birthday)
-      now = Time.now
-      if birthday and now.month == birthday.month and now.day == birthday.day
-        return true
-      else
-        return false
-      end
-    end
-
-    def happy_birthday_message
-      string = "Feliz cumpleaños! te desea el equipo de BlackBrocket."
-      return string
-    end
 end

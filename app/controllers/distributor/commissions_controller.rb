@@ -5,15 +5,14 @@ class Distributor::CommissionsController < ApplicationController
 
   def index
     @commissions = @current_user.Commissions.order(created_at: :desc)
-                    .limit(100).paginate(page: params[:page], per_page: 25)
+      .paginate(page: params[:page], per_page: 25)
   end
 
   def details
     commission = @current_user.Commissions.find_by!(hash_id: params[:id])
     if commission.nil?
       flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
-      redirect_to distributor_commissions_path
-      return
+      redirect_to distributor_commissions_path and return
     end
 
     order_ids = commission.Details.map { |m| m.order_id  }
@@ -24,8 +23,7 @@ class Distributor::CommissionsController < ApplicationController
     commission = @current_user.Commissions.find_by!(hash_id: params[:id])
     if commission.nil?
       flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
-      redirect_to distributor_commissions_path
-      return
+      redirect_to distributor_commissions_path and return
     end
 
     if commission.update_attributes(invoice: params[:commission][:invoice], state: "PAID_&_INVOICE")

@@ -9,7 +9,6 @@ class Admin::ClientsController < AdminController
         .search(key_words: search_params, joins: {City: :State}, fields: fields_to_search)
         .paginate(page: params[:page], per_page: 20).includes(City: :State)
     else
-      puts "--- search_params: #{search_params} ---"
       @clients = Client.active.order_by_name
         .search(key_words: search_params, joins: {City: :State}, fields: fields_to_search)
         .paginate(page: params[:page], per_page: 20).includes(City: :State)

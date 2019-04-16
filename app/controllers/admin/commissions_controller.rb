@@ -9,17 +9,12 @@ class Admin::CommissionsController < AdminController
 
     if params[:distributor]
       distributor = Distributor.find_by!(hash_id: params[:distributor])
+      distributor_id = distributor.id
+    end
 
-      @commissions = distributor.Commissions.order(created_at: :desc)
-        .search(key_words: search_params, fields: ['hash_id', 'state'])
-        .limit(100).paginate(page: params[:page], per_page: 25)
-        .includes(:Distributor)
-    else
-      @commissions = Commission.all.order(created_at: :desc)
-        .search(key_words: search_params, fields: ['hash_id', 'state'])
-        .limit(100).paginate(page: params[:page], per_page: 25)
-        .includes(:Distributor)
-    end # if params[:distributor] #
+    @commissions = Commission.order(created_at: :desc).by_distributor(distributor_id)
+      .search(key_words: search_params, fields: ['hash_id', 'state'])
+      .paginate(page: params[:page], per_page: 25).includes(:Distributor)
   end
 
   def create

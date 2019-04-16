@@ -1,16 +1,13 @@
 class StaticPagesController < ApplicationController
-  # require 'net/http'
   layout "static_pages.html.erb"
 
   def index
-    @current_user = current_user
+    current_user
     if session[:user_type].present?
       if session[:user_type] == 'w'
-        redirect_to admin_welcome_path
-        return
+        redirect_to admin_welcome_path and return
       elsif session[:user_type] == 'd'
-        redirect_to distributor_welcome_path
-        return
+        redirect_to distributor_welcome_path and return
       end
     end
 
@@ -96,33 +93,5 @@ class StaticPagesController < ApplicationController
        mother_lastname: params[:mother_lastname],
        telephone: params[:telephone], cellphone: params[:cellphone],
        city_id: params[:city_id], email: params[:email]}
-    end
-
-    def fill_ladas_in_database
-      # need to uncomment require 'net/http' at the top of the file
-      City.where(lada: nil).includes(:State).each do |city|
-        state_name = city.State.name
-        state_name = "México" if state_name == "Edo. México"
-        if state_name == "Ciudad de México"
-          city.update_attributes(lada: "55")
-          next
-        end
-
-        url = URI.parse("http://telmex.com/web/buscador?q=#{CGI.escape city.name}+#{CGI.escape state_name}&output=xml_no_dtd&oe=UTF-8&ie=UTF-8&client=_nuevo_telmex_claves_lada&proxystylesheet=_nuevo_telmex_claves_lada&entqr=3&entqrm=0&ud=1&getfields=*&site=claves_lada&filter=0&requiredfields=&giro=Mostrar+todo&estado=Seleccione+uno")
-        req = Net::HTTP::Get.new(url.to_s)
-        res = Net::HTTP.start(url.host, url.port) {|http|
-          http.request(req)
-        }
-
-        matches = res.body.match(/(cveLada).*\n.*\n.*div/)
-        if matches.nil?
-          puts "--- No lada found for #{city.name}, #{state_name} ---"
-          next
-        end
-        num = matches.to_s.match(/\d+/)
-
-        city.update_attributes(lada: num.to_s)
-        puts "--- updating lada for #{city.name}, #{state_name}| lada: #{num.to_s}"
-      end
     end
 end

@@ -37,12 +37,12 @@ class Admin::WarehouseProductsController < AdminController
     product = Product.find(params[:id])
 
     master_detail = WarehouseProduct.where(warehouse_id: warehouse.id,
-                      product_id: product.id, describes_total_stock: true).take
+      product_id: product.id, describes_total_stock: true).take
 
     detail = WarehouseProduct.where(warehouse_id: warehouse.id,
-                      product_id: product.id, describes_total_stock: false,
-                      batch: params[:warehouse_product][:batch],
-                      expiration_date: params[:warehouse_product][:expiration_date]).take
+      batch: params[:warehouse_product][:batch],
+      product_id: product.id, describes_total_stock: false,
+      expiration_date: params[:warehouse_product][:expiration_date]).take
 
     success = false
     ActiveRecord::Base.transaction do

@@ -13,8 +13,7 @@ class Distributor::OrdersController < ApplicationController
         @current_user.updateRevision(@client)
       else
         flash[:info]="No encontramos a tu cliente."
-        redirect_to distributor_clients_path
-        return
+        redirect_to distributor_clients_path and return
       end
     else
       @orders = @current_user.Orders.order(updated_at: :desc).limit(150).paginate(:page => params[:page], :per_page => 10).includes(City: :State).includes(:Client)

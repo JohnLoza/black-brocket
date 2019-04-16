@@ -19,9 +19,15 @@ class Product < ApplicationRecord
   validates :lowest_price, numericality: {less_than_or_equal_to: :recommended_price}
 
   scope :recent, -> { order(created_at: :desc) }
+  scope :visible, -> { where(show: true) }
   scope :order_by_name, -> (way = :asc) {
     order(name: way)
   }
+
+  def self.by_category(category)
+    return all unless category.present? and ["hot","cold","frappe"].include? category
+    where("#{category}" => true)
+  end
 
   private
     def get_embed_link

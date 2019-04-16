@@ -9,10 +9,11 @@ class TipsController < ApplicationController
 
   def create_comment
     @tip_id = params[:id]
-    @comment = TipRecipeComment.new(
-              tip_recipe_id: @tip_id,
-              client_id: @current_user.id,
-              description: params[:tip_recipe_comment][:description])
+    @comment = 
+      TipRecipeComment.new(
+        tip_recipe_id: @tip_id,
+        client_id: @current_user.id,
+        description: params[:tip_recipe_comment][:description])
 
     @comment.save
     respond_to do |format|
@@ -26,12 +27,11 @@ class TipsController < ApplicationController
 
     if @tip.nil?
       flash[:info] = "La entrada de blog que buscas no existe."
-      redirect_to tips_path
-      return
+      redirect_to tips_path and return
     end
 
     @comments = @tip.Comments.order(created_at: :desc)
-                .paginate(page: params[:page], per_page: 30).includes(:Client)
+      .paginate(page: params[:page], per_page: 30).includes(:Client)
   end
 
 end

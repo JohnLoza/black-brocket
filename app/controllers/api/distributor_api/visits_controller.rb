@@ -27,7 +27,7 @@ class Api::DistributorApi::VisitsController < ApiController
                       client_id: client.id,
                       visit_date: params[:visit_date])
 
-    if visit.save and client.update_attribute(:last_distributor_visit, today)
+    if visit.save and client.update_attribute(:last_distributor_visit, params[:visit_date])
       render :status => 200,
              :json => { :success => true, :info => "SAVED" }
       return

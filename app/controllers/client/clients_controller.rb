@@ -17,8 +17,8 @@ class Client::ClientsController < ApplicationController
     end
 
     if @distributor
-      @messages = @current_user.DistributorMessages.all.order(:created_at => :desc)
-                    .paginate(page: params[:page], :per_page => 25)
+      @messages = @current_user.DistributorMessages.where('distributor_id = ? or worker_id = ?', @distributor.id, @distributor.id)
+        .order(:created_at => :desc).paginate(page: params[:page], :per_page => 25)
       @create_message_url = client_create_distributor_comment_path(@distributor.id)
 
       @client_image = @current_user.avatar_url(:mini)
@@ -40,17 +40,13 @@ class Client::ClientsController < ApplicationController
 
   def destroy_account
     if !@current_user.authenticate(params[:password])
-      flash[:warning]="Contraseña incorrecta."
-      redirect_to client_destroy_account_path(@current_user.hash_id)
-      return
+      flash[:warning] = "Contraseña incorrecta."
+      redirect_to client_destroy_account_path(@current_user.hash_id) and return
     end
-    @current_user.deleted=true
+    @current_user.deleted = true
     @current_user.delete_account_hash= random_hash_id(12).upcase
 
-    if @current_user.save
-      log_out
-      session.delete(:e_cart)
-    end
+    log_out and session.delete(:e_cart) if @current_user.save
     redirect_to good_bye_path(params[:id])
   end
 
@@ -109,8 +105,7 @@ class Client::ClientsController < ApplicationController
 
     if @client.update_attributes(client_params)
       flash[:success] = "Tu información ha sido actualizada!"
-      redirect_to products_path
-      return
+      redirect_to products_path and return
     else
       flash.now[:danger] = 'Ocurrió un error al guardar.'
       params[:city_id] = params[:city_id]
@@ -167,20 +162,17 @@ class Client::ClientsController < ApplicationController
 
   private
     def client_params
-      params.require(:client).permit(:username, :email, :email_confirmation, :rfc,
-                                     :street, :col, :intnumber, :extnumber,
-                                     :cp, :street_ref1, :street_ref2, :telephone,
-                                     :password, :password_confirmation, :birthday,
-                                     :fiscal_number, :photo, :cellphone,
-                                     :name, :lastname, :mother_lastname)
+      params.require(:client)
+        .permit(:username, :email, :email_confirmation, :rfc, :street, :col, 
+          :intnumber, :extnumber, :password, :password_confirmation, :birthday,
+          :cp, :street_ref1, :street_ref2, :telephone, :name, :lastname, 
+          :mother_lastname, :fiscal_number, :photo, :cellphone)
     end
 
     def visit_params
       params.require(:distributor_visit).permit(:client_recognizes_visit,
                                          :treatment_answer, :extra_comments)
     end
-
-
 
     def message_params
       {client_id: @current_user.id, comment: params[:comment],

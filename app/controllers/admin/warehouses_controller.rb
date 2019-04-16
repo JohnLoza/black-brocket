@@ -36,8 +36,8 @@ class Admin::WarehousesController < AdminController
         @warehouse.update_attribute(:hash_id, generateAlphKey("A", @warehouse.id))
         Product.all.each do |p|
           WarehouseProduct.create(warehouse_id: @warehouse.id,
-                  describes_total_stock: true, product_id: p.id, existence: 0,
-                  min_stock: 50, hash_id: random_hash_id(12).upcase)
+            describes_total_stock: true, product_id: p.id, existence: 0,
+            min_stock: 50, hash_id: random_hash_id(12).upcase)
         end
         flash[:success] = "Almacén creado"
         redirect_to admin_warehouses_path
@@ -99,12 +99,12 @@ class Admin::WarehousesController < AdminController
       @inventory_reports = InventoryReport.where(batch: params[:batch]).includes(:Worker)
 
       @products_to_ship = OrderProductShipmentDetail.joins(:Order)
-                          .where(orders: {state: ["BATCHES_CAPTURED", "INSPECTIONED"]})
-                          .where(batch: params[:batch]).includes(Order: :Client)
+        .where(orders: {state: ["BATCHES_CAPTURED", "INSPECTIONED"]})
+        .where(batch: params[:batch]).includes(Order: :Client)
 
       @products_shipped = OrderProductShipmentDetail.joins(:Order)
-                          .where(orders: {state: ["SENT", "DELIVERED"]})
-                          .where(batch: params[:batch]).includes(Order: :Client)
+        .where(orders: {state: ["SENT", "DELIVERED"]})
+        .where(batch: params[:batch]).includes(Order: :Client)
     end
   end
 
@@ -114,21 +114,17 @@ class Admin::WarehousesController < AdminController
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
 
     @products_in_stock = @warehouse.Products.joins(:Product).where(products: {deleted_at: nil})
-                          .where(warehouse_id: @warehouse.id, describes_total_stock: true)
-                          .order(product_id: :asc).includes(:Product)
+      .where(warehouse_id: @warehouse.id, describes_total_stock: true)
+      .order(product_id: :asc).includes(:Product)
 
     @products_no_pay = OrderDetail.select("product_id, sum(quantity) as sum_quantity").joins(:Order)
-                                        .where(orders: {state: ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED", "PAYMENT_REJECTED"],
-                                        warehouse_id: @warehouse.id}).group(:product_id)
+      .where(orders: {state: ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED", "PAYMENT_REJECTED"], warehouse_id: @warehouse.id}).group(:product_id)
 
     @products_paid = OrderDetail.select("product_id, sum(quantity) as sum_quantity").joins(:Order)
-                                        .where(orders: {state: ["PAYMENT_ACCEPTED", "BATCHES_CAPTURED"],
-                                        warehouse_id: @warehouse.id}).group(:product_id)
+      .where(orders: {state: ["PAYMENT_ACCEPTED", "BATCHES_CAPTURED"], warehouse_id: @warehouse.id}).group(:product_id)
 
     @complement = OrderDetail.joins(:Order)
-                            .where(orders: {state: ["INSPECTIONED"],
-                            warehouse_id: @warehouse.id}).includes(:Order)
-
+      .where(orders: {state: ["INSPECTIONED"], warehouse_id: @warehouse.id}).includes(:Order)
 
     render :inventory, layout: false
   end

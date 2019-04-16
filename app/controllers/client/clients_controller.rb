@@ -1,4 +1,5 @@
 class Client::ClientsController < ApplicationController
+  layout "static_pages.html.erb", only: [ :new ]
   before_action :logged_in?, except:  [ :new, :create, :email_confirmation ]
   before_action :current_user_is_a_client?, except:  [ :new, :create, :email_confirmation ]
 

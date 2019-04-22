@@ -39,14 +39,15 @@
         <div class="widget-text-box">
             <h3 class="media-heading"><i class="fa fa-map-marker"></i> Zonas que debo distribuir: <small>- Haz click sobre la etiqueta para ver la zona en google maps</small></h3>
             <div class="hr-line-dashed"></div>
-            <center>
+            <div class="text-center">
+              <% state_name = @regions[0].State.name if @regions.length > 0 %>
               <% @regions.each do |region| %>
                 <% city_name = region.name %>
-                <%= link_to "https://maps.google.com.mx/maps/search/#{city_name}", { target: "_blank" } do %>
+                <%= link_to "https://maps.google.com.mx/maps/search/#{city_name}+#{state_name}", { target: "_blank" } do %>
                   <span class="badge badge-primary f-size-16 m-sm" style="color: #FEFEFE;"> <%=city_name%> </span>
                 <% end %>
               <% end %>
-            </center>
+            </div>
             <div class="text-right">
               <label for="color-ui">Tema de interfaz</label>
               <select name="color-ui" id="color-ui" autocomplete="off" onchange="updateUI();">

@@ -1,12 +1,10 @@
 <% provide(:title, @current_user.username) %>
 
-<div class="col-md-12">
-    <center>
-      <h1 class="module-title long-up-2x">Editar perfil</h1>
-  		<h2 class="module-subtitle">Aquí puedes cambiar la información de tu usuario.</h2>
-    </center>
-    <br><br>
+<div class="client-header">
+  <h1 class="module-title long-up-2x">Editar perfil</h1>
+  <h2 class="module-subtitle">Aquí puedes cambiar la información de tu usuario.</h2>
 </div>
+
 <div class="show-tips-container">
   <div class="row">
     <%= render 'form' %>

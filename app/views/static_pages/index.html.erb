@@ -4,9 +4,9 @@
 
 <section id="home" class="intro-module heightfull">
 
-  <center style="padding-top: 4em;">
+  <div class="text-center" style="padding-top: 6em;">
     <%= image_tag "bblogohome.png", style:"max-height:199px;"%>
-  </center>
+  </div>
 
   <div class="fullscreen-bg">
     <video loop muted autoplay poster="<%= image_url @bgImg.getImage %>" class="fullscreen-bg__video">
@@ -85,13 +85,13 @@
       </div>
     </div><!-- .row -->
     <!--Slider start-->
-    <div class="main-slider not-mobile">
+    <div class="main-slider">
           <div id="spinner"></div>
           <div id="slideshow0" class="owl-carousel" style="opacity: 1;">
             <% @offers.each do |o| %>
-              <div class="item"><center>
-                <a href="<%= o.url %>"><%= image_tag o.photo.url, class: "img-responsive" %></a>
-              </center></div>
+              <div class="item text-center">
+                <a href="<%= o.url %>"><%= image_tag o.photo.url %></a>
+              </div>
             <% end %>
           </div>
     </div>
@@ -323,6 +323,8 @@
         -ms-transform: translate(-50%, -50%);
       transform: translate(-50%, -50%);
   }
+
+  .module{ padding: 60px 0 !important; }
 
   @media (max-width: 767px) {
     .fullscreen-bg {

@@ -3,14 +3,21 @@
     <div class="ibox-content">
 
       <%= render "navigation_labels" %>
+      <%= form_for :class, url: admin_orders_path, method: :get  do |f| %>
+        <%= hidden_field_tag :type, params[:type] %>
+        <div class="input-group">
+          <%= f.text_field :search, value: search_params, class: 'form-control',
+            placeholder: 'Buscar', maxlength: 20  %>
+          <span class="input-group-btn">
+            <%= f.submit 'Buscar', class: 'btn btn btn-success' %>
+          </span>
+        </div>
+      <% end %>
 
       <table class="footable table table-stripped toggle-arrow-tiny" data-filter=#filter>
         <thead>
           <tr>
-            <th>Folio</th>
-            <!--<th data-hide="all">Cliente</th>
-            <th data-hide="all">Teléfono del Cliente</th>
-            <th data-hide="all">Correo del Cliente</th>-->
+            <th>Referencia</th>
             <th data-hide="all">Correo electrónico</th>
             <th data-hide="all">Ubicación</th>
             <th data-hide="phone">Cliente</th>
@@ -30,12 +37,15 @@
               <td><%= o.Client.email %></td>
               <% o_city = o.City %>
               <td><%= o_city.name %>, <%= o_city.State.name %></td>
-              <td><%= o.Client.username %></td>
+              <td><%= link_to o.Client.name, admin_client_path(o.Client) %></td>
               <td><%= o.Client.telephone %></td>
               <td>$ <%= o.total %></td>
               <td>
                 <% if o.distributor_id != 0 %>
                   <%= link_to o.Distributor.username, admin_distributor_path(o.Distributor.hash_id) %>
+                <% elsif o.Client.worker_id.present? %>
+                  <% worker = o.Client.Worker %>
+                  <%= link_to worker.name, admin_site_workers_path(worker) %>
                 <% else %>
                   <strong> Sin distribuidor en la zona </strong>
                 <% end # if o.distributor_id != 0 # %>

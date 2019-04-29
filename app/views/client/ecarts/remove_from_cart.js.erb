@@ -6,7 +6,7 @@ $("#grand-total").text(total);
 $("#<%=params[:product]%>").remove();
 
 <% if !session[:e_cart] %>
-  $("#ecart_content").html("<div class='col-md-12'><br><br><center><span class='icon-basket' style='font-size: 140px;''></span><br><br><br><h2 class='module-subtitle'>Tu carrito esta vacío, ve productos <a href='/products'>aquí</a><h2></center></div>");
+  $("#ecart_content").html("<div class='col-md-12 text-center'><span class='icon-basket' style='font-size: 140px;''></span><h2 class='module-subtitle' style="margin-top:2em;">Tu carrito esta vacío, ve productos <a href='/products'>aquí</a><h2></center></div>");
 <% end %>
 
 $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Eliminado del carrito.'} %>");

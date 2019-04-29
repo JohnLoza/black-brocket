@@ -44,6 +44,10 @@ class Admin::OrdersController < AdminController
         @orders = Array.new and return if params[:type].blank?
     end # case params[:type] #
 
+    if search_params
+      where_statement += " and hash_id like '%#{search_params}%'"
+    end
+
     if @current_user.has_permission?('orders@capture_tracking_code') and
       params[:type] == "CAPTURE_TRACKING_CODE"
       @parcels = Parcel.where(warehouse_id: @current_user.warehouse_id)

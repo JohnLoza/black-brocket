@@ -38,10 +38,10 @@
                 </div>
 
               <% else %>
-                <center>
+                <div class="text-center">
                   <h1>¡Aún no hay imágenes! sube unas nuevas aquí abajo</h1>
                   <i class="fa fa-arrow-down big-icon"></i>
-                </center>
+                </div>
               <% end %>
 
                 <%= form_for @new_photo, url: admin_web_photos_path, html: { method: :post, class: 'form-horizontal' } do |f| %>

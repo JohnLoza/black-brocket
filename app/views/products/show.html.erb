@@ -7,27 +7,24 @@
     <% end %>
     <%= @product.name %></h1>
   <div class="row divider-row-top">
-    <div class="col-sm-6">
-      <center>
-        <div class="thumbnail" style="border: 0;">
-          <% @photos.each do |photo| %>
-            <% if photo.is_principal %>
-              <%= link_to image_tag(photo.photo.url(:thumb), class: "img-responsive",
-                  style: "max-height: 400px; max-width: 420px;margin-bottom:10px;"),
-                  image_path(photo.photo.url), :data => {:toggle => "lightbox", :gallery => "products", :title => @product.name } %>
-              <% break %>
-            <% end %>
+    <div class="col-sm-6 text-center">
+      <div class="thumbnail" style="border: 0;">
+        <% @photos.each do |photo| %>
+          <% if photo.is_principal %>
+            <%= link_to image_tag(photo.photo.url(:thumb), style: "max-height: 350px; max-width: 350px;margin-bottom:10px;"),
+              image_path(photo.photo.url), :data => {:toggle => "lightbox", :gallery => "products", :title => @product.name } %>
+            <% break %>
           <% end %>
+        <% end %>
 
-          <% @photos.each do |photo| %>
-            <% if !photo.is_principal %>
-              <%= link_to image_tag(photo.photo.url(:mini), class: "img-thumbnail photo-gallery pull-left",
-                  style:"heigth: 90px; width: 90px; display: inline-block; margin-right:5px;"),
-                  image_path(photo.photo.url), :data => {:toggle => "lightbox", :gallery => "products", :title => @product.name } %>
-            <% end %>
+        <% @photos.each do |photo| %>
+          <% if !photo.is_principal %>
+            <%= link_to image_tag(photo.photo.url(:mini), class: "img-thumbnail photo-gallery",
+              style:"heigth: 90px; width: 90px; display: inline-block; margin-right:5px;"),
+              image_path(photo.photo.url), :data => {:toggle => "lightbox", :gallery => "products", :title => @product.name } %>
           <% end %>
-        </div>
-      </center>
+        <% end %>
+      </div>
     </div>
 
     <div class="col-sm-6">

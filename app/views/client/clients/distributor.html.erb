@@ -2,12 +2,12 @@
 <div class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
 
-    <center>
+    <div class="text-center">
       <h1 class="module-title long-up-2x">Distribuidores en la zona</h1>
       <h2 class="module-subtitle">Descubre nuestros distribuidores autorizados cerca de tu ubicación.</h2>
-    </center>
-    <br><br>
-    <div class="show-tips-container">
+    </div>
+
+    <div class="show-tips-container" style="margin-top: 2em;">
         <% if @distributor %>
           <div class="col-sm-12 m-b-md">
             <%= render partial: "distributor" %>

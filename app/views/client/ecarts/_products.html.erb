@@ -3,15 +3,13 @@
   <div id="<%=wp.hash_id%>" class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;">
     <% p = wp.Product %>
 
-        <div class="col-sm-1">
-          <center>
-            <% @photos.each do |photo| %>
-              <% if photo.product_id == p.id %>
-                <%= link_to image_tag(photo.photo.url(:mini),class: "img-circle"), product_path(wp.hash_id) %>
-                <% break %>
-              <% end %>
+        <div class="col-sm-1 text-center">
+          <% @photos.each do |photo| %>
+            <% if photo.product_id == p.id %>
+              <%= link_to image_tag(photo.photo.url(:mini), class: "img-circle"), product_path(wp.hash_id) %>
+              <% break %>
             <% end %>
-          </center>
+          <% end %>
         </div>
         <div class="col-sm-4">
           <label>Nombre:</label><br>
@@ -139,18 +137,14 @@
     </p>
   </div>
   <% if !@product_prices.any? %>
-    <div class="col-md-12">
-      <br>
-      <center>
+    <div class="col-md-12 text-center">
       <h3 class="iconbox-title">¿Es usted mayorista?</h3>
-      </center>
-      <br>
+      <div class="col-sm-12">
+        <% notice = WebInfo.where(name: "ECART_NOTICE").take %>
+        <%= render notice.description_render_path %>
+      </div>
     </div>
   <% end %>
-  <div class="col-sm-12">
-    <% notice = WebInfo.where(name: "ECART_NOTICE").take %>
-    <%= render notice.description_render_path %>
-  </div>
 </div>
 <div class="row">
     <div class="col-sm-6 col-sm-offset-3">

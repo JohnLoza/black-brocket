@@ -1,4 +1,4 @@
-<center>
+<div class="text-center">
   <div class="btn-group m-b">
       <%
       if !params[:distributor].blank?
@@ -9,7 +9,7 @@
         %>
 
       <% if @current_user.has_permission?('orders@search') %>
-        <%= link_to "Buscar", admin_orders_search_path,
+        <%= link_to "Corte", admin_orders_search_path,
             class: "btn btn-white m-b-xs" %>
       <% end %>
 
@@ -68,7 +68,7 @@
               class: 'btn btn-primary' %>
       </div>
   <% end %>
-</center>
+</div>
 
 <script type="text/javascript">
   $(document).ready(function(){

@@ -1,26 +1,24 @@
-<center>
-  <div class="row">
-    <h1><%= "#{@product.name} | #{params[:product_qr][:batch]}" %></h1>
+<div class="row text-center">
+  <h1><%= "#{@product.name} | #{params[:product_qr][:batch]}" %></h1>
 
-    <div style="display: inline-block">
-      <%= raw @qr.as_html %>
-    </div>
-    <div style="display: inline-block">
-      <p style="text-align: left;">
-        CAD: <%= params[:product_qr][:expiration_date] %>
-      </p>
-      <p style="text-align: left;">
-        CANT. EN CAJA: ________
-      </p>
-      <p style="text-align: left;">
-        CESTA NÚMERO: ________
-      </p>
-    </div>
-    <p>
-      CANT. TOTAL DE LOTE: <%= params[:product_qr][:quantity] %>
+  <div style="display: inline-block">
+    <%= raw @qr.as_html %>
+  </div>
+  <div style="display: inline-block">
+    <p style="text-align: left;">
+      CAD: <%= params[:product_qr][:expiration_date] %>
+    </p>
+    <p style="text-align: left;">
+      CANT. EN CAJA: ________
+    </p>
+    <p style="text-align: left;">
+      CESTA NÚMERO: ________
     </p>
   </div>
-</center>
+  <p>
+    CANT. TOTAL DE LOTE: <%= params[:product_qr][:quantity] %>
+  </p>
+</div>
 
 <style>
   table {
@@ -40,4 +38,5 @@
 
   td.black { border-color: #000; }
   td.white { border-color: #fff; }
+  .text-center{ text-align: center; }
 </style>

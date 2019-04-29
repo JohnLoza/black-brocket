@@ -1,12 +1,9 @@
 <% provide(:title, "Productos") %>
 
 <div class="row">
-  <div class="col-md-12">
-    <center>
-      <h3 class="module-title long-up-2x">Nuestros Productos</h3>
-      <h3 class="module-subtitle">El mejor café</h3>
-    </center>
-    <br><br>
+  <div class="client-header">
+    <h3 class="module-title long-up-2x">Nuestros Productos</h3>
+    <h3 class="module-subtitle">El mejor café</h3>
   </div>
 </div>
 <!-- categories -->
@@ -14,10 +11,10 @@
   <div class="col-md-3">
 
     <% if logged_in?%>
-      <center>
-       <%= image_tag @current_user.avatar_url(:mini), class: "img-rounded", :style => "width:130px;" %><br>
-       <h5 style="margin-top: 10px;margin-bottom: 15px;"><%= @current_user.username %></h5>
-      </center>
+      <div class="text-center">
+        <%= image_tag @current_user.avatar_url(:mini), class: "img-rounded", :style => "width:130px;" %><br>
+        <h5 style="margin-top: 10px;margin-bottom: 15px;"><%= @current_user.name %></h5>
+      </div>
     <% end %>
 
     <%= form_tag(products_path, method: :get) do %>
@@ -109,10 +106,8 @@
         <br>
         <div class="row">
           <div class="col-sm-12">
-             <div class="col-sm-3">
-               <center>
-                 <%= image_tag distributor.avatar_url(:mini),class: "img-circle" %>
-               </center>
+             <div class="col-sm-3 text-center">
+                <%= image_tag distributor.avatar_url(:mini), class: "img-circle" %>
              </div>
              <div class="col-sm-9">
                <label>Distribuidor:</label><br>

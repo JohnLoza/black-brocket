@@ -25,30 +25,28 @@
 
                 <div class="row">
                   <% @offers.each do |offer| %>
-                    <div class="col-md-6" style="display: inline-block; padding: 10px;">
-                        <center>
-                        <%= image_tag offer.photo.url, class: "img-responsive" %>
-                        </center>
-                        <div class="row">
-                          <div class="col-md-9 p-r-7">
-                              <a href="<%= offer.url %>" class='btn btn-white btn-sm m-t btn-block' style="text-align: left;"><strong>URL:</strong> <%= offer.url %></a>
-                          </div>
-                          <div class="col-md-3 p-l-7">
-                            <%= link_to "<button type='button' class='btn btn-danger btn-sm m-t btn-block'><i class='fa fa-trash'></i> Eliminar</button>".html_safe, admin_web_destroy_offer_path(offer.id),
-                                method: :delete, data: { confirm: "Estás seguro(a) de eliminar la imágen? esto no se puede deshacer." } %>
-                          </div>
+                    <div class="col-md-6 text-center">
+                      <%= image_tag offer.photo.url(:thumb) %>
+                      <div class="row">
+                        <div class="col-md-9 p-r-7">
+                            <a href="<%= offer.url %>" class='btn btn-white btn-sm m-t btn-block' style="text-align: left;"><strong>URL:</strong> <%= offer.url %></a>
                         </div>
-                        <div class="hr-line-dashed" style="margin-bottom: 5px;margin-top: 15px;"></div>
+                        <div class="col-md-3 p-l-7">
+                          <%= link_to "<button type='button' class='btn btn-danger btn-sm m-t btn-block'><i class='fa fa-trash'></i> Eliminar</button>".html_safe, admin_web_destroy_offer_path(offer.id),
+                              method: :delete, data: { confirm: "Estás seguro(a) de eliminar la imágen? esto no se puede deshacer." } %>
+                        </div>
+                      </div>
+                      <div class="hr-line-dashed" style="margin-bottom: 5px;margin-top: 15px;"></div>
                     </div>
                   <% end %>
                 </div>
 
               <% else %>
 
-                <center>
+                <div class="text-center">
                   <h1>¡Aún no hay imágenes! sube unas nuevas aquí abajo</h1>
                   <i class="fa fa-arrow-down big-icon"></i>
-                </center>
+                </div>
 
               <% end %>
              </br>

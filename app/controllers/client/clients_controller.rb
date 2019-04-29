@@ -23,7 +23,7 @@ class Client::ClientsController < ApplicationController
       @create_message_url = client_create_distributor_comment_path(@distributor.id)
 
       @client_image = @current_user.avatar_url(:mini)
-      @client_username = @current_user.username
+      @client_username = @current_user.name
 
       @distributor_image = @distributor.avatar_url(:mini)
       @distributor_username = @distributor.username
@@ -44,10 +44,12 @@ class Client::ClientsController < ApplicationController
       flash[:warning] = "Contraseña incorrecta."
       redirect_to client_destroy_account_path(@current_user.hash_id) and return
     end
-    @current_user.deleted = true
-    @current_user.delete_account_hash= random_hash_id(12).upcase
 
-    log_out and session.delete(:e_cart) if @current_user.save
+    if @current_user.destroy
+      @current_user.update_attribute(:delete_account_hash, random_hash_id(12).upcase)
+      log_out and session.delete(:e_cart)
+    end
+
     redirect_to good_bye_path(params[:id])
   end
 

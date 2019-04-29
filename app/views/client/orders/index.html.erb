@@ -1,10 +1,9 @@
 <% provide(:title, "Mis órdenes") %>
 
-<center>
+<div class="text-center" style="margin-bottom:2em;">
   <h1 class="module-title long-up-2x">Mis órdenes</h1>
 	<h2 class="module-subtitle">Aquí puedes ver todas las órdenes que has realizado.</h2><br/>
-</center>
-<br><br>
+</div>
 
 <% @orders.each do |o| %>
   <div id="<%=o.hash_id%>" class="order-box">

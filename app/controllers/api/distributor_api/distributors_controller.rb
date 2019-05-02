@@ -5,12 +5,8 @@ class Api::DistributorApi::DistributorsController < ApiController
 
   def index
     regions = @current_user.Regions
-    home_img = @current_user.home_img.url
-    avatar = @current_user.avatar_url
 
     data = Hash.new
-    data[:avatar] = avatar
-    data[:home_img] = home_img
     array = Array.new
     regions.each do |region|
       array << region.name

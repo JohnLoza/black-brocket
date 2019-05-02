@@ -46,7 +46,7 @@ class Admin::MexicoDbController < AdminController
 
     city = City.new(new_city_params)
     if city.save
-      flash[:success] = "La ciudad " + city.name + " se creó correctamente."
+      flash[:success] = "La población " + city.name + " se creó correctamente."
     else
       flash[:info] = "Oops, algo no salió como lo planeado.s"
     end

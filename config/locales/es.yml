@@ -78,8 +78,8 @@ es:
         client:
           attributes:
             city_id:
-              blank: "Debes seleccionar una ciudad"
-              not_a_number: "Debes seleccionar una ciudad"
+              blank: "Debes seleccionar una población"
+              not_a_number: "Debes seleccionar una población"
             email_confirmation:
               confirmation: "El correo electrónico y su confirmación no coinciden."
             password:

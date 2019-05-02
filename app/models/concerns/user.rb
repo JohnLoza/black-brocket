@@ -42,14 +42,14 @@ module User
   # Get the user image if there is one, else return default image #
   def avatar_url(type = nil)
     image = ""
-    if !self.photo.blank?
+    if self.photo.present?
       if !type.nil?
         image = self.photo.url(type)
       else
         image = self.photo.url
       end
     else
-      image = "user_avatar.png"
+      image = ActionController::Base.helpers.image_url "user_avatar.png"
     end # if !self.photo.blank? #
   end # def getImage(type = nil) #
 

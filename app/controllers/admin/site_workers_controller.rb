@@ -282,7 +282,7 @@ class Admin::SiteWorkersController < AdminController
       @mexico_db_category = []
       @mexico_db_category << {category: "mexico_db", name: "update_state_LADA", description: "Editar LADA del estado"}
       @mexico_db_category << {category: "mexico_db", name: "update_city_name", description: "Editar nombre de población"}
-      @mexico_db_category << {category: "mexico_db", name: "update_city_LADA", description: "Editar LADA de la ciudad"}
+      @mexico_db_category << {category: "mexico_db", name: "update_city_LADA", description: "Editar LADA de la población"}
       @mexico_db_category << {category: "mexico_db", name: "create", description: "Crear población y su LADA"}
     end
 end

@@ -39,6 +39,20 @@
 </li>
 <!--End Dropdown notifications-->
 
+<!--Ecart-->
+<li>
+  <%= link_to client_ecart_path(@current_user.hash_id),
+      style: "padding-top: 11px; padding-bottom: 10px;", class: 'no-mobile' do %>
+      <i class="icon-basket-loaded" style="font-size: 20px;"></i>
+      <span class="yes-mobile"> Carrito </span>
+  <% end %>
+  <span class="ecart-badge no-mobile <%= "badge" if !session[:e_cart].nil? %>"
+    style="background-color: #f0ad4e;position: absolute;top: 10px;left: 35px;">
+    <%= session[:e_cart].size-1 if !session[:e_cart].nil? %>
+  </span>
+</li>
+<!--End of Ecart-->
+
 <!--Start Dropdown profile-->
 <li class="dropdown no-mobile">
   <a href="#" class="less_padding" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top: 14px !important;padding-bottom: 12px !important;">
@@ -57,15 +71,3 @@
   </ul>
 </li>
 <!--End Dropdown profile-->
-<!--Ecart-->
-<li>
-  <%= link_to client_ecart_path(@current_user.hash_id),
-      style: "padding-top: 11px; padding-bottom: 10px;", class: 'no-mobile' do %>
-      <i class="icon-basket-loaded" style="font-size: 20px;"></i>
-      <span class="yes-mobile"> Carrito </span>
-  <% end %>
-  <span class="ecart-badge <%= "badge" if !session[:e_cart].nil? %>"
-    style="background-color: #f0ad4e;position: absolute;top: 10px;left: 35px;">
-    <%= session[:e_cart].size-1 if !session[:e_cart].nil? %>
-  </span>
-</li>

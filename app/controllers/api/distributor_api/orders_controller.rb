@@ -25,9 +25,11 @@ class Api::DistributorApi::OrdersController < ApiController
       data << {hash_id: order.hash_id, client_username: order.Client.username, client_hash_id: order.Client.hash_id,
         date: I18n.l(order.created_at, format: :long), total: order.total, status: I18n.t(order.state), city: order.City.name, state: order.City.State.name }
     end
+    home_img = @current_user.home_img.url
+    avatar = @current_user.avatar_url
 
     render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+           :json => { :success => true, :info => "DATA_RETURNED", :avatar => avatar, :home_img => home_img, :data => data }
   end
 
   def show

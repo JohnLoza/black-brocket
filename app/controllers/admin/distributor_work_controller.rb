@@ -3,7 +3,7 @@ class Admin::DistributorWorkController < AdminController
   def index
     deny_access! and return unless @current_user.has_permission_category?('distributor_work')
 
-    @clients = Client.joins(:City).where(cities: {distributor_id: nil})
+    @clients = Client.joins(:City).active.where(cities: {distributor_id: nil})
             .where(worker_id: nil).includes(City: :State)
             .paginate(page: params[:page], per_page: 25)
   end

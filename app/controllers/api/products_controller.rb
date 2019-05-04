@@ -66,10 +66,17 @@ class Api::ProductsController < ApiController
       # get the photo for the product #
       photos.each do |photo|
         if photo.product_id == p.id
-          sub_data[:photo] = photo.photo.url(:thumb)
+          sub_data[:photo] = photo.photo.url
           break
         end
       end
+
+      p_photos = p.Photos.where(is_principal: false).select(:id, :photo)
+      photo_urls = Array.new
+      p_photos.each do |p_photo|
+        photo_urls << p_photo.photo.url
+      end
+      sub_data[:photos] = photo_urls
 
       # get the custom price if any #
       product_prices.each do |custom_price|
@@ -95,8 +102,9 @@ class Api::ProductsController < ApiController
 
     description = File.open(description_file, "r"){|file| file.read }
     preparation = File.open(preparation_file, "r"){|file| file.read }
+
     render :status => 200,
            :json => { :success => true, :info => "PRODUCT_DATA",
-                      :data => { description: description, preparation: preparation, presentation: product.presentation}}
+                      :data => { description: description, preparation: preparation, presentation: product.presentation }}
   end
 end

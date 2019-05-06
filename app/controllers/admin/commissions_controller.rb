@@ -24,11 +24,7 @@ class Admin::CommissionsController < AdminController
     @orders = Order.where("hash_id in (?)", params[:order_keys]).where(commission_in_progress: false)
     raise ActiveRecord::RecordNotFound unless @orders.any?
 
-    total = 0
-    @orders.each do |o|
-      total += o.total
-    end
-    total = (total * @distributor.commission) / 100
+    total = Commission.calculateCommission(@orders, @distributor.commission)
 
     commission = Commission.new({hash_id: Utils.new_alphanumeric_token.upcase,
       distributor_id: @distributor.id, worker_id: @current_user.id,

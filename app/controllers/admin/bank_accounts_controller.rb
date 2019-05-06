@@ -27,9 +27,6 @@ class Admin::BankAccountsController < AdminController
       flash[:success] = "Creación de cuenta exitosa"
       redirect_to admin_bank_accounts_path(@bank)
     else
-      @bank_account.errors.full_messages.each do |message|
-        puts "--- #{message}"
-      end
       render :new
     end
   end # def create #

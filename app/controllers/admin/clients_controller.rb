@@ -5,14 +5,10 @@ class Admin::ClientsController < AdminController
 
     if params[:distributor]
       region_ids = Distributor.find_by!(hash_id: params[:distributor]).Regions.map(&:id)
-      @clients = Client.where(city_id: region_ids).order_by_name
-        .search(key_words: search_params, joins: {City: :State}, fields: fields_to_search)
-        .paginate(page: params[:page], per_page: 20).includes(City: :State)
-    else
-      @clients = Client.active.order_by_name
-        .search(key_words: search_params, joins: {City: :State}, fields: fields_to_search)
-        .paginate(page: params[:page], per_page: 20).includes(City: :State)
     end
+    @clients = Client.active.recent.byRegion(region_ids)
+      .search(key_words: search_params, joins: {City: :State}, fields: fields_to_search)
+      .paginate(page: params[:page], per_page: 20).includes(City: :State)
   end
 
   def show

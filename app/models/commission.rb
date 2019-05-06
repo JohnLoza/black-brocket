@@ -12,4 +12,16 @@ class Commission < ApplicationRecord
     return all unless distributor.present?
     where(distributor_id: distributor)
   end
+
+  def self.calculateCommission(orders, commission)
+    raise ArgumentError, "orders should be present" unless orders
+    raise ArgumentError, "commission should be present" unless commission
+
+    total = 0
+    orders.each do |o|
+      total += o.total
+    end
+    total = (total * commission) / 100
+    return total
+  end
 end

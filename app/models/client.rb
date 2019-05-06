@@ -43,6 +43,13 @@ class Client < ApplicationRecord
     order(name: way)
   }
 
+  def self.byRegion(region_ids)
+    return all unless region_ids.present?
+    raise ArgumentError, "region_ids should be an array" unless region_ids.kind_of? Array
+
+    where(city_id: region_ids)
+  end
+
   def getAddress()
     city = self.City
     state_name = State.find(city.state_id).name

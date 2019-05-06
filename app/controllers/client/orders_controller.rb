@@ -15,28 +15,23 @@ class Client::OrdersController < ApplicationController
     end
     @order = Order.find_by!(hash_id: params[:id])
 
-    if @order
-      @details = @order.Details.includes(:Product)
-      @client = @order.Client
-      @fiscal_data = @client.FiscalData
-      if !@fiscal_data.blank?
-        @city = @fiscal_data.City
-        @state = @city.State
-      end
-
-      @client_city = @current_user.City
-      @client_state = State.where(id: @client_city.state_id).take
-
-      render :show, layout: false
-    else
-      flash[:info] = "No se encontró la orden con clave: #{params[:id]}"
-      redirect_to client_orders_path(@current_user.hash_id)
+    @details = @order.Details.includes(:Product)
+    @client = @order.Client
+    @fiscal_data = @client.FiscalData
+    if !@fiscal_data.blank?
+      @city = @fiscal_data.City
+      @state = @city.State
     end
+
+    @client_city = @current_user.City
+    @client_state = State.where(id: @client_city.state_id).take
+
+    render :show, layout: false
   end
 
   def create
-    return unless verify_fiscal_data
     return unless verify_client_address
+    return unless verify_fiscal_data
     @order = Order.new
 
     # find the corresponding distributor #

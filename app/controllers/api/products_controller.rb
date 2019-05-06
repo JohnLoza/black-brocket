@@ -13,32 +13,10 @@ class Api::ProductsController < ApiController
              :json => { :success => false, :info => "WAREHOUSE_NOT_FOUND" } and return
     end
 
-    if params[:category] and ["hot","cold","frappe"].include? params[:category]
-
-      products = warehouse.Products.joins(:Product)
-          .where(products:{
-              show:true, deleted_at: nil, "#{params[:category]}" => true},
-              describes_total_stock: true)
-          .paginate(:page => params[:page], :per_page => 18).includes(:Product)
-
-    elsif !params[:search].blank?
-
-      products = warehouse.Products.joins(:Product)
-          .where(products:{
-              show:true, deleted_at: nil},
-              describes_total_stock: true)
-          .where("products.name like '%#{params[:search]}%'")
-          .paginate(:page => params[:page], :per_page => 18).includes(:Product)
-
-    else
-
-      products = warehouse.Products.joins(:Product)
-          .where(products:{
-              show:true, deleted_at: nil},
-              describes_total_stock: true)
-          .paginate(:page => params[:page], :per_page => 18).includes(:Product)
-
-    end
+    products = warehouse.Products.joins(:Product).active.visible
+      .describes_total_stock.by_category(params[:category])
+      .search(key_words: params[:search], fields: ['products.name'])
+      .paginate(page: params[:page], per_page: 20).includes(:Product)
 
     photos = ProdPhoto.where("product_id in (?) and is_principal=true", products.map{|p| p.product_id})
     product_prices = @current_user.ProductPrices

@@ -367,7 +367,10 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def print_qr
-    deny_access! and return unless @current_user.has_permission_category?('warehouse_products')
+    unless @current_user.has_permission_category?('warehouse_products') or
+      @current_user.has_permission_category?('warehouse_manager')
+      deny_access! and return 
+    end
 
     @product = Product.find_by!(hash_id: params[:product_qr][:product])
     @qr = RQRCode::QRCode.new( "#{@product.name}|#{params[:product_qr][:batch]}")

@@ -138,12 +138,12 @@ class Client::ClientsController < ApplicationController
     if @distributor
       message.distributor_id = @distributor.id
       Notification.create(distributor_id: @distributor.id, icon: "fa fa-comments-o",
-                      description: "El usuario " + @current_user.username + " te envió un mensaje",
+                      description: "El usuario " + @current_user.name + " te envió un mensaje",
                       url: distributor_client_messages_path(@current_user.hash_id))
     elsif @worker
       message.worker_id = @worker.id
       Notification.create(worker_id: @worker.id, icon: "fa fa-comments-o",
-                      description: "El usuario " + @current_user.username + " te envió un mensaje",
+                      description: "El usuario " + @current_user.name + " te envió un mensaje",
                       url: admin_distributor_work_client_messages_path(@current_user.hash_id))
     end
 

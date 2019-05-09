@@ -8,7 +8,7 @@
           <%= form_for(:class, url: admin_warehouses_path, method: :get) do |f| %>
             <div class="input-group">
               <%= f.text_field :search, value: search_params, class: 'input form-control',
-                placeholder: 'Buscar', maxlength: 20  %>
+                placeholder: 'Buscar', maxlength: 20, required: true  %>
 
               <span class="input-group-btn">
                 <%= f.submit 'Buscar', class: 'btn btn btn-success' %>

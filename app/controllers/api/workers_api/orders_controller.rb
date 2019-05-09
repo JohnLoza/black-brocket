@@ -19,7 +19,7 @@ class Api::WorkersApi::OrdersController < ApiController
       client = order.Client
       distributor = order.Distributor
       hash = {folio: order.hash_id, date: order.created_at, client: order.client_id,
-        client_avatar: client.avatar_url, client_username: client.username,
+        client_avatar: client.avatar_url, client_username: client.name,
         distributor: order.distributor_id, distributor_avatar: nil, distributor_username: nil}
 
       if distributor

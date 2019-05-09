@@ -17,7 +17,11 @@
 
   <td><%= product.hash_id %></td>
   <td><%= product.name %></td>
-  <td>$ <%= product.price %></td>
+  <td>
+    <p>max: $ <%= product.price %></p>
+    <p>rec: $ <%= product.recommended_price %></p>
+    <p>min: $ <%= product.lowest_price %></p>
+  </td>
   <td><%= l(product.created_at, format: :long) %></td>
   <td><%= l(product.updated_at, format: :long) %></td>
   <td>

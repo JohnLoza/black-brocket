@@ -64,6 +64,8 @@ class Client::ClientsController < ApplicationController
   end
 
   def new
+    redirect_to products_path and return if logged_in?
+
     @client = Client.new
     @states = State.order_by_name
     @cities = Array.new

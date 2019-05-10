@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   # static_pages #
   root 'static_pages#index'
+
   get '/good_bye/:id' => 'static_pages#good_bye', as: :good_bye
   post '/' => 'static_pages#create_suggestion'
 
@@ -377,6 +378,8 @@ Rails.application.routes.draw do
       get "orders/supplied" => "orders#supplied"
     end
   end
+
+  match '*path', via: :all, to: 'application#render_404'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -1,6 +1,9 @@
 <tr>
   <td></td>
   <td class="project-people">
+    <% unless client.cp.present? %>
+      <i class="fa fa-times fa-2x" style="color: #ff4444;"></i>
+    <% end %>
     <%= link_to admin_client_path(client.hash_id) do %>
       <%= image_tag(client.avatar_url(:mini), { class: "img-circle" }) %>
     <% end %>

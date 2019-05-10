@@ -24,7 +24,7 @@ class ImageUploader < CarrierWave::Uploader::Base
     process :resize_to_fill => [350, 350]
   end
 
-  process :resize_to_limit => [1800, 1200], :if => :scale_image?
+  process :resize_to_limit => [1200, 1000], :if => :scale_image?
 
   def image
     @image ||= MiniMagick::Image.open(self.file.file)

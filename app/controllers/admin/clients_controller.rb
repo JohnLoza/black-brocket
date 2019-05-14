@@ -4,8 +4,15 @@ class Admin::ClientsController < AdminController
     deny_access! and return unless @current_user.has_permission_category?('clients')
 
     if params[:distributor]
-      region_ids = Distributor.find_by!(hash_id: params[:distributor]).Regions.map(&:id)
+      distributor = Distributor.find_by!(hash_id: params[:distributor])
+      region_ids = distributor.Regions.map(&:id)
+
+      if region_ids.empty?
+        flash[:info] = "El distribuidor '#{distributor.username}' no tiene zonas asignadas."
+        redirect_to admin_distributors_path and return
+      end
     end
+
     @clients = Client.active.recent.byRegion(region_ids)
       .search(key_words: search_params, joins: {City: :State}, fields: fields_to_search)
       .paginate(page: params[:page], per_page: 20).includes(City: :State)

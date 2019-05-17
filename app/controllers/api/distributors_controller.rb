@@ -6,11 +6,9 @@ class Api::DistributorsController < ApiController
   def create_candidate
     candidate = DistributorCandidate.new(distributor_request_params)
     if candidate.save
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED" }
+      render status: 200, json: {success: true, info: "SAVED"}
     else
-      render :status => 200,
-             :json => { :success => false, :info => "SAVE_ERROR" }
+      render status: 200, json: {success: false, info: "SAVE_ERROR"}
     end
   end
 
@@ -24,8 +22,7 @@ class Api::DistributorsController < ApiController
     end
 
     unless distributor
-      render :status => 200,
-             :json => { :success => false, :info => "DISTRIBUTOR_NOT_FOUND" } and return
+      render status: 200, json: {success: false, info: "DISTRIBUTOR_NOT_FOUND"} and return
     end
 
     city = distributor.City
@@ -40,8 +37,7 @@ class Api::DistributorsController < ApiController
       end
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "DISTRIBUTOR_DATA", :data => data }
+    render status: 200, json: {success: true, info: "DISTRIBUTOR_DATA", data: data}
   end
 
   def messages
@@ -58,8 +54,7 @@ class Api::DistributorsController < ApiController
       data << {is_from_client: message.is_from_client, comment: message.comment, datetime: I18n.l(message.created_at, format: :long)}
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "MESSAGES_DATA", :data => data }
+    render status: 200, json: {success: true, info: "MESSAGES_DATA", data: data}
   end
 
   def create_message
@@ -82,11 +77,9 @@ class Api::DistributorsController < ApiController
     end
 
     if message.save
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED" }
+      render status: 200, json: {success: true, info: "SAVED"}
     else
-      render :status => 200,
-             :json => { :success => false, :info => "SAVE_ERROR", :data => data }
+      render status: 200, json: {success: false, info: "SAVE_ERROR", data: data}
     end
   end
 

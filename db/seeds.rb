@@ -148,9 +148,9 @@ end
 #   if client.save
 #     client.update_attribute(:hash_id, generateAlphKey("C", client.id))
 #   else
-#     puts "--- error ---"
+#     logger.info "/-/-/ error ---"
 #     client.errors.each do |field, msg|
-#       puts "--- #{field}: #{msg} ---"
+#       logger.info "/-/-/ #{field}: #{msg} ---"
 #     end
 #   end
 # end
@@ -183,9 +183,9 @@ end
 
 #     product.update_attributes(:preparation_render_path => render_file_path)
 #   else
-#     puts "--- cant save product, error(s): ---"
+#     logger.info "/-/-/ cant save product, error(s): ---"
 #     product.errors.each do |field, msg|
-#       puts "--- #{field}: #{msg} ---"
+#       logger.info "/-/-/ #{field}: #{msg} ---"
 #     end
 #   end
 # end

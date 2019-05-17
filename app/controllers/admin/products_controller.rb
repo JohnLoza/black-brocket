@@ -27,7 +27,7 @@ class Admin::ProductsController < AdminController
       # create product special prices slots for each user #
       create_client_prices
 
-      redirect_to admin_products_path, flash: { success: 'Producto creado' }
+      redirect_to admin_products_path, flash: {success: 'Producto creado' }
     else
       flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
       render :new

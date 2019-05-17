@@ -12,7 +12,7 @@ class Api::DistributorApi::MessagesController < ApiController
     client = Client.find_by!(hash_id: params[:id])
 
     messages = @current_user.ClientMessages.where(client_id: client.id)
-                  .order(created_at: :desc).paginate(page: params[:page], per_page: 50)
+      .order(created_at: :desc).paginate(page: params[:page], per_page: 50)
 
     data = Hash.new
     data[:per_page] = 50
@@ -27,23 +27,19 @@ class Api::DistributorApi::MessagesController < ApiController
     end
     data[:messages] = array
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def create
     client = Client.find_by!(hash_id: params[:id])
 
-    message = ClientDistributorComment.new(
-            {client_id: client.id, distributor_id: @current_user.id,
-             comment: params[:comment], is_from_client: false})
+    message = ClientDistributorComment.new({client_id: client.id, 
+      distributor_id: @current_user.id, comment: params[:comment], is_from_client: false})
     message.save
 
     Notification.create(client_id: client.id, icon: "fa fa-comments-o",
-                    description: "El distribuidor respondió a tu mensaje",
-                    url: client_my_distributor_path)
+      description: "El distribuidor respondió a tu mensaje", url: client_my_distributor_path)
 
-    render :status => 200,
-           :json => { :success => true, :info => "SAVED" }
+    render status: 200, json: {success: true, info: "SAVED"}
   end
 end

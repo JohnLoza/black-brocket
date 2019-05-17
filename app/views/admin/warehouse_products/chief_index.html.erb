@@ -23,27 +23,32 @@
                   </div>
                   <div class="ibox-content">
 
-                      <div id="prepare_product_for_shipment">
-                        <% hash = session[:shipment_products].clone %>
-                        <% hash.delete("warehouse") %>
-                        <% hash.keys.each do |k| %>
-                          <% products = hash[k] %>
-                          <div class="col-md-12 well" id="<%=k%>">
+                    <div id="prepare_product_for_shipment">
+                      <% hash = session[:shipment_products].clone %>
+                      <% hash.delete("warehouse") %>
+                      <% hash.keys.each do |k| %>
+                        <% products = hash[k] %>
+                        <div class="col-md-12 well" id="<%=k%>">
 
-                              <h4 class="m-l">Lote(s) de producto: <small><%= hash[k]["name"] %></small></h4>
-                              <% products.keys.each do |p_k| %>
-                                <% if p_k != "name" %>
-                                    <%= render partial: "product_preparated", locals: {product: products[p_k], product_key: p_k} %>
-                                <% end %>
+                            <h4 class="m-l">Lote(s) de producto: <small><%= hash[k]["name"] %></small></h4>
+                            <% products.keys.each do |p_k| %>
+                              <% if p_k != "name" %>
+                                  <%= render partial: "product_preparated", locals: {product: products[p_k], product_key: p_k} %>
                               <% end %>
+                            <% end %>
 
-                          </div>
-                        <% end %>
-                      </div>
+                        </div>
+                      <% end %>
+                    </div>
 
-                      <%= link_to "Enviar productos al almacén", admin_chief_shipments_path(params[:warehouse_id]),
-                      class: "btn btn-primary pull-right", method: :post, data: {confirm: "Seguro(a) de registrar el envío de productos?" } %>
-                      <div class="clearfix"></div>
+                    <%= form_for(:shipment, :url=> admin_chief_shipments_path(params[:warehouse_id])) do |f| %>
+                      <%= f.hidden_field :shipment_type, value: "NEW_BATCHES" %>
+                      <%= f.hidden_field :target_warehouse_id, value: @warehouse.id %>
+                      <%= f.hidden_field :chief_id, value: @current_user.id %>
+
+                      <%= f.submit "Enviar productos al almacén!", class: "btn btn-primary",
+                      data: {confirm: "Seguro(a) de registrar el envío de productos?" }%>
+                    <% end %>
                   </div>
               </div>
           </div>

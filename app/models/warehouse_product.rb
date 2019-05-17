@@ -1,4 +1,6 @@
 class WarehouseProduct < ApplicationRecord
+  attr_accessor :required_bulk
+  attr_accessor :required_quantity
   include HashId
   include Searchable
   
@@ -15,5 +17,25 @@ class WarehouseProduct < ApplicationRecord
   def self.by_category(category)
     return all unless category.present? and ["hot","cold","frappe"].include? category
     where("products.#{category}" => true)
+  end
+
+  def self.enoughStock?(products, required_stock)
+    products.each do |product|
+      if product.existence < required_stock[product.hash_id].to_i
+        return false
+      end
+    end
+    return true
+  end
+
+  def enoughStock?
+    return true if self.existence >= self.required_quantity
+    return false
+  end
+
+  def withdraw(quantity)
+    self.required_quantity = quantity
+    raise StandardError, "Sin stock suficiente" unless self.enoughStock?
+    update_attributes(existence: self.existence - required_quantity)
   end
 end

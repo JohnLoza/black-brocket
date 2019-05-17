@@ -16,68 +16,16 @@ class Admin::OrdersController < AdminController
     deny_access! and return unless params[:type].blank? or @current_user.has_permission?("orders@#{permission}")
 
     @label_styles = get_label_styles
-    @orders = Array.new
-
-    where_statement = "state="
-    order_statement = {created_at: :asc}
-
-    case params[:type]
-      when "CANCEL"
-        where_statement += "'WAITING_FOR_PAYMENT' or state='PAYMENT_REJECTED'"
-      when "ACCEPT_REJECT_PAYMENT"
-        where_statement += "'PAYMENT_DEPOSITED'"
-      when "CAPTURE_BATCHES"
-        where_statement += "'PAYMENT_ACCEPTED'"
-      when "INSPECTION"
-        where_statement += "'BATCHES_CAPTURED'"
-      when "CAPTURE_TRACKING_CODE"
-        where_statement += "'INSPECTIONED'"
-      when "SENT"
-        where_statement += "'SENT'"
-      when "DELIVERED"
-        where_statement += "'DELIVERED'"
-        order_statement = {created_at: :desc}
-      when "INVOICES"
-        where_statement = "state not in ('WAITING_FOR_PAYMENT','ORDER_CANCELED','PAYMENT_REJECTED','PAYMENT_DEPOSITED')"
-        order_statement = {created_at: :desc}
-      else
-        @orders = Array.new and return if params[:type].blank?
-    end # case params[:type] #
-
-    if search_params
-      where_statement += " and hash_id like '%#{search_params}%'"
-    end
+    statements = whereAndOrderStatements()
+    @orders = Array.new and return unless statements
 
     if @current_user.has_permission?('orders@capture_tracking_code') and
       params[:type] == "CAPTURE_TRACKING_CODE"
       @parcels = Parcel.where(warehouse_id: @current_user.warehouse_id)
     end # if @actions["CAPTURE_TRACKING_CODE"] #
 
-    where_warehouse = {}
-    if ["CANCEL","ACCEPT_REJECT_PAYMENT","INVOICES"].include? params[:type]
-      where_warehouse = "true"
-    else
-      where_warehouse = {warehouse_id: @current_user.warehouse_id}
-    end # if ["CANCEL","ACCEPT_REJECT_PAYMENT","INVOICES"].include? params[:type] #
-
-    if !params[:distributor].nil?
-      distributor = Distributor.find_by!(:hash_id => params[:distributor])
-
-      @orders = Order.joins(:Distributor)
-          .where(distributors: {hash_id: params[:distributor]})
-          .where(where_statement)
-          .where(where_warehouse)
-          .order(order_statement)
-          .paginate(:page =>  params[:page], :per_page => 25)
-          .includes(City: :State).includes(:Distributor, :Client, :Parcel)
-    else
-      @orders = Order.where(where_statement)
-          .where(where_warehouse)
-          .order(order_statement)
-          .paginate(:page =>  params[:page], :per_page => 25)
-          .includes(City: :State).includes(:Distributor, :Client, :Parcel)
-    end # if !params[:distributor].nil? #
-
+    statements = warehouseStatement(statements)
+    @orders = getOrdersFor(statements).paginate(page: params[:page], per_page: 25)
   end # def index #
 
   def accept_pay
@@ -195,7 +143,7 @@ class Admin::OrdersController < AdminController
     OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Regresó la orden a volver a surtir")
     flash[:success] = "Pedido regresado"
     redirect_to admin_orders_path(type: "INSPECTION")
-  end
+  end # def supply_error #
 
   def capture_details
     deny_access! and return unless @current_user.has_permission?('orders@capture_batches')
@@ -218,97 +166,36 @@ class Admin::OrdersController < AdminController
     deny_access! and return unless @current_user.has_permission?('orders@capture_batches')
     deny_access! and return if params[:product_id].nil?
 
-    success = false
-    @order = Order.find_by!(hash_id: params[:id])
+    order = Order.find_by!(hash_id: params[:id])
+    redirect_to admin_orders_path + "?type=CAPTURE_BATCHES" and return unless order.state == "PAYMENT_ACCEPTED"
 
-    if @order.state == "PAYMENT_ACCEPTED"
-      ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction do
+      indx = 0
+      while indx < params[:product_id].size do
+        detail = OrderProductShipmentDetail.create(order_id: order.id, batch: params[:batch][indx],
+          product_id: params[:product_id][indx], quantity: params[:quantity][indx], warehouse_id: order.warehouse_id)
+        # Rollback if there are any errors
+        flash[:info] = detail.errors.full_messages[0] and raise ActiveRecord::Rollback if detail.errors.any?
+        # Withdraw the quantity used for the shipment detail
+        detail.warehouse_detail.withdraw(detail.quantity) and indx += 1
+      end
 
-        indx = 0
-        while indx < params[:product_id].size do
-          product_detail =
-            WarehouseProduct.where(warehouse_id: @order.warehouse_id,
-                                   product_id: params[:product_id][indx],
-                                   batch: params[:batch][indx]).take
+      shipment_details = OrderProductShipmentDetail.select("product_id, sum(quantity) as t_quantity")
+        .where(order_id: order.id).group(:product_id)
+      order_details = OrderDetail.select(:product_id, :quantity).where(order_id: order.id)
+      # Review quantities to see that are the same that the client wanted
+      validation = CustomValidation.validateOrderShipment(order_details, shipment_details)
+      flash[:info] = validation[:error_message] and raise ActiveRecord::Rollback unless validation[:success]
 
-          # if the product with the given key and batch doesn't exist stop the execution #
-          if !product_detail
-            puts "--- product not found ---"
-            flash[:info] = "No existe el producto con clave #{params[:product_id][indx]} y No. de lote #{params[:batch][indx]}."
-            raise ActiveRecord::Rollback
-            break
-          end # if !product_detail #
-
-          # if the current existence of the product is less than the one captured stop the execution #
-          if product_detail.existence >= params[:quantity][indx].to_i
-            product_detail.update_attribute(:existence,
-                          product_detail.existence - params[:quantity][indx].to_i)
-          else
-            puts "--- no enough existence for delivery ---"
-            flash[:info] = "No hay existencias suficientes."
-            raise ActiveRecord::Rollback
-            break
-          end
-
-          OrderProductShipmentDetail.create(order_id: @order.id,
-                          product_id: params[:product_id][indx],
-                          quantity: params[:quantity][indx],
-                          batch: params[:batch][indx])
-
-          indx += 1
-        end # while indx < params[:product_id].size #
-
-        # review quantities to see that are the same that the client wanted
-        shipment_details = OrderProductShipmentDetail.select("product_id, sum(quantity) as t_quantity")
-                              .where(order_id: @order.id).group(:product_id)
-        order_details = OrderDetail.select(:product_id, :quantity).where(order_id: @order.id)
-
-        product_captured = true
-        order_details.each do |order_detail|
-
-          # if a product hasn't been captured stop the execution #
-          if !product_captured
-            puts "--- a product hasn't been captured ---"
-            flash[:info] = "No se esta surtiendo el pedido completo."
-            raise ActiveRecord::Rollback
-            break
-          end
-
-          product_captured = false
-          shipment_quantity = 0
-
-          # iterate through the shipment details to verify the product quantities are the ones the client wanted #
-          shipment_details.each do |shipment_detail|
-            if order_detail.product_id == shipment_detail.product_id
-              shipment_quantity += shipment_detail.t_quantity
-            end
-          end
-
-          if order_detail.quantity != shipment_quantity
-            puts "--- quantities don't match ---"
-            flash[:info] = "La cantidad de productos a enviar no es correcta."
-            raise ActiveRecord::Rollback
-            break
-          else
-            product_captured = true
-          end
-        end
-
-        @order.update_attribute(:state, "BATCHES_CAPTURED")
-        puts "--- every thing went OK while validating quantities ---"
-        success = true
-      end # Transaction #
-
-    end # if @order #
-
-    if success
+      order.update_attribute(:state, "BATCHES_CAPTURED")
+      OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
       flash[:success] = "Números de lote y cantidades guardadas"
-      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
-    else
-      flash[:info] = "Ocurrió un error al guardar, verifica la información introducida" if flash[:info].blank?
+    end # Transaction #
+
+    if flash[:success].nil? and flash[:info].blank?
+      flash[:info] = "Ocurrió un error al guardar, verifica la información introducida" 
     end
     redirect_to admin_orders_path + "?type=CAPTURE_BATCHES"
-
   end # def save_details #
 
   def save_tracking_code
@@ -361,19 +248,14 @@ class Admin::OrdersController < AdminController
 
     @warehouses = Warehouse.all.order(:name)
     if params[:start_date].blank? and params[:end_date].blank? and params[:reference].blank?
-      flash.now[:warning] = "Se requiere se estipule al menos una fecha de inicio y fin o un folio."
-      return
+      flash.now[:warning] = "Se requiere estipule al menos una fecha de inicio y fin o un folio." and return
     end
 
     if !params[:reference].blank?
       @order = Order.find_by(hash_id: params[:reference].strip)
-      if @order.blank?
-        flash.now[:warning] = "Orden con referencia: #{params[:reference]} no encontrada :("
-      end
-      return
+      flash.now[:warning] = "Orden con referencia: #{params[:reference]} no encontrada :(" and return unless @order
     end
 
-    @warehouse = ""
     if params[:warehouse_id]
       @warehouses.each do |w|
         @warehouse = w if w.id == params[:warehouse_id].to_i
@@ -381,9 +263,8 @@ class Admin::OrdersController < AdminController
     end
 
     where_statement = ""
-    if !@warehouse.blank?
-      where_statement = "warehouse_id = " + @warehouse.id.to_s + " and "
-    end
+    where_statement = "warehouse_id = " + @warehouse.id.to_s + " and " if @warehouse
+    
     where_statement += "created_at BETWEEN '#{params[:start_date].strip}' and '#{params[:end_date].strip}'"
 
     @no_invoice_required_orders = Order.where.not(state: ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED"])
@@ -406,6 +287,7 @@ class Admin::OrdersController < AdminController
   end
 
   def download_invoice_data
+    # TODO refactor at the end, possibly deprecated
     deny_access! and return unless @current_user.has_permission?('orders@invoices')
 
     orders = Order.where(invoice_sent: false)
@@ -425,7 +307,7 @@ class Admin::OrdersController < AdminController
     # iterate the orders and put the data on the invoices file #
     orders.each do |order|
       last_folio += 1
-      #puts "--- #{last_folio}, #{order.hash_id}, order_id: #{order.id} ---"
+      #logger.info "/-/-/ #{last_folio}, #{order.hash_id}, order_id: #{order.id} ---"
 
       now = Time.now
       now = "#{now.year}-#{now.month}-#{now.day}"
@@ -509,5 +391,64 @@ class Admin::OrdersController < AdminController
          "DELIVERED"=>"label label-success" }
 
       return label_styles
+    end
+
+    def whereAndOrderStatements
+      statements = Hash.new
+      statements[:where] = "state="
+      statements[:order] = {created_at: :asc}
+
+      case params[:type]
+        when "CANCEL"
+          statements[:where] = "state in ('WAITING_FOR_PAYMENT','PAYMENT_REJECTED')"
+        when "ACCEPT_REJECT_PAYMENT"
+          statements[:where] += "'PAYMENT_DEPOSITED'"
+        when "CAPTURE_BATCHES"
+          statements[:where] += "'PAYMENT_ACCEPTED'"
+        when "INSPECTION"
+          statements[:where] += "'BATCHES_CAPTURED'"
+        when "CAPTURE_TRACKING_CODE"
+          statements[:where] += "'INSPECTIONED'"
+        when "SENT"
+          statements[:where] += "'SENT'"
+        when "DELIVERED"
+          statements[:where] += "'DELIVERED'"
+          statements[:order] = {created_at: :desc}
+        when "INVOICES"
+          statements[:where] = "state not in ('WAITING_FOR_PAYMENT','ORDER_CANCELED','PAYMENT_REJECTED','PAYMENT_DEPOSITED')"
+          statements[:order] = {created_at: :desc}
+        else
+          return if params[:type].blank?
+      end # case params[:type] #
+
+      if search_params.present?
+        statements[:where] += " and hash_id like '%#{search_params}%'"
+      end
+      return statements
+    end
+
+    def warehouseStatement(statements)
+      unless ["CANCEL","ACCEPT_REJECT_PAYMENT","INVOICES"].include? params[:type]
+        statements[:warehouse] = @current_user.warehouse_id
+      end
+      return statements
+    end
+
+    def getOrdersFor(statements)
+      if params[:distributor].present?
+        distributor = Distributor.find_by!(:hash_id => params[:distributor])
+  
+        Order.joins(:Distributor)
+          .where(distributors: {hash_id: params[:distributor]})
+          .where(statements[:where])
+          .byWarehouse(statements[:warehouse])
+          .order(statements[:order])
+          .includes(City: :State).includes(:Distributor, :Client, :Parcel)
+      else
+        Order.where(statements[:where])
+          .byWarehouse(statements[:warehouse])
+          .order(statements[:order])
+          .includes(City: :State).includes(:Distributor, :Client, :Parcel)
+      end
     end
 end

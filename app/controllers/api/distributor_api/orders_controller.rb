@@ -7,17 +7,13 @@ class Api::DistributorApi::OrdersController < ApiController
     if params[:client].blank?
       orders = @current_user.Orders.order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State).includes(:Client, City: :State)
     else
-
-    client = Client.find_by!(hash_id: params[:client])
-    if !client.blank?
-      orders = Order.where(client_id: client.id).order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State)
-      @current_user.updateRevision(client)
-    else
-      render :status => 200,
-              :json => { :success => false, :info => "CLIENT_NOT_FOUND" }
-      return
-    end
-
+      client = Client.find_by!(hash_id: params[:client])
+      if !client.blank?
+        orders = Order.where(client_id: client.id).order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 25).includes(City: :State)
+        @current_user.updateRevision(client)
+      else
+        render status: 200, json: {success: false, info: "CLIENT_NOT_FOUND"} and return
+      end
     end
 
     data = Array.new
@@ -28,8 +24,8 @@ class Api::DistributorApi::OrdersController < ApiController
     home_img = @current_user.home_img.url
     avatar = @current_user.avatar_url
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :avatar => avatar, :home_img => home_img, :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", 
+      avatar: avatar, home_img: home_img, data: data}
   end
 
   def show
@@ -62,7 +58,6 @@ class Api::DistributorApi::OrdersController < ApiController
     end
     data[:order_details] = details_data
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 end

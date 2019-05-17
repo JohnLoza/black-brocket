@@ -7,12 +7,11 @@ class Api::FiscalDataController < ApiController
     fiscal_data = @current_user.FiscalData
 
     if !fiscal_data.blank?
-      render :status => 200,
-             :json => { :success => true, :info => "DATA_RETURNED", data: fiscal_data,
-                        state: fiscal_data.City.State.id, city: fiscal_data.City.id }
+      render status: 200,
+        json: {success: true, info: "DATA_RETURNED", data: fiscal_data,
+          state: fiscal_data.City.State.id, city: fiscal_data.City.id }
     else
-      render :status => 200,
-             :json => { :success => false, :info => "FISCAL_DATA_NOT_FOUND" }
+      render status: 200, json: {success: false, info: "FISCAL_DATA_NOT_FOUND"}
     end
   end
 
@@ -23,11 +22,9 @@ class Api::FiscalDataController < ApiController
     @fiscal_data.hash_id = random_hash_id(12).upcase
 
     if @fiscal_data.save
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED" }
+      render status: 200, json: {success: true, info: "SAVED"}
     else
-      render :status => 200,
-             :json => { :success => false, :info => "SAVE_ERROR" }
+      render status: 200, json: {success: false, info: "SAVE_ERROR"}
     end
   end
 
@@ -38,11 +35,9 @@ class Api::FiscalDataController < ApiController
     @fiscal_data.mother_lastname = params[:fiscal_data][:mother_lastname]==""
 
     if @fiscal_data.update_attributes(fiscal_params)
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED" }
+      render status: 200, json: {success: true, info: "SAVED"}
     else
-      render :status => 200,
-             :json => { :success => false, :info => "SAVE_ERROR" }
+      render status: 200, json: {success: false, info: "SAVE_ERROR"}
     end
   end
 

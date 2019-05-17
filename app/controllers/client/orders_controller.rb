@@ -32,102 +32,44 @@ class Client::OrdersController < ApplicationController
   def create
     return unless verify_client_address
     return unless verify_fiscal_data
-    @order = Order.new
+    @order = setBasicInfo
 
-    # find the corresponding distributor #
-    @order.distributor_id = 0
-    @distributor = @current_user.City.Distributor
-    if !@distributor.nil?
-      @order.distributor_id = @distributor.id
-    end
-
-    # save some order values #
-    @order.client_id = @current_user.id
-    @order.city_id = @current_user.city_id
-    @order.invoice = params[:invoice] if params[:invoice]
-    @order.payment_method = params[:payment_method]
-    @order.parcel_id = params[:parcel_id]
-    @order.state = "WAITING_FOR_PAYMENT"
-
-    @order.hash_id = random_hash_id(12).upcase
-
-    # find the products the client want to buy #
+    # find the products the client want to buy and verify stock #
     @products = WarehouseProduct.where(hash_id: session[:e_cart].keys)
-                .where(describes_total_stock: true).includes(:Product)
-
-    @products.each do |product|
-      # puts "--- existence: #{product.existence}, buying: #{session[:e_cart][product.hash_id]}"
-      if product.existence < session[:e_cart][product.hash_id].to_i
-        flash[:info] = "Lo sentimos pero no queda suficiente inventario del producto #{product.Product.name} su existencia actual es de: #{product.existence}"
-        redirect_to client_ecart_path(@current_user.hash_id)
-        return
-      end
+      .where(describes_total_stock: true).includes(:Product)
+    @order.warehouse_id = @products[0].warehouse_id
+    unless WarehouseProduct.enoughStock?(@products, session[:e_cart])
+      flash[:info] = "Lo sentimos pero no queda suficiente inventario del producto #{product.Product.name} su existencia actual es de: #{product.existence}"
+      redirect_to client_ecart_path(@current_user.hash_id) and return
     end
-
-    product_prices = @current_user.ProductPrices.where("product_id in (?)", @products.map(&:product_id))
-
-    # get the warehouse he belogs to #
-    @warehouse = @products[0].Warehouse
-    @order.warehouse_id = @warehouse.id
 
     # get the corresponding prices and create the details of the order #
-    @order_details = Array.new
-    total = 0
-    current_product_price = 0
+    @total = 0
     @products.each do |p|
-      subtotal = 0
-      if product_prices.any?
-        product_prices.each do |pp|
-          if pp.product_id == p.Product.id
-            current_product_price = pp.client_price
-            break
-          end # if pp.product_id == p.Product.id #
-        end # product_prices.each #
-      else
-        current_product_price = p.Product.price
-      end # if product_prices.any? #
-
-      subtotal = session[:e_cart][p.hash_id].to_i*current_product_price
-      total+=subtotal
-
-      total_iva = current_product_price-(current_product_price*100/(p.Product.iva+100))
-      total_ieps = (current_product_price-total_iva)-((current_product_price-total_iva)*100/(p.Product.ieps+100))
-
-      @order_details << OrderDetail.new(product_id: p.product_id,
-                  hash_id: random_hash_id(12).upcase, iva: p.Product.iva,
-                  quantity: session[:e_cart][p.hash_id], sub_total: subtotal,
-                  w_product_id: p.id, ieps: p.Product.ieps, price: current_product_price,
-                  total_iva: total_iva * session[:e_cart][p.hash_id].to_i,
-                  total_ieps: total_ieps * session[:e_cart][p.hash_id].to_i)
+      detail = OrderDetail.for(current_user, @products, p, session[:e_cart])
+      @total += detail.sub_total
+      @order.Details << detail
     end # @products.each do #
 
-    @order.shipping_cost = params[:delivery_cost]
-    @order.guides = params[:guides]
-    @order.total = total + params[:delivery_cost].to_f
-
     # finally save all the stuff to the database #
-    @saved = false
     ActiveRecord::Base.transaction do
-      @order.save
+      @order.total = @total + params[:delivery_cost].to_f
+      begin
+      @order.save!
+      rescue ActiveRecord::RecordInvalid
+        flash[:info] = "ocurrió un error al procesar la órden"
+        redirect_to client_ecart_path(@current_user.hash_id) and return
+      end
       @products.each do |p|
-        p.update_attributes(existence: ( p.existence - session[:e_cart][p.hash_id].to_i ))
+        p.update_attributes(existence: (p.existence - session[:e_cart][p.hash_id].to_i))
       end
-      @order_details.each do |detail|
-        detail.order_id = @order.id
-        detail.save
-      end
-      @saved = true
+      flash[:success] = "Orden guardada"
+      session.delete(:e_cart)
+      redirect_to client_orders_path(@current_user.hash_id) and return
     end
 
-    if @saved == true
-      session.delete(:e_cart)
-      flash[:success] = "Orden guardada"
-      redirect_to client_orders_path(@current_user.hash_id)
-      return
-    else
-      flash[:info] = "Ocurrió un error al guardar tu pedido, vuelve a intentarlo por favor..."
-      redirect_to client_ecart_path(@current_user.hash_id)
-    end
+    flash[:info] = "Ocurrió un error al guardar tu pedido, vuelve a intentarlo por favor..."
+    redirect_to client_ecart_path(@current_user.hash_id)
   end
 
   def cancel
@@ -231,5 +173,20 @@ class Client::OrdersController < ApplicationController
         redirect_to edit_client_client_path @current_user and return false
       end
       return true
+    end
+
+    def setBasicInfo
+      order = Order.new
+      order.hash_id = random_hash_id(12).upcase
+      order.client_id = @current_user.id
+      order.city_id = @current_user.city_id
+      order.distributor_id = @current_user.distributorId
+      order.shipping_cost = params[:delivery_cost]
+      order.guides = params[:guides]
+      order.payment_method = params[:payment_method]
+      order.parcel_id = params[:parcel_id]
+      order.invoice = params[:invoice] if params[:invoice]
+      order.state = "WAITING_FOR_PAYMENT"
+      return order
     end
 end

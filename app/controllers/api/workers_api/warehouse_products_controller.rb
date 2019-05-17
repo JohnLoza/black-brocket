@@ -10,36 +10,22 @@ class Api::WorkersApi::WarehouseProductsController < ApiController
       data << {hash_id: w_p.Product.hash_id, name: w_p.Product.name, existence: w_p.existence, min_stock: w_p.min_stock}
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def existence
-    unless params[:batch]
-      render :status => 200,
-             :json => { :success => false, :info => "BATCH_MUST_BE_PRESENT" }
-      return
-    end
+    render status: 200, json: {success: false, info: "BATCH_MUST_BE_PRESENT"} and return unless params[:batch]
 
     wp = @current_user.Warehouse.Products.where(batch: params[:batch]).take
-    unless wp
-      render :status => 200,
-             :json => { :success => false, :info => "WAREHOUSE_PRODUCT_NOT_FOUND" }
-      return
-    end
+    render status: 200, json: {success: false, info: "WAREHOUSE_PRODUCT_NOT_FOUND"} and return unless wp
 
     data = { product_id: wp.product_id, batch: wp.batch, existence: wp.existence }
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def create_inventory_report
-    unless params[:report].present?
-      render :status => 200,
-             :json => { :success => false, :info => "REPORT_DETAILS_REQUIRED" }
-      return
-    end
+    render status: 200, json: {success: false, info: "REPORT_DETAILS_REQUIRED"} and return unless params[:report]
 
     inventory_report = InventoryReport.new(inventory_report_params)
     inventory_report.worker_id = @current_user.id
@@ -49,21 +35,15 @@ class Api::WorkersApi::WarehouseProductsController < ApiController
       .where(warehouse_id: @current_user.warehouse_id)
       .where(permissions: {category: 'WAREHOUSE_MANAGER'}).take
 
-    unless worker.present?
-      render :status => 200,
-             :json => { :success => false, :info => "NO_ONE_TO_REPORT_AT" }
-      return
-    end
+    render status: 200, json: {success: false, info: "NO_ONE_TO_REPORT_AT"} and return unless worker
 
     if inventory_report.save
-      Notification.create(worker_id: worker.id, icon: "fa fa-file-text-o",
-        description: "Nuevo reporte de inventario", url: "/admin/warehouse/#{@current_user.Warehouse.hash_id}/inventory_report/#{inventory_report.id}")
+      Notification.create(worker_id: worker.id, icon: "fa fa-file-text-o", description: "Nuevo reporte de inventario", 
+        url: "/admin/warehouse/#{@current_user.Warehouse.hash_id}/inventory_report/#{inventory_report.id}")
 
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED" }
+      render status: 200, json: {success: true, info: "SAVED"}
     else
-      render :status => 200,
-             :json => { :success => false, :info => "NOT_SAVED" }
+      render status: 200, json: {success: false, info: "NOT_SAVED"}
     end
   end
 

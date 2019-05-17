@@ -17,4 +17,11 @@ class Order < ApplicationRecord
 
   mount_uploader :pay_img, PayUploader
   mount_uploader :pay_pdf, PdfUploader
+
+  def self.byWarehouse(warehouse)
+    return all unless warehouse
+    raise ArgumentError, "warehouse must be an integer" unless warehouse.kind_of? Integer
+
+    where(warehouse_id: warehouse)
+  end
 end

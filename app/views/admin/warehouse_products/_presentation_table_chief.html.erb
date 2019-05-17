@@ -48,7 +48,7 @@
                 <td><%= p.name %></td>
                 <td>
                   <button id="stock-<%= p.hash_id %>" type="button" class="btn btn-primary btn-sm m-r-sm"
-                          onclick="update_shipment_preparations_form('<%= p.name %>', '<%= p.hash_id %>');">
+                          onclick="update_shipment_preparations_form('<%= p.name %>', '<%= p.id %>');">
                           <%= wp.existence %>
                   </button>
                   <% if @current_user.has_permission?('warehouse_products@update_stock') %>

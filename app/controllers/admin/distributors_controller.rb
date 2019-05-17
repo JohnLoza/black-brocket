@@ -29,7 +29,7 @@ class Admin::DistributorsController < AdminController
 
     if @distributor.save
       @distributor.update_attribute(:hash_id, generateAlphKey("D", @distributor.id))
-      redirect_to admin_distributor_path(@distributor), flash: { success: 'Distribuidor guardado' }
+      redirect_to admin_distributor_path(@distributor), flash: {success: 'Distribuidor guardado' }
     else
       @cities = City.where(state_id: params[:state_id]).order_by_name
       @states = State.order_by_name
@@ -84,7 +84,7 @@ class Admin::DistributorsController < AdminController
     @distributor.city_id = params[:city_id]
 
     if @distributor.update_attributes(distributor_params)
-      redirect_to admin_distributors_path, flash: { success: 'El distribuidor se actualizó.' }
+      redirect_to admin_distributors_path, flash: {success: 'El distribuidor se actualizó.' }
     else
       @cities = City.where(state_id: params[:state_id]).order_by_name
       @states = State.order_by_name

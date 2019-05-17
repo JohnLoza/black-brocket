@@ -28,7 +28,7 @@ class Admin::WelcomeController < AdminController
 
   def update_ui_theme
     @current_user.update_attribute(:ui_theme, params[:theme])
-    render :status => 200, json: { success: true, new_theme: params[:theme] }
+    render status: 200, json: {success: true, new_theme: params[:theme] }
   end
 
 end

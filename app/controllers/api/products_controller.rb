@@ -8,17 +8,12 @@ class Api::ProductsController < ApiController
 
   def index
     warehouse = @current_user.City.State.Warehouse
-    unless warehouse
-      render :status => 200,
-             :json => { :success => false, :info => "WAREHOUSE_NOT_FOUND" } and return
-    end
+    render status: 200, json: {success: false, info: "WAREHOUSE_NOT_FOUND"} and return unless warehouse
+    
+    products = warehouse.productsForApi(params[:category], params[:search])
+      .paginate(page: params[:page], per_page: 20)
 
-    products = warehouse.Products.joins(:Product).active.visible
-      .describes_total_stock.by_category(params[:category])
-      .search(key_words: params[:search], fields: ['products.name'])
-      .paginate(page: params[:page], per_page: 20).includes(:Product)
-
-    photos = ProdPhoto.where("product_id in (?) and is_principal=true", products.map{|p| p.product_id})
+    # photos = ProdPhoto.where("product_id in (?) and is_principal=true", products.map{|p| p.product_id})
     product_prices = @current_user.ProductPrices
 
     data = Array.new
@@ -42,17 +37,17 @@ class Api::ProductsController < ApiController
       }
 
       # get the photo for the product #
-      photos.each do |photo|
-        if photo.product_id == p.id
+      p.Photos.each do |photo|
+        if photo.product_id == p.id and photo.is_principal
           sub_data[:photo] = photo.photo.url
           break
         end
       end
 
-      p_photos = p.Photos.where(is_principal: false).select(:id, :photo)
+      p_photos = p.Photos
       photo_urls = Array.new
       p_photos.each do |p_photo|
-        photo_urls << p_photo.photo.url
+        photo_urls << p_photo.photo.url unless p_photo.is_principal
       end
       sub_data[:photos] = photo_urls
 
@@ -67,8 +62,7 @@ class Api::ProductsController < ApiController
       data << sub_data
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "PRODUCT_DATA", :data => data }
+    render status: 200, json: {success: true, info: "PRODUCT_DATA", data: data}
   end
 
   def show
@@ -81,8 +75,7 @@ class Api::ProductsController < ApiController
     description = File.open(description_file, "r"){|file| file.read }
     preparation = File.open(preparation_file, "r"){|file| file.read }
 
-    render :status => 200,
-           :json => { :success => true, :info => "PRODUCT_DATA",
-                      :data => { description: description, preparation: preparation, presentation: product.presentation }}
+    render status: 200, json: {success: true, info: "PRODUCT_DATA", data: 
+      {description: description, preparation: preparation, presentation: product.presentation}}
   end
 end

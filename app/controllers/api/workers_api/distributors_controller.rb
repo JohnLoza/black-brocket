@@ -8,8 +8,7 @@ class Api::WorkersApi::DistributorsController < ApiController
     distributor = order.Distributor
 
     unless distributor
-      render :status => 200,
-             :json => { :success => false, :info => "DISTRIBUTOR_NOT_FOUND" }
+      render status: 200, json: {success: false, info: "DISTRIBUTOR_NOT_FOUND"}
     end
 
     data = Hash.new
@@ -25,8 +24,7 @@ class Api::WorkersApi::DistributorsController < ApiController
       data[:address] = distributor.address
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
 end

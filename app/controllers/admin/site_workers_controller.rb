@@ -70,7 +70,7 @@ class Admin::SiteWorkersController < AdminController
     @worker.city_id = params[:city_id]
 
     if @worker.update_attributes(worker_params)
-      redirect_to admin_site_workers_path, flash: { success: 'Trabajador actualizado correctamente.' }
+      redirect_to admin_site_workers_path, flash: {success: 'Trabajador actualizado correctamente.' }
     else
       @warehouse_id = params[:site_worker][:warehouse_id]
       @warehouses = Warehouse.active.order_by_name
@@ -89,7 +89,7 @@ class Admin::SiteWorkersController < AdminController
     deny_access! and return unless current_user_is_admin_or_same_warehouse?(@worker)
 
     if @worker.destroy
-      redirect_to admin_site_workers_path, flash: { success: 'Trabajador eliminado.' }
+      redirect_to admin_site_workers_path, flash: {success: 'Trabajador eliminado.' }
     else
       redirect_to admin_site_workers_path, flash: { warning: 'Ocurrió un error al eliminar el trabajador.' }
     end

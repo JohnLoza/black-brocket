@@ -14,9 +14,8 @@ class Api::WorkersApi::ClientsController < ApiController
             name: c.name, lastname: c.lastname, mother_lastname: c.mother_lastname,
             photo: c.avatar_url}
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED",
-                      :data => data, city_name: c.City.name, state_name: c.City.State.name  }
+    render status: 200, json: {success: true, info: "DATA_RETURNED",
+      data: data, city_name: c.City.name, state_name: c.City.State.name}
   end
 
 end

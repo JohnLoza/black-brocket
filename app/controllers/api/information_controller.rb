@@ -9,21 +9,17 @@ class Api::InformationController < ApiController
 
   def privacy_policy
     data = WebInfo.where(name: "PRIVACY_POLICY").take
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED",
-                      :data => data.description  }
+    render status: 200, json: {success: true, info: "DATA_RETURNED",data: data.description}
   end
 
   def terms_of_service
     data = WebInfo.where(name: "TERMS_OF_SERVICE").take
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED",
-                      :data => data.description }
+    render status: 200, json: {success: true, info: "DATA_RETURNED",data: data.description}
   end
 
   def tips
     tips = TipRecipe.all.order(updated_at: :desc)
-            .paginate(page: params[:page], per_page: 15)
+      .paginate(page: params[:page], per_page: 15)
 
     data = Array.new
     tips.each do |tip|
@@ -35,20 +31,16 @@ class Api::InformationController < ApiController
         description: description, video: tip.video, created_at: tip.created_at, updated_at: tip.updated_at}
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED",
-                      :data => data, :per_page => 15 }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data, :per_page => 15}
   end
 
   def contact
     suggestion = Suggestion.new(suggestion_params)
 
     if suggestion.save
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED" }
+      render status: 200, json: {success: true, info: "SAVED"}
     else
-      render :status => 200,
-             :json => { :success => false, :info => "SAVE_ERROR" }
+      render status: 200, json: {success: false, info: "SAVE_ERROR"}
     end
   end
 
@@ -60,8 +52,7 @@ class Api::InformationController < ApiController
     description = File.open(description_file, "r"){|file| file.read }
 
     data = {shipping_cost: warehouse.shipping_cost, wholesale: warehouse.wholesale, ecart_notice: description}
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", data: data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   private

@@ -13,32 +13,25 @@ class Api::DistributorApi::DistributorsController < ApiController
     end
     data[:regions] = array
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def update_home_image
     if !params[:distributor][:home_img].blank?
       if @current_user.update_attribute(:home_img, params[:distributor][:home_img])
-        render :status => 200,
-               :json => { :success => true, :info => "SAVED" }
-        return
+        render status: 200, json: {success: true, info: "SAVED"} and return
       else
-        render :status => 200,
-               :json => { :success => false, :info => "SAVE_ERROR", :data => {formats_accepted: ["jpg","jpeg","png","gif"]} }
-        return
+        render status: 200, json: {success: false, info: "SAVE_ERROR", 
+          data: {formats_accepted: ["jpg","jpeg","png","gif"]}} and return
       end
     else
-      render :status => 200,
-             :json => { :success => false, :info => "NO_IMAGE_FOUND" }
-      return
+      render status: 200, json: {success: false, info: "NO_IMAGE_FOUND"} and return
     end
   end
 
   def get_username_n_photo
-    render :status => 200,
-           :json => { :success => true, :info => "USER_DATA",
-                      :data => {username: @current_user.username, photo: @current_user.avatar_url }}
+    render status: 200, json: {success: true, info: "USER_DATA",
+      data: {username: @current_user.username, photo: @current_user.avatar_url}}
   end
 
   def notifications
@@ -53,8 +46,6 @@ class Api::DistributorApi::DistributorsController < ApiController
     end
 
     not_seen_count = @current_user.Notifications.where(:seen => false).size
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :not_seen_count => not_seen_count, :data => data }
-
+    render status: 200, json: {success: true, info: "DATA_RETURNED", :not_seen_count => not_seen_count, data: data}
   end
 end

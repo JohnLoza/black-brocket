@@ -29,6 +29,16 @@ class Product < ApplicationRecord
     where("#{category}" => true)
   end
 
+  def self.priceFor(product, custom_prices)
+    if custom_prices.size > 0
+      custom_prices.each do |cp|
+        return cp.client_price if cp.product_id == product.product_id
+      end
+    else
+      return cp.Product.price
+    end
+  end
+
   private
     def get_embed_link
       return unless self.video.present?

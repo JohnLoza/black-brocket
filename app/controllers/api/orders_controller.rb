@@ -23,8 +23,7 @@ class Api::OrdersController < ApiController
       data << extra_data
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def payment_steps
@@ -45,8 +44,7 @@ class Api::OrdersController < ApiController
     end
 
     data[:bank_data] = extra_data
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def show
@@ -56,11 +54,7 @@ class Api::OrdersController < ApiController
     end
 
     order = @current_user.Orders.where(hash_id: params[:id]).take
-    if order.blank?
-      render :status => 200,
-             :json => { :success => false, :info => "ORDER_NOT_FOUND" }
-      return
-    end
+    render status: 200, json: {success: false, info: "ORDER_NOT_FOUND"} and return unless order
 
     warehouse = order.Warehouse
     details = order.Details
@@ -91,110 +85,47 @@ class Api::OrdersController < ApiController
     end
     data[:order_details] = details_data
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def create
     if params[:invoice]=="1" and @current_user.FiscalData.nil?
-      render :status => 200,
-             :json => { :success => false, :info => "FISCAL_DATA_NOT_FOUND" }
-      return
+      render status: 200, json: {success: false, info: "FISCAL_DATA_NOT_FOUND"} and return
     end
-
-    order = Order.new
-
-    # find the corresponding distributor #
-    order.distributor_id = 0
-    distributor = @current_user.City.Distributor
-    if !distributor.nil?
-      order.distributor_id = distributor.id
-    end
-
-    # save some order values #
-    order.client_id = @current_user.id
-    order.city_id = @current_user.city_id
-    order.invoice = params[:invoice] if !params[:invoice].blank?
-    order.payment_method = params[:payment_method]
-    order.parcel_id = params[:parcel_id]
-    order.state = "WAITING_FOR_PAYMENT"
-
-    order.hash_id = random_hash_id(12).upcase
-
+    order = setBasicInfo()
     # find the products the client want to buy #
-    products = WarehouseProduct.where("hash_id in (?) and describes_total_stock = true",
-                      params[:product_details].keys).includes(:Product)
+    products = WarehouseProduct.where(hash_id: params[:product_details].keys)
+      .where(describes_total_stock: true).includes(:Product)
 
-    products.each do |product|
-      if product.existence < params[:product_details][product.hash_id].to_i
-        render :status => 200,
-               :json => { :success => false, :info => "NO_ENOUGH_EXISTENCE", :data => {product: product.hash_id, existence: product.existence} }
-        return
-      end
+    order.warehouse_id = products[0].warehouse_id
+    unless WarehouseProduct.enoughStock?(products, params[:product_details])
+      render status: 200, json: {success: false, info: "NO_ENOUGH_EXISTENCE", 
+        data: {product: product.hash_id, existence: product.existence} } and return
     end
-
-    product_prices = @current_user.ProductPrices.where("product_id in (?)", products.map(&:product_id))
-
-    # get the warehouse he belogs to #
-    warehouse = products[0].Warehouse
-    order.warehouse_id = warehouse.id
 
     # get the corresponding prices and create the details of the order #
-    order_details = Array.new
     total = 0
-    current_product_price = 0
     products.each do |p|
-      subtotal = 0
-      if product_prices.any?
-        product_prices.each do |pp|
-          if pp.product_id == p.Product.id
-            current_product_price = pp.client_price
-            break
-          end # if pp.product_id == p.Product.id #
-        end # product_prices.each #
-      else
-        current_product_price = p.Product.price
-      end # if product_prices.any? #
-
-      subtotal = params[:product_details][p.hash_id].to_i*current_product_price
-      total+=subtotal
-
-      total_iva = current_product_price-(current_product_price*100/(p.Product.iva+100))
-      total_ieps = (current_product_price-total_iva)-((current_product_price-total_iva)*100/(p.Product.ieps+100))
-
-      order_details << OrderDetail.new(product_id: p.product_id,
-                  hash_id: @current_user.new_token, iva: p.Product.iva,
-                  quantity: params[:product_details][p.hash_id], sub_total: subtotal,
-                  w_product_id: p.id, ieps: p.Product.ieps, price: current_product_price,
-                  total_iva: total_iva * params[:product_details][p.hash_id].to_i,
-                  total_ieps: total_ieps * params[:product_details][p.hash_id].to_i)
-    end # products.each do #
-
-    order.shipping_cost = params[:delivery_cost]
-    order.guides = params[:guides]
-    order.total = total + params[:delivery_cost].to_f
+      detail = OrderDetail.for(@current_user, products, p, params[:product_details])
+      total += detail.sub_total
+      order.Details << detail
+    end
 
     # finally save all the stuff to the database #
-    saved = false
     ActiveRecord::Base.transaction do
-      order.save
+      order.total = total + params[:delivery_cost].to_f
+      begin
+      order.save!
+      rescue ActiveRecord::RecordInvalid
+        render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
+      end
       products.each do |p|
-        p.update_attributes(existence: (p.existence-params[:product_details][p.hash_id].to_i))
+        p.update_attributes(existence: (p.existence - params[:product_details][p.hash_id].to_i))
       end
-      order_details.each do |detail|
-        detail.order_id = order.id
-        detail.save
-      end
-      saved = true
+      render status: 200, json: {success: true, info: "SAVED"} and return
     end
 
-    if saved == true
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED" }
-    else
-      render :status => 200,
-             :json => { :success => false, :info => "SAVE_ERROR" }
-    end
+    render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
   end
 
   def cancel
@@ -211,24 +142,17 @@ class Api::OrdersController < ApiController
       end
 
       if order.update(state: "ORDER_CANCELED")
-        render :status => 200,
-               :json => { :success => true, :info => "SAVED" }
+        render status: 200, json: {success: true, info: "SAVED"}
       else
-        render :status => 200,
-               :json => { :success => false, :info => "SAVE_ERROR" }
+        render status: 200, json: {success: false, info: "SAVE_ERROR"}
       end
 
     end
   end
 
   def upload_payment
+    render status: 200, json: {success: false, info: "PAYMENT_NOT_FOUND"} and return unless params[:payment]
     order = @current_user.Orders.find_by!(hash_id: params[:id])
-
-    if params[:payment].blank?
-      render :status => 200,
-             :json => { :success => false, :info => "PAYMENT_NOT_FOUND" }
-      return
-    end
 
     if params[:payment].content_type.include? "pdf"
       order.remove_pay_img! if !order.pay_img.blank?
@@ -237,20 +161,13 @@ class Api::OrdersController < ApiController
       order.remove_pay_pdf! if !order.pay_pdf.blank?
       order.pay_img = params[:payment]
     else
-      render :status => 200,
-             :json => { :success => false, :info => "FILE_FORMAT_ERROR" }
-      return
+      render status: 200, json: {success: false, info: "FILE_FORMAT_ERROR"} and return
     end
     order.state = "PAYMENT_DEPOSITED"
     order.download_payment_key = SecureRandom.urlsafe_base64 if order.download_payment_key.nil?
 
-    if order.save
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED" }
-    else
-      render :status => 200,
-             :json => { :success => false, :info => "SAVE_ERROR" }
-    end
+    render status: 200, json: {success: true, info: "SAVED"} and return if order.save
+    render status: 200, json: {success: false, info: "SAVE_ERROR"}
   end
 
   def available_banks
@@ -262,8 +179,7 @@ class Api::OrdersController < ApiController
       data << extra_data
     end
 
-    render :status => 200,
-           :json => { success: true, info: 'DATA_RETURNED', data: data}
+    render status: 200, json: {success: true, info: 'DATA_RETURNED', data: data}
   end
 
   def available_parcels
@@ -284,9 +200,7 @@ class Api::OrdersController < ApiController
       data << extra_data
     end
 
-    render status: 200,
-      json: { success: true, info: 'DATA_RETURNED', data: data }
-
+    render status: 200, json: {success: true, info: 'DATA_RETURNED', data: data}
   end
 
   def update_payment_method
@@ -295,8 +209,7 @@ class Api::OrdersController < ApiController
 
     order.update_attributes(payment_method: params[:payment_method])
 
-    render :status => 200,
-           :json => { success: true, info: 'SAVED'}
+    render status: 200, json: {success: true, info: 'SAVED'}
   end
 
   def download_payment
@@ -308,5 +221,21 @@ class Api::OrdersController < ApiController
       send_file order.pay_pdf.path
     end
   end
+
+  private
+    def setBasicInfo
+      order = Order.new
+      order.hash_id = random_hash_id(12).upcase
+      order.client_id = @current_user.id
+      order.city_id = @current_user.city_id
+      order.distributor_id = @current_user.distributorId
+      order.shipping_cost = params[:delivery_cost]
+      order.guides = params[:guides]
+      order.payment_method = params[:payment_method]
+      order.parcel_id = params[:parcel_id]
+      order.invoice = params[:invoice] if params[:invoice]
+      order.state = "WAITING_FOR_PAYMENT"
+      return order
+    end
 
 end

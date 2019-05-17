@@ -31,7 +31,9 @@
             </div>
 
             <%= form_for(:shipment, :url=> admin_chief_shipments_path(params[:warehouse_id])) do |f| %>
-              <%= f.hidden_field :type, :value => "TRANSFER" %>
+              <%= f.hidden_field :shipment_type, value: "TRANSFER" %>
+              <%= f.hidden_field :chief_id, value: @current_user.id %>
+              <%= f.hidden_field :origin_warehouse_id, value: @warehouse.id %>
 
               <%= select_tag "shipment[target_warehouse_id]", options_from_collection_for_select(
               @warehouses, "id", "name"), prompt: "Selecciona...", class: "form-control m-b", required: true %>

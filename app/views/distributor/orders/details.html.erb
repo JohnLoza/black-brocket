@@ -75,12 +75,12 @@
                       <!-- IVA -->
                       <td>
                         <%=d.iva%> %<br>
-                        ($<span class="number_format"><%= d.total_iva %></span>)<br>
+                        ($<span class="number_format"><%= d.iva %></span>)<br>
                       </td>
                       <!-- IEPS -->
                       <td>
                         <%=d.ieps%> %<br>
-                        ($<span class="number_format"><%= d.total_ieps %></span>)<br>
+                        ($<span class="number_format"><%= d.ieps %></span>)<br>
                       </td>
                       <% current_import = (d.sub_total - d.total_iva - d.total_ieps).round(2) %>
                       <td>$

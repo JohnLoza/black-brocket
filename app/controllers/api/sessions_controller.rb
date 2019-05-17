@@ -24,31 +24,24 @@ class Api::SessionsController < ApiController
     end
 
     if user.blank? or !user.authenticate(params[:password])
-      render_authentication_error
-      return
+      render_authentication_error and return
     end
 
     unless user.authentication_token.present?
       user.update_attribute(:authentication_token, SecureRandom.urlsafe_base64(16))
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "AUTHORIZED",
-                      :data => { :auth_token => user.authentication_token, :user_type => user_type} }
+    render status: 200, json: {success: true, info: "AUTHORIZED",
+      data: {:auth_token => user.authentication_token, :user_type => user_type}}
   end
 
   def destroy
     user = SiteWorker.find_by(authentication_token: params[:authentication_token])
     user = Distributor.find_by(authentication_token: params[:authentication_token]) unless user
     user = Client.find_by(authentication_token: params[:authentication_token]) unless user
-
-    if user.blank?
-      render_authentication_error
-      return
-    end
+    render_authentication_error and return unless user
 
     user.update_attribute(:authentication_token, nil)
-    render :status => 200,
-           :json => { :success => true, :info => "LOGGED_OUT" }
+    render status: 200, json: {success: true, info: "LOGGED_OUT"}
   end
 end

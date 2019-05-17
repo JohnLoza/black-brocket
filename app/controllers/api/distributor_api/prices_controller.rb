@@ -26,8 +26,7 @@ class Api::DistributorApi::PricesController < ApiController
       data << hash
     end # products each do #
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def update
@@ -42,7 +41,6 @@ class Api::DistributorApi::PricesController < ApiController
       client.update_attributes(has_custom_prices: true, is_new: false)
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "SAVED" }
+    render status: 200, json: {success: true, info: "SAVED"}
   end
 end

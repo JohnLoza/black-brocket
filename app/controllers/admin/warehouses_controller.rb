@@ -74,7 +74,7 @@ class Admin::WarehousesController < AdminController
     @warehouse.city_id = params[:city_id]
 
     if @warehouse.update_attributes(warehouse_params)
-      redirect_to admin_warehouses_path, flash: { success: 'Almacén actualizado' }
+      redirect_to admin_warehouses_path, flash: {success: 'Almacén actualizado' }
     else
       @states = State.order_by_name
       @cities = City.where(state_id: params[:state_id]).order_by_name
@@ -87,7 +87,7 @@ class Admin::WarehousesController < AdminController
 
     @warehouse = Warehouse.find_by!(hash_id: params[:id])
     @warehouse.destroy
-    redirect_to admin_warehouses_path, flash: { success: 'Almacén eliminado' }
+    redirect_to admin_warehouses_path, flash: {success: 'Almacén eliminado' }
   end
 
   def batch_search

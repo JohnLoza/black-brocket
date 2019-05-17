@@ -32,4 +32,11 @@ class Warehouse < ApplicationRecord
   def location
     "#{self.City} #{self.City.State}"
   end
+
+  def productsForApi(category, search)
+    self.Products.joins(:Product).active.visible
+      .describes_total_stock.by_category(category)
+      .search(key_words: search, fields: ['products.name'])
+      .includes(Product: :Photos)
+  end
 end

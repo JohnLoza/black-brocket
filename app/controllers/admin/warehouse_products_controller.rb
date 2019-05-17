@@ -126,87 +126,47 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def create_shipment
+    # TODO refactor
     unless @current_user.has_permission?('warehouse_manager@transfer_mercancy') or
-           @current_user.has_permission?('warehouse_products@create_shipments')
+      @current_user.has_permission?('warehouse_products@create_shipments')
       deny_access! and return
     end
     deny_access! and return unless session[:shipment_products].present?
-
     warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
+    shipment = Shipment.new(shipment_params)
 
-    # Is the shipment a transfer?
-    if params[:shipment] and params[:shipment][:type] == "TRANSFER"
-      shipment = Shipment.new(target_warehouse_id: params[:shipment][:target_warehouse_id],
-      origin_warehouse_id: warehouse.id, chief_id: @current_user.id, shipment_type: "TRANSFER")
-    else # or not?
-      shipment = Shipment.new(target_warehouse_id: warehouse.id,
-      chief_id: @current_user.id, shipment_type: "NEW_BATCHES")
-    end
-
-    success = true
     ActiveRecord::Base.transaction do
+      raise ActiveRecord::Rollback, "could not save shipment" unless shipment.save
       session[:shipment_products].delete("warehouse")
-      products = Product.select(:id, :hash_id).where("hash_id in (?)", session[:shipment_products].keys)
+      products = Product.select(:id, :hash_id).where("id in (?)", session[:shipment_products].keys)
 
       # iterate the shipment details
-      session[:shipment_products].keys.each do |k|
-        session[:shipment_products][k].delete("name")
+      session[:shipment_products].keys.each do |product_id|
+
+        session[:shipment_products][product_id].delete("name")
         # search for the product id that matches this details
-        session[:shipment_products][k].keys.each do |s_k|
-          product_id = 0
-          products.each do |p|
-            if p.hash_id == k
-              product_id = p.id
-              break
-            end
-          end # products.each #
+        session[:shipment_products][product_id].keys.each do |hash|
 
-          hash = session[:shipment_products][k][s_k]
-          product_expiration_date = hash["expiration_date"]
-
-          product_exist = false
-          warehouse_product = WarehouseProduct.where(batch: hash["batch"]).take
-          if warehouse_product and warehouse_product.product_id == product_id
-            # Same product with same batch its ok #
-            product_expiration_date = warehouse_product.expiration_date
-            product_exist = true
-          elsif warehouse_product and warehouse_product.product_id != product_id
-            success = false
-            raise ActiveRecord::Rollback, "Can't have 2 products with the same batch!"
+          product_info = session[:shipment_products][product_id][hash]
+          product_expiration_date = product_info["expiration_date"]
+          current_detail = ShipmentDetail.new(shipment_id: shipment.id, product_id: product_id, 
+            quantity: product_info["quantity"], batch: product_info["batch"], 
+            expiration_date: product_info["expiration_date"], type: shipment.shipment_type, 
+            target_warehouse_id: shipment.target_warehouse_id, origin_warehouse_id: shipment.origin_warehouse_id)
+          unless current_detail.save
+            flash[:info] = current_detail.errors.full_messages[0]
+            raise ActiveRecord::Rollback
           end
 
-          # Raise an exception if the product doesn't exist and the shipment is a transfer #
-          if params[:shipment] and params[:shipment][:type] == "TRANSFER" and !product_exist
-            success = false
-            raise ActiveRecord::Rollback, "Product doesnt exist and is needed for transfer, aka product with batch"
-          end
+        end # session[:shipment_products][product_id].keys.each #
 
-          success = false and break unless shipment.save
-          detail = ShipmentDetail.new(shipment_id: shipment.id, product_id: product_id,
-            quantity: hash["quantity"], batch: hash["batch"],
-            expiration_date: product_expiration_date)
-          success = false and break unless detail.save
-
-          if shipment.shipment_type == "TRANSFER"
-            master_product = WarehouseProduct.where(warehouse_id: warehouse.id,
-                product_id: product_id, describes_total_stock: true).take
-
-            product = WarehouseProduct.where(
-                warehouse_id: warehouse.id, product_id: product_id,
-                batch: hash["batch"]).take
-
-            product.update_attributes(existence: (product.existence - hash["quantity"].to_i))
-            master_product.update_attributes(existence: (master_product.existence - hash["quantity"].to_i))
-          end # if params["shipment_type"] == "TRANSFER" #
-
-        end # session[:shipment_products][k].keys.each #
       end # session[:shipment_products].keys.each #
 
-      session[:shipment_products] = nil if success
+      session[:shipment_products] = nil
+      flash[:success] = "Envío registrado!"
     end
-
-    flash[:success] = "Envío registrado!" if success
-    flash[:info] = "Ocurrió un error al guardar el envío verifica que los datos introducidos como lotes y fechas de caducidad sean correctos." if !success
+    
+    flash[:info] = "Ocurrió un error al guardar el envío" unless flash[:success].present? or flash[:info].present?
     if shipment.shipment_type == "TRANSFER"
       redirect_to admin_warehouse_products_path(params[:warehouse_id])
     else
@@ -252,7 +212,7 @@ class Admin::WarehouseProductsController < AdminController
     @warehouse = @current_user.Warehouse
     @shipments = @warehouse.IncomingShipments.includes(:Chief, :Worker, :OriginWarehouse).order(:created_at => :desc).paginate(page: params[:page], per_page: 20)
   end
-
+  
   def shipment_details
     deny_access! and return unless @current_user.has_permission?('warehouse_manager@receive_shipments')
 
@@ -380,6 +340,7 @@ class Admin::WarehouseProductsController < AdminController
 
   private
     def update_stock_from_shipment(warehouse, shipment, report = nil)
+      # TODO refactor
       details = shipment.Details
       report_details = report.Details if !report.nil?
 
@@ -445,11 +406,14 @@ class Admin::WarehouseProductsController < AdminController
     end
 
     def update_principal_warehouse_product_stock(warehouse_id, product_id, total)
-      puts "--- updating total descriptor for warehouse: #{warehouse_id} and product: #{product_id}"
       w = WarehouseProduct.where(warehouse_id: warehouse_id, product_id: product_id,
         describes_total_stock: true).take
-      puts "--- current_existence: w.existence, adding: #{total}"
       w.update_attributes(existence: w.existence + total)
+    end
+
+    def shipment_params
+      params.require(:shipment).permit(:shipment_type, :chief_id, 
+        :target_warehouse_id, :origin_warehouse_id)
     end
 
 end

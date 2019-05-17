@@ -14,8 +14,7 @@ class Api::DistributorApi::CommissionsController < ApiController
         payment_img: commission.payment_img.url, payment_pdf: commission.payment_pdf.url}
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def show
@@ -29,7 +28,6 @@ class Api::DistributorApi::CommissionsController < ApiController
         client_hash_id: order.Client.hash_id, status: I18n.t(order.state), payment_img: commission.payment_img.url, payment_pdf: commission.payment_pdf.url}
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 end

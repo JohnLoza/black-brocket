@@ -68,4 +68,13 @@ class Client < ApplicationRecord
     return address
   end
 
+  def Distributor
+    self.City.Distributor
+  end
+
+  def distributorId
+    dist = self.Distributor
+    return dist ? dist.id : 0
+  end
+
 end

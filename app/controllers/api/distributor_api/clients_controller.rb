@@ -18,8 +18,7 @@ class Api::DistributorApi::ClientsController < ApiController
       }
     end
 
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def show
@@ -35,8 +34,6 @@ class Api::DistributorApi::ClientsController < ApiController
       created_at: client.created_at, updated_at: client.updated_at
     }
 
-    render :status => 200,
-           :json => { :success => true, :info => "USER_DATA",
-                      :data => data }
+    render status: 200, json: {success: true, info: "USER_DATA", data: data}
   end
 end

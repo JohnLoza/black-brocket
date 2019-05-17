@@ -6,8 +6,13 @@
       <%= form_for :class, url: admin_orders_path, method: :get  do |f| %>
         <%= hidden_field_tag :type, params[:type] %>
         <div class="input-group">
-          <%= f.text_field :search, value: search_params, class: 'form-control',
-            placeholder: 'Buscar', maxlength: 20, required: true  %>
+          <% if params[:type] == "DELIVERED" %>
+            <%= f.text_field :search, value: search_params, class: 'form-control',
+              placeholder: 'Buscar', maxlength: 20 %>
+          <% else %>
+            <%= f.text_field :search, value: search_params, class: 'form-control',
+              placeholder: 'Buscar', maxlength: 20, required: true %>
+          <% end %>
           <span class="input-group-btn">
             <%= f.submit 'Buscar', class: 'btn btn btn-success' %>
           </span>

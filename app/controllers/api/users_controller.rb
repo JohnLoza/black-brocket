@@ -11,15 +11,10 @@ class Api::UsersController < ApiController
     if client.save
       client.update_attributes(:hash_id => generateAlphKey("C", client.id), :authentication_token => SecureRandom.urlsafe_base64(16))
 
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED",
-                        :data => { auth_token: client.authentication_token } }
+      render status: 200, json: {success: true, info: "SAVED",
+        data: {auth_token: client.authentication_token}}
     else
-      client.errors.each do |field, msg|
-        puts "--- #{field} #{msg} ---"
-      end
-      render :status => 200,
-             :json => { :success => false, :info => "SAVE_ERROR" }
+      render status: 200, json: {success: false, info: "SAVE_ERROR"}
     end
 
   end
@@ -32,44 +27,35 @@ class Api::UsersController < ApiController
             telephone: u.telephone, birthday: u.birthday, cellphone: u.cellphone,
             name: u.name, lastname: u.lastname, mother_lastname: u.mother_lastname, city: @current_user.City.id }
 
-    render :status => 200,
-           :json => { :success => true, :info => "USER_DATA",
-                      :data => data, :state => @current_user.City.state_id  }
+    render status: 200, json: {success: true, info: "USER_DATA", 
+      data: data, state: @current_user.City.state_id}
   end
 
   def get_username_n_photo
-    render :status => 200,
-           :json => { :success => true, :info => "USER_DATA",
-                      :data => {username: @current_user.username, photo: @current_user.avatar_url }}
+    render status: 200, json: {success: true, info: "USER_DATA", 
+      data: {username: @current_user.username, photo: @current_user.avatar_url}}
   end
 
   def update
     @current_user.city_id = params[:city_id]
     if @current_user.update_attributes(user_params)
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED" }
+      render status: 200, json: {success: true, info: "SAVED"}
     else
-      render :status => 200,
-             :json => { :success => false, :info => "SAVE_ERROR" }
+      render status: 200, json: {success: false, info: "SAVE_ERROR"}
     end
   end
 
   def destroy
     unless @current_user.authenticate(params[:password])
-      render :status => 200,
-             :json => { :success => false, :info => "PASSWORD_NOT_MATCH" }
-      return
+      render status: 200, json: {success: false, info: "PASSWORD_NOT_MATCH"} and return
     end
 
     @current_user.delete_account_hash = @current_user.new_token
-
     if @current_user.destroy
       @current_user.update_attributes(authentication_token: nil)
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED", delete_folio: @current_user.delete_account_hash }
+      render status: 200, json: {success: true, info: "SAVED", delete_folio: @current_user.delete_account_hash}
     else
-      render :status => 200,
-             :json => { :success => false, :info => "SAVE_ERROR" }
+      render status: 200,json: {success: false, info: "SAVE_ERROR"}
     end
 
   end
@@ -88,8 +74,7 @@ class Api::UsersController < ApiController
     end
 
     not_seen_count = @current_user.Notifications.where(:seen => false).size
-    render :status => 200,
-           :json => { :success => true, :info => "DATA_RETURNED", :not_seen_count => not_seen_count, :data => data }
+    render status: 200, json: {success: true, info: "DATA_RETURNED", not_seen_count: not_seen_count, data: data}
 
   end
 
@@ -97,13 +82,10 @@ class Api::UsersController < ApiController
     visit = DistributorVisit.find_by!(id: params[:visit])
 
     if visit.update_attributes(visit_params)
-      render :status => 200,
-             :json => { :success => true, :info => "SAVED" }
+      render status: 200, json: {success: true, info: "SAVED"}
     else
-      render :status => 200,
-             :json => { :success => false, :info => "SAVE_ERROR" }
+      render status: 200, json: {success: false, info: "SAVE_ERROR"}
     end
-
   end
 
   private

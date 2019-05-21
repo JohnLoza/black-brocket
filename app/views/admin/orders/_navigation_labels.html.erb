@@ -13,6 +13,11 @@
             class: "btn btn-white m-b-xs" %>
       <% end %>
 
+      <% if @current_user.has_permission?('orders@local_orders') %>
+        <%= link_to "En efectivo", url + 'LOCAL_ORDERS',
+            class: "btn btn-white m-b-xs LOCAL_ORDERS" %>
+      <% end %>
+
       <% if @current_user.has_permission?('orders@cancel') %>
         <%= link_to "Sin depósito", url + 'CANCEL',
             class: "btn btn-white m-b-xs CANCEL" %>

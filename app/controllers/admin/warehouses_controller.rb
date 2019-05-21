@@ -37,7 +37,7 @@ class Admin::WarehousesController < AdminController
         Product.all.each do |p|
           WarehouseProduct.create(warehouse_id: @warehouse.id,
             describes_total_stock: true, product_id: p.id, existence: 0,
-            min_stock: 50, hash_id: random_hash_id(12).upcase)
+            min_stock: 50, hash_id: Utils.new_alphanumeric_token(9).upcase)
         end
         flash[:success] = "Almacén creado"
         redirect_to admin_warehouses_path

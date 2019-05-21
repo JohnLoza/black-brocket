@@ -17,9 +17,10 @@ class StaticPagesController < ApplicationController
     @bgImg = WebPhoto.where(name: "INITIAL").take
     @bgImg = WebPhoto.new if @bgImg.nil?
 
-    @photos = WebPhoto.where(name: "GALLERY")
+    @gallery_photos = WebPhoto.where(name: "GALLERY")
     @offers = WebOffer.all
-    @texts = WebInfo.where(name: "WELCOME_MESSAGE").take
+    @welcome_message = WebInfo.where(name: "WELCOME_MESSAGE").take
+    @services = WebInfo.where(name: ["HIGH_QUALITY","DISCOUNTS","EASY_SHOPPING","DISTRIBUTORS"])
   end
 
   def privacy_policy
@@ -53,10 +54,7 @@ class StaticPagesController < ApplicationController
   end
 
   def create_suggestion
-    if !params[:name].blank? and !params[:email].blank? and !params[:message].blank?
-      suggestion = Suggestion.new(suggestion_params)
-      @saved = suggestion.save ? true : false
-    end
+    @suggestion = Suggestion.create(suggestion_params)
 
     respond_to do |format|
       format.js { render :create_suggestion, :layout => false }
@@ -74,7 +72,7 @@ class StaticPagesController < ApplicationController
 
   def get_city_lada
     @city = nil
-    if (params[:city] != nil && params[:city] != '')
+    if (params[:city].present? && !params[:city].blank?)
       @city = City.find_by!(id: params[:city])
     end
 

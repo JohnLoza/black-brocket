@@ -92,6 +92,15 @@
     <%= form_tag client_create_order_path(@current_user.hash_id), method: :post do %>
       <div class="row col-sm-12 text-right">
         <h3 class="iconbox-title">Método de envío</h3>
+        <% if @local_regions.include? @current_user.city_id %>
+          <div>
+            <p>
+              <%= radio_button_tag 'parcel_id', 0, false, autocomplete: :off,
+                onchange: "noShipping();", required: true %>
+              Recojer en instalaciones de Guadalajara, Jal.
+            </p>
+          </div>
+        <% end %>
         <% @parcels.each do |parcel| %>
           <div style="display: inline-block">
             <%= radio_button_tag 'parcel_id', parcel.id, false, autocomplete: :off,
@@ -101,7 +110,7 @@
         <% end %>
       </div>
 
-      <div class="row col-sm-12 text-right">
+      <div class="row col-sm-12 text-right banks">
         <h3 class="iconbox-title">Método de pago</h3>
         <% @banks.each do |bank| %>
           <div style="display: inline-block">
@@ -189,6 +198,8 @@
       url: new_target,
       context: document.body
     }).done(function(body) {});
+    $('.banks').removeClass('hidden');
+    $('.banks input').attr('required', true);
   }
 
   // pick a guide for package delivery based on weight
@@ -246,6 +257,24 @@
     });
 
     return delivery_cost;
+  }
+
+  function noShipping() {
+    // obtain the current_sub_total
+    var last_shipping_cost = parseFloat($("#order-shipping-cost").text().replace(",",""));
+    var current_grand_total = parseFloat($("#order-grand-total").text().replace(",",""));
+    var current_sub_total = current_grand_total;
+    if($("#shipping_cost_is_present").text().trim() == "YES")
+      current_sub_total = current_grand_total - last_shipping_cost;
+    
+
+    $('#order-shipping-cost').text('0.00');
+    $('#delivery_cost').val(0);
+    $('#guides').val('Recoje en local');
+    $('#shipping_cost_is_present').text('NO');
+    $('#order-grand-total').text(money_format(current_sub_total));
+    $('.banks').addClass('hidden');
+    $('.banks input').removeAttr('required');
   }
 
   $(document).ready(function(){

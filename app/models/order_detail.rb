@@ -17,7 +17,7 @@ class OrderDetail < ApplicationRecord
     total_ieps = (current_product_price-total_iva)-((current_product_price-total_iva)*100/(product.Product.ieps+100))
 
     return OrderDetail.new(product_id: product.product_id, price: current_product_price,
-      hash_id: Utils.new_alphanumeric_token(nil, 12).upcase, iva: product.Product.iva,
+      hash_id: Utils.new_alphanumeric_token(9).upcase, iva: product.Product.iva,
       quantity: info[product.hash_id], sub_total: subtotal,
       w_product_id: product.id, ieps: product.Product.ieps, 
       total_iva: total_iva * info[product.hash_id].to_i,

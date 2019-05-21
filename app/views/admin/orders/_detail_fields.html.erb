@@ -1,4 +1,4 @@
-<% hash_id = random_hash_id(12).upcase %>
+<% hash_id = Utils.new_alphanumeric_token(9).upcase %>
 
 <div id="<%= hash_id %>">
   <%= label_tag :product, "Producto" %>

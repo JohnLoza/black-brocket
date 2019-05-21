@@ -16,8 +16,12 @@ class Api::OrdersController < ApiController
         parcel_url: "", payment_method: order.payment_method, download_payment_key: order.download_payment_key}
 
       if order.parcel_id.present?
-        extra_data[:parcel_url] = order.Parcel.tracking_url
-        extra_data[:parcel] = order.Parcel.image.url(:mini)
+        if order.parcel_id == 0
+          extra_data[:parcel] = "LOCAL"
+        else 
+          extra_data[:parcel_url] = order.Parcel.tracking_url
+          extra_data[:parcel] = order.Parcel.image.url(:mini)
+        end
       end
 
       data << extra_data
@@ -225,7 +229,7 @@ class Api::OrdersController < ApiController
   private
     def setBasicInfo
       order = Order.new
-      order.hash_id = random_hash_id(12).upcase
+      order.hash_id = Utils.new_alphanumeric_token(9).upcase
       order.client_id = @current_user.id
       order.city_id = @current_user.city_id
       order.distributor_id = @current_user.distributorId

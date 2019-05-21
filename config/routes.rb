@@ -153,6 +153,7 @@ Rails.application.routes.draw do
     put 'order/:id/delivered' => 'orders#save_as_delivered', as: :order_delivered
     put 'order/:id/invoice' => 'orders#invoice_delivered', as: :order_invoice_delivered
     get 'order/:payment_key/download_payment_file' => 'orders#download_payment_file', as: :download_payment
+    put 'order/:id/upload_payment' => 'orders#upload_payment', as: :order_upload_payment
 
     # orders search #
     get 'orders/search' => 'orders#search', as: :orders_search

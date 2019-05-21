@@ -1,0 +1,32 @@
+<!-- About start -->
+<section id="about" class="module">
+  <div class="container">
+
+    <div class="ma">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="module-header wow fadeInUp">
+          <h2 class="module-title">Acerca de Nosotros</h2>
+          <h3 class="module-subtitle">Bienvenido a Black Brocket</h3>
+        </div>
+      </div>
+    </div><!-- .row -->
+
+    <% if welcome_message %>
+      <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+          <%= render welcome_message.description_render_path %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="devider">
+          <%= image_tag "divider-down.svg" %>
+        </div>
+      </div>
+    </div><!-- .row -->
+
+  </div><!-- .container -->
+</section>
+<!-- About end -->

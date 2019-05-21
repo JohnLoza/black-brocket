@@ -16,8 +16,8 @@ class Utils
     end
 
     # # Returns an alphanumeric token with values a-z A-Z and 0-9
-    def self.new_alphanumeric_token(start_with = nil, n = 10)
-      token = start_with ? start_with + new_token(n) : new_token(n)
+    def self.new_alphanumeric_token(n = 12)
+      token = new_token(n)
       i = SecureRandom.random_number(allowedChars.size)
       token.gsub!(/[-_]/, allowedChars[i])
       return token

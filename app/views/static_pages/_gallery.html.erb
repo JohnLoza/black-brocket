@@ -1,0 +1,45 @@
+<% if gallery_photos.size > 0 %>
+  <!-- Gallery start -->
+  <section id="gallery" class="module module-brown" style="padding-bottom: 0px;">
+
+    <div class="row position-relative margin-0">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="module-header wow fadeInUp">
+          <h2 class="module-title">Galería de nuestros productos</h2>
+          <%= link_to "Catálago", products_path, class: "btn btn-default" %>
+        </div>
+      </div>
+    </div><!-- .row -->
+
+    <div class="row position-relative margin-0">
+
+      <div class="col-xs-12 col-md-12  gallery-no-padding">
+
+        <div class="row module-brown" style="border-top: 2px dashed #CDC2C2;">
+
+          <% gallery_photos.each do |p| %>
+            <div class="col-xs-6 col-sm-3">
+              <div class="gallery-item">
+                <figure class="overlay">
+                  <%= image_tag p.photo.url(:thumb) %>
+                  <figcaption>
+                    <%= link_to "", p.photo.url, class: "gallery" %>
+                    <div class="caption-inner">
+                      <div class="overlay-icon">
+                        <span class="icon-magnifier"></span>
+                      </div>
+                    </div>
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+          <% end %>
+
+        </div><!-- .row -->
+
+      </div><!-- .gallery-no-padding -->
+
+    </div><!-- .row -->
+  </section>
+  <!-- Gallery end -->
+<% end %>

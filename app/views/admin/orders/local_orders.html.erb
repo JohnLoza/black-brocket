@@ -1,0 +1,28 @@
+<% provide(:title, "Órdenes") %>
+<% if params[:distributor] %>
+  <%= render partial: "/shared/admin/header_band", locals:
+        {title: "Órdenes", labels: ['Distribuidores', 'Órdenes'], links: [admin_distributors_path]} %>
+<% else %>
+  <%= render partial: "/shared/admin/header_band", locals: {title: "Órdenes", labels: ['Órdenes']} %>
+<% end %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
+  <div class="row">
+
+    <div class="ibox">
+      <div class="ibox-content text-center">
+          <h3 class="m-b-xxs">Listado de órdenes</h3>
+          <small>Aquí verás la lista de las órdenes realizadas por los clientes desde la página web.</small>
+      </div>
+    </div>
+
+    <!--Table-->
+    <div class="row">
+      <%= render partial: "local_orders_presentation_table" %>
+    </div>
+    <!--End Table-->
+
+  </div>
+</div>
+<!--End content with animation-->

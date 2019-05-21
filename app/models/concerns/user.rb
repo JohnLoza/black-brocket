@@ -6,6 +6,7 @@ module User
   extend ActiveSupport::Concern
 
   included do
+    validates :email, format: { with: /\A.+@.+\z/ }
     # attr_accessor :really_destroy
     # scope :active,   -> { where(deleted_at: nil) }
     # scope :inactive, -> { where.not(deleted_at: nil) }

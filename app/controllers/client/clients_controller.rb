@@ -46,7 +46,7 @@ class Client::ClientsController < ApplicationController
     end
 
     if @current_user.destroy
-      @current_user.update_attribute(:delete_account_hash, random_hash_id(12).upcase)
+      @current_user.update_attribute(:delete_account_hash, Utils.new_alphanumeric_token(9).upcase)
       log_out and session.delete(:e_cart)
     end
 

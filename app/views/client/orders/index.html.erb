@@ -48,13 +48,14 @@
       </div>
       <div class="col-sm-2">
         <b>Código de rastreo:</b>
-        <% if o.tracking_code and o.parcel_id %>
+        <% if o.tracking_code and o.parcel_id and o.parcel_id != 0 %>
           <% parcel = o.Parcel %>
           <a href="<%=parcel.tracking_url%>" target="_blank">
             <%= image_tag parcel.image.url(:mini), class: "img-rounded",:style =>"width:60px;" %>
           </a>
         <% end %><br>
         <%= o.tracking_code %>
+        <%= '<span class="label label-default">No aplica</span>'.html_safe if o.state == "LOCAL" %>
       </div>
       <div class="col-sm-2 text-center">
 
@@ -63,8 +64,10 @@
           <%= link_to client_get_order_payment_path(@current_user.hash_id, o.download_payment_key), target: '_blank' do %>
             <i class="fa fa-file-o fa-3x"></i>
           <% end %>
+        <% elsif o.state == "LOCAL" %>
+          <span class="label label-default">No aplica</span>
         <% else %>
-          <span class="label label-default">  No se ha subido ninguna foto.</span>
+          <span class="label label-default">No se ha subido ninguna foto.</span>
         <% end %>
 
       </div>
@@ -74,6 +77,12 @@
             class: "darklink", style: "font-size: 32px;", target: "_blank" %>
       </div>
     </div>
+    <% if o.state == "LOCAL" %>
+      <div class="row order-box-foot" style="padding-left: 1em;">
+        <p>Recojer en: Galeana 125, col Centro Guadalajara, Jal. cp 44100</p>
+        <p>El pago deberá ser realizado al momento de recojer la mercancía en las instalaciones.</p>
+      </div>
+    <% end %>
     <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>
     <div class="row order-box-foot">
       <div class="col-sm-6">
@@ -82,8 +91,6 @@
                 class: 'darklink label-custom-2', style: 'cursor:pointer; color: #FEFEFE;' do %>
             <span class="btn btn-custom-1 btn-sm pull-right"> <strong>Información para pagar</strong></span><br>
           <% end %>
-        <% else %>
-          <!--span class="icon-check" style="font-size: 20px;color: #F5D76E;"></span> <b>Orden pagada con exito</b-->
         <% end %>
       </div>
 

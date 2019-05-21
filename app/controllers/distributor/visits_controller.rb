@@ -7,10 +7,9 @@ class Distributor::VisitsController < ApplicationController
     region_ids = @current_user.Regions.map(&:id)
     @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
-    if !@client
-      flash[:info] = "No encontramos a tu cliente."
-      redirect_to distributor_clients_path
-      return
+    unless @client
+      flash[:info] = "No encontramos al cliente."
+      redirect_to distributor_clients_path and return
     end # if @client and @client.is_new #
     
     @visits = @client.DistributorVisits.order(:created_at => :desc).paginate(page: params[:page], per_page: 15)

@@ -26,7 +26,7 @@ class Admin::CommissionsController < AdminController
 
     total = Commission.calculateCommission(@orders, @distributor.commission)
 
-    commission = Commission.new({hash_id: Utils.new_alphanumeric_token.upcase,
+    commission = Commission.new({hash_id: Utils.new_alphanumeric_token(9).upcase,
       distributor_id: @distributor.id, worker_id: @current_user.id,
       state: 'WAITING_FOR_PAYMENT', total: total })
     ActiveRecord::Base.transaction do

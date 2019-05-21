@@ -21,6 +21,8 @@
 
 es:
 # order states #
+  LOCAL: "Recojer en local"
+  PICKED_UP: "Recogido"
   ORDER_CANCELED: "Pedido cancelado"
   WAITING_FOR_PAYMENT: "Por pagar"
   PAYMENT_DEPOSITED: "Pago depositado"

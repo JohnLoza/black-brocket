@@ -1,0 +1,50 @@
+<!-- Contact start -->
+<section id="contact" class="module module-dark">
+  <div class="container">
+
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="module-header">
+          <h1 class="module-title">Contacto</h1>
+          <h2 class="module-subtitle">Escríbenos tus comentarios y/o sugerencias</h2>
+        </div>
+      </div>
+    </div><!-- .row -->
+
+    <div class="row">
+
+      <div class="col-md-6 col-sm-offset-3">
+        <%= form_tag(root_path, method: :post, remote: true) do %>
+
+          <div class="row">
+
+            <div class="col-sm-6 form-group">
+              <%= text_field_tag :name, "", { class: "form-control", placeholder: "Nombre", maxlength: 50, required: true} %>
+            </div>
+
+            <div class="col-sm-6 form-group">
+              <%= email_field_tag :email, "", { class: "form-control", placeholder: "Tu email", maxlength: 50, required: true} %>
+            </div>
+
+          </div><!-- .row -->
+
+          <div class="row">
+            <div class="col-sm-12 form-group">
+              <%= text_area_tag :message, "", { class: "form-control", placeholder: "Mensaje", maxlength: 250, required: true} %>
+            </div>
+          </div><!-- .row -->
+
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <button type="submit" class="btn btn-custom-4">Enviar</button>
+            </div>
+          </div><!-- .row -->
+
+        <% end %>
+      </div><!-- .col -->
+
+    </div><!-- .row -->
+
+  </div><!-- .container -->
+</section>
+<!-- Contact end -->

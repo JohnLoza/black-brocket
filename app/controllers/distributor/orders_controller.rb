@@ -12,7 +12,7 @@ class Distributor::OrdersController < ApplicationController
 
         @current_user.updateRevision(@client)
       else
-        flash[:info]="No encontramos a tu cliente."
+        flash[:info]="No encontramos al cliente."
         redirect_to distributor_clients_path and return
       end
     else
@@ -22,30 +22,22 @@ class Distributor::OrdersController < ApplicationController
 
   def details
     @order = Order.find_by!(hash_id: params[:id])
-    if @order.nil?
+    unless @order
       flash[:info] = "No se encontró la orden con clave: #{params[:id]}"
-      redirect_to distributor_orders_path
-      return
+      redirect_to distributor_orders_path and return
     end
 
-    if @order
-      @details = @order.Details.includes(:Product)
-      @client = @order.Client
-      @fiscal_data = @client.FiscalData
-      if !@fiscal_data.blank?
-        @city = @fiscal_data.City
-        @state = @city.State
-      end
-
-      @client_city = @current_user.City
-      @client_state = State.where(id: @client_city.state_id).take
-
-      render :details, layout: false
-      return
-    else
-      flash[:warning] = "No se encontró la orden"
-      redirect_to distributor_orders_path
-      return
+    @details = @order.Details.includes(:Product)
+    @client = @order.Client
+    @fiscal_data = @client.FiscalData
+    if @fiscal_data
+      @city = @fiscal_data.City
+      @state = @city.State
     end
+
+    @client_city = @current_user.City
+    @client_state = State.where(id: @client_city.state_id).take
+
+    render :details, layout: false
   end
 end

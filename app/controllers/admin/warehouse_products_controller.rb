@@ -82,7 +82,7 @@ class Admin::WarehouseProductsController < AdminController
     session[:shipment_products][:warehouse] = params[:warehouse_id] unless session[:shipment_products][:warehouse].present?
 
     @hash = Hash.new
-    @hash_id = random_hash_id(12).upcase
+    @hash_id = Utils.new_alphanumeric_token(9).upcase
 
     @hash[params[:id]] = {"name" => params[:warehouse_product][:name],
             @hash_id => {"quantity" => params[:warehouse_product][:quantity],
@@ -340,75 +340,47 @@ class Admin::WarehouseProductsController < AdminController
 
   private
     def update_stock_from_shipment(warehouse, shipment, report = nil)
-      # TODO refactor
       details = shipment.Details
-      report_details = report.Details if !report.nil?
-
-      product_id = details[0].product_id
-      total = 0
-      saved = false
-      ids_are_different = false
+      report_details = report.Details if report.present?
       ActiveRecord::Base.transaction do
-        details.each do |d|
-          has_a_report = false
-          quantity_to_add = 0
-
-          if product_id == d.product_id
-            ids_are_different = false
-          else
-            ids_are_different = true
-          end
-
-          if ids_are_different
-            update_principal_warehouse_product_stock(warehouse.id, product_id, total)
-            product_id = d.product_id
-            total = 0
-            quantity_to_add = 0
-          end # if product_id == d.product_id else end #
-
-          if !report.nil?
-            report_details.each do |r_d|
-              if r_d.shipment_detail_id == d.id
-                has_a_report = true
-                quantity_to_add = r_d.difference
-                total += r_d.difference
-                break
+        details.each do |detail|
+          to_be_added = 0
+          if report.present?
+            report_details.each do |report_detail|
+              # if the product of the current detail has a report #
+              # use the quantity specified in the report #
+              if report_detail.shipment_detail_id == detail.id
+                to_be_added = report_detail.difference
               end
             end # report_details.each end #
-            if !has_a_report
-              total += d.quantity
-              quantity_to_add = d.quantity
-            end
-          else
-            total += d.quantity
-            quantity_to_add = d.quantity
-          end # if report end #
+            # if the product of the current details has no report #
+            # use de shipment detail quantity #
+            to_be_added = detail.quantity unless to_be_added.present?
+          else # no report present use the shipment detail quantity #
+            to_be_added = detail.quantity
+          end # if report.present? end #
 
-          existing_batch = WarehouseProduct.where(batch: d.batch, warehouse_id: warehouse.id, product_id: product_id).take
-          if !existing_batch.nil?
-            existing_batch.update_attributes(existence: existing_batch.existence + quantity_to_add)
-          else
-            WarehouseProduct.create(warehouse_id: warehouse.id, product_id: product_id,
-                  describes_total_stock: false, hash_id: random_hash_id(12).upcase,
-                  existence: quantity_to_add, batch: d.batch, expiration_date: d.expiration_date)
-          end
-
-        end # details.each end #
-
-        update_principal_warehouse_product_stock(warehouse.id, product_id, total)
-
-        shipment.update_attributes(:got_safe_to_destination => true, :worker_id => @current_user.id, :reviewed => true) if !report
-        shipment.update_attributes(:reviewed => true) if report
-        saved = true
-      end # transaction end #
-
-      return saved
+          update_product_stock(warehouse.id, detail, to_be_added)
+        end
+        shipment.update_attributes(got_safe_to_destination: true, worker_id: @current_user.id, reviewed: true) unless report.present?
+        shipment.update_attributes(reviewed: true) if report
+        return true
+      end # ActiveRecord::Base.transaction #
     end
 
-    def update_principal_warehouse_product_stock(warehouse_id, product_id, total)
-      w = WarehouseProduct.where(warehouse_id: warehouse_id, product_id: product_id,
-        describes_total_stock: true).take
-      w.update_attributes(existence: w.existence + total)
+    def update_product_stock(warehouse_id, detail, to_be_added)
+      existing_batch = WarehouseProduct.where(warehouse_id: warehouse_id, 
+        product_id: detail.product_id, batch: detail.batch).take
+      if existing_batch.present?
+        existing_batch.update_attributes(existence: existing_batch.existence + to_be_added)
+      else
+        WarehouseProduct.create(warehouse_id: warehouse_id, product_id: detail.product_id,
+          describes_total_stock: false, hash_id: Utils.new_alphanumeric_token(9).upcase,
+          existence: to_be_added, batch: detail.batch, expiration_date: detail.expiration_date)
+      end
+      total_descriptor = WarehouseProduct.where(warehouse_id: warehouse_id, 
+        product_id: detail.product_id, describes_total_stock: true).take
+      total_descriptor.update_attributes(existence: total_descriptor.existence + to_be_added)
     end
 
     def shipment_params

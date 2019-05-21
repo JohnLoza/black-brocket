@@ -39,4 +39,9 @@ class Warehouse < ApplicationRecord
       .search(key_words: search, fields: ['products.name'])
       .includes(Product: :Photos)
   end
+
+  private
+    def generate_hash_id
+      self.hash_id = 'to_be_replaced'
+    end
 end

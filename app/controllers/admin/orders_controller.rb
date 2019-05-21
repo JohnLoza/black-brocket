@@ -1,6 +1,8 @@
 class Admin::OrdersController < AdminController
   # Order States #
   # ORDER_CANCELED #
+  # LOCAL #
+  # PICKED_UP #
   # WAITING_FOR_PAYMENT #
   # PAYMENT_DEPOSITED #
   # PAYMENT_ACCEPTED #
@@ -13,19 +15,17 @@ class Admin::OrdersController < AdminController
   def index
     permission = params[:type]
     permission = 'SHOW' if permission == 'SENT' or permission == 'DELIVERED'
-    deny_access! and return unless params[:type].blank? or @current_user.has_permission?("orders@#{permission}")
+    if params[:type]
+      deny_access! and return unless @current_user.has_permission?("orders@#{permission}")
+    end
 
     @label_styles = get_label_styles
     statements = whereAndOrderStatements()
     @orders = Array.new and return unless statements
 
-    if @current_user.has_permission?('orders@capture_tracking_code') and
-      params[:type] == "CAPTURE_TRACKING_CODE"
-      @parcels = Parcel.where(warehouse_id: @current_user.warehouse_id)
-    end # if @actions["CAPTURE_TRACKING_CODE"] #
-
     statements = warehouseStatement(statements)
     @orders = getOrdersFor(statements).paginate(page: params[:page], per_page: 25)
+    render :local_orders if params[:type] == "LOCAL_ORDERS"
   end # def index #
 
   def accept_pay
@@ -167,7 +167,9 @@ class Admin::OrdersController < AdminController
     deny_access! and return if params[:product_id].nil?
 
     order = Order.find_by!(hash_id: params[:id])
-    redirect_to admin_orders_path + "?type=CAPTURE_BATCHES" and return unless order.state == "PAYMENT_ACCEPTED"
+    unless order.state == "PAYMENT_ACCEPTED" or order.state == "LOCAL"
+      redirect_to admin_orders_path + "?type=CAPTURE_BATCHES" and return
+    end
 
     ActiveRecord::Base.transaction do
       indx = 0
@@ -187,7 +189,8 @@ class Admin::OrdersController < AdminController
       validation = CustomValidation.validateOrderShipment(order_details, shipment_details)
       flash[:info] = validation[:error_message] and raise ActiveRecord::Rollback unless validation[:success]
 
-      order.update_attribute(:state, "BATCHES_CAPTURED")
+      new_state = (order.state == 'LOCAL') ? 'PICKED_UP' : 'BATCHES_CAPTURED'
+      order.update_attribute(:state, new_state)
       OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
       flash[:success] = "Números de lote y cantidades guardadas"
     end # Transaction #
@@ -377,10 +380,33 @@ class Admin::OrdersController < AdminController
     end
   end
 
+  def upload_payment
+    order = Order.find_by!(hash_id: params[:id])
+    deny_access! and return if order.pay_img.file or order.pay_pdf.file
+
+    if params[:order][:pay_img].content_type == "application/pdf"
+      order.remove_pay_img! if order.pay_img.present?
+      order.pay_pdf = params[:order][:pay_img]
+    else
+      order.remove_pay_pdf! if order.pay_pdf.present?
+      order.pay_img = params[:order][:pay_img]
+    end
+    order.download_payment_key = SecureRandom.urlsafe_base64
+    if order.save!
+      OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Subió comprobante")
+      flash[:success] = "Comprobante actualizado"
+    else
+      flash[:info] = "Ocurrió un error al guardar el comprobante"
+    end
+    redirect_to admin_orders_path(type: 'LOCAL_ORDERS')
+  end
+
   private
     def get_label_styles
       label_styles =
         {"ORDER_CANCELED"=>"label label-danger",
+         "LOCAL"=>"label label-information",
+         "PICKED_UP"=>"label label-primary",
          "WAITING_FOR_PAYMENT"=>"label label-warning",
          "PAYMENT_DEPOSITED"=>"label label-information",
          "PAYMENT_ACCEPTED"=>"label label-primary",
@@ -401,6 +427,9 @@ class Admin::OrdersController < AdminController
       case params[:type]
         when "CANCEL"
           statements[:where] = "state in ('WAITING_FOR_PAYMENT','PAYMENT_REJECTED')"
+        when "LOCAL_ORDERS"
+          statements[:where] = "state in ('LOCAL','PICKED_UP')"
+          statements[:order] = {created_at: :desc}
         when "ACCEPT_REJECT_PAYMENT"
           statements[:where] += "'PAYMENT_DEPOSITED'"
         when "CAPTURE_BATCHES"

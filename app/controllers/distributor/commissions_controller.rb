@@ -10,7 +10,7 @@ class Distributor::CommissionsController < ApplicationController
 
   def details
     commission = @current_user.Commissions.find_by!(hash_id: params[:id])
-    if commission.nil?
+    unless commission
       flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
       redirect_to distributor_commissions_path and return
     end
@@ -21,7 +21,7 @@ class Distributor::CommissionsController < ApplicationController
 
   def upload_invoice
     commission = @current_user.Commissions.find_by!(hash_id: params[:id])
-    if commission.nil?
+    unless commission
       flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
       redirect_to distributor_commissions_path and return
     end

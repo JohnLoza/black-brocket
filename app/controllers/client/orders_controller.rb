@@ -99,7 +99,7 @@ class Client::OrdersController < ApplicationController
   end
 
   def upload_payment
-    @order = Order.where(hash_id: params[:id]).take
+    @order = Order.find_by!(hash_id: params[:id])
     if params[:order] and @order and 
       ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED", "PAYMENT_REJECTED"].include? @order.state
       if params[:order][:pay_img].content_type == "application/pdf"
@@ -110,7 +110,7 @@ class Client::OrdersController < ApplicationController
         @order.pay_img = params[:order][:pay_img]
       end
       @order.state = "PAYMENT_DEPOSITED"
-      @order.download_payment_key = SecureRandom.urlsafe_base64 if @order.download_payment_key.nil?
+      @order.download_payment_key = SecureRandom.urlsafe_base64
       @saved = true if @order.save!
     end
 
@@ -177,7 +177,7 @@ class Client::OrdersController < ApplicationController
 
     def setBasicInfo
       order = Order.new
-      order.hash_id = random_hash_id(12).upcase
+      order.hash_id = Utils.new_alphanumeric_token(9).upcase
       order.client_id = @current_user.id
       order.city_id = @current_user.city_id
       order.distributor_id = @current_user.distributorId
@@ -186,7 +186,7 @@ class Client::OrdersController < ApplicationController
       order.payment_method = params[:payment_method]
       order.parcel_id = params[:parcel_id]
       order.invoice = params[:invoice] if params[:invoice]
-      order.state = "WAITING_FOR_PAYMENT"
+      order.state = params[:parcel_id] == '0' ? "LOCAL" : "WAITING_FOR_PAYMENT"
       return order
     end
 end

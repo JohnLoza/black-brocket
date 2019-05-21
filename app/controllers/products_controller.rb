@@ -6,7 +6,7 @@ class ProductsController < ApplicationController
       @visit = @current_user.DistributorVisits.where(client_recognizes_visit: nil).take
       @warehouse = @current_user.City.State.Warehouse
 
-      if @warehouse.nil?
+      unless @warehouse
         flash[:warning] = "Lo sentimos pero no distribuimos nuestros productos en tu zona ¡aún!."
         redirect_to root_path and return
       end
@@ -28,10 +28,10 @@ class ProductsController < ApplicationController
 
   def show
     if logged_in? and session[:user_type] == 'c'
-      @w_product = WarehouseProduct.find_by!(hash_id: params[:id])
+      @warehouse_product = WarehouseProduct.find_by!(hash_id: params[:id])
 
-      @warehouse = @w_product.Warehouse
-      @product = @w_product.Product
+      @warehouse = @warehouse_product.Warehouse
+      @product = @warehouse_product.Product
       @product_price = @current_user.ProductPrices.where(product_id: @product.id).take
     else
       @product = Product.find_by!(hash_id: params[:id])
@@ -47,10 +47,8 @@ class ProductsController < ApplicationController
 
   def ask
     product = Product.find_by!(hash_id: params[:id])
-    @question = ProdQuestion.new(product_id: product.id, client_id: current_user.id,
-                hash_id: random_hash_id(12).upcase,
-                description: params[:prod_question][:description])
-    @saved = @question.save ? true : false
+    @question = ProdQuestion.create(product_id: product.id, client_id: current_user.id,
+      hash_id: Utils.new_alphanumeric_token(9).upcase, description: params[:prod_question][:description])
 
     respond_to do |format|
       format.js { render :ask, :layout => false }

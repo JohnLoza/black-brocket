@@ -29,7 +29,7 @@ class ApiController < ActionController::API
     end
 
     @current_user = model.find_by(authentication_token: params[:authentication_token])
-    render_authentication_error and return unless @current_user.present?
+    render_authentication_error and return unless @current_user
 
     if type == :site_worker
       deny_access! and return unless @current_user.has_permission?('orders@capture_batches')

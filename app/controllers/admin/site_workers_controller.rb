@@ -243,6 +243,7 @@ class Admin::SiteWorkersController < AdminController
       @order_category = []
       @order_category << {category: "orders", name: "search", description: "Búsqueda de órdenes"}
       @order_category << {category: "orders", name: "show", description: "Ver detalles"}
+      @order_category << {category: "orders", name: "local_orders", description: "Órdenes en local"}
       @order_category << {category: "orders", name: "cancel", description: "Cancelar orden"}
       @order_category << {category: "orders", name: "accept_reject_payment", description: "Aceptar o rechazar comprobante de pago"}
       @order_category << {category: "orders", name: "capture_batches", description: "Captura de No. de lotes"}

@@ -19,7 +19,7 @@ class Api::FiscalDataController < ApiController
     @fiscal_data = FiscalData.new(fiscal_params)
     @fiscal_data.city_id = params[:city_id]
     @fiscal_data.client_id = @current_user.id
-    @fiscal_data.hash_id = random_hash_id(12).upcase
+    @fiscal_data.hash_id = Utils.new_alphanumeric_token(9).upcase
 
     if @fiscal_data.save
       render status: 200, json: {success: true, info: "SAVED"}

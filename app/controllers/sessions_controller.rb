@@ -1,39 +1,28 @@
 class SessionsController < ApplicationController
 
   def new
-    if logged_in?
-      redirect_to controller: "admin/welcome", action: :index if session[:user_type] == 'w'
-      redirect_to controller: "distributor/admin", action: :index if session[:user_type] == 'd'
-      redirect_to products_path if session[:user_type] == 'c'
-      return
-    end
+    render :new, layout: false and return unless logged_in?
 
-    render :new, layout: false
+    redirect_to admin_welcome_path if session[:user_type] == 'w'
+
+    redirect_to distributor_welcome_path if session[:user_type] == 'd'
+
+    redirect_to products_path if session[:user_type] == 'c'
   end
 
   def create
     worker = SiteWorker.find_by(email: params[:session][:email].downcase)
-    if worker && worker.authenticate(params[:session][:password])
-      log_in(worker, 'w')
-      remember(worker, 'w') if params[:session][:remember_me] == '1'
-      redirect_to controller: "admin/welcome", action: :index and return
-    end
+    redirect_to admin_welcome_path and return if try_log_in(worker, 'w')
 
     distributor = Distributor.find_by(email: params[:session][:email].downcase)
-    if distributor && distributor.authenticate(params[:session][:password])
-      log_in(distributor, 'd')
-      remember(distributor, 'd') if params[:session][:remember_me] == '1'
-      redirect_to controller: "distributor/admin", action: :index and return
-    end
+    redirect_to distributor_welcome_path and return if try_log_in(distributor, 'd')
 
     client = Client.find_by(email: params[:session][:email].downcase)
-    if client && client.deleted_at == nil && client.authenticate(params[:session][:password])
-      log_in(client, 'c')
-      remember(client, 'c') if params[:session][:remember_me] == '1'
-      if !client.email_verified
-        flash[:info] = "Por favor confirma tu correo electrónico, en caso de no recibirlo puedes <a href=\"#{client_resend_email_confirmation_path(client.hash_id)}\">reenviarlo</a>."
+    if try_log_in(client, 'c')
+      unless client.email_verified
+        flash[:info] = "Por favor confirma tu correo electrónico, en caso de no recibirlo podemos <a href=\"#{client_resend_email_confirmation_path(client.hash_id)}\">reenviarlo</a>."
       end
-      redirect_to controller: "products" and return
+      redirect_to products_path and return
     end
 
     flash.now[:danger] = 'Email o contraseña incorrecto'
@@ -75,4 +64,14 @@ class SessionsController < ApplicationController
 
     render :update_password, layout: false
   end
+
+  private
+    def try_log_in(subject, type)
+      if subject and subject.active? and subject.authenticate(params[:session][:password])
+        log_in(subject, type)
+        remember(subject, type) if params[:session][:remember_me] == '1'
+        return true
+      end
+      return false
+    end
 end

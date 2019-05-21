@@ -10,8 +10,7 @@
 
 <% if @current_user.has_permission?('orders@accept_reject_payment') and params[:type] == "ACCEPT_REJECT_PAYMENT" %>
   <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
-    <%= link_to admin_download_payment_path(o.download_payment_key),
-                target: "_blank" do %>
+    <%= link_to admin_download_payment_path(o.download_payment_key), target: "_blank" do %>
       <span>Comprobante de pago</span><br>
       <i class="fa fa-file-o fa-3x"></i>
     <% end %><br>

@@ -12,6 +12,13 @@ class Client::EcartsController < ApplicationController
 
       @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.product_id})
       @total = 0
+
+      @local_regions = [
+        19597, # Guadalajara, jal
+        19676, # Zapopan, jal
+        19655, # Tlaquepaque, jal
+        19658  # Tonalá, jal
+      ]
     end
   end
 

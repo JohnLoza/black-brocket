@@ -12,10 +12,9 @@ class Distributor::ClientsController < ApplicationController
     region_ids = @current_user.Regions.map(&:id)
     @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
-    if !@client
-      flash[:info] = "No encontramos a tu cliente."
-      redirect_to distributor_clients_path
-      return
+    unless @client
+      flash[:info] = "No encontramos al cliente."
+      redirect_to distributor_clients_path and return
     end # if @client and @client.is_new #
   end
 
@@ -23,19 +22,16 @@ class Distributor::ClientsController < ApplicationController
     region_ids = @current_user.Regions.map(&:id)
     @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
-    if !@client
-      flash[:info] = "No encontramos a tu cliente."
-      redirect_to distributor_clients_path
-      return
+    unless @client
+      flash[:info] = "No encontramos al cliente."
+      redirect_to distributor_clients_path and return
     end # if @client and @client.is_new #
 
-    if @client
-      @product_prices = @client.ProductPrices
-      @client_city = @client.City
-      @products = Product.where(deleted_at: nil).order(name: :asc)
+    @product_prices = @client.ProductPrices
+    @client_city = @client.City
+    @products = Product.where(deleted_at: nil).order(name: :asc)
 
-      @current_user.updateRevision(@client)
-    end # if @client #
+    @current_user.updateRevision(@client)
   end
 
   def create_prices
@@ -58,8 +54,8 @@ class Distributor::ClientsController < ApplicationController
     region_ids = @current_user.Regions.map(&:id)
     @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
-    if !@client
-      flash[:info] = "No encontramos a tu cliente."
+    unless @client
+      flash[:info] = "No encontramos al cliente."
       redirect_to distributor_clients_path and return
     end # if @client and @client.is_new #
 
@@ -85,10 +81,9 @@ class Distributor::ClientsController < ApplicationController
     region_ids = @current_user.Regions.map(&:id)
     @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
 
-    if !@client
+    unless @client
       flash[:info] = "No encontramos a tu cliente."
-      redirect_to distributor_clients_path
-      return
+      redirect_to distributor_clients_path and return
     end # if @client and @client.is_new #
 
     message = ClientDistributorComment.new(

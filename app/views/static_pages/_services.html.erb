@@ -1,0 +1,57 @@
+<!-- Services start -->
+<section id="services" class="module">
+  <div class="container">
+
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="module-header wow fadeInUp">
+          <h2 class="module-title">Lo que ofrecemos</h2>
+          <h3 class="module-subtitle">Servicios</h3>
+        </div>
+      </div>
+    </div><!-- .row -->
+
+    <div class="row">
+      <% services.each do |info| %>
+
+        <div class="col-sm-3">
+          <div class="iconbox">
+            <div class="iconbox-body equal-height min-height">
+
+              <div class="iconbox-icon">
+                <% case info.name
+                  when "HIGH_QUALITY"%>
+                  <span class="icon-like"></span>
+                <%when "DISCOUNTS"%>
+                  <span class="icon-cup"></span>
+                <%when "EASY_SHOPPING"%>
+                  <span class="icon-basket"></span>
+                <%else%>
+                  <span class="icon-map"></span>
+                <%end%>
+              </div>
+              <div class="iconbox-text">
+                <h3 class="iconbox-title"><%= t(info.name) %></h3>
+                <div class="iconbox-desc">
+                  <span><%= render info.description_render_path %></span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+    </div><!-- .row -->
+
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="devider">
+          <%= image_tag "divider-down.svg" %>
+        </div>
+      </div>
+    </div><!-- .row -->
+
+  </div><!-- .container -->
+</section>
+<!-- Services end -->

@@ -34,8 +34,9 @@ class Product < ApplicationRecord
       custom_prices.each do |cp|
         return cp.client_price if cp.product_id == product.product_id
       end
+      return p.Product.price
     else
-      return cp.Product.price
+      return p.Product.price
     end
   end
 
@@ -49,5 +50,9 @@ class Product < ApplicationRecord
       video_key = video_key[0].remove 'v=' # remove the 'v' attribute
 
       self.video = "https://www.youtube.com/embed/#{video_key}"
+    end
+
+    def generate_hash_id
+      self.hash_id = 'to_be_replaced'
     end
 end

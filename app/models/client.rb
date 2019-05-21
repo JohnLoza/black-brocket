@@ -77,4 +77,8 @@ class Client < ApplicationRecord
     return dist ? dist.id : 0
   end
 
+  def generate_hash_id
+    self.hash_id = 'to_be_replaced'
+  end
+
 end

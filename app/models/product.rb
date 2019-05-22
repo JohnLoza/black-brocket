@@ -34,9 +34,9 @@ class Product < ApplicationRecord
       custom_prices.each do |cp|
         return cp.client_price if cp.product_id == product.product_id
       end
-      return p.Product.price
+      return product.Product.price
     else
-      return p.Product.price
+      return product.Product.price
     end
   end
 

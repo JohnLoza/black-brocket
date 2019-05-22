@@ -7,7 +7,7 @@
 <li style="padding-bottom: 2px;", class='no-mobile' >
    <a class="count-info" data-toggle="dropdown" href="off_canvas_menu.html#">
      <i class="icon-bell" style="font-size: 16px;"></i>
-     <% notifications_not_seen_count = @current_user.Notifications.where(:seen => false).size %>
+     <% notifications_not_seen_count = @current_user.Notifications.where(seen: false).size %>
      <% if notifications_not_seen_count > 0 %>
        <span class="badge" style="background-color: #F44336;position: absolute;top: 10px;left: 28px;">
          <%= notifications_not_seen_count %>

@@ -1,6 +1,6 @@
 <%= form_for(:warehouse_product,
     url: admin_update_product_min_stock_path(@warehouse.hash_id, "0x0"),
-    remote: true, method: :put, :html => {:id => "min-stock-form"}) do |f| %>
+    remote: true, method: :put, html: {id: "min-stock-form"}) do |f| %>
 
     <table class="full-width">
       <tr>

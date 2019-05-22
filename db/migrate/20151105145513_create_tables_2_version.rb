@@ -24,7 +24,7 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     end
 
     add_column :distributors, :commission, :decimal, precision: 5, scale: 2
-    add_column :orders, :commission_in_progress, :boolean, :default => false
+    add_column :orders, :commission_in_progress, :boolean, default: false
   # Commisions #
 
   # Supervision #
@@ -91,7 +91,7 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     end
 
     add_column :clients, :last_supervisor_visit, :datetime
-    add_column :permissions, :supervisor, :boolean, :default => false
+    add_column :permissions, :supervisor, :boolean, default: false
     add_column :distributors, :last_supervision, :datetime
   # Supervision #
 
@@ -145,14 +145,14 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     add_column :distributors, :bank_account_owner, :string
     add_column :distributors, :bank_account_number, :string
     add_column :distributors, :interbank_clabe, :string
-    add_column :distributors, :show_address, :boolean, :default => false
+    add_column :distributors, :show_address, :boolean, default: false
     add_column :distributors, :home_img, :string
 
     add_column :clients, :is_new, :boolean
     add_column :clients, :worker_id, :integer
     add_column :clients, :last_distributor_revision, :datetime
     add_column :clients, :last_distributor_visit, :datetime
-    add_column :clients, :has_custom_prices, :boolean, :defalt => false
+    add_column :clients, :has_custom_prices, :boolean, default: false
   # New Distributor System #
 
   # New Warehouses System Using Batches #
@@ -180,7 +180,7 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
       t.bigint :shipment_id
       t.bigint :worker_id
       t.bigint :chief_id
-      t.boolean :reviewed, :default => false
+      t.boolean :reviewed, default: false
       t.text :observations
 
       t.timestamps
@@ -192,8 +192,8 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
       t.bigint :difference
     end
 
-    add_column :warehouses, :shipping_cost, :decimal, :precision => 8, :scale => 2
-    add_column :warehouses, :wholesale, :decimal, :precision => 8, :scale => 2
+    add_column :warehouses, :shipping_cost, :decimal, precision: 8, scale: 2
+    add_column :warehouses, :wholesale, :decimal, precision: 8, scale: 2
 
     add_column :warehouse_products, :batch, :string
     add_column :warehouse_products, :expiration_date, :date
@@ -210,7 +210,7 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     create_table :parcels do |t|
       t.bigint :warehouse_id
       t.string :parcel_name
-      t.decimal :cost, :precision => 8, :scale => 2
+      t.decimal :cost, precision: 8, scale: 2
       t.string :tracking_url
       t.string :image
 
@@ -259,19 +259,19 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     add_column :bank_accounts, :interbank_clabe, :string
 
     add_column :products, :presentation, :string
-    add_column :products, :recommended_price, :decimal, :precision => 8, :scale => 2
-    add_column :products, :ieps, :decimal, :precision => 5, :scale => 2
-    add_column :products, :iva, :decimal, :precision => 5, :scale => 2
+    add_column :products, :recommended_price, :decimal, precision: 8, scale: 2
+    add_column :products, :ieps, :decimal, precision: 5, scale: 2
+    add_column :products, :iva, :decimal, precision: 5, scale: 2
 
-    add_column :warehouse_products, :describes_total_stock, :boolean, :default => false
-    add_column :permissions, :warehouse_chief, :boolean, :default => false
+    add_column :warehouse_products, :describes_total_stock, :boolean, default: false
+    add_column :permissions, :warehouse_chief, :boolean, default: false
 
     add_column :warehouse_products, :created_at, :datetime
     add_column :warehouse_products, :updated_at, :datetime
 
     change_column :shipments, :got_safe_to_destination, :boolean, default: nil
 
-    add_column :shipments, :reviewed, :boolean, :default => false
+    add_column :shipments, :reviewed, :boolean, default: false
 
     add_column :bank_accounts, :email, :string
     add_column :bank_accounts, :RFC, :string
@@ -280,12 +280,12 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     add_column :clients, :lastname, :string
     add_column :clients, :mother_lastname, :string
 
-    change_column :clients, :is_new, :boolean, :default => true
-    change_column :clients, :has_custom_prices, :boolean, :default => false
+    change_column :clients, :is_new, :boolean, default: true
+    change_column :clients, :has_custom_prices, :boolean, default: false
 
     rename_column :tip_recipe_comments, :comment, :description
 
-    add_column :distributor_candidates, :read, :boolean, :default => false
+    add_column :distributor_candidates, :read, :boolean, default: false
 
     add_column :client_distributor_comments, :worker_id, :integer
 
@@ -313,7 +313,7 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
     add_column :distributors, :authentication_token, :string
     add_column :site_workers, :authentication_token, :string
 
-    add_column :commissions, :invoice_downloaded, :boolean, :default => false
+    add_column :commissions, :invoice_downloaded, :boolean, default: false
 
     add_column :orders, :shipping_cost, :decimal, precision: 8, scale: 2
 

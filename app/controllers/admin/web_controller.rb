@@ -17,35 +17,21 @@ class Admin::WebController < AdminController
   def upload_photos
     deny_access! and return unless @current_user.has_permission?('web@gallery_images')
 
-    success = true
+    params[:web_photo][:photos].each do |photo|
+      WebPhoto.create({ photo: p, name: params[:web_photo][:name] })
+    end if params[:web_photo] and params[:web_photo][:photos]
 
-    params[:web_photo][:photos].each do |p|
-      photo = WebPhoto.new({ photo: p, name: params[:web_photo][:name] })
-      success = false if !photo.save
-    end if params[:web_photo][:photos]
+    if params[:web_photo] and params[:web_photo][:photo]
+      photo = WebPhoto.where(name: params[:web_photo][:name]).take
 
-    if params[:web_photo][:photo]
-      p = WebPhoto.where(name: params[:web_photo][:name]).take
-
-      if p.blank?
-        photo = WebPhoto.new({ photo: params[:web_photo][:photo], name: params[:web_photo][:name] })
-        success = false if !photo.save
+      if photo.blank?
+        WebPhoto.create(photo_params)
       else
-        p.photo = params[:web_photo][:photo]
-        success = false if !p.save
+        photo.update_attribute(:photo, params[:web_photo][:photo])
       end
+    end # if params[:web_photo][:photo]
 
-    end
-
-    if success
-      type = :success
-      message = "Imágenes cargadas al sitio"
-    else
-      type = :danger
-      message = "Alguna o todas las imágenes no han podido ser cargadas, verifica que las imágenes sean del formato correcto, jpg, jpeg, png"
-    end
-
-    flash[type] = message
+    flash[:success] = "Imágenes cargadas al sitio"
     redirect_to admin_web_photos_path
   end
 
@@ -132,7 +118,7 @@ class Admin::WebController < AdminController
       # erasing contents of file and openning it to rewrite, to append use "a" as second argument #
       File.open(file_path, "w"){|file| file.write(params[:web_info][:body]) }
 
-      web_info.update_attributes(:description_render_path => render_file_path) if web_info.description_render_path != render_file_path
+      web_info.update_attributes(description_render_path: render_file_path)
       flash[:success] = t(params[:name]) + " actualizado!"
     else
       flash[:info] = "La página que buscas, no existe..."
@@ -248,7 +234,7 @@ class Admin::WebController < AdminController
       # erasing contents of file and openning it to rewrite, to append use "a" as second argument #
       File.open(file_path, "w"){|file| file.write(params[:web_info][:body]) }
 
-      web_info.update_attributes(:description_render_path => render_file_path) if web_info.description_render_path != render_file_path
+      web_info.update_attributes(description_render_path: render_file_path) if web_info.description_render_path != render_file_path
       flash[:success] = "Servicio actualizado!"
     else
       flash[:info] = "La página que buscas, no existe..."
@@ -257,6 +243,10 @@ class Admin::WebController < AdminController
   end
 
   private
+    def photo_params
+      params.require(:web_photo).permit(:photo, :name)
+    end
+
     def footer_params
       params.require(:footer_extra_detail).permit(:name, :detail)
     end

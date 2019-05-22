@@ -8,12 +8,12 @@ class Order < ApplicationRecord
   has_many :Actions, class_name: :OrderAction, foreign_key: :order_id
 
   validates :client_id, :city_id, :distributor_id,
-  :total, presence: true, :on => :create
+  :total, presence: true, on: :create
 
   validates :client_id, :distributor_id,
-  numericality: { only_integer: true }, :on => :create
+  numericality: { only_integer: true }, on: :create
 
-  validates :total, numericality: true, :on => :create
+  validates :total, numericality: true, on: :create
 
   mount_uploader :pay_img, PayUploader
   mount_uploader :pay_pdf, PdfUploader

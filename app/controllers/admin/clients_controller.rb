@@ -72,7 +72,7 @@ class Admin::ClientsController < AdminController
 
     @client_city = @client.City
 
-    @visits = @client.SupervisorVisits.order(:created_at => :desc)
+    @visits = @client.SupervisorVisits.order(created_at: :desc)
       .paginate(page: params[:page], per_page: 25).includes(:Supervisor)
   end
 

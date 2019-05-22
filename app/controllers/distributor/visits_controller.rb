@@ -12,21 +12,17 @@ class Distributor::VisitsController < ApplicationController
       redirect_to distributor_clients_path and return
     end # if @client and @client.is_new #
     
-    @visits = @client.DistributorVisits.order(:created_at => :desc).paginate(page: params[:page], per_page: 15)
+    @visits = @client.DistributorVisits.order(created_at: :desc)
+      .paginate(page: params[:page], per_page: 15)
   end
 
   def create
     @client = Client.find_by!(hash_id: params[:id])
 
-    success = false
-    visit = DistributorVisit.new(
-                      distributor_id: @current_user.id,
-                      client_id: @client.id,
-                      visit_date: params[:visit_date])
+    visit = DistributorVisit.new(distributor_id: @current_user.id,
+      client_id: @client.id, visit_date: params[:visit_date])
 
-    success = true if visit.save and @client.update_attribute(:last_distributor_visit, params[:visit_date])
-
-    if success
+    if visit.save
       flash[:success] = "Visita guardada"
       redirect_to distributor_clients_path
     else

@@ -17,13 +17,13 @@ class Distributor < ApplicationRecord
   has_many :Notifications, class_name: :Notification, foreign_key: :distributor_id
   has_many :Commissions, class_name: :Commission, foreign_key: :distributor_id
 
-  validates :password, length: { minimum: 6 }, :on => :create
+  validates :password, length: { minimum: 6 }, on: :create
 
   validates :city_id, :name, :email, :username, :fiscal_number,
             :rfc, :address, :telephone, presence: true
 
   validates :email, :rfc, uniqueness: { case_sensitive: false }
-  validates :email, :confirmation => true
+  validates :email, confirmation: true
 
   validates :name, :lastname, :mother_lastname,
         format: { with: /\A[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\s\.']+\z/ }
@@ -65,7 +65,7 @@ class Distributor < ApplicationRecord
   # update revisions from distributor to client creating timestamps #
   def updateRevision(client)
     last_revision = DistributorClientRevision.where(distributor_id: self.id,
-                    client_id: client.id).order(:created_at => :desc).take
+                    client_id: client.id).order(created_at: :desc).take
 
     if last_revision
       if last_revision.created_at < 12.hours.ago

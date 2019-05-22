@@ -39,13 +39,13 @@
         <div class="row">
           <label>Me gustaría ser distribuidor en:</label>
           <div class="col-sm-12 form-group">
-            <%= render :partial => "/shared/select_state", locals: { states: @states } %>
+            <%= render partial: "/shared/select_state", locals: { states: @states } %>
           </div>
         </div><!-- .row -->
 
         <div class="row">
           <div class="col-sm-12 form-group">
-            <%= render :partial => "/shared/select_city", locals: { cities: @cities } %>
+            <%= render partial: "/shared/select_city", locals: { cities: @cities } %>
           </div>
         </div><!-- .row -->
 

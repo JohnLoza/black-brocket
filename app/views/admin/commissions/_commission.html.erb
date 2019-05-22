@@ -43,8 +43,8 @@
         </a>
 
         <%= f.file_field :payment, id: "payment_field_#{commission.hash_id}",
-            :style =>"display: none;", :multiple => false,
-            :onchange => "$('#payment_commit_#{commission.hash_id}').click();" %>
+            style: "display: none;", multiple: false,
+            onchange: "$('#payment_commit_#{commission.hash_id}').click();" %>
         <%= f.submit "commit", id: "payment_commit_#{commission.hash_id}", style: "display: none;",
             data: {confirm: "Estas seguro(a) de ser el archivo correcto?"} %>
       <% end #form end# %>

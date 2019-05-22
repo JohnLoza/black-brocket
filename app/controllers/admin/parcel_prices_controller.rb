@@ -41,8 +41,7 @@ class Admin::ParcelPricesController < AdminController
     else
       @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
       @parcel = Parcel.find(params[:parcel_id])
-      flash.now[:danger] = "Ocurrió un error al guardar el precio"
-      render :edit
+      flash.now[:danger] = "Ocurrió un error al guardar el precio" and render :edit
     end
   end
 

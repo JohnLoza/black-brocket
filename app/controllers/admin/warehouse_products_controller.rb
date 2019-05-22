@@ -11,7 +11,7 @@ class Admin::WarehouseProductsController < AdminController
     @warehouse = @current_user.Warehouse
 
     @products = @warehouse.Products.joins(:Product)
-      .where(:describes_total_stock => true, products: {deleted_at: nil})
+      .where(describes_total_stock: true, products: {deleted_at: nil})
       .includes(:Product).order("products.name asc").paginate(page: params[:page], per_page: 20)
 
     if @current_user.has_permission?('warehouse_manager@transfer_mercancy')
@@ -67,7 +67,7 @@ class Admin::WarehouseProductsController < AdminController
 
     if @current_user.has_permission?('warehouse_products@show')
       @products = @warehouse.Products.joins(:Product)
-        .where(:describes_total_stock => true, products: {deleted_at: nil})
+        .where(describes_total_stock: true, products: {deleted_at: nil})
         .order("products.name asc").paginate(page: params[:page], per_page: 20).includes(:Product)
     end
   end
@@ -94,7 +94,7 @@ class Admin::WarehouseProductsController < AdminController
     session[:shipment_products][params[:id]][:name] = params[:warehouse_product][:name]
 
     respond_to do |format|
-      format.js { render :prepare_product_for_shipment, :layout => false }
+      format.js { render :prepare_product_for_shipment, layout: false }
     end
   end
 
@@ -121,7 +121,7 @@ class Admin::WarehouseProductsController < AdminController
     end
 
     respond_to do |format|
-      format.js { render :discard_shipment_preparation, :layout => false }
+      format.js { render :discard_shipment_preparation, layout: false }
     end
   end
 
@@ -210,7 +210,8 @@ class Admin::WarehouseProductsController < AdminController
     deny_access! and return unless @current_user.has_permission?('warehouse_manager@receive_shipments')
 
     @warehouse = @current_user.Warehouse
-    @shipments = @warehouse.IncomingShipments.includes(:Chief, :Worker, :OriginWarehouse).order(:created_at => :desc).paginate(page: params[:page], per_page: 20)
+    @shipments = @warehouse.IncomingShipments.includes(:Chief, :Worker, :OriginWarehouse)
+      .order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
   
   def shipment_details
@@ -247,7 +248,7 @@ class Admin::WarehouseProductsController < AdminController
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @shipments = @warehouse.IncomingShipments.includes(:Chief, :Worker, :OriginWarehouse)
-      .order(:created_at => :desc).paginate(page: params[:page], per_page: 20)
+      .order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 
   def chief_shipment_details
@@ -287,8 +288,8 @@ class Admin::WarehouseProductsController < AdminController
     @shipment = Shipment.find(params[:id])
 
     ActiveRecord::Base.transaction do
-      @shipment.update_attributes(:got_safe_to_destination => false,
-        :worker_id => @current_user.id, :reviewed => false)
+      @shipment.update_attributes(got_safe_to_destination: false,
+        worker_id: @current_user.id, reviewed: false)
       @report = ShipmentDifferenceReport.create!(shipment_id: @shipment.id,
       worker_id: @current_user.id, observations: params[:observations])
 
@@ -322,7 +323,7 @@ class Admin::WarehouseProductsController < AdminController
     end
 
     respond_to do |format|
-      format.js { render :update_min_stock, :layout => false }
+      format.js { render :update_min_stock, layout: false }
     end
   end
 

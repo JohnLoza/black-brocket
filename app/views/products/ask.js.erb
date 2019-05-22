@@ -1,7 +1,7 @@
 <% if @question.persisted? %>
   $("#prod_question_description").val("");
   $('#questions').prepend('<%= escape_javascript(
-    render :partial => "question", locals: { question: @question }) %>');
+    render partial: "question", locals: { question: @question }) %>');
 
   $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Se ha guardado tu pregunta.'} %>");
 <% else %>

@@ -34,25 +34,25 @@ class Admin::OrdersController < AdminController
     @order = Order.find_by!(hash_id: params[:id])
     if params[:accept] == "true"
       if Order.find_by(payment_folio: params[:payment_folio])
-        #Duplicate folio
+        # That Folio has already been used 
         flash[:info] = "El folio del pago ya ha sido registrado previamente."
         redirect_to admin_orders_path(type: 'ACCEPT_REJECT_PAYMENT') and return
       end
-      #Accept the payment
+      # Accept the payment
       @saved=true if @order.update_attributes(state:"PAYMENT_ACCEPTED", reject_description: nil, payment_folio: params[:payment_folio])
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Aceptó pago")
     else
-      #Reject the payment and notify the user
+      # Reject the payment and notify the user
       @saved=true if @order.update_attributes(state:"PAYMENT_REJECTED", reject_description: params[:order][:reject_description])
       Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
-                      description: "El pago de tu pedido ha sido rechazado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
+        description: "El pago de tu pedido ha sido rechazado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Rechazó pago")
     end
 
-    if @saved==true
-      flash[:success]=t(@order.state)
+    if @saved == true
+      flash[:success] = t(@order.state)
     else
-      flash[:info]="Ocurrió un error al procesar el pago, inténtalo de nuevo por favor"
+      flash[:info] = "Ocurrió un error al procesar el pago, inténtalo de nuevo por favor"
     end
 
     redirect_to admin_orders_path(type: "ACCEPT_REJECT_PAYMENT")
@@ -96,7 +96,7 @@ class Admin::OrdersController < AdminController
 
       @order.update(state: "ORDER_CANCELED", cancel_description: params[:order][:cancel_description])
       Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
-                      description: "Pedido cancelado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
+        description: "Pedido cancelado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Canceló la orden")
       flash[:success] = "La orden se canceló correctamente."
     end
@@ -107,7 +107,6 @@ class Admin::OrdersController < AdminController
 
   def inspection
     deny_access! and return unless @current_user.has_permission?('orders@inspection')
-
     @order = Order.find_by!(hash_id: params[:id])
 
     if @order.update_attribute(:state, "INSPECTIONED")
@@ -127,13 +126,13 @@ class Admin::OrdersController < AdminController
     shipment_details = OrderProductShipmentDetail.where(order_id: order.id)
 
     warehouse = order.Warehouse
-    warehouse_products = warehouse.Products.where(describes_total_stock: false, product_id: shipment_details.map {|d| d.product_id})
+    warehouse_products = warehouse.Products.where(describes_total_stock: false, 
+      product_id: shipment_details.map {|d| d.product_id}, batch: shipment_details.map {|d| d.batch})
 
     shipment_details.each do |detail|
       warehouse_products.each do |warehouse_product|
         if detail.product_id == warehouse_product.product_id and detail.batch == warehouse_product.batch
           warehouse_product.update_attribute(:existence, warehouse_product.existence + detail.quantity)
-          break
         end # if end #
       end # warehouse_products.each #
     end # shipment_details.each #
@@ -153,12 +152,7 @@ class Admin::OrdersController < AdminController
 
     product_ids = Array.new
     @details = @order.Details
-    @details.each do |detail|
-      if !product_ids.include?(detail.product_id)
-        product_ids << detail.product_id
-      end # if !product_ids.include?(detail.product_id) #
-    end # @details.each #
-
+    product_ids = details.map {|d| d.product_id}.uniq
     @products = Product.where("id in (?)", product_ids)
   end # def capture_details #
 
@@ -204,14 +198,11 @@ class Admin::OrdersController < AdminController
   def save_tracking_code
     deny_access! and return unless @current_user.has_permission?('orders@capture_tracking_code')
 
-    success = false
     @order = Order.find_by!(hash_id: params[:id])
-
     @order.tracking_code = params[:tracking_code]
     @order.state = "SENT"
-    success = true if @order.save
 
-    if success
+    if @order.save
       flash[:success] = "Orden actualizada correctamente"
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Capturó código de rastreo")
     else
@@ -255,7 +246,7 @@ class Admin::OrdersController < AdminController
     end
 
     if !params[:reference].blank?
-      @order = Order.find_by(hash_id: params[:reference].strip)
+      @order = Order.find_by(hash_id: params[:reference].strip) and return
       flash.now[:warning] = "Orden con referencia: #{params[:reference]} no encontrada :(" and return unless @order
     end
 
@@ -391,6 +382,7 @@ class Admin::OrdersController < AdminController
       order.remove_pay_pdf! if order.pay_pdf.present?
       order.pay_img = params[:order][:pay_img]
     end
+    
     order.download_payment_key = SecureRandom.urlsafe_base64
     if order.save!
       OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Subió comprobante")
@@ -465,7 +457,7 @@ class Admin::OrdersController < AdminController
 
     def getOrdersFor(statements)
       if params[:distributor].present?
-        distributor = Distributor.find_by!(:hash_id => params[:distributor])
+        distributor = Distributor.find_by!(hash_id: params[:distributor])
   
         Order.joins(:Distributor)
           .where(distributors: {hash_id: params[:distributor]})

@@ -20,26 +20,26 @@ class Admin::CommissionsController < AdminController
   def create
     deny_access! and return unless @current_user.has_permission?('commissions@create')
 
-    @distributor = Distributor.find_by!(hash_id: params[:distributor])
-    @orders = Order.where("hash_id in (?)", params[:order_keys]).where(commission_in_progress: false)
-    raise ActiveRecord::RecordNotFound unless @orders.any?
+    distributor = Distributor.find_by!(hash_id: params[:distributor])
+    orders = Order.where("hash_id in (?)", params[:order_keys]).where(commission_in_progress: false)
+    raise ActiveRecord::RecordNotFound unless orders.any?
 
-    total = Commission.calculateCommission(@orders, @distributor.commission)
+    total = Commission.calculateCommission(orders, distributor.commission)
 
     commission = Commission.new({hash_id: Utils.new_alphanumeric_token(9).upcase,
-      distributor_id: @distributor.id, worker_id: @current_user.id,
+      distributor_id: distributor.id, worker_id: @current_user.id,
       state: 'WAITING_FOR_PAYMENT', total: total })
     ActiveRecord::Base.transaction do
       commission.save!
-      @orders.update_all(commission_in_progress: true)
-      @orders.each do |o|
+      orders.update_all(commission_in_progress: true)
+      orders.each do |o|
         CommissionDetail.create(commission_id: commission.id, order_id: o.id)
       end
       flash[:success] = "Comisión creada!"
     end
 
     flash[:info] = "Ocurrió un error al guardar la información" unless flash[:success].present?
-    redirect_to admin_orders_path(distributor: @distributor.hash_id, type: "DELIVERED")
+    redirect_to admin_orders_path(distributor: distributor.hash_id, type: "DELIVERED")
   end
 
   def details

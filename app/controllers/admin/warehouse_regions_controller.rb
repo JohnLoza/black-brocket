@@ -19,7 +19,7 @@ class Admin::WarehouseRegionsController < AdminController
     end
 
     respond_to do |format|
-      format.js { render :create, :layout => false }
+      format.js { render :create, layout: false }
     end
   end
 
@@ -36,7 +36,7 @@ class Admin::WarehouseRegionsController < AdminController
     end
 
     respond_to do |format|
-      format.js { render :destroy, :layout => false }
+      format.js { render :destroy, layout: false }
     end
   end
 

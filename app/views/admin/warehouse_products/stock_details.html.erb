@@ -29,7 +29,7 @@
               <% end %>
 
               <%= form_for(:product_qr, url: admin_print_qr_path, method: :post, 
-                :html => {target: "_blank", style: "display: inline-block"}) do |f| %>
+                html: {target: "_blank", style: "display: inline-block"}) do |f| %>
 
                 <%= f.hidden_field :warehouse, value: params[:warehouse_id] %>
                 <%= f.hidden_field :product, value: d.Product.hash_id %>
@@ -57,7 +57,7 @@
           </div>
           <div class="modal-body">
             <%= form_for(:warehouse_product,
-                :url=> admin_warehouse_products_stock_details_path(@warehouse.hash_id, @product.id),
+                url: admin_warehouse_products_stock_details_path(@warehouse.hash_id, @product.id),
                 method: :put, html:{id: "update_stock_form"}) do |f| %>
               <%= f.label :existence, "Existencia real del lote:" %>
               <%= f.number_field :existence,

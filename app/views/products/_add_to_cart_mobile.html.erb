@@ -4,7 +4,7 @@
     onchange="update_quantity(this, this.value, 'mobile')" id="input_quantity" onkeypress="return isNumberKey(event)"/></td>
   <td><%= link_to "Añadir al carrito!",
       client_add_to_cart_path(@warehouse_product.hash_id)+"?quantity=NAN",
-      method: :put, remote: true, class: "btn btn-custom-3 btn-block", :style => "font-size: 11.3px;",
+      method: :put, remote: true, class: "btn btn-custom-3 btn-block", style: "font-size: 11.3px;",
       id: "add_to_cart_mobile" %>
   </td>
 </tr>

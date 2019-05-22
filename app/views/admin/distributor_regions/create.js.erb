@@ -1,5 +1,5 @@
 <% if @saved %>
-  $('#distributor_regions').append('<%= escape_javascript( render :partial => "region", locals: { city: @city, dist_id: params[:dist_id] } ) %>');
+  $('#distributor_regions').append('<%= escape_javascript( render partial: "region", locals: { city: @city, dist_id: params[:dist_id] } ) %>');
 
   // find and remove the element that was added
   var opts = $('#city_id').find('option');

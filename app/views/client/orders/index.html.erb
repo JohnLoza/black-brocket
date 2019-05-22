@@ -51,7 +51,7 @@
         <% if o.tracking_code and o.parcel_id and o.parcel_id != 0 %>
           <% parcel = o.Parcel %>
           <a href="<%=parcel.tracking_url%>" target="_blank">
-            <%= image_tag parcel.image.url(:mini), class: "img-rounded",:style =>"width:60px;" %>
+            <%= image_tag parcel.image.url(:mini), class: "img-rounded", style: "width:60px;" %>
           </a>
         <% end %><br>
         <%= o.tracking_code %>
@@ -99,8 +99,8 @@
                       data:{confirm: "Seguro(a) de ser el archivo correcto?"}) do |f| %>
         <div class="col-sm-2 text-right">
           <%= f.file_field :pay_img, id: "field_#{o.hash_id}",
-              :style =>"display: none;", :multiple => false,
-              :onchange => "$('#pay_img_commit_#{o.hash_id}').click();" %></br>
+              style: "display: none;", multiple: false,
+              onchange: "$('#pay_img_commit_#{o.hash_id}').click();" %></br>
         </div>
         <div class="col-sm-4">
           <span onclick="$('#field_<%=o.hash_id%>').click();"

@@ -28,7 +28,7 @@
                   <% @photos.each do |photo| %>
                     <div class="col-xs-6 col-md-3 " style="display: inline-block">
                       <%= link_to image_tag(photo.photo.url(:thumb), class: "img-thumbnail photo-gallery"),
-                                  image_path(photo.photo.url), data: {:toggle => "lightbox", :gallery => "home-gallery", :title => "Imagen de la galería" } %>
+                          image_path(photo.photo.url), data: {toggle: "lightbox", gallery: "home-gallery", title: "Imagen de la galería" } %>
 
                         <%= link_to "<button type='button' class='btn btn-danger btn-sm m-t btn-block'><i class='fa fa-trash'></i> Eliminar</button>".html_safe, admin_web_destroy_photo_path(photo.id),
                             method: :delete, data: { confirm: "Estás seguro(a) de eliminar la imágen? esto no se puede deshacer." } %>
@@ -88,7 +88,7 @@
                 <% @log_in_initial.each do |photo| %>
                   <div class="col-xs-6 col-md-3 " style="display: inline-block">
                     <%= link_to image_tag(photo.photo.url(:thumb), class: "img-thumbnail photo-gallery"),
-                                image_path(photo.photo.url), data: {:toggle => "lightbox", :gallery => "session-gallery", :title => "Imagenes de inicio de sesión y portada del sitio" } %>
+                                image_path(photo.photo.url), data: {toggle: "lightbox", gallery: "session-gallery", title: "Imagenes de inicio de sesión y portada del sitio" } %>
                     <% if photo.name == "LOGIN" %>
                       <label>Inicio de sesión</label>
                     <% elsif photo.name == "INITIAL" %>

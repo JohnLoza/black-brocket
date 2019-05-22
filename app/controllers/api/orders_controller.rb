@@ -5,7 +5,7 @@ class Api::OrdersController < ApiController
 
   def index
     orders = @current_user.Orders.where.not(state: "ORDER_CANCELED")
-    .order(created_at: :desc).paginate(:page => params[:page], :per_page => 10)
+    .order(created_at: :desc).paginate(page: params[:page], per_page: 10)
     .includes(:Parcel, City: :State)
     data = Array.new
     data<<{per_page: 10}

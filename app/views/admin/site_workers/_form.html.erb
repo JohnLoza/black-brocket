@@ -11,8 +11,8 @@
               </div>
           </div>
           <div class="ibox-content">
-            <%= form_for [:admin, @worker], :html => {:id => "worker_form", class: 'form-horizontal'} do |f| %>
-              <%= render :partial=>'/shared/error_messages', locals:{entity: @worker} %>
+            <%= form_for [:admin, @worker], html: {id: "worker_form", class: 'form-horizontal'} do |f| %>
+              <%= render partial: '/shared/error_messages', locals:{entity: @worker} %>
 
               <% if @current_user.has_permission?('site_workers@update_personal_data') or
                     @current_user.has_permission?('site_workers@create') %>
@@ -20,7 +20,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :hash_id, class: 'form-control', :disabled => true %>
+                    <%= f.text_field :hash_id, class: 'form-control', disabled: true %>
                   </div>
                 </div>
 
@@ -85,7 +85,7 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><%= f.label :email_confirmation, "Confirma tu correo electrónico" %></label>
                     <div class="col-sm-10">
-                      <%= f.email_field :email_confirmation, :value => @worker.email,
+                      <%= f.email_field :email_confirmation, value: @worker.email,
                           class: 'form-control form-control-black', placeholder: "john@example.com",
                           required: true, maxlength: 50, "data-parsley-equalto"=>"#site_worker_email" %>
                     </div>
@@ -162,8 +162,8 @@
                   </div>
                 </div>
 
-                <%= render :partial => "/shared/select_state", locals: { states: @states } %>
-                <%= render :partial => "/shared/select_city", locals: { cities: @cities } %>
+                <%= render partial: "/shared/select_state", locals: { states: @states } %>
+                <%= render partial: "/shared/select_city", locals: { cities: @cities } %>
 
                 <div class="hr-line-dashed"></div>
 
@@ -188,7 +188,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :photo, "Subir foto" %></label>
                   <div class="col-sm-7">
-                    <%= f.file_field :photo, :multiple => false %><br>
+                    <%= f.file_field :photo, multiple: false %><br>
                   </div>
                 </div>
 
@@ -201,7 +201,7 @@
                   <div class="form-group"><label class="col-sm-2 control-label">Almacén</label>
                       <div class="col-sm-10">
                       <%= select_tag "site_worker[warehouse_id]", options_from_collection_for_select(
-                      @warehouses, "id", "name", :selected => @warehouse_id), prompt: "Selecciona...",
+                      @warehouses, "id", "name", selected: @warehouse_id), prompt: "Selecciona...",
                         class: "form-control m-b", required: true %>
                       </div>
                   </div>
@@ -253,7 +253,7 @@
       }
     });
 
-    <% max_date = l(18.years.ago, :format => :form_date) %>
+    <% max_date = l(18.years.ago, format :form_date) %>
     $('#datetimepicker').datetimepicker({
         locale: 'es',
         format: 'YYYY-MM-DD',

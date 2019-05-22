@@ -93,7 +93,7 @@
       <%= form_tag(admin_best_dist_statistics_path, method: :post) do %>
         <div class="modal-body">
           <label>Quieres ver los mejores: </label>
-          <%= number_field_tag :dist_quantity, 5, :min => 1, class: "form-control" %>
+          <%= number_field_tag :dist_quantity, 5, min: 1, class: "form-control" %>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-white btn-sm" data-dismiss="modal">Cancelar</button>

@@ -10,15 +10,9 @@
         <% if @tip.video.present? %>
           <%= render partial: '/shared/embed_video', locals: {url: @tip.video} %>
         <% elsif @tip.image.present? %>
-          <%= image_tag(@tip.image.url , { class: "img-responsive full-width show-tip-image", :align =>"left" }) %>
+          <%= image_tag(@tip.image.url , { class: "img-responsive full-width show-tip-image", align: "left" }) %>
         <% end %>
 
-        <!-- For heroku not crashing -->
-        <% file_path = file_path = "app/views" + @tip.description_render_path.sub("/shared/tips_recipes/", "/shared/tips_recipes/_")
-        if !File.exists?(file_path)
-          File.open(file_path, "w"){|file| file.write("<h1>Tip and or Recipe</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis facilisis tempor libero quis sollicitudin. Sed volutpat risus nibh, vel scelerisque nunc dapibus ac. Cras porta magna lobortis, rutrum ante ac, viverra justo. Vivamus sed orci risus. Quisque viverra eros leo, quis fermentum ante cursus id. Integer urna ligula, dapibus id purus id, tempus porta magna. Pellentesque ut purus ultrices, tincidunt odio nec, sollicitudin arcu. Nulla dui turpis, sodales quis dui sed, consectetur vestibulum lorem. Maecenas libero lacus, pellentesque non arcu non, facilisis suscipit massa.</p>") }
-        end %>
-        <!-- For heroku not crashing -->
         <%= render @tip.description_render_path %>
     </div>
   </div>

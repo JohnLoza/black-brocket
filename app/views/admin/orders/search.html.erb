@@ -10,7 +10,7 @@
         <div class="form-group">
           <%= label_tag :warehouse_id, "Almacén" %>
           <%= select_tag :warehouse_id, options_from_collection_for_select(
-            @warehouses, "id", "name", :selected => params[:warehouse_id]), prompt: "Selecciona...",
+            @warehouses, "id", "name", selected: params[:warehouse_id]), prompt: "Selecciona...",
             class: "form-control m-b", onchange: "referenceNotWriting();" %>
         </div>
 

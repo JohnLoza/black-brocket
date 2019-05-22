@@ -23,7 +23,7 @@
        <li class="dropdown">
           <a class="dropdown-toggle count-info" data-toggle="dropdown" href="off_canvas_menu.html#">
               <i class="fa fa-bell"></i>
-              <% notifications_not_seen_count = @current_user.Notifications.where(:seen => false).size %>
+              <% notifications_not_seen_count = @current_user.Notifications.where(seen: false).size %>
               <% if notifications_not_seen_count > 0 %>
                 <span class="badge" style="background-color: #F44336; color: #FEFEFE;">
                   <%= notifications_not_seen_count %>

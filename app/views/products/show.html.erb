@@ -12,7 +12,7 @@
         <% @photos.each do |photo| %>
           <% if photo.is_principal %>
             <%= link_to image_tag(photo.photo.url(:thumb), style: "max-height: 350px; max-width: 350px;margin-bottom:10px;"),
-              image_path(photo.photo.url), data: {:toggle => "lightbox", :gallery => "products", :title => @product.name } %>
+              image_path(photo.photo.url), data: {toggle: "lightbox", gallery: "products", title: @product.name } %>
             <% break %>
           <% end %>
         <% end %>
@@ -21,7 +21,7 @@
           <% if !photo.is_principal %>
             <%= link_to image_tag(photo.photo.url(:mini), class: "img-thumbnail photo-gallery",
               style:"heigth: 90px; width: 90px; display: inline-block; margin-right:5px;"),
-              image_path(photo.photo.url), data: {:toggle => "lightbox", :gallery => "products", :title => @product.name } %>
+              image_path(photo.photo.url), data: {toggle: "lightbox", gallery: "products", title: @product.name } %>
           <% end %>
         <% end %>
       </div>
@@ -149,7 +149,7 @@
     					</div>-->
               <div class="col-md-12" id="questions">
                 <% @questions.each do |q| %>
-                  <%= render :partial => "question", locals: { question: q } %>
+                  <%= render partial: "question", locals: { question: q } %>
                 <% end %>
               </div>
               <div class="clearfix"></div>

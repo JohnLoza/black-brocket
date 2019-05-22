@@ -1,6 +1,6 @@
 <%= form_for(:warehouse_product,
     url: admin_prepare_product_for_shipment_path(@warehouse.hash_id, "0x0"),
-    remote: true, method: :post, :html => {:id => "existence-form"}) do |f| %>
+    remote: true, method: :post, html: {id: "existence-form"}) do |f| %>
 
     <%= f.label :quantity, "Cantidad a agregar en existencia" %>
     <%= f.number_field :quantity, class: "form-control", placeholder: "0",
@@ -22,7 +22,7 @@
 <% end %>
 
 <br>
-<%= form_for(:product_qr, url: admin_print_qr_path, method: :post, :html => {target: "_blank"}) do |f| %>
+<%= form_for(:product_qr, url: admin_print_qr_path, method: :post, html: {target: "_blank"}) do |f| %>
     <%= f.hidden_field :warehouse, value: @warehouse.hash_id %>
     <%= f.hidden_field :product %>
     <%= f.hidden_field :batch %>

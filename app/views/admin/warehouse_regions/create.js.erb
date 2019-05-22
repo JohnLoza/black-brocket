@@ -1,5 +1,5 @@
 <% if @saved %>
-  $('#warehouse_regions').append('<%= escape_javascript(render :partial => "region", locals: { state: @state, warehouse_id: params[:warehouse_id] } ) if @saved %>');
+  $('#warehouse_regions').append('<%= escape_javascript(render partial: "region", locals: { state: @state, warehouse_id: params[:warehouse_id] } ) if @saved %>');
 
   // remove the element that was added
   var opts = $('#state_id').find('option');

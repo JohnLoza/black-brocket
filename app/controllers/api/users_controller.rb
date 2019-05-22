@@ -9,7 +9,7 @@ class Api::UsersController < ApiController
     client.city_id = params[:city_id]
 
     if client.save
-      client.update_attributes(:hash_id => generateAlphKey("C", client.id), :authentication_token => SecureRandom.urlsafe_base64(16))
+      client.update_attributes(hash_id: generateAlphKey("C", client.id), authentication_token: SecureRandom.urlsafe_base64(16))
 
       render status: 200, json: {success: true, info: "SAVED",
         data: {auth_token: client.authentication_token}}
@@ -73,7 +73,7 @@ class Api::UsersController < ApiController
       end
     end
 
-    not_seen_count = @current_user.Notifications.where(:seen => false).size
+    not_seen_count = @current_user.Notifications.where(seen: false).size
     render status: 200, json: {success: true, info: "DATA_RETURNED", not_seen_count: not_seen_count, data: data}
 
   end

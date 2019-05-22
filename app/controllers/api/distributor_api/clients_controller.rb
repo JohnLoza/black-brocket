@@ -5,7 +5,8 @@ class Api::DistributorApi::ClientsController < ApiController
 
   def index
     region_ids = @current_user.Regions.map(&:id)
-    clients = Client.where(city_id: region_ids).order(updated_at: :DESC).paginate(:page => params[:page], :per_page => 20).includes(City: :State)
+    clients = Client.where(city_id: region_ids).order(updated_at: :DESC)
+      .paginate(page: params[:page], per_page: 20).includes(City: :State)
 
     data = Array.new
     data << {per_page: 20}

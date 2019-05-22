@@ -1,5 +1,5 @@
 class Admin::StatisticsController < AdminController
-  @@noProcessableOrders = ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED","ORDER_CANCELED"]
+  @@NoProcessableOrders = ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED","ORDER_CANCELED"]
 
   def index
     deny_access! and return unless @current_user.has_permission_category?('statistics')
@@ -48,8 +48,8 @@ class Admin::StatisticsController < AdminController
     selection = "sum(order_details.quantity) as sum_q, orders.distributor_id as dist_id, distributors.username as dist_username"
 
     @details = OrderDetail.select(selection).joins(Order: :Distributor)
-                  .where.not(orders: {:state => @@noProcessableOrders})
-                  .group("dist_id, dist_username").order("sum_q desc").limit(params[:dist_quantity])
+      .where.not(orders: {state: @@NoProcessableOrders}).order("sum_q desc")
+      .group("dist_id, dist_username").limit(params[:dist_quantity])
 
     @dist_names = @details.map{|detail| detail.dist_username}.to_json
   end
@@ -60,8 +60,8 @@ class Admin::StatisticsController < AdminController
     selection = "sum(order_details.quantity) as sum_q, orders.client_id as client_id, clients.username as client_username"
 
     @details = OrderDetail.select(selection).joins(Order: :Client)
-                  .where.not(orders: {:state => @@noProcessableOrders})
-                  .group("client_id, client_username").order("sum_q desc").limit(params[:client_quantity])
+      .where.not(orders: {state: @@NoProcessableOrders}).order("sum_q desc")
+      .group("client_id, client_username").limit(params[:client_quantity])
 
     @client_names = @details.map{|detail| detail.client_username}.to_json
   end

@@ -19,7 +19,7 @@ class Client::ClientsController < ApplicationController
 
     if @distributor
       @messages = @current_user.DistributorMessages.where('distributor_id = ? or worker_id = ?', @distributor.id, @distributor.id)
-        .order(:created_at => :desc).paginate(page: params[:page], :per_page => 25)
+        .order(created_at: :desc).paginate(page: params[:page], per_page: 25)
       @create_message_url = client_create_distributor_comment_path(@distributor.id)
 
       @client_image = @current_user.avatar_url(:mini)
@@ -122,8 +122,12 @@ class Client::ClientsController < ApplicationController
   end
 
   def update_distributor_visit
-    @visit = DistributorVisit.find(params[:id])
-    @visit.update_attributes(visit_params)
+    visit = DistributorVisit.find(params[:id])
+    visit.update_attributes(visit_params)
+
+    if visit.client_recognizes_visit
+      @current_user.update_attribute(:last_distributor_visit, visit.visit_date)
+    end
 
     flash[:success] = "Gracias por tu participación."
     redirect_to products_path
@@ -140,13 +144,13 @@ class Client::ClientsController < ApplicationController
     if @distributor
       message.distributor_id = @distributor.id
       Notification.create(distributor_id: @distributor.id, icon: "fa fa-comments-o",
-                      description: "El usuario " + @current_user.name + " te envió un mensaje",
-                      url: distributor_client_messages_path(@current_user.hash_id))
+        description: "El usuario " + @current_user.name + " te envió un mensaje",
+        url: distributor_client_messages_path(@current_user.hash_id))
     elsif @worker
       message.worker_id = @worker.id
       Notification.create(worker_id: @worker.id, icon: "fa fa-comments-o",
-                      description: "El usuario " + @current_user.name + " te envió un mensaje",
-                      url: admin_distributor_work_client_messages_path(@current_user.hash_id))
+        description: "El usuario " + @current_user.name + " te envió un mensaje",
+        url: admin_distributor_work_client_messages_path(@current_user.hash_id))
     end
 
     message.save
@@ -175,12 +179,11 @@ class Client::ClientsController < ApplicationController
     end
 
     def visit_params
-      params.require(:distributor_visit).permit(:client_recognizes_visit,
-                                         :treatment_answer, :extra_comments)
+      params.require(:distributor_visit)
+        .permit(:client_recognizes_visit, :treatment_answer, :extra_comments)
     end
 
     def message_params
-      {client_id: @current_user.id, comment: params[:comment],
-      is_from_client: true}
+      {client_id: @current_user.id, comment: params[:comment], is_from_client: true}
     end
 end

@@ -32,7 +32,7 @@ class Api::SessionsController < ApiController
     end
 
     render status: 200, json: {success: true, info: "AUTHORIZED",
-      data: {:auth_token => user.authentication_token, :user_type => user_type}}
+      data: {auth_token: user.authentication_token, user_type: user_type}}
   end
 
   def destroy

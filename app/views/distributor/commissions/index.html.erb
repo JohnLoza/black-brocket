@@ -79,8 +79,8 @@
                         </a>
 
                         <%= f.file_field :invoice, id: "invoice_field_#{c.hash_id}",
-                            :style =>"display: none;", :multiple => false,
-                            :onchange => "$('#invoice_commit_#{c.hash_id}').click();" %>
+                            style: "display: none;", multiple: false,
+                            onchange: "$('#invoice_commit_#{c.hash_id}').click();" %>
                         <%= f.submit "commit", id: "invoice_commit_#{c.hash_id}", style: "display: none;",
                             data: {confirm: "Estas seguro(a) de ser el archivo correcto?"} %>
                       <% end #form end# %>

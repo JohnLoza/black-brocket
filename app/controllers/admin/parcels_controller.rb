@@ -25,8 +25,7 @@ class Admin::ParcelsController < AdminController
       flash[:success] = "Paquetería creada..."
       redirect_to admin_warehouse_parcels_path(@warehouse.hash_id)
     else
-      flash.now[:danger] = "Ocurrió un error al guardar la paquetería"
-      render :new
+      flash.now[:danger] = "Ocurrió un error al guardar la paquetería" and render :new
     end
   end
 
@@ -47,8 +46,7 @@ class Admin::ParcelsController < AdminController
       flash[:success] = "Paquetería actualizada..."
       redirect_to admin_warehouse_parcels_path(@warehouse.hash_id)
     else
-      flash.now[:danger] = "Ocurrió un error al guardar la paquetería"
-      render :edit
+      flash.now[:danger] = "Ocurrió un error al guardar la paquetería" and render :edit
     end
   end
 

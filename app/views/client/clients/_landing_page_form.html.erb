@@ -1,5 +1,5 @@
-<%= form_for [:client, @client], :html => {id: "client_form"} do |f| %>
-	<%= render :partial=>'/shared/error_messages', locals:{entity: @client} %>
+<%= form_for [:client, @client], html: {id: "client_form"} do |f| %>
+	<%= render partial: '/shared/error_messages', locals:{entity: @client} %>
 	<div class="col-md-6 pull-right bg-light">
 		<div class="row">
 			<div class="col-sm-12 form-group">
@@ -39,13 +39,13 @@
 
 		<div class="row">
 			<div class="col-sm-12 form-group">
-				<%= render :partial => "/shared/select_state", locals: { states: @states } %>
+				<%= render partial: "/shared/select_state", locals: { states: @states } %>
 			</div>
 		</div><!-- .row -->
 
 		<div class="row">
 			<div class="col-sm-12 form-group">
-				<%= render :partial => "/shared/select_city", locals: { cities: @cities } %>
+				<%= render partial: "/shared/select_city", locals: { cities: @cities } %>
 			</div>
 		</div><!-- .row -->
 

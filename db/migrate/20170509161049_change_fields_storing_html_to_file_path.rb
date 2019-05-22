@@ -32,7 +32,7 @@ class ChangeFieldsStoringHtmlToFilePath < ActiveRecord::Migration[5.1]
       file.puts("<p>Editame...</p>")
       file.flush
 
-      product.update_attributes(:description_render_path => render_file_path)
+      product.update_attributes(description_render_path: render_file_path)
 
       render_file_path = replaceable_path + "product_" + product.hash_id + "_preparation.html.erb"
       file_path = base_file_path + render_file_path.sub(replaceable_path, replaceable_path + "_")
@@ -41,7 +41,7 @@ class ChangeFieldsStoringHtmlToFilePath < ActiveRecord::Migration[5.1]
       file.puts("<p>Editame...</p>")
       file.flush
 
-      product.update_attributes(:preparation_render_path => render_file_path)
+      product.update_attributes(preparation_render_path: render_file_path)
     end
 
     WebInfo.all.each do |info|

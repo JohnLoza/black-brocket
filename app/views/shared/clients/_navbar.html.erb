@@ -9,7 +9,7 @@
 
   <div class="container">
 
-    <%= link_to root_path, class: 'navbar-brand pull-left', :style => 'padding-top:16px !important;' do %>
+    <%= link_to root_path, class: 'navbar-brand pull-left', style: 'padding-top:16px !important;' do %>
       <i class="icon-home" style="font-size: 20px;"></i>
     <% end if logged_in? %>
 
@@ -38,7 +38,7 @@
           <button type="button" class="navbar-toggle pull-right" style="max-height: 34px;">
              <a class="count-info" data-toggle="dropdown" href="off_canvas_menu.html#">
                <i class="icon-bell" style="color: #fff;font-size: 16px;"></i>
-               <% notifications_not_seen_count = @current_user.Notifications.where(:seen => false).size %>
+               <% notifications_not_seen_count = @current_user.Notifications.where(seen: false).size %>
                <% if notifications_not_seen_count > 0 %>
                  <span class="badge" style="background-color: #F44336;position: absolute;top: 10px;left: 28px;">
                    <%= notifications_not_seen_count %>

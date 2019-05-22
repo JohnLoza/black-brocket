@@ -1,4 +1,4 @@
-<% if @saved %>
+<% if @answer.persisted? %>
   $("#<%= params[:prod_answer][:question_id] %>").remove();
   $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Respuesta Guardada'} %>");
 <% else %>

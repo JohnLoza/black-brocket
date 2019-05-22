@@ -33,7 +33,7 @@
       <%= form_tag(admin_best_clients_statistics_path, method: :post) do %>
         <div class="modal-body">
           <label>Quieres ver los mejores: </label>
-          <%= number_field_tag :client_quantity, 5, :min => 0, class: "form-control" %>
+          <%= number_field_tag :client_quantity, 5, min: 0, class: "form-control" %>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-white btn-sm" data-dismiss="modal">Cancelar</button>

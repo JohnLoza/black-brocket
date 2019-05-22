@@ -1,5 +1,5 @@
-<%= form_for [:client, @fiscal_data], url: @url, :html => { id: "fiscal_data_form" } do |f| %>
-<%= render :partial=>'/shared/error_messages', locals: { entity: @fiscal_data } %>
+<%= form_for [:client, @fiscal_data], url: @url, html: { id: "fiscal_data_form" } do |f| %>
+<%= render partial: '/shared/error_messages', locals: { entity: @fiscal_data } %>
   <div class="col-md-6">
         <h4>Yo soy</h4>
         <table class="table borderless">
@@ -21,7 +21,7 @@
   				<div class="col-sm-12 form-group">
   					<%= f.label :name, "Nombre(s) / Razón Social", id:"label_name" %>
             <%= f.text_field :name, class: 'form-control form-control-black',
-                  maxlength: 99, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
+                  maxlength: 99, disabled: "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
             <span class="help-text">Solo se admite letras, espacios y puntos para nombre y appellidos</span>
   				</div>
   			</div><!-- .row -->
@@ -32,7 +32,7 @@
     				<div class="col-sm-12 form-group">
     					<%= f.label :lastname, "Apellido paterno" %>
               <%= f.text_field :lastname, class: 'form-control form-control-black',
-                    maxlength: 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
+                    maxlength: 25, disabled: "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
     				</div>
     			</div><!-- .row -->
 
@@ -40,7 +40,7 @@
     				<div class="col-sm-12 form-group">
     					<%= f.label :mother_lastname, "Apellido materno" %>
               <%= f.text_field :mother_lastname, class: 'form-control form-control-black',
-                      maxlength: 25, :disabled => "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
+                      maxlength: 25, disabled: "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
             </div>
     			</div><!-- .row -->
         </div>
@@ -55,13 +55,13 @@
 
         <div class="row">
           <div class="col-sm-12 form-group">
-            <%= render :partial => "/shared/select_state", locals: { states: @states } %>
+            <%= render partial: "/shared/select_state", locals: { states: @states } %>
           </div>
         </div><!-- .row -->
 
         <div class="row">
           <div class="col-sm-12 form-group">
-            <%= render :partial => "/shared/select_city", locals: { cities: @cities } %>
+            <%= render partial: "/shared/select_city", locals: { cities: @cities } %>
           </div>
         </div><!-- .row -->
   </div>
@@ -80,7 +80,7 @@
  			 <div class="col-sm-12 form-group">
  				 <%= f.label :extnumber, "Número exterior" %>
  				 <%= f.number_field :extnumber, class: 'form-control form-control-black',
- 				 			required: true, maxlength: 5, :step => 1, :min => 0 %>
+ 				 			required: true, maxlength: 5, step: 1, min: 0 %>
  			 </div>
  		 </div><!-- .row -->
 
@@ -88,7 +88,7 @@
  			 <div class="col-sm-12 form-group">
  				 <%= f.label :intnumber, "Número interior" %>
  				 <%= f.number_field :intnumber, class: 'form-control form-control-black',
- 				 			maxlength: 4, :step => 1, :min => 0 %>
+ 				 			maxlength: 4, step: 1, min: 0 %>
  			 </div>
  		 </div><!-- .row -->
 

@@ -23,18 +23,12 @@
                   </iframe>
                 <% elsif !t.image.blank? %>
                   <div class="caption divider-row-top tip-image" style="background-image: url('<%= t.image.url %>');">
-                    <% image_tag(t.image.url , { class: "img-responsive full-width", :style =>"margin-bottom: 10px;", :align =>"left" }) %>
+                    <% image_tag(t.image.url , { class: "img-responsive full-width", style:"margin-bottom: 10px;", align: "left" }) %>
                   </div>
                 <% end %>
 
                 <div class="caption divider-row-top tip-desc-200">
                     <div class="menu-detail cortar">
-                      <!-- For heroku not crashing -->
-                      <% file_path = file_path = "app/views" + t.description_render_path.sub("/shared/tips_recipes/", "/shared/tips_recipes/_")
-                      if !File.exists?(file_path)
-                        File.open(file_path, "w"){|file| file.write("<h1>Tip and or Recipe</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis facilisis tempor libero quis sollicitudin. Sed volutpat risus nibh, vel scelerisque nunc dapibus ac. Cras porta magna lobortis, rutrum ante ac, viverra justo. Vivamus sed orci risus. Quisque viverra eros leo, quis fermentum ante cursus id. Integer urna ligula, dapibus id purus id, tempus porta magna. Pellentesque ut purus ultrices, tincidunt odio nec, sollicitudin arcu. Nulla dui turpis, sodales quis dui sed, consectetur vestibulum lorem. Maecenas libero lacus, pellentesque non arcu non, facilisis suscipit massa.</p>") }
-                      end %>
-                      <!-- For heroku not crashing -->
                       <%= render t.description_render_path %>
                     </div>
                 </div>

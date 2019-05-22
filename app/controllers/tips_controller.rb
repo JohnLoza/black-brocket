@@ -18,7 +18,7 @@ class TipsController < ApplicationController
     @comment.save
     respond_to do |format|
       format.html{ redirect_to tips_path }
-      format.js { render :create_comment, :layout => false }
+      format.js { render :create_comment, layout: false }
     end
   end
 

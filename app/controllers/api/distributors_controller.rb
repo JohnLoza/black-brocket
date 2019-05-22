@@ -46,8 +46,8 @@ class Api::DistributorsController < ApiController
       notification.update_attributes(seen: true)
     end
 
-    messages = @current_user.DistributorMessages.all.order(:created_at => :desc)
-                  .paginate(page: params[:page], :per_page => 50)
+    messages = @current_user.DistributorMessages.all.order(created_at: :desc)
+                  .paginate(page: params[:page], per_page: 50)
 
     data = Array.new
     messages.each do |message|

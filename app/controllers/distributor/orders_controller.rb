@@ -8,7 +8,7 @@ class Distributor::OrdersController < ApplicationController
       @client = Client.find_by!(hash_id: params[:client])
       if @client
         @client_city = @client.City
-        @orders = Order.where(client_id: @client.id).order(updated_at: :desc).limit(100).paginate(:page => params[:page], :per_page => 10).includes(City: :State)
+        @orders = Order.where(client_id: @client.id).order(updated_at: :desc).limit(100).paginate(page: params[:page], per_page: 10).includes(City: :State)
 
         @current_user.updateRevision(@client)
       else
@@ -16,7 +16,7 @@ class Distributor::OrdersController < ApplicationController
         redirect_to distributor_clients_path and return
       end
     else
-      @orders = @current_user.Orders.order(updated_at: :desc).limit(150).paginate(:page => params[:page], :per_page => 10).includes(City: :State).includes(:Client)
+      @orders = @current_user.Orders.order(updated_at: :desc).limit(150).paginate(page: params[:page], per_page: 10).includes(City: :State).includes(:Client)
     end
   end
 

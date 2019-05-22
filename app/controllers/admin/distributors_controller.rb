@@ -128,11 +128,11 @@ class Admin::DistributorsController < AdminController
 
   private
     def distributor_params
-      params.require(:distributor).permit(:name, :username, :email, :rfc, :birthday,
-                        :address, :telephone, :password, :password_confirmation,
-                        :fiscal_number, :lastname, :mother_lastname, :commission,
-                        :photo, :cellphone, :bank_name, :bank_account_owner,
-                        :bank_account_number, :interbank_clabe, :show_address)
+      params.require(:distributor).permit(:name, :username, :email, :rfc, 
+        :address, :telephone, :password, :password_confirmation, :birthday,
+        :fiscal_number, :lastname, :mother_lastname, :commission, :photo,
+        :cellphone, :bank_name, :bank_account_owner, :bank_account_number,
+        :interbank_clabe, :show_address)
     end
 
     def fields_to_search

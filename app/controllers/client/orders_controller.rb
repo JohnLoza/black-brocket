@@ -4,7 +4,7 @@ class Client::OrdersController < ApplicationController
   before_action :verify_fiscal_data, only: [:create]
 
   def index
-    @orders = @current_user.Orders.where.not(state: "ORDER_CANCELED").order(created_at: :desc).paginate(:page => params[:page], :per_page => 10).includes(City: :State)
+    @orders = @current_user.Orders.where.not(state: "ORDER_CANCELED").order(created_at: :desc).paginate(page: params[:page], per_page: 10).includes(City: :State)
     @bank_accounts = BankAccount.all
   end
 
@@ -141,7 +141,7 @@ class Client::OrdersController < ApplicationController
     @bank_accounts = @bank.Accounts
 
     respond_to do |format|
-      format.js { render :get_bank_payment_info, :layout => false }
+      format.js { render :get_bank_payment_info, layout: false }
     end
   end
 
@@ -154,7 +154,7 @@ class Client::OrdersController < ApplicationController
     end
 
     respond_to do |format|
-      format.js { render :update_payment_method, :layout => false }
+      format.js { render :update_payment_method, layout: false }
     end
   end
 

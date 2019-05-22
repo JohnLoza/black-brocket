@@ -3,8 +3,8 @@
   <div class="col-lg-12">
       <div class="ibox float-e-margins">
           <div class="ibox-content">
-            <%= form_for([:admin, @bank], :html => {class: 'form-horizontal', id: 'bank_form'}) do |f| %>
-              <%= render :partial=>'/shared/error_messages', locals:{entity: @bank} %>
+            <%= form_for([:admin, @bank], html: {class: 'form-horizontal', id: 'bank_form'}) do |f| %>
+              <%= render partial: '/shared/error_messages', locals:{entity: @bank} %>
 
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :bank_name, "Nombre del banco" %></label>

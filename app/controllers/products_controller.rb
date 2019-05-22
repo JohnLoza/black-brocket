@@ -51,7 +51,7 @@ class ProductsController < ApplicationController
       hash_id: Utils.new_alphanumeric_token(9).upcase, description: params[:prod_question][:description])
 
     respond_to do |format|
-      format.js { render :ask, :layout => false }
+      format.js { render :ask, layout: false }
     end
   end
 

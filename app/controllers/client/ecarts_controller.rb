@@ -46,7 +46,7 @@ class Client::EcartsController < ApplicationController
     session[:e_cart]["total_weight"] += added_weight
 
     respond_to do |format|
-      format.js { render :add_to_cart, :layout => false }
+      format.js { render :add_to_cart, layout: false }
     end
   end
 
@@ -90,7 +90,7 @@ class Client::EcartsController < ApplicationController
     end
 
     respond_to do |format|
-      format.js { render :update_quantity, :layout => false }
+      format.js { render :update_quantity, layout: false }
     end
   end
 
@@ -99,7 +99,7 @@ class Client::EcartsController < ApplicationController
     @prices = @parcel.Prices.order(max_weight: :asc)
 
     respond_to do |format|
-      format.js { render :parcel_prices, :layout => false}
+      format.js { render :parcel_prices, layout: false}
     end
   end
 end

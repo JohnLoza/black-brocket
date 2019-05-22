@@ -132,18 +132,15 @@ class Admin::SiteWorkersController < AdminController
 
   private
     def worker_params
-      params.require(:site_worker).permit(:name, :username, :email, :rfc,
-                        :nss, :address, :telephone, :password,
-                        :password_confirmation, :warehouse_id, :birthday,
-                        :lastname, :mother_lastname, :photo, :cellphone,
-                        :email_confirmation)
+      params.require(:site_worker).permit(:name, :username, :email, :rfc, :birthday,
+        :nss, :address, :telephone, :password, :password_confirmation, :warehouse_id, 
+        :lastname, :mother_lastname, :photo, :cellphone, :email_confirmation)
     end
 
     def permission_params
       params.require(:permission).permit(:workers, :distributors, :products,
-                            :warehouses, :warehouse_chief, :products_questions,
-                            :statistics, :authorize_payments, :send_orders,
-                            :invoices, :verify_delivery, :web)
+        :warehouses, :warehouse_chief, :products_questions, :statistics,
+        :invoices, :verify_delivery, :web, :authorize_payments, :send_orders)
     end
 
     def fields_to_search

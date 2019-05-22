@@ -19,7 +19,7 @@ class SiteWorker < ApplicationRecord
 
   validates :city_id, presence: true, numericality: { only_integer: true }
 
-  validates :password, length: { minimum: 6 }, :on => :create
+  validates :password, length: { minimum: 6 }, on: :create
 
   validates :name, :email, :username,
             :rfc, :nss, :address, :telephone, presence: true
@@ -27,7 +27,7 @@ class SiteWorker < ApplicationRecord
   #validates :rfc, :nss, uniqueness: {case_sensitive: false }
 
   #validates :email, uniqueness: { case_sensitive: false }
-  validates :email, :confirmation => true
+  validates :email, confirmation: true
 
   validates :name, :lastname, :mother_lastname,
         format: { with: /\A[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\s\.']+\z/ }

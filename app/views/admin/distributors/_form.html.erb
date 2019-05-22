@@ -10,9 +10,9 @@
               </div>
           </div>
           <div class="ibox-content">
-            <%= form_for [:admin, @distributor], :html => {:id => "distributor_form",
+            <%= form_for [:admin, @distributor], html: {id: "distributor_form",
                 class: 'form-horizontal'} do |f| %>
-            <%= render :partial=>'/shared/error_messages', locals:{entity: @distributor} %>
+            <%= render partial: '/shared/error_messages', locals:{entity: @distributor} %>
 
               <% if @current_user.has_permission?('distributors@update_personal_data') or
                     @current_user.has_permission?('distributors@create') %>
@@ -20,7 +20,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :hash_id, class: 'form-control', :disabled => true %>
+                    <%= f.text_field :hash_id, class: 'form-control', disabled: true %>
                   </div>
                 </div>
 
@@ -84,7 +84,7 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><%= f.label :email_confirmation, "Confirma tu correo electrónico" %></label>
                     <div class="col-sm-10">
-                      <%= f.email_field :email_confirmation, :value => @distributor.email,
+                      <%= f.email_field :email_confirmation, value: @distributor.email,
                           class: 'form-control form-control-black', placeholder: "john@example.com",
                           required: true, maxlength: 50, "data-parsley-equalto"=>"#distributor_email" %>
                     </div>
@@ -161,8 +161,8 @@
                   </div>
                 </div>
 
-                <%= render :partial => "/shared/select_state", locals: { states: @states } %>
-                <%= render :partial => "/shared/select_city", locals: { cities: @cities } %>
+                <%= render partial: "/shared/select_state", locals: { states: @states } %>
+                <%= render partial: "/shared/select_city", locals: { cities: @cities } %>
 
                 <div class="hr-line-dashed"></div>
               <% end # if @actions["UPDATE_PERSONAL_DATA"] end # %>
@@ -255,7 +255,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :photo, "Subir foto" %></label>
                   <div class="col-sm-10">
-                    <%= f.file_field :photo, :multiple => false %>
+                    <%= f.file_field :photo, multiple: false %>
                   </div>
                 </div>
 
@@ -307,7 +307,7 @@
       }
     });
 
-    <% max_date = l(18.years.ago, :format => :form_date) %>
+    <% max_date = l(18.years.ago, format: :form_date) %>
     $('#datetimepicker').datetimepicker({
         locale: 'es',
         format: 'YYYY-MM-DD',

@@ -6,7 +6,7 @@ class Api::DistributorApi::VisitsController < ApiController
   def index
     client = Client.find_by!(hash_id: params[:id])
 
-    visits = client.DistributorVisits.order(:created_at => :desc).paginate(page: params[:page], per_page: 25)
+    visits = client.DistributorVisits.order(created_at: :desc).paginate(page: params[:page], per_page: 25)
 
     data = Array.new
     data<<{per_page: 25}

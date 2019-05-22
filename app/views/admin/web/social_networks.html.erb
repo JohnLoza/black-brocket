@@ -20,7 +20,7 @@
               <br/>
               <% @networks.each do |n| %>
 
-                <%= form_for(n, url: admin_update_social_network_path(n.id), :html => {class: 'form-horizontal'}, method: :put, class: "form") do |f| %>
+                <%= form_for(n, url: admin_update_social_network_path(n.id), html: {class: 'form-horizontal'}, method: :put, class: "form") do |f| %>
 
                 <div class="form-group">
                   <label class="col-sm-2 control-label"> <%= f.label :url, "URL de " + n.name %></label>

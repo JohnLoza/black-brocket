@@ -114,9 +114,9 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
       t.string :pay_pdf, default: nil
       t.string :tracking_code
       t.string :state
-      t.boolean :invoice, :default => false
-      t.boolean :invoice_sent, :default => false
-      t.boolean :direct_to_client, :default => false
+      t.boolean :invoice, default: false
+      t.boolean :invoice_sent, default: false
+      t.boolean :direct_to_client, default: false
 
       t.timestamps
     end
@@ -161,7 +161,7 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
       t.bigint :product_id
       t.string :hash_id, null: false
       t.string :photo
-      t.boolean :is_principal, :default => false
+      t.boolean :is_principal, default: false
 
       t.timestamps
     end
@@ -192,9 +192,9 @@ class CreateDbTables < ActiveRecord::Migration[5.1]
       t.decimal :shipping_cost, precision: 8, scale: 2
       t.string :video
       t.text :preparation
-      t.boolean :hot, :default => false
-      t.boolean :cold, :default => false
-      t.boolean :frappe, :default => false
+      t.boolean :hot, default: false
+      t.boolean :cold, default: false
+      t.boolean :frappe, default: false
       t.datetime :deleted_at
 
       t.timestamps

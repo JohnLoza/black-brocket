@@ -41,7 +41,7 @@
                       <% end %>
                     </div>
 
-                    <%= form_for(:shipment, :url=> admin_chief_shipments_path(params[:warehouse_id])) do |f| %>
+                    <%= form_for(:shipment, url: admin_chief_shipments_path(params[:warehouse_id])) do |f| %>
                       <%= f.hidden_field :shipment_type, value: "NEW_BATCHES" %>
                       <%= f.hidden_field :target_warehouse_id, value: @warehouse.id %>
                       <%= f.hidden_field :chief_id, value: @current_user.id %>

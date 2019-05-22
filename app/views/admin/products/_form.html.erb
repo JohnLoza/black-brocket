@@ -12,15 +12,15 @@
 
         <div id="tab-1" class="tab-pane active">
           <div class="panel-body">
-            <%= form_for [:admin, @product], :html => {:id => "product_form", class: 'form-horizontal'} do |f| %>
-            <%= render :partial=>'/shared/error_messages', locals:{entity: @product} %>
+            <%= form_for [:admin, @product], html: {id: "product_form", class: 'form-horizontal'} do |f| %>
+            <%= render partial: '/shared/error_messages', locals:{entity: @product} %>
 
             <% if @current_user.has_permission?('products@update_name') or
                   @current_user.has_permission?('products@create') %>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_field :hash_id, { class: 'form-control', :disabled => true } %>
+                  <%= f.text_field :hash_id, { class: 'form-control', disabled: true } %>
                 </div>
               </div>
 
@@ -39,21 +39,21 @@
                 <label class="col-sm-2 control-label"><%= f.label :price, "Precio máximo del producto" %></label>
                 <div class="col-sm-10">
                   <%= f.number_field :price, class: 'form-control', placeholder: "110",
-                        required: true, maxlength: 11, :min => 1, :step => 0.01 %>
+                        required: true, maxlength: 11, min: 1, step: 0.01 %>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :recommended_price, "Precio recomendado" %></label>
                 <div class="col-sm-10">
                   <%= f.number_field :recommended_price, class: 'form-control', placeholder: "100",
-                        required: true, maxlength: 11, :min => 1, :step => 0.01%>
+                        required: true, maxlength: 11, min: 1, step: 0.01%>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :lowest_price, "Precio mínimo del producto" %></label>
                 <div class="col-sm-10">
                   <%= f.number_field :lowest_price, class: 'form-control', placeholder: "100",
-                        required: true, maxlength: 11, :min => 1, :step => 0.01 %>
+                        required: true, maxlength: 11, min: 1, step: 0.01 %>
                 </div>
               </div>
               <div class="hr-line-dashed"></div>
@@ -76,7 +76,7 @@
                 <%= f.label :iva, "IVA", class: "col-sm-2 control-label" %>
                 <div class="col-sm-10">
                   <%= f.number_field :iva, class: "form-control", placeholder: "ej. 16 (sin signo de porcentaje %)",
-                        required: true, :min => 0, :max => 99, :step => 0.1 %>
+                        required: true, min: 0, max: 99, step: 0.1 %>
                 </div>
               </div>
 
@@ -84,7 +84,7 @@
                 <%= f.label :ieps, "IEPS", class: "col-sm-2 control-label" %>
                 <div class="col-sm-10">
                   <%= f.number_field :ieps, placeholder: "ej. 8 (sin signo de porcentaje %)", class: "form-control",
-                        required: true, :min => 0, :max => 99, :step => 0.1 %>
+                        required: true, min: 0, max: 99, step: 0.1 %>
                 </div>
               </div>
 
@@ -153,14 +153,14 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :principal_photo, "Cargar fotografía de portada" %></label>
                 <div class="col-sm-10">
-                  <%= f.file_field :principal_photo, :multiple => false %>
+                  <%= f.file_field :principal_photo, multiple: false %>
                 </div>
               </div>
 
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :photo, "Cargar fotografías secundarias" %></label>
                 <div class="col-sm-10">
-                  <%= f.file_field :photo, :multiple => true %>
+                  <%= f.file_field :photo, multiple: true %>
                 </div>
               </div>
 

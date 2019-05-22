@@ -31,7 +31,7 @@ class Api::InformationController < ApiController
         description: description, video: tip.video, created_at: tip.created_at, updated_at: tip.updated_at}
     end
 
-    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data, :per_page => 15}
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data, per_page: 15}
   end
 
   def contact

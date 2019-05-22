@@ -10,8 +10,8 @@
           </div>
         </div>
         <div class="ibox-content">
-          <%= form_for([:admin, @warehouse, @parcel, @price], :html => {class: 'form-horizontal'}) do |f| %>
-          <%= render :partial=>'/shared/error_messages', locals:{entity: @price} %>
+          <%= form_for([:admin, @warehouse, @parcel, @price], html: {class: 'form-horizontal'}) do |f| %>
+          <%= render partial: '/shared/error_messages', locals:{entity: @price} %>
             <div class="form-group">
               <label class="col-sm-2 control-label"><%= f.label :max_weight, "Peso máximo en Kilogramos" %></label>
               <div class="col-sm-10">

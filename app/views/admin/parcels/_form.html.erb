@@ -10,8 +10,8 @@
               </div>
           </div>
           <div class="ibox-content">
-            <%= form_for([:admin, @warehouse, @parcel], :html => {class: 'form-horizontal'}) do |f| %>
-            <%= render :partial=>'/shared/error_messages', locals:{entity: @parcel} %>
+            <%= form_for([:admin, @warehouse, @parcel], html: {class: 'form-horizontal'}) do |f| %>
+            <%= render partial: '/shared/error_messages', locals:{entity: @parcel} %>
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :parcel_name, "Nombre" %></label>
                 <div class="col-sm-10">
@@ -36,7 +36,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :image, "Imagen de paquetería" %></label>
                 <div class="col-sm-7">
-                  <%= f.file_field :image, :multiple => false %><br>
+                  <%= f.file_field :image, multiple: false %><br>
                 </div>
               </div>
 

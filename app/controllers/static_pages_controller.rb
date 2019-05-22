@@ -57,12 +57,12 @@ class StaticPagesController < ApplicationController
     @suggestion = Suggestion.create(suggestion_params)
 
     respond_to do |format|
-      format.js { render :create_suggestion, :layout => false }
+      format.js { render :create_suggestion, layout: false }
     end
   end
 
   def get_cities
-    @cities = City.where(:state_id => params[:state_id]).order_by_name
+    @cities = City.where(state_id: params[:state_id]).order_by_name
 
     respond_to do |format|
       format.json{ render json: @cities.as_json(only: [:id, :name, :lada]), status: 200 }
@@ -77,7 +77,7 @@ class StaticPagesController < ApplicationController
     end
 
     respond_to do |format|
-      format.js { render :get_city_lada, :layout => false }
+      format.js { render :get_city_lada, layout: false }
     end
   end
 

@@ -45,7 +45,7 @@ class Api::DistributorApi::DistributorsController < ApiController
       end
     end
 
-    not_seen_count = @current_user.Notifications.where(:seen => false).size
-    render status: 200, json: {success: true, info: "DATA_RETURNED", :not_seen_count => not_seen_count, data: data}
+    not_seen_count = @current_user.Notifications.where(seen: false).size
+    render status: 200, json: {success: true, info: "DATA_RETURNED", not_seen_count: not_seen_count, data: data}
   end
 end

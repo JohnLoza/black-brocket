@@ -5,7 +5,7 @@ class Distributor::ClientsController < ApplicationController
 
   def index
     region_ids = @current_user.Regions.map(&:id)
-    @clients = Client.where(city_id: region_ids).order(updated_at: :DESC).paginate(:page => params[:page], :per_page => 20).includes(City: :State)
+    @clients = Client.where(city_id: region_ids).order(updated_at: :DESC).paginate(page: params[:page], per_page: 20).includes(City: :State)
   end
 
   def show

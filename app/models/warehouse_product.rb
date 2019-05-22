@@ -8,7 +8,7 @@ class WarehouseProduct < ApplicationRecord
   belongs_to :Product, foreign_key: :product_id
 
   validates :warehouse_id, :product_id, :existence, presence: true,
-                          numericality: { only_integer: true }, :on => :create
+                          numericality: { only_integer: true }, on: :create
 
   scope :visible, -> { where(products: {show: true}) }
   scope :active, -> { where(products: {deleted_at: nil})}

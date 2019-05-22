@@ -38,8 +38,8 @@
 
               <div class="hr-line-dashed"></div>
 
-              <%= form_for @video, url: admin_web_videos_path, :html => {class: 'form-horizontal'}, method: :post do |f| %>
-                <%= render :partial=>'/shared/error_messages', locals:{entity: @video} %>
+              <%= form_for @video, url: admin_web_videos_path, html: {class: 'form-horizontal'}, method: :post do |f| %>
+                <%= render partial: '/shared/error_messages', locals:{entity: @video} %>
 
                 <div class="form-group">
                   <label class="col-sm-3 control-label"><%= f.label :video, "Elige un nuevo video \'mp4\' o \'webm\'" %></label>

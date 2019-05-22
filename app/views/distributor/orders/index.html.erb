@@ -44,7 +44,7 @@
                     <tr id="<%=o.hash_id%>">
                       <td><%=o.hash_id%></td>
                       <td><%= l(o.created_at, format: :long) %></td>
-                      <td><%= o.Client.username %></td>
+                      <td><%= link_to o.Client.name, distributor_client_path(o.Client)  %></td>
                       <td><%= o.City.name %>, <%= o.City.State.name %></td>
                       <td>
                         <% case t(o.state)

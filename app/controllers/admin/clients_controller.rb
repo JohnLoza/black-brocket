@@ -113,8 +113,7 @@ class Admin::ClientsController < AdminController
   private
     def fields_to_search
       return ['cities.name','states.name','clients.name',
-        'clients.lastname','clients.mother_lastname',
-        'clients.hash_id']
+        'clients.email', 'clients.hash_id']
     end
 
     def visit_params

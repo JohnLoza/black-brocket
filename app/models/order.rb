@@ -24,4 +24,16 @@ class Order < ApplicationRecord
 
     where(warehouse_id: warehouse)
   end
+
+  def address_hash
+    eval self.address
+  end
+  
+  def address_for_google
+    hash = address_hash
+    str = "#{hash[:street]}+#{hash[:extnumber]}"
+    str += "+interior+#{hash[:intnumber]}" if hash[:intnumber].present?
+    str += "+#{hash[:col]}+#{hash[:cp]}"
+    return str
+  end
 end

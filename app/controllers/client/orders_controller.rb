@@ -14,6 +14,7 @@ class Client::OrdersController < ApplicationController
       notification.update_attribute(:seen, true)
     end
     @order = Order.find_by!(hash_id: params[:id])
+    @order_address = @order.address_hash
 
     @details = @order.Details.includes(:Product)
     @client = @order.Client
@@ -26,7 +27,7 @@ class Client::OrdersController < ApplicationController
     @client_city = @current_user.City
     @client_state = State.where(id: @client_city.state_id).take
 
-    render :show, layout: false
+    render "/shared/orders/details", layout: false
   end
 
   def create
@@ -55,7 +56,7 @@ class Client::OrdersController < ApplicationController
     ActiveRecord::Base.transaction do
       @order.total = @total + params[:delivery_cost].to_f
       begin
-      @order.save!
+        @order.save!
       rescue ActiveRecord::RecordInvalid
         flash[:info] = "ocurrió un error al procesar la órden"
         redirect_to client_ecart_path(@current_user.hash_id) and return
@@ -75,7 +76,7 @@ class Client::OrdersController < ApplicationController
   def cancel
     @order = @current_user.Orders.where(hash_id: params[:id]).take
 
-    if @order
+    if @order and ["WAITING_FOR_PAYMENT", "LOCAL"].include? @order.state
       ActiveRecord::Base.transaction do
         @details = OrderDetail.where(order_id: @order.id)
 
@@ -124,15 +125,14 @@ class Client::OrdersController < ApplicationController
 
   def get_payment
     @order = @current_user.Orders.find_by!(download_payment_key: params[:id])
-    if !@order.nil?
-      # if there is an image of the payment send it
-      if !@order.pay_img.blank?
-        send_file @order.pay_img.path
-      # else, if there is a pdf of the payment, send it
-      elsif !@order.pay_pdf.blank?
-        send_file @order.pay_pdf.path
-      end
-    end
+    # if there is an image of the payment send it
+    file_path = @order.pay_img.path if @order.pay_img.present?
+    # else, if there is a pdf of the payment, send it
+    file_path = @order.pay_pdf.path if @order.pay_pdf.present?
+
+    render_404 and return unless file_path
+
+    send_file file_path
   end
 
   def get_bank_payment_info
@@ -148,10 +148,7 @@ class Client::OrdersController < ApplicationController
   def update_payment_method
     return if params[:order][:payment_method].nil?
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
-
-    if @order
-      @order.update_attributes(payment_method: params[:order][:payment_method])
-    end
+    @order.update_attributes(payment_method: params[:order][:payment_method])
 
     respond_to do |format|
       format.js { render :update_payment_method, layout: false }
@@ -187,6 +184,11 @@ class Client::OrdersController < ApplicationController
       order.parcel_id = params[:parcel_id]
       order.invoice = params[:invoice] if params[:invoice]
       order.state = params[:parcel_id] == '0' ? "LOCAL" : "WAITING_FOR_PAYMENT"
+      address = {street: @current_user.street, extnumber: @current_user.extnumber,
+        intnumber: @current_user.intnumber, col: @current_user.col,
+        cp: @current_user.cp, street_ref1: @current_user.street_ref1,
+        street_ref2: @current_user.street_ref2, city_id: @current_user.city_id}
+      order.address = address
       return order
     end
 end

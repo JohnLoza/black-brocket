@@ -1,5 +1,4 @@
 class Distributor::CommissionsController < ApplicationController
-  before_action :logged_in?
   before_action :current_user_is_a_distributor?
   layout "distributor_layout.html.erb"
 
@@ -10,10 +9,6 @@ class Distributor::CommissionsController < ApplicationController
 
   def details
     commission = @current_user.Commissions.find_by!(hash_id: params[:id])
-    unless commission
-      flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
-      redirect_to distributor_commissions_path and return
-    end
 
     order_ids = commission.Details.map { |m| m.order_id  }
     @orders = Order.where("id in (?)", order_ids).includes(:Client)
@@ -21,10 +16,6 @@ class Distributor::CommissionsController < ApplicationController
 
   def upload_invoice
     commission = @current_user.Commissions.find_by!(hash_id: params[:id])
-    unless commission
-      flash[:info] = "No se encontró la comisión con clave: #{params[:id]}"
-      redirect_to distributor_commissions_path and return
-    end
 
     if commission.update_attributes(invoice: params[:commission][:invoice], state: "PAID_&_INVOICE")
       flash[:success] = "Factura cargada exitosamente."
@@ -38,16 +29,16 @@ class Distributor::CommissionsController < ApplicationController
   def download_payment
     commission = @current_user.Commissions.find_by!(hash_id: params[:id])
 
-    render_404 and return unless commission.payment_pdf.present? or commission.payment_img.present?
-
     file_path = commission.payment_pdf.path if commission.payment_pdf.present?
     file_path = commission.payment_img.path if commission.payment_img.present?
+    render_404 and return unless file_path
 
     send_file file_path
   end
 
   def download_invoice
     commission = @current_user.Commissions.find_by!(hash_id: params[:id])
+    render_404 and return unless commission.invoice.present?
     send_file commission.invoice.path
   end
 end

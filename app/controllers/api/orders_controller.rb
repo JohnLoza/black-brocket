@@ -93,6 +93,9 @@ class Api::OrdersController < ApiController
   end
 
   def create
+    if @current_user.street.nil?
+      render status: 200, json: {success: false, info: "CLIENT_DATA_NOT_COMPLETE"} and return
+    end
     if params[:invoice]=="1" and @current_user.FiscalData.nil?
       render status: 200, json: {success: false, info: "FISCAL_DATA_NOT_FOUND"} and return
     end
@@ -238,7 +241,12 @@ class Api::OrdersController < ApiController
       order.payment_method = params[:payment_method]
       order.parcel_id = params[:parcel_id]
       order.invoice = params[:invoice] if params[:invoice]
-      order.state = "WAITING_FOR_PAYMENT"
+      order.state = params[:parcel_id] == '0' ? "LOCAL" : "WAITING_FOR_PAYMENT"
+      address = {street: @current_user.street, extnumber: @current_user.extnumber,
+        intnumber: @current_user.intnumber, col: @current_user.col,
+        cp: @current_user.cp, street_ref1: @current_user.street_ref1,
+        street_ref2: @current_user.street_ref2, city_id: @current_user.city_id}
+      order.address = address
       return order
     end
 

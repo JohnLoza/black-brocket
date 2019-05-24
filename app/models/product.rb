@@ -31,11 +31,14 @@ class Product < ApplicationRecord
 
   def self.priceFor(product, custom_prices)
     if custom_prices.size > 0
+      # search the custom prices for the price of the given product
       custom_prices.each do |cp|
         return cp.client_price if cp.product_id == product.product_id
       end
+      # return the default price if we dont find it in custom prices list
       return product.Product.price
     else
+      # return the default price if we dont have a custom prices list
       return product.Product.price
     end
   end

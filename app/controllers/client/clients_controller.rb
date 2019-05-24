@@ -1,6 +1,5 @@
 class Client::ClientsController < ApplicationController
   layout "static_pages.html.erb", only: [ :new ]
-  before_action :logged_in?, except:  [ :new, :create, :email_confirmation ]
   before_action :current_user_is_a_client?, except:  [ :new, :create, :email_confirmation ]
 
   def distributor
@@ -32,7 +31,7 @@ class Client::ClientsController < ApplicationController
 
   def notifications
     @notifications = @current_user.Notifications.order(created_at: :desc)
-                      .limit(50).paginate(page: params[:page], per_page: 15)
+      .limit(50).paginate(page: params[:page], per_page: 15)
   end
 
   def pre_destroy_account
@@ -179,8 +178,8 @@ class Client::ClientsController < ApplicationController
     end
 
     def visit_params
-      params.require(:distributor_visit)
-        .permit(:client_recognizes_visit, :treatment_answer, :extra_comments)
+      params.require(:distributor_visit).permit(:client_recognizes_visit, 
+        :treatment_answer, :extra_comments)
     end
 
     def message_params

@@ -1,7 +1,7 @@
 require 'active_support/concern'
 
-# For this concern to work, generate a migration for the model adding
-# a datetime 'deleted_at' attribute with nil as default
+# For this concern to work, generate a migration for the model
+# adding a string 'hash_id' attribute
 module HashId
   extend ActiveSupport::Concern
 

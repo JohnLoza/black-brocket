@@ -1,7 +1,5 @@
 require 'active_support/concern'
 
-# For this concern to work, generate a migration for the model adding
-# a datetime 'deleted_at' attribute with nil as default
 module User
   extend ActiveSupport::Concern
 

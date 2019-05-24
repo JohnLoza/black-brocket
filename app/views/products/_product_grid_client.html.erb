@@ -12,16 +12,7 @@
           <div class="caption" style="height:100px;">
               <h4 class="pull-right">
                 $<span class="money_format">
-                  <% if @product_prices.size > 0 %>
-                    <% @product_prices.each do |pp| %>
-                      <% if pp.product_id == p.id %>
-                        <%= pp.client_price %>
-                        <% break %>
-                      <% end # if pp.product_id == p.id # %>
-                    <% end # product_prices.each # %>
-                  <% else %>
-                    <%= p.price %>
-                  <% end # if product_prices.any? # %>
+                  <%= Product.priceFor(wp, @product_prices) %>
                 </span> MXN
               </h4>
               <% if wp.existence > 0 %>

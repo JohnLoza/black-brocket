@@ -1,5 +1,4 @@
 class Distributor::ClientsController < ApplicationController
-  before_action :logged_in?
   before_action :current_user_is_a_distributor?
   layout "distributor_layout.html.erb"
 
@@ -10,22 +9,12 @@ class Distributor::ClientsController < ApplicationController
 
   def show
     region_ids = @current_user.Regions.map(&:id)
-    @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
-
-    unless @client
-      flash[:info] = "No encontramos al cliente."
-      redirect_to distributor_clients_path and return
-    end # if @client and @client.is_new #
+    @client = Client.find_by!(hash_id: params[:id], city_id: region_ids)
   end
 
   def prices
     region_ids = @current_user.Regions.map(&:id)
-    @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
-
-    unless @client
-      flash[:info] = "No encontramos al cliente."
-      redirect_to distributor_clients_path and return
-    end # if @client and @client.is_new #
+    @client = Client.find_by!(hash_id: params[:id], city_id: region_ids)
 
     @product_prices = @client.ProductPrices
     @client_city = @client.City
@@ -52,12 +41,7 @@ class Distributor::ClientsController < ApplicationController
 
   def messages
     region_ids = @current_user.Regions.map(&:id)
-    @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
-
-    unless @client
-      flash[:info] = "No encontramos al cliente."
-      redirect_to distributor_clients_path and return
-    end # if @client and @client.is_new #
+    @client = Client.find_by!(hash_id: params[:id], city_id: region_ids)
 
     if params[:notification]
       notification = Notification.find(params[:notification])
@@ -79,21 +63,13 @@ class Distributor::ClientsController < ApplicationController
 
   def create_message
     region_ids = @current_user.Regions.map(&:id)
-    @client = Client.where(city_id: region_ids).where(hash_id: params[:id]).take
+    @client = Client.find_by!(hash_id: params[:id], city_id: region_ids)
 
-    unless @client
-      flash[:info] = "No encontramos a tu cliente."
-      redirect_to distributor_clients_path and return
-    end # if @client and @client.is_new #
-
-    message = ClientDistributorComment.new(
-            {client_id: @client.id, distributor_id: @current_user.id,
-             comment: params[:comment], is_from_client: false})
-    message.save
+    ClientDistributorComment.create({client_id: @client.id, 
+      distributor_id: @current_user.id, comment: params[:comment], is_from_client: false})
 
     Notification.create(client_id: @client.id, icon: "fa fa-comments-o",
-                    description: "El distribuidor respondió a tu mensaje",
-                    url: client_my_distributor_path)
+      description: "El distribuidor respondió a tu mensaje", url: client_my_distributor_path)
 
     flash[:success] = "Mensaje guardado."
     redirect_to distributor_client_messages_path(@client.hash_id)

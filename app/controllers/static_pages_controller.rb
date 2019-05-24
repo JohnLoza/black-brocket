@@ -2,8 +2,7 @@ class StaticPagesController < ApplicationController
   layout "static_pages.html.erb"
 
   def index
-    current_user
-    if session[:user_type].present?
+    if logged_in?
       if session[:user_type] == 'w'
         redirect_to admin_welcome_path and return
       elsif session[:user_type] == 'd'
@@ -44,8 +43,7 @@ class StaticPagesController < ApplicationController
   end
 
   def create_distributor_request
-    candidate = DistributorCandidate.new(distributor_request_params)
-    if candidate.save
+    if DistributorCandidate.create(distributor_request_params)
       flash[:success] = "Tus datos fueron enviados, un representante se contactará contigo muy pronto."
     else
       flash[:info] = "Ocurrió un error al guardar tu información, inténtalo de nuevo por favor."
@@ -67,17 +65,6 @@ class StaticPagesController < ApplicationController
     respond_to do |format|
       format.json{ render json: @cities.as_json(only: [:id, :name, :lada]), status: 200 }
       format.any{ head :not_found }
-    end
-  end
-
-  def get_city_lada
-    @city = nil
-    if (params[:city].present? && !params[:city].blank?)
-      @city = City.find_by!(id: params[:city])
-    end
-
-    respond_to do |format|
-      format.js { render :get_city_lada, layout: false }
     end
   end
 

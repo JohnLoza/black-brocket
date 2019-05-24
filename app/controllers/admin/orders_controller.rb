@@ -62,6 +62,7 @@ class Admin::OrdersController < AdminController
     deny_access! and return unless @current_user.has_permission?('orders@show')
 
     @order = Order.find_by!(hash_id: params[:id])
+    @order_address = @order.address_hash
 
     if !params[:only_address] or params[:only_address] != "Y"
       @details = @order.Details.includes(:Product)
@@ -76,7 +77,7 @@ class Admin::OrdersController < AdminController
     @client_city = @current_user.City
     @client_state = State.where(id: @client_city.state_id).take
 
-    render :details, layout: false
+    render "/shared/orders/details", layout: false
   end # def details #
 
   def cancel

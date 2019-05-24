@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
 
   def index
+    @warehouses = Warehouse.all
     if logged_in? and session[:user_type] == 'c'
       # when the user logged in #
       @visit = @current_user.DistributorVisits.where(client_recognizes_visit: nil).take
@@ -37,12 +38,9 @@ class ProductsController < ApplicationController
       @product = Product.find_by!(hash_id: params[:id])
     end
 
-    if @product
-      @photos = @product.Photos
-      @questions = ProdQuestion.where(product_id: @product.id).order(created_at: :DESC).limit(10).includes(:Answer)
-    else
-      redirect_to products_path
-    end
+    redirect_to products_path and return unless @product
+    @photos = @product.Photos
+    @questions = ProdQuestion.where(product_id: @product.id).order(created_at: :DESC).limit(10).includes(:Answer)
   end
 
   def ask

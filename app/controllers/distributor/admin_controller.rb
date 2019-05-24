@@ -1,5 +1,4 @@
 class Distributor::AdminController < ApplicationController
-  before_action :logged_in?
   before_action :current_user_is_a_distributor?
   layout "distributor_layout.html.erb"
 
@@ -15,7 +14,7 @@ class Distributor::AdminController < ApplicationController
 
   def notifications
     @notifications = @current_user.Notifications.order(created_at: :desc)
-                      .limit(50).paginate(page: params[:page], per_page: 15)
+      .limit(50).paginate(page: params[:page], per_page: 15)
   end
 
   def update_ui_theme

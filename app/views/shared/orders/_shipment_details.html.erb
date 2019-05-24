@@ -1,0 +1,61 @@
+<div class="pull-left" style="margin-right: 15px;">
+  <table class="tablemn">
+    <tbody>
+      <tr>
+        <td colspan="2"><br><b>Datos de entrega:</b></td>
+      </tr>
+      <tr>
+        <td>Destinatario: </td>
+        <td>
+          <% if @fiscal_data.blank? %>
+            <%= @client.full_name %> 
+          <% else %>
+            <%=@fiscal_data.name%> <%=@fiscal_data.lastname%> <%=@fiscal_data.mother_lastname%>
+          <% end # if @fiscal_data.blank? # %>
+        </td>
+      </tr>
+      <tr>
+        <td>Calle:</td>
+        <td><%= @order_address[:street] %></td>
+      </tr>
+      <tr>
+        <td class="table-padd">Número exterior:</td>
+        <td><%= @order_address[:extnumber] %></td>
+      </tr>
+      <% if @order_address[:intnumber].present? %>
+        <tr>
+          <td>Número interior:</td>
+          <td><%= @order_address[:intnumber] %></td>
+        </tr>
+      <% end %>
+      <tr>
+        <td>Colonia:</td>
+        <td><%= @order_address[:col] %></td>
+      </tr>
+      <tr>
+        <td>Código postal:</td>
+        <td><%= @order_address[:cp] %></td>
+      </tr>
+      <tr>
+        <td>Entre calle:</td>
+        <td><%= @order_address[:street_ref1] %></td>
+      </tr>
+      <tr>
+        <td>Y calle:</td>
+        <td><%= @order_address[:street_ref2] %></td>
+      </tr>
+      <tr>
+        <td>Población:</td>
+        <td><%= @order.City.name %></td>
+      </tr>
+      <tr>
+        <td>Estado:</td>
+        <td><%= @order.City.State.name %></td>
+      </tr>
+      <tr>
+        <td>País:</td>
+        <td>México</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

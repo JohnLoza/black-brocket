@@ -5,17 +5,14 @@ class AdminController < ApplicationController
   layout 'admin_layout.html.erb'
 
   def authenticate_user!
-    unless logged_in?
-      store_location
-      redirect_to log_in_path and return
-    end
+    return unless must_be_logged_in
 
     redirect_to root_path unless session[:user_type] == "w"
   end
 
   def deny_access!
     respond_to do |format|
-      format.html { redirect_to admin_welcome_path, flash: {info: 'Acceso denegado, no tienes permiso para acceder a esta página'} }
+      format.html { redirect_to admin_welcome_path, flash: {info: 'Accesso denegado, falta de permisos'} }
       format.any { head :not_found }
     end
   end

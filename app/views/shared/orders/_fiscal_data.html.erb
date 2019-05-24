@@ -1,0 +1,72 @@
+<% if !@fiscal_data.blank? and (!params[:only_address] or params[:only_address] != "Y") %>
+  <div class="pull-left" style="margin-right: 15px;">
+    <table class="tablemn">
+      <tbody>
+
+        <tr>
+          <td colspan="2"><br><b>Datos fiscales:</b></td>
+        </tr>
+
+        <tr>
+          <% if @fiscal_data.lastname != "" %>
+            <td class="table-padd">Nombre(s):</td>
+          <% else %>
+            <td class="table-padd">Razón Social:</td>
+          <% end %>
+          <td><%= @fiscal_data.name %></td>
+        </tr>
+        <% if @fiscal_data.lastname != "" %>
+          <tr>
+            <td>Apellido paterno:</td>
+            <td><%= @fiscal_data.lastname %></td>
+          </tr>
+          <tr>
+            <td>Apellido materno:</td>
+            <td><%= @fiscal_data.mother_lastname %></td>
+          </tr>
+        <% end %>
+
+        <tr>
+          <td>RFC:</td>
+          <td><%= @fiscal_data.rfc %></td>
+        </tr>
+
+        <tr>
+          <td>Calle:</td>
+          <td><%= @fiscal_data.street %></td>
+        </tr>
+        <tr>
+          <td class="table-padd">Número exterior:</td>
+          <td><%= @fiscal_data.extnumber %></td>
+        </tr>
+        <% if !@fiscal_data.intnumber.blank? %>
+          <tr>
+            <td>Número interior:</td>
+            <td><%= @fiscal_data.intnumber %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td>Colonia:</td>
+          <td><%= @fiscal_data.col %></td>
+        </tr>
+        <tr>
+          <td>Código postal:</td>
+          <td><%= @fiscal_data.cp %></td>
+        </tr>
+        <tr>
+          <td>Población:</td>
+          <td><%= @city.name %></td>
+        </tr>
+        <tr>
+          <td>Estado:</td>
+          <td><%= @state.name %></td>
+        </tr>
+        <tr>
+          <td>País:</td>
+          <td>México</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+<% end # if !@fiscal_data.blank? # %>

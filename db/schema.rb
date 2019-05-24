@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190412180044) do
+ActiveRecord::Schema.define(version: 20190523181443) do
 
   create_table "bank_accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "bank_name"
@@ -295,7 +295,7 @@ ActiveRecord::Schema.define(version: 20190412180044) do
     t.integer "city_id"
     t.integer "distributor_id"
     t.string "hash_id", null: false, collation: "utf8_bin"
-    t.string "address"
+    t.text "address"
     t.decimal "total", precision: 8, scale: 2
     t.string "pay_img"
     t.string "pay_pdf"

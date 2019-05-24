@@ -12,7 +12,7 @@
         <b>orden</b>
       </div>
       <div class="col-xs-3 text-right">
-        <% if o.state == "WAITING_FOR_PAYMENT" %>
+        <% if o.state == "WAITING_FOR_PAYMENT" or o.state == "LOCAL" %>
           <!-- to cancel an order -->
           <%= link_to "<span class='icon-close' style='font-size: 30px;'></span>".html_safe,
                       client_cancel_order_path(@current_user.hash_id, o.hash_id),
@@ -27,10 +27,10 @@
         <b>Folio:</b></br>
         <%= o.hash_id %>
       </div>
+      <!-- div class="col-sm-2">
+        <b>Fecha:</b></br> <%#= l(o.created_at, format: :long) %>
+      </div -->
       <div class="col-sm-2">
-        <b>Fecha:</b></br> <%= l(o.created_at, format: :long) %>
-      </div>
-      <div class="col-sm-1">
          <b>Status:</b></br>
          <% case o.state %>
          <%when "ORDER_CANCELED"%>
@@ -71,10 +71,20 @@
         <% end %>
 
       </div>
+
+      <% unless o.state == "LOCAL" %>
+        <div class="col-sm-1 text-center">
+          <p><strong>Destino</strong></p>
+          <%= link_to "https://maps.google.com.mx/maps/search/#{o.address_for_google}", { target: "_blank" } do %>
+            <i class="fa fa-map-marker fa-3x"></i>
+          <% end %>
+        </div>
+      <% end %>
+
       <div class="col-sm-2 text-center">
-        <b>Ver pedido:</b></br>
+        <p><strong>Ver pedido</strong></p>
         <%= link_to "<span class='icon-eye'></span>".html_safe, client_order_path(@current_user.hash_id, o.hash_id),
-            class: "darklink", style: "font-size: 32px;", target: "_blank" %>
+          class: "darklink", style: "font-size: 32px;", target: "_blank" %>
       </div>
     </div>
     <% if o.state == "LOCAL" %>

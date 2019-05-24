@@ -4,25 +4,30 @@ class SessionsController < ApplicationController
     render :new, layout: false and return unless logged_in?
 
     redirect_to admin_welcome_path if session[:user_type] == 'w'
-
     redirect_to distributor_welcome_path if session[:user_type] == 'd'
-
     redirect_to products_path if session[:user_type] == 'c'
   end
 
   def create
     worker = SiteWorker.find_by(email: params[:session][:email].downcase)
-    redirect_to admin_welcome_path and return if try_log_in(worker, 'w')
+    if try_log_in(worker, 'w')
+      redirect_back_or(admin_welcome_path)
+      return
+    end 
 
     distributor = Distributor.find_by(email: params[:session][:email].downcase)
-    redirect_to distributor_welcome_path and return if try_log_in(distributor, 'd')
+    if try_log_in(distributor, 'd')
+      redirect_back_or(distributor_welcome_path)
+      return
+    end 
 
     client = Client.find_by(email: params[:session][:email].downcase)
     if try_log_in(client, 'c')
       unless client.email_verified
         flash[:info] = "Por favor confirma tu correo electrónico, en caso de no recibirlo podemos <a href=\"#{client_resend_email_confirmation_path(client.hash_id)}\">reenviarlo</a>."
       end
-      redirect_to products_path and return
+      redirect_back_or(products_path) 
+      return
     end
 
     flash.now[:danger] = 'Email o contraseña incorrecto'

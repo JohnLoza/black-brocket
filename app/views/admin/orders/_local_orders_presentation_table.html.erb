@@ -94,6 +94,13 @@
                     </div>
                   <% end %>
                 <% end %>
+
+                <% if @current_user.has_permission?('orders@cancel') and o.state == 'LOCAL' %>
+                  <a class="btn btn-white btn-sm m-b-xs"
+                    onclick="update_cancel_form('<%=o.hash_id%>')">
+                    Cancelar orden
+                  </a>
+                <% end %>
               </td>
             </tr>
           <% end %>
@@ -112,11 +119,45 @@
       </table>
 
       <script>
-          $(document).ready(function() {
-              $('.footable').footable();
-          });
+        $(document).ready(function() {
+            $('.footable').footable();
+        });
+        function update_cancel_form(target){
+          $("#cancel_modal").modal("show");
+
+          new_action = "<%= admin_cancel_order_path(0) %>";
+          new_action = new_action.replace("0", target);
+
+          $("#cancel_form").attr("action", new_action);
+        }
       </script>
 
     </div>
   </div>
 </div>
+
+<!-- Modal -->
+<div class="modal inmodal in" id="cancel_modal" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Cancelar orden/pedido</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_for :order, url: admin_cancel_order_path(0), method: :delete, html: {id: "cancel_form"} do |f| %>
+          <%= f.label :cancel_description, "Descripción del por qué se cancela esta orden/pedido" %>
+          <%= f.text_area :cancel_description, class: "form-control m-b", placeholder: "Escribe la razón de la cancelación...", required: true %>
+          <%= f.submit "Cancelar la orden", class: "btn btn-danger btn-sm", data:{confirm: "¿Seguro(a) de cancelar la orden?"} %>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-greenbeauty"
+                data-dismiss="modal"> Cerrar </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

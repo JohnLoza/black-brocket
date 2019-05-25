@@ -84,6 +84,7 @@ class Admin::OrdersController < AdminController
     deny_access! and return unless @current_user.has_permission?('orders@cancel')
 
     @order = Order.find_by!(hash_id: params[:id])
+    deny_access! and return unless ['WAITING_FOR_PAYMENT','PAYMENT_REJECTED','LOCAL']
 
     ActiveRecord::Base.transaction do
       @details = OrderDetail.where(order_id: @order.id)

@@ -44,24 +44,26 @@
       <div class="clearfix"></div>
 
       <div class="checkbox">
-          <label>
-              <%= f.check_box 'remember_me', checked: true %>
-              No cerrar sesión
-          </label>
-          <br/>
-          <p class="text-center">
-            <%= link_to "Regístrate!", client_sign_up_path %> |
-            <%= link_to "Recuperar Contraseña", recover_password_path %> |
-            <%= link_to "Volver", root_path %>
-          </p>
+        <label>
+          <%= f.check_box 'remember_me', checked: true %>
+          Recordar mis datos
+        </label>
       </div>
+      <p class="text-center" style="margin-top: 1em;">
+        <%= link_to "Regístrate", client_sign_up_path %> |
+        <%= link_to "Recuperar Contraseña", recover_password_path %>
+      </p>
       <%= button_tag(type: 'submit', class: "btn btn-login btn-danger btn-float") do %>
-          <i class="fa fa-arrow-right" style="margin-left: -8px;"></i>
+        <i class="fa fa-arrow-right" style="margin-left: -8px;"></i>
       <% end %>
     <% end %>
   </div>
 </body>
 </html>
+
+<style>
+  form a{color: #B39767;}
+</style>
 
 <script type="text/javascript">
   $(document).ready(function(){
@@ -73,11 +75,8 @@
     <% end %>
 
     $("body").css({"background-image": "url('<%= url %>')",
-                    "background-position": "center",
-                    "background-repeat": "no-repeat",
-                    "-webkit-background-size": "cover",
-                    "-moz-background-size": "cover",
-                    "-o-background-size": "cover",
-                    "background-size": "cover"});
+      "background-position": "center", "background-repeat": "no-repeat",
+      "-webkit-background-size": "cover", "-moz-background-size": "cover",
+      "-o-background-size": "cover", "background-size": "cover"});
   });
 </script>

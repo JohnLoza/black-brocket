@@ -13,11 +13,9 @@
     </video>
   </div>
 
-  <div class="text-center" style="padding-top: 20em;">
+  <div class="text-center greeting">
     <%= image_tag "black-brocket-gold-logo.png", style:"max-height:150px;"%>
-    <h1 class="module-title" style="font-size: 3em; padding-top: 0.5em;">
-      Bienvenido a Black Brocket
-    </h1>
+    <h1 class="module-title">Bienvenido a Black Brocket</h1>
   </div>
 
   <% unless logged_in? %>
@@ -106,6 +104,12 @@
 
   .module{ padding: 60px 0 !important; }
 
+  .greeting{ padding-top: 20em; }
+  .greeting > h1 {
+    font-size: 3em;
+    padding-top: 0.5em;
+  }
+
   @media (max-width: 767px) {
     .fullscreen-bg {
         background: url('<%= image_url @bgImg.getImage %>') center center / cover no-repeat;
@@ -114,6 +118,12 @@
     .fullscreen-bg__video {
         display: none;
     }
+
+    .greeting{ padding-top: 15em; }
+    .greeting > h1{
+      font-size: 2em;
+    }
+    .btn-gold, .btn-white{ margin-top: 1.5em; }
   }
 </style>
 

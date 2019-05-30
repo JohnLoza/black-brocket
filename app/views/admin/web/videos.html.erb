@@ -21,7 +21,7 @@
               <div class="hr-line-dashed"></div>
 
               <% if !@video.id.nil? %>
-                <video controls>
+                <video controls style="max-width: 720px; max-height: 480px;">
                   <source src="<%= @video.video.url %>" type="video/mp4">
                   Your browser does not support the video tag.
                 </video>

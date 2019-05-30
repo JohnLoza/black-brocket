@@ -14,7 +14,7 @@
   </div>
 
   <div class="text-center greeting">
-    <%= image_tag "black-brocket-gold-logo.png", style:"max-height:150px;"%>
+    <%= image_tag "black-brocket-gold-logo.png" %>
     <h1 class="module-title">Bienvenido a Black Brocket</h1>
   </div>
 
@@ -109,8 +109,9 @@
     font-size: 3em;
     padding-top: 0.5em;
   }
+  .greeting > img { max-width: 150px }
 
-  @media (max-width: 767px) {
+  @media screen and (max-width: 767px) {
     .fullscreen-bg {
         background: url('<%= image_url @bgImg.getImage %>') center center / cover no-repeat;
     }
@@ -120,10 +121,15 @@
     }
 
     .greeting{ padding-top: 15em; }
-    .greeting > h1{
-      font-size: 2em;
-    }
-    .btn-gold, .btn-white{ margin-top: 1.5em; }
+    .greeting > h1 { font-size: 2em; }
+    .greeting > img { max-width: 100px; }
+    .btn-gold, .btn-white{ margin-top: 1em; }
+  }
+
+  @media screen and (max-height: 740px) and (orientation: landscape){
+    .greeting { padding-top: 10em; }
+    .greeting > img { max-width: 100px; }
+    .btn-gold, .btn-white{ margin-top: 0.5em; }
   }
 </style>
 

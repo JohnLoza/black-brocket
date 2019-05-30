@@ -5,15 +5,12 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="<%= yield :keywords %>">
+  <meta name="description" content="<%= yield :meta_description %>">
 
-  <meta name="keywords" content="black brocket, cafe, frappe, chocolate, caramelo,
-    chai, latte, capuchino, capuccino, moka, mocha, moca, chocolate blanco, macha,
-    manzana canela, chai green tea latte, caramel latte, chai latte, coffee, granizado">
+  <title><%= yield :title %> | Black Brocket</title>
 
-  <meta name="description" content="Prepara bebidas gourmet en cuestión de segundos,
-    calientes o frappeadas, capucchino, moka, chocolate, té, chai, y mucho más.">
-
-  <title>BlackBrocket | <%= yield(:title) %></title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet"> 
 
   <!--stylesheets-->
   <%= stylesheet_link_tag 'static_pages', media: 'all' %>

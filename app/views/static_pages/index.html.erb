@@ -1,12 +1,11 @@
 <% provide(:title, "Bienvenido") %>
+<% provide(:keywords, "black brocket, blackbrocket, café, frappé, chocolate, 
+  caramelo, chai, latte, capuchino, capuccino, moka, mocha") %>
+<% provide(:meta_description, "Prepara bebidas gourmet en cuestión de segundos,
+  calientes o frappeadas, capucchino, moka, chocolate, té, chai, y mucho más.") %>
 
 <!-- Home start -->
-
 <section id="home" class="intro-module heightfull">
-
-  <div class="text-center" style="padding-top: 6em;">
-    <%= image_tag "bblogohome.png", style:"max-height:199px;"%>
-  </div>
 
   <div class="fullscreen-bg">
     <video loop muted autoplay poster="<%= image_url @bgImg.getImage %>" class="fullscreen-bg__video">
@@ -14,22 +13,23 @@
     </video>
   </div>
 
-  <div class="intro">
+  <div class="text-center" style="padding-top: 20em;">
+    <%= image_tag "black-brocket-gold-logo", style:"max-height:150px;"%>
+    <h1 class="module-title" style="font-size: 3em; padding-top: 0.5em;">
+      Bienvenido a Black Brocket
+    </h1>
+  </div>
 
-    <div class="intro-slider">
-      <!-- Slide 1 -->
-      <div class="owl-item">
-        <% unless logged_in? %>
-          <div class="row">
-            <%= link_to "Regístrate", client_sign_up_path,
-            class: "btn btn-default btn-custom-4 text-shadow-black", style:"margin-top:20em;" %>
-          </div>
-        <% end %>
-      </div>
+  <% unless logged_in? %>
+    <div class="row text-center">
+      <%= link_to "Regístrate", client_sign_up_path,
+        class: "btn btn-gold" %>
 
-    </div><!-- .intro-slider -->
-
-  </div><!-- .intro -->
+      <%= link_to "Inicia sesión", log_in_path,
+        class: "btn btn-white",
+        style: "margin-left: 1em;" %>
+    </div>
+  <% end %>
 
   <div class="mouse-icon" style="border: 0;">
     <div class="wheel"></div>
@@ -68,6 +68,40 @@
        -moz-transform: translate(-50%, -50%);
         -ms-transform: translate(-50%, -50%);
       transform: translate(-50%, -50%);
+  }
+
+  .btn-gold {
+    background: transparent;
+    color: #333;
+    background: #E6CA9A;
+    border-color: #E6CA9A;
+    margin-top: 3em; 
+    border-radius: 5px;
+  }
+
+  .btn-gold:hover,
+  .btn-gold:focus,
+  .btn-gold:active,
+  .btn-gold.active {
+    color: #333;
+    background: #D5B989;
+    border-color: #D5B989;
+  }
+
+  .btn-white {
+    background: transparent;
+    color: #333;
+    background: #fefefe;
+    border-color: #e7eaec;
+    margin-top: 3em; 
+    border-radius: 5px;
+  }
+
+  .btn-white:hover,
+  .btn-white:focus,
+  .btn-white:active,
+  .btn-white.active {
+    background: #f5f5f5;
   }
 
   .module{ padding: 60px 0 !important; }

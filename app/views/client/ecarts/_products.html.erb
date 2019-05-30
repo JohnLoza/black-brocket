@@ -3,89 +3,89 @@
   <div id="<%=wp.hash_id%>" class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;">
     <% p = wp.Product %>
 
-        <div class="col-sm-1 text-center">
-          <% @photos.each do |photo| %>
-            <% if photo.product_id == p.id %>
-              <%= link_to image_tag(photo.photo.url(:mini), class: "img-circle"), product_path(wp.hash_id) %>
-              <% break %>
-            <% end %>
-          <% end %>
-        </div>
-        <div class="col-sm-4">
-          <label>Nombre:</label><br>
-          <%=p.name%>
-        </div>
-        <div class="col-sm-1">
-          <label>Clave:</label><br>
-          <%=p.hash_id%>
-        </div>
-        <div class="col-sm-2">
-          <label>Cantidad:</label>
-         <input type="number" min="1" value="<%= session[:e_cart][wp.hash_id] %>"
-         onchange="update_quantity('<%=wp.hash_id%>', this.value, <%=wp.existence%>)"
-         id="<%=wp.hash_id%>-quantity-input" class="form-control form-control-black text-center"/>
-        </div>
-        <div class="col-sm-2">
-          <label>Precio Unitario:</label><br>
-            $<span>
-              <% monto = 0 %>
-              <% if @product_prices.any? %>
-                <% @product_prices.each do |pp| %>
-                  <% if p.id == pp.product_id %>
-                    <% monto = pp.client_price * session[:e_cart][wp.hash_id].to_i %>
-                    <%= pp.client_price %>
-                  <% end # if p.id == pp.product_id # %>
-                <% end # @product_prices.each # %>
-              <% else %>
-                <% monto = p.price * session[:e_cart][wp.hash_id].to_i %>
-                <%= p.price %>
-              <% end # if @product_prices.any? # %>
-            </span>
-        </div>
-        <div class="col-sm-1">
-          <% @total += monto %>
-          <label>Importe: </label><br>
-            $<span id="<%=wp.hash_id%>-cost" class="individual-cost">
-               <%= monto %>
-            </span>
-        </div>
-        <div class="col-sm-1 text-center">
-          <br>
-          <%= link_to "<span class='icon-close' style='font-size: 34px;'></span>".html_safe,
-             client_remove_from_cart_path(@current_user.hash_id, wp.hash_id),
-             method: :put, data:{confirm: "Estas seguro(a) de quitarlo del carrito?"} %>
-        </div>
+    <div class="col-sm-1 text-center">
+      <% @photos.each do |photo| %>
+        <% if photo.product_id == p.id %>
+          <%= link_to image_tag(photo.photo.url(:mini), class: "img-circle"), product_path(wp.hash_id) %>
+          <% break %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-sm-4">
+      <label>Nombre:</label><br>
+      <%=p.name%>
+    </div>
+    <div class="col-sm-1">
+      <label>Clave:</label><br>
+      <%=p.hash_id%>
+    </div>
+    <div class="col-sm-2">
+      <label>Cantidad:</label>
+      <input type="number" min="1" value="<%= session[:e_cart][wp.hash_id] %>"
+      onchange="update_quantity('<%=wp.hash_id%>', this.value, <%=wp.existence%>)"
+      id="<%=wp.hash_id%>-quantity-input" class="form-control form-control-black text-center"/>
+    </div>
+    <div class="col-sm-2">
+      <label>Precio Unitario:</label><br>
+        $<span>
+          <% monto = 0 %>
+          <% if @product_prices.any? %>
+            <% @product_prices.each do |pp| %>
+              <% if p.id == pp.product_id %>
+                <% monto = pp.client_price * session[:e_cart][wp.hash_id].to_i %>
+                <%= pp.client_price %>
+              <% end # if p.id == pp.product_id # %>
+            <% end # @product_prices.each # %>
+          <% else %>
+            <% monto = p.price * session[:e_cart][wp.hash_id].to_i %>
+            <%= p.price %>
+          <% end # if @product_prices.any? # %>
+        </span>
+    </div>
+    <div class="col-sm-1">
+      <% @total += monto %>
+      <label>Importe: </label><br>
+        $<span id="<%=wp.hash_id%>-cost" class="individual-cost">
+            <%= monto %>
+        </span>
+    </div>
+    <div class="col-sm-1 text-center">
+      <br>
+      <%= link_to "<span class='icon-close' style='font-size: 34px;'></span>".html_safe,
+          client_remove_from_cart_path(@current_user.hash_id, wp.hash_id),
+          method: :put, data:{confirm: "Estas seguro(a) de quitarlo del carrito?"} %>
+    </div>
   </div>
 
   <% end %>
 
   <div class="col-md-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;">
-        <div class="col-md-10 text-right">
-          <strong>Sub total:</strong>
-        </div>
-        <div class="col-md-2" >
-          $ <label id="order-sub-total" style="font-size:20px;"><%= @total %></label> MXN
-        </div>
+    <div class="col-md-10 text-right">
+      <strong>Sub total:</strong>
+    </div>
+    <div class="col-md-2" >
+      $ <label id="order-sub-total" style="font-size:20px;"><%= @total %></label> MXN
+    </div>
 
-        <div class="col-md-10 text-right">
-          <strong>Coste de envío:</strong>
-        </div>
-        <div class="col-md-2" >
-          $ <label id="order-shipping-cost" style="font-size:20px;">
-            0.00
-          </label> MXN
-        </div>
+    <div class="col-md-10 text-right">
+      <strong>Coste de envío:</strong>
+    </div>
+    <div class="col-md-2" >
+      $ <label id="order-shipping-cost" style="font-size:20px;">
+        0.00
+      </label> MXN
+    </div>
 
-        <div class="col-md-10 text-right">
-          <label id="delivery-time"></label>
-        </div>
+    <div class="col-md-10 text-right">
+      <label id="delivery-time"></label>
+    </div>
 
-        <div class="col-md-10 text-right">
-          <strong>Total:</strong>
-        </div>
-        <div class="col-md-2" >
-          $ <label id="order-grand-total" style="font-size:20px;"><%= @total %></label> MXN
-        </div>
+    <div class="col-md-10 text-right">
+      <strong>Total:</strong>
+    </div>
+    <div class="col-md-2" >
+      $ <label id="order-grand-total" style="font-size:20px;"><%= @total %></label> MXN
+    </div>
   </div>
 
   <div class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;margin-bottom: 40px;">

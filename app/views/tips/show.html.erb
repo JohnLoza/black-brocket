@@ -1,10 +1,13 @@
-<% provide(:title, "Tips") %>
+<% provide(:title, "#{@tip.title} | Tips y recetas") %>
 <div class="show-tips-container">
-  <h1 class="module-title long-up-2x">
+  <h1 class="module-title long-up">
     <%= link_to(tips_path, class: "darklink") do %>
       <small><span class="icon-arrow-left"></span></small>
     <% end %>
-    <%= @tip.title %></h1>
+    <%= @tip.title %>
+  </h1>
+  <h2 class="module-subtitle">| Tips y Recetas</h2>
+
   <div class="row divider-row-top">
     <div class="col-md-12">
         <% if @tip.video.present? %>
@@ -85,5 +88,9 @@
     width: 400px;
     margin-right: 40px;
     margin-bottom: 10px;
+  }
+  .show-tips-container > .module-title,
+  .show-tips-container > .module-subtitle {
+    display: inline-block;
   }
 </style>

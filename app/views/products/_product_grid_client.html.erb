@@ -2,45 +2,31 @@
   <% p = wp.Product %>
 
   <div class="col-sm-4 col-lg-4 col-md-4">
-      <div class="thumbnail">
-          <% @photos.each do |photo| %>
-            <% if photo.product_id == p.id %>
-              <%= link_to image_tag(photo.photo.url(:thumb)), product_path(wp.hash_id) %>
-              <% break %>
-            <% end %>
-          <% end %>
-          <div class="caption" style="height:100px;">
-              <h4 class="pull-right">
-                $<span class="money_format">
-                  <%= Product.priceFor(wp, @product_prices) %>
-                </span> MXN
-              </h4>
-              <% if wp.existence > 0 %>
-                <%= link_to(product_path(wp.hash_id), class: "darklink") do %>
-                  Producto Disponible
-                <% end %>
-              <% else %>
-                <%= link_to(product_path(wp.hash_id), class: "darklink", style: "color: #F44336;") do %>
-                  Producto Agotado
-                <% end %>
-              <% end %>
-              <h4 class="nowrap-10em slide-image menu-title text-left"><%=link_to p.name, product_path(wp.hash_id), class: "darklink"%></h4>
-              <div class="menu-detail cortar text-left">
-                <% if p.cold %>
-                  Frío /
-                <% end %>
-                <% if p.hot %>
-                  Caliente /
-                <% end %>
-                <% if p.frappe %>
-                  Frappé /
-                <% end %>
-                <% if p.cold == false && p.hot == false && p.frappe == false%>
-                Sin especificar
-                <% end %>
-              </div>
-          </div>
+    <div class="thumbnail">
+      <% @photos.each do |photo| %>
+        <% if photo.product_id == p.id %>
+          <%= link_to image_tag(photo.photo.url(:thumb)), product_path(wp.hash_id) %>
+          <% break %>
+        <% end %>
+      <% end %>
+      <div class="caption" style="height:100px;">
+        <span class="pull-right">
+          $<%= p.price %> MXN
+        </span>
+
+        <h3><strong><%= p.name %></strong></h3>
+        
+        <div class="menu-detail cortar text-left">
+          <%= 'Frío /' if p.cold %>
+          <%= 'Caliente /' if p.hot %>
+          <%= 'Frappé' if p.frappe %>
+        </div><br>
+
+        <% if !(wp.existence > 0) %>
+          <span class="darklink" style="color: #F44336">Producto Agotado </span>
+        <% end %>
       </div>
+    </div>
   </div>
 <% end %>
 

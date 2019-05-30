@@ -1,9 +1,11 @@
-<% provide(:title, "Mi distribuidor") %>
+<% provide(:title, "Distribuidores") %>
+<% provide(:meta_description, "Contácta a tu distribuidor Black Brocket ahora mismo") %>
+
 <div class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
 
     <div class="text-center">
-      <h1 class="module-title long-up-2x">Distribuidores en la zona</h1>
+      <h1 class="module-title long-up-2x">Distribuidores Black Brocket</h1>
       <h2 class="module-subtitle">Descubre nuestros distribuidores autorizados cerca de tu ubicación.</h2>
     </div>
 
@@ -17,11 +19,11 @@
             <%= render partial: "/shared/messages", locals: {messages:@messages, create_message_url: @create_message_url}%>
           </div>
         <% else %>
-          <h5 class="text-center">
+          <p class="text-center">
             No hay ningún distribuidor que le corresponda atender tus
             pedidos por la población en que te encuentras, sin embargo,
             pronto uno de nuestros asistentes se comunicará contigo para atenderte.
-          </h5>
+          </p>
         <% end %>
     </div>
     <div class="row">

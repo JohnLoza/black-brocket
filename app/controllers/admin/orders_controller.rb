@@ -246,6 +246,11 @@ class Admin::OrdersController < AdminController
     if params[:start_date].blank? and params[:end_date].blank? and params[:reference].blank?
       flash.now[:warning] = "Se requiere estipule al menos una fecha de inicio y fin o un folio." and return
     end
+    
+    if (params[:start_date].present? and params[:end_date].blank?) or
+      (params[:end_date].present? and params[:start_date].blank?)
+      flash.now[:warning] = "Se requiere estipule la fecha de inicio y también la de fin" and return
+    end
 
     if !params[:reference].blank?
       @order = Order.find_by(hash_id: params[:reference].strip) and return
@@ -263,13 +268,13 @@ class Admin::OrdersController < AdminController
     
     where_statement += "created_at BETWEEN '#{params[:start_date].strip}' and '#{params[:end_date].strip}'"
 
-    @no_invoice_required_orders = Order.where.not(state: ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED"])
-                                  .where(state: ["SENT","DELIVERED"])
-                                  .where(where_statement).where(invoice: false).includes(:Client, :Distributor, :Details)
+    @no_invoice_required_orders = Order.where(state: ["SENT","DELIVERED"])
+      .where.not(state: ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED"])
+      .where(where_statement).where(invoice: false).includes(:Client, :Distributor, :Details)
 
-    @invoice_required_orders = Order.where.not(state: ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED"])
-                                  .where(state: ["SENT","DELIVERED"])
-                                  .where(where_statement).where(invoice: true).includes(:Client, :Distributor, :Details)
+    @invoice_required_orders = Order.where(state: ["SENT","DELIVERED"])
+      .where.not(state: ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED"])
+      .where(where_statement).where(invoice: true).includes(:Client, :Distributor, :Details)
 
     @orders_to_be_sent = Order.where(state: "BATCHES_CAPTURED").where(where_statement).includes(:Client, :Distributor, :Details)
     @orders_to_be_paid = Order.where(state: ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED"]).where(where_statement).includes(:Client, :Distributor, :Details)

@@ -1,9 +1,14 @@
 <% provide(:title, "Productos") %>
+<% provide(:keywords, "productos, black brocket, blackbrocket, white chocolate,
+  double chocolate, caramel, chai green tea latte, mocha latte, cappuccino,
+  cappuccino french vanilla, french vanilla, chai tea latte, 
+  apple cinnamon chai tea latte, chai, frappé, café") %>
+<% provide(:meta_description, "Lista de los productos Black Brocket")%>
 
 <div class="row">
   <div class="client-header">
-    <h3 class="module-title long-up-2x">Nuestros Productos</h3>
-    <h3 class="module-subtitle">El mejor café</h3>
+    <h1 class="module-title long-up">Productos Black Brocket</h1>
+    <h2 class="module-subtitle">Para bebidas calientes, frías y frappé</h2>
   </div>
 </div>
 <!-- categories -->
@@ -12,8 +17,8 @@
 
     <% if logged_in?%>
       <div class="text-center">
-        <%= image_tag @current_user.avatar_url(:mini), class: "img-rounded", style: "width:130px;" %><br>
-        <h5 style="margin-top: 10px;margin-bottom: 15px;"><%= @current_user.name %></h5>
+        <%= image_tag @current_user.avatar_url(:mini), class: "img-rounded", 
+          style: "width:130px; margin-bottom: 1em;" %><br>
       </div>
     <% end %>
 
@@ -72,89 +77,14 @@
 		</div>
 </div>
 
-<script type="text/javascript">
-  function money_format(number){
-    return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
-      return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
-    });
+<style>
+  .thumbnail h3{
+    font-size: 1em;
   }
-
-  $(document).ready(function(){
-    numbers_to_format = $(".money_format");
-    numbers_to_format.each(function(){
-      $(this).html(money_format($(this).text()));
-    });
-  });
-
-  <% if params[:category] and params[:category] == "hot" or params[:category] == "cold" or params[:category] == "frappe" %>
-    $(document).ready(function(){
-      $(".<%=params[:category]%>").addClass("active");
-    });
-  <% end %>
-</script>
+</style>
 
 <% if !@visit.nil? and @visit.visit_date.past? %>
-<!-- Modal -->
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content" style="padding: .5em;">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Visita del distribuidor</h4>
-      </div>
-      <%= form_for(@visit, url: client_update_distributor_visit_path(@visit.id), method: :put) do |f| %>
-        <% distributor = @visit.Distributor %>
-        <br>
-        <div class="row">
-          <div class="col-sm-12">
-             <div class="col-sm-3 text-center">
-                <%= image_tag distributor.avatar_url(:mini), class: "img-circle" %>
-             </div>
-             <div class="col-sm-9">
-               <label>Distribuidor:</label><br>
-               <%= distributor.name %> <%= distributor.lastname %>
-             </div>
-          </div>
-        </div>
-        <br>
-
-        <div class="col-sm-12">
-          <p>En garantía de nuestro servicio y en atención a su persona,
-          el distribuidor <b><%= distributor.name %> <%= distributor.lastname %></b> ¿Pasó a visitarle el día <%= l(@visit.visit_date, format: :long) %>?
-          <select name="distributor_visit[client_recognizes_visit]"
-                  id="distributor_visit_client_recognizes_visit" required="required"
-                  onchange="update_visit_form(this);">
-                  <option value="">Selecciona...</option>
-                  <option value="true">Sí</option>
-                  <option value="false">No</option>
-          </select></p>
-
-          <p>Si la respuesta es sí llene el resto del formulario,
-          de lo contrario presione "guardar" al final del formulario.</p>
-
-          <p>Su trato fue:
-          <select name="distributor_visit[treatment_answer]"
-                  id="distributor_visit_treatment_answer" required="required">
-                  <option value="">Selecciona...</option>
-                  <option value="Excelente">Excelente</option>
-                  <option value="Bueno">Bueno</option>
-                  <option value="Regular">Regular</option>
-                  <option value="Malo">Malo</option>
-          </select></p>
-
-          <p><b>Sugerencias y/o comentarios:</b></p>
-          <%= f.text_area :extra_comments, class: "input form-control", style: "border: solid #999 1px;" %><br>
-        </div>
-        <div class="clearfix"></div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
-          <%= submit_tag "Guardar", class: "btn btn-primary" %>
-        </div>
-
-      <% end %>
-    </div>
-  </div>
-</div>
+<%= render 'visit_modal' %>
 
 <script type="text/javascript">
   $(document).ready(function(){
@@ -173,3 +103,21 @@
   }
 </script>
 <% end # if @visit # %>
+
+<script type="text/javascript">
+  function money_format(number){
+    return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
+      return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
+    });
+  }
+
+  $(document).ready(function(){
+    numbers_to_format = $(".money_format");
+    numbers_to_format.each(function(){
+      $(this).html(money_format($(this).text()));
+    });
+    <% if params[:category] %>
+      $(".<%= params[:category] %>").addClass("active");
+    <% end %>
+  });
+</script>

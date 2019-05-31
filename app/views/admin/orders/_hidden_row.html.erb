@@ -1,26 +1,38 @@
-<% if !o.tracking_code.blank? %>
-  <p>Código de rastreo: <%= o.tracking_code %></p>
-<% end # if o.tracking_code != nil # %>
-
 <% if ["SENT","DELIVERED"].include? params[:type] %>
-  <p>
-    Paquetería: <%= o.Parcel.parcel_name %>
-  </p>
+  <p>Paquetería: <strong><%= o.Parcel.parcel_name %></strong></p>
 <% end %>
 
+<% if o.tracking_code.present? %>
+  <p>Código de rastreo: <strong><%= o.tracking_code %></strong></p>
+<% end  %>
+
+<% if o.invoice_folio.nil? and @current_user.has_permission?('orders@save_invoice_folio') and 
+  ['SENT','DELIVERED'].include? params[:type] %>
+  <%= form_tag admin_order_save_invoice_folio_path(o.hash_id), method: :put do %>
+    <%= label_tag :invoice_folio, "Folio de factura" %>
+    <%= text_field_tag :invoice_folio, '', class: 'form-control', required: true %>
+    <%= hidden_field_tag :type, params[:type] %>
+    <%= submit_tag 'Guardar folio', class: 'btn btn-primary btn-sm m-t',
+      data:{confirm: 'Seguro(a) de ser el folio correcto?'} %>
+  <% end %>
+<% end %>
+
+<% if o.invoice_folio.present? %>
+  <p>Folio de factura: <strong><%= o.invoice_folio %></strong></p>
+<% end %>
+
+<% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
+  <%= link_to admin_download_payment_path(o.download_payment_key), target: "_blank" do %>
+    <i class="fa fa-file-pdf-o fa-3x"></i>
+  <% end %><br>
+<% end # if !o.pay_img.blank? # %>
+
 <% if @current_user.has_permission?('orders@accept_reject_payment') and params[:type] == "ACCEPT_REJECT_PAYMENT" %>
-  <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
-    <%= link_to admin_download_payment_path(o.download_payment_key), target: "_blank" do %>
-      <span>Comprobante de pago</span><br>
-      <i class="fa fa-file-o fa-3x"></i>
-    <% end %><br>
-  <% end # if !o.pay_img.blank? # %>
-  
   <%= form_tag admin_accept_order_pay_path(o.hash_id,"true"), method: :put do  %>
-    <%= label_tag :payment_folio, 'Folio del pago' %>
+    <%= label_tag :payment_folio, 'Folio del pago/depósito' %>
     <%= text_field_tag :payment_folio, '', class: 'form-control', required: true %>
     <%= submit_tag 'Aceptar', class: 'btn btn-primary btn-sm m-t',
-        data:{confirm: 'Seguro(a) de aceptar el pago?'} %>
+      data:{confirm: 'Seguro(a) de aceptar el pago?'} %>
   <% end %>
 
   <%= link_to "Rechazar", "#", class: "btn btn-danger btn-sm m-t" ,

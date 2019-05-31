@@ -249,6 +249,7 @@ class Admin::SiteWorkersController < AdminController
       @order_category << {category: "orders", name: "stablish_as_sent", description: "Establecer como enviado"}
       @order_category << {category: "orders", name: "stablish_as_delivered", description: "Establecer como entregado/recibido"}
       @order_category << {category: "orders", name: "invoices", description: "Órdenes para facturar"}
+      @order_category << {category: "orders", name: "save_invoice_folio", description: "Guardar el folio de factura"}
 
       @other_category = []
       @other_category << {category: "product_questions", name: "answer", description: "Responder preguntas de producto"}

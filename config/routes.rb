@@ -161,6 +161,9 @@ Rails.application.routes.draw do
     # download orders info as txt #
     get 'orders/invoice/download' => 'orders#download_invoice_data', as: :download_orders_invoice_data
 
+    # save the invoice folio for an order #
+    put 'orders/:id/invoice_folio' => 'orders#save_invoice_folio', as: :order_save_invoice_folio
+
     # bank reports
     get 'bank_report/' => 'bank_reports#index', as: :bank_report
     post 'bank_report/' => 'bank_reports#show'

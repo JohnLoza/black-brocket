@@ -9,7 +9,7 @@
 
   <div class="fullscreen-bg">
     <video loop muted autoplay poster="<%= image_url @bgImg.getImage %>" class="fullscreen-bg__video">
-        <source src="<%= video_url @bgVideo.getVideo() %>" type="video/mp4">
+      <source src="<%= video_url @bgVideo.getVideo() %>" type="video/mp4">
     </video>
   </div>
 
@@ -20,12 +20,9 @@
 
   <% unless logged_in? %>
     <div class="row text-center">
-      <%= link_to "Regístrate", client_sign_up_path,
-        class: "btn btn-gold" %>
-
+      <%= link_to "Regístrate", client_sign_up_path, class: "btn btn-gold" %>
       <%= link_to "Inicia sesión", log_in_path,
-        class: "btn btn-white",
-        style: "margin-left: 1em;" %>
+        class: "btn btn-white", style: "margin-left: 1em;" %>
     </div>
   <% end %>
 

@@ -2,7 +2,8 @@
 <% provide(:keywords, "productos, black brocket, blackbrocket, white chocolate,
   double chocolate, caramel, chai green tea latte, mocha latte, cappuccino,
   cappuccino french vanilla, french vanilla, chai tea latte, 
-  apple cinnamon chai tea latte, chai, frappé, café") %>
+  apple cinnamon chai tea latte, chai, frappé, café, bases para frappe,
+  polvos para frappe, suministros para cafeteria") %>
 <% provide(:meta_description, "Lista de los productos Black Brocket")%>
 
 <div class="row">
@@ -62,6 +63,12 @@
         <%= render "product_grid_visiter" %>
       <% end %>
 
+      <div class="text-center">
+        <%= link_to root_path + '#contact', class: 'btn btn-custom-1' do %>
+          Más información para muestras gratuitas.
+        <% end %>
+      </div>
+
       <div class="col-md-9 pull-right text-right">
         <%= will_paginate @products, renderer: BootstrapPagination::Rails %>
       </div>
@@ -78,6 +85,23 @@
 </div>
 
 <style>
+  .caption { height: 120px; }
+  .caption > h3{
+    height: 33px;
+    margin-bottom: 5px;
+  }
+  .categories > img{
+    height: 40px;
+    max-width: 20px;
+    margin-right: 1em;
+  }
+  .cortar{
+    width:100%;
+    height:20px;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden; 
+  }
   .thumbnail h3{
     font-size: 1em;
   }

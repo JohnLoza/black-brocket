@@ -70,7 +70,8 @@ class StaticPagesController < ApplicationController
 
   private
     def suggestion_params
-      {name: params[:name], email: params[:email].strip, message: params[:message]}
+      {name: params[:name], email: params[:email].strip, message: params[:message],
+      telephone: params[:telephone]}
     end
 
     def distributor_request_params

@@ -9,18 +9,18 @@
           <% break %>
         <% end %>
       <% end %>
-      <div class="caption" style="height:100px;">
+      <div class="caption">
         <span class="pull-right">
           $<%= p.price %> MXN
         </span>
 
         <h3><strong><%= p.name %></strong></h3>
         
-        <div class="menu-detail cortar text-left">
-          <%= 'Frío /' if p.cold %>
-          <%= 'Caliente /' if p.hot %>
-          <%= 'Frappé' if p.frappe %>
-        </div><br>
+        <p class="categories">
+          <%= image_tag 'hot-drink-black' if p.hot %>
+          <%= image_tag 'cold-drink-black' if p.cold %>
+          <%= image_tag 'frappe-black' if p.frappe %>
+        </p>
 
         <% if !(wp.existence > 0) %>
           <span class="darklink" style="color: #F44336">Producto Agotado </span>
@@ -29,12 +29,3 @@
     </div>
   </div>
 <% end %>
-
-<style type="text/css">
-.cortar{
-  width:100%;
-  height:20px;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  overflow:hidden; }
-</style>

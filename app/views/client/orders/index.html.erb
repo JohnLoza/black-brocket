@@ -16,9 +16,8 @@
         <% if o.state == "WAITING_FOR_PAYMENT" or o.state == "LOCAL" %>
           <!-- to cancel an order -->
           <%= link_to "<span class='icon-close' style='font-size: 30px;'></span>".html_safe,
-                      client_cancel_order_path(@current_user.hash_id, o.hash_id),
-                      data:{confirm: "Seguro(a) de cancelar el pedido?"},
-                      remote: true, method: :delete %>
+            client_cancel_order_path(@current_user.hash_id, o.hash_id),
+            data:{confirm: "Seguro(a) de cancelar el pedido?"}, remote: true, method: :delete %>
         <% end %>
       </div>
     </div>

@@ -33,10 +33,11 @@
     <div class="col-sm-6">
 
       <% unless logged_in? and session[:user_type] == 'c' %>
-        <div class="alert alert-info alert-dismissible" role="alert">
+        <div class="alert alert-warning alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <b>Regístrate o inicia sesión</b></br>
-        Para comprar nuestros productos necesitas registrarte, mientras tanto siéntete libre de explorar nuestros artículos.
+          <%= link_to 'Regístrate', client_sign_up_path %> o
+          <%= link_to 'Inicia sesión', log_in_path %> <br>
+          Para comprar nuestros productos necesitas registrarte, mientras tanto siéntete libre de explorar nuestros artículos.
         </div>
       <% end %>
 
@@ -102,7 +103,14 @@
               <td colspan="3"><b>Descripción:</b></td>
             </tr>
             <tr>
-              <td colspan="3"><%= render @product.description_render_path %></td>
+              <td colspan="3">
+                <%= render @product.description_render_path %>
+                
+                <% unless logged_in? %>
+                  <br><br>
+                  <%= link_to 'Regístrate ahora!', client_sign_up_path, class: 'btn btn-custom-1' %>
+                <% end %>  
+              </td>
             </tr>
             <%= render "add_to_cart" if logged_in? and session[:user_type] == 'c' and @warehouse_product.existence > 0 %>
 
@@ -171,6 +179,17 @@
       </div>
     </div>
 </div>
+
+<style>
+  div.alert.alert-warning a{
+    color: #4595E3;
+  }
+  div.alert.alert-warning a:hover,
+  div.alert.alert-warning a:focus,
+  div.alert.alert-warning a:active{
+    color: #2373C1;
+  }
+</style>
 
 <script>
   // init ekko-lightbox

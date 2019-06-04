@@ -7,18 +7,18 @@
             <% break %>
           <% end %>
         <% end %>
-        <div class="caption" style="height:100px;">
+        <div class="caption">
           <span class="pull-right">
             $<%= p.price %> MXN
           </span>
 
           <h3><strong><%= p.name %></strong></h3>
 
-          <div class="menu-detail cortar text-left">
+          <p class="menu-detail cortar text-left">
             <%= 'Frío /' if p.cold %>
             <%= 'Caliente /' if p.hot %>
             <%= 'Frappé' if p.frappe %>
-          </div>
+          </p>
         </div>
     </div>
   </div>

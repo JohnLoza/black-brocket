@@ -4,8 +4,8 @@
 
     <div class="row">
       <div class="col-sm-6 col-sm-offset-3">
-        <div class="module-header">
-          <h1 class="module-title">Contacto</h1>
+        <div class="module-header" style="margin: 0 0 30px;">
+          <h1 class="module-title">Contáctanos</h1>
           <h2 class="module-subtitle">Escríbenos tus comentarios y/o sugerencias</h2>
         </div>
       </div>
@@ -14,19 +14,30 @@
     <div class="row">
 
       <div class="col-md-6 col-sm-offset-3">
+        <p class="text-center">
+          <i class="fa fa-whatsapp" style="font-size: 22px; padding-right: 0.3em;"></i> 
+          (33) 2310 0024
+        </p><br>
+
         <%= form_tag(root_path, method: :post, remote: true) do %>
 
           <div class="row">
 
             <div class="col-sm-6 form-group">
-              <%= text_field_tag :name, "", { class: "form-control", placeholder: "Nombre", maxlength: 50, required: true} %>
+              <%= text_field_tag :name, "", { class: 'form-control', placeholder: "Nombre", maxlength: 50, required: true} %>
             </div>
 
             <div class="col-sm-6 form-group">
-              <%= email_field_tag :email, "", { class: "form-control", placeholder: "Tu email", maxlength: 50, required: true} %>
+              <%= email_field_tag :email, "", { class: 'form-control', placeholder: "Tu email", maxlength: 50, required: true} %>
             </div>
 
           </div><!-- .row -->
+
+          <div class="row">
+            <div class="col-sm-12 form-group">
+              <%= text_field_tag :telephone, "", { class: 'form-control', placeholder: 'Teléfono de contacto', maxlength: 20 }%>
+            </div>
+          </div>
 
           <div class="row">
             <div class="col-sm-12 form-group">
@@ -38,7 +49,11 @@
             <div class="col-sm-12 text-center">
               <button type="submit" class="btn btn-custom-4">Enviar</button>
             </div>
-          </div><!-- .row -->
+          </div><!-- .row --><br>
+
+          <p>Responderemos a la brevedad su mensaje, de no proporcionar su teléfono 
+          la respuesta se enviará a su correo electrónico, es posible que 
+          nuestro correo llegue a su carpeta de SPAM</p>
 
         <% end %>
       </div><!-- .col -->

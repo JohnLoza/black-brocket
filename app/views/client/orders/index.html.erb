@@ -43,7 +43,7 @@
            <label class="label label-success" style="font-size: 13px;"><%=t(o.state)%></label>
          <%end%>
       </div>
-      <div class="col-sm-1">
+      <div class="col-sm-2">
         <b>Total:</b></br> $<%= o.total %> MXN
       </div>
       <div class="col-sm-2">
@@ -71,15 +71,6 @@
         <% end %>
 
       </div>
-
-      <% unless o.state == "LOCAL" %>
-        <div class="col-sm-1 text-center">
-          <p><strong>Destino</strong></p>
-          <%= link_to "https://maps.google.com.mx/maps/search/#{o.address_for_google}", { target: "_blank" } do %>
-            <i class="fa fa-map-marker fa-3x"></i>
-          <% end %>
-        </div>
-      <% end %>
 
       <div class="col-sm-2 text-center">
         <p><strong>Ver pedido</strong></p>

@@ -34,8 +34,6 @@
         } %>
 <% end %>
 
-
-
 <% if @current_user.has_permission?('orders@invoices') and params[:type] == "INVOICES" %>
   <td>
     <% if !o.invoice %>
@@ -49,9 +47,9 @@
 
 <% if @current_user.has_permission?('orders@cancel') and (o.state == "WAITING_FOR_PAYMENT" or
       o.state == "PAYMENT_REJECTED") and params[:type] != "INVOICES" %>
-  <a class="btn btn-white btn-sm m-b-xs"
-     onclick="update_cancel_form('<%=o.hash_id%>')">
-    Cancelar orden
+  <a class="btn btn-danger btn-sm m-b-xs"
+    onclick="update_cancel_form('<%=o.hash_id%>')">
+    <i class="fa fa-trash"></i> Cancelar
   </a>
 <% end %>
 

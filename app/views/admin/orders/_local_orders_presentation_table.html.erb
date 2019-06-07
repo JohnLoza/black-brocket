@@ -79,26 +79,25 @@
 
                 <% unless o.pay_img.file or o.pay_pdf.file %>
                   <%= form_for(o, url: admin_order_upload_payment_path(o.hash_id), method: :put,
-                      data:{confirm: "Seguro(a) de ser el archivo correcto?"}) do |f| %>
-                    <div class="col-sm-2 text-right">
-                      <%= f.file_field :pay_img, id: "field_#{o.hash_id}",
-                          style: "display: none;", multiple: false,
-                          onchange: "$('#pay_img_commit_#{o.hash_id}').click();" %></br>
-                    </div>
-                    <div class="col-sm-4">
-                      <span onclick="$('#field_<%=o.hash_id%>').click();"
-                        class="btn btn-white btn-sm m-b-xs">Subir comprobante</span>
+                      data: {confirm: "Seguro(a) de ser el archivo correcto?"},
+                      html: {style: 'display: contents;'}) do |f| %>
 
-                      <%= f.submit "Subir foto del pago".html_safe,
-                          id: "pay_img_commit_#{o.hash_id}", style: "display: none;" %>
-                    </div>
+                    <%= f.file_field :pay_img, id: "field_#{o.hash_id}",
+                      style: "display: none;", multiple: false,
+                      onchange: "$('#pay_img_commit_#{o.hash_id}').click();" %>
+
+                    <a href="#" onclick="$('#field_<%=o.hash_id%>').click();"
+                      class="btn btn-white btn-sm m-b-xs">Subir comprobante</a>
+
+                    <%= f.submit "Subir foto del pago".html_safe,
+                        id: "pay_img_commit_#{o.hash_id}", style: "display: none;" %>
                   <% end %>
                 <% end %>
 
                 <% if @current_user.has_permission?('orders@cancel') and o.state == 'LOCAL' %>
-                  <a class="btn btn-white btn-sm m-b-xs"
+                  <a class="btn btn-danger btn-sm m-b-xs"
                     onclick="update_cancel_form('<%=o.hash_id%>')">
-                    Cancelar orden
+                    <i class="fa fa-trash"></i> Cancelar
                   </a>
                 <% end %>
               </td>

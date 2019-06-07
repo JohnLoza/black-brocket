@@ -1,6 +1,6 @@
 <div id="ecart_content">
   <% @products.each do |wp| %>
-  <div id="<%=wp.hash_id%>" class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;">
+  <div id="<%=wp.hash_id%>" class="col-sm-12 product dotted">
     <% p = wp.Product %>
 
     <div class="col-sm-1 text-center">
@@ -11,22 +11,22 @@
         <% end %>
       <% end %>
     </div>
-    <div class="col-sm-4">
-      <label>Nombre:</label><br>
-      <%=p.name%>
+    <div class="col-sm-4 text-center">
+      <label class="product-descriptor">Nombre:</label>
+      <span><%= p.name %></span>
     </div>
-    <div class="col-sm-1">
-      <label>Clave:</label><br>
-      <%=p.hash_id%>
+    <div class="col-sm-1 text-center no-mobile">
+      <label class="product-descriptor">Clave:</label> 
+      <span><%= p.hash_id %></span>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-2 text-center">
       <label>Cantidad:</label>
       <input type="number" min="1" value="<%= session[:e_cart][wp.hash_id] %>"
       onchange="update_quantity('<%=wp.hash_id%>', this.value, <%=wp.existence%>)"
       id="<%=wp.hash_id%>-quantity-input" class="form-control form-control-black text-center"/>
     </div>
-    <div class="col-sm-2">
-      <label>Precio Unitario:</label><br>
+    <div class="col-sm-2 text-center">
+      <label class="product-descriptor">Precio Unitario:</label>
         $<span>
           <% monto = 0 %>
           <% if @product_prices.any? %>
@@ -42,15 +42,14 @@
           <% end # if @product_prices.any? # %>
         </span>
     </div>
-    <div class="col-sm-1">
+    <div class="col-sm-1 text-center">
       <% @total += monto %>
-      <label>Importe: </label><br>
+      <label class="product-descriptor">Importe: </label>
         $<span id="<%=wp.hash_id%>-cost" class="individual-cost">
-            <%= monto %>
+          <%= monto %>
         </span>
     </div>
     <div class="col-sm-1 text-center">
-      <br>
       <%= link_to "<span class='icon-close' style='font-size: 34px;'></span>".html_safe,
           client_remove_from_cart_path(@current_user.hash_id, wp.hash_id),
           method: :put, data:{confirm: "Estas seguro(a) de quitarlo del carrito?"} %>
@@ -59,19 +58,19 @@
 
   <% end %>
 
-  <div class="col-md-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;">
-    <div class="col-md-10 text-right">
+  <div class="col-md-12 dotted extra-padding">
+    <div class="col-md-10 col-xs-6 text-right">
       <strong>Sub total:</strong>
     </div>
-    <div class="col-md-2" >
-      $ <label id="order-sub-total" style="font-size:20px;"><%= @total %></label> MXN
+    <div class="col-md-2 col-xs-6" >
+      $ <label id="order-sub-total"><%= @total %></label> MXN
     </div>
 
-    <div class="col-md-10 text-right">
+    <div class="col-md-10 col-xs-6 text-right">
       <strong>Coste de envío:</strong>
     </div>
-    <div class="col-md-2" >
-      $ <label id="order-shipping-cost" style="font-size:20px;">
+    <div class="col-md-2 col-xs-6" >
+      $ <label id="order-shipping-cost">
         0.00
       </label> MXN
     </div>
@@ -80,57 +79,69 @@
       <label id="delivery-time"></label>
     </div>
 
-    <div class="col-md-10 text-right">
+    <div class="col-md-10 col-xs-6 text-right">
       <strong>Total:</strong>
     </div>
-    <div class="col-md-2" >
-      $ <label id="order-grand-total" style="font-size:20px;"><%= @total %></label> MXN
+    <div class="col-md-2 col-xs-6" >
+      $ <label id="order-grand-total"><%= @total %></label> MXN
     </div>
   </div>
 
-  <div class="col-sm-12" style="border-bottom: 1px dotted #DDD;padding-top: 10px;padding-bottom: 10px;margin-bottom: 40px;">
+  <div class="col-sm-12 dotted" style="margin-bottom: 40px;">
     <%= form_tag client_create_order_path(@current_user.hash_id), method: :post do %>
-      <div class="row col-sm-12 text-right">
-        <h3 class="iconbox-title">Método de envío</h3>
+      <div class="row col-sm-12 inline-block dotted">
+        <label>Método de envío</label>
         <% if @local_regions.include? @current_user.city_id %>
           <div>
-            <p>
-              <%= radio_button_tag 'parcel_id', 0, false, autocomplete: :off,
-                onchange: "noShipping();", required: true %>
-              Recojer en instalaciones de Guadalajara, Jal.
-            </p>
+            <%= radio_button_tag 'parcel_id', 0, false, autocomplete: :off,
+              onchange: "noShipping(); removeFilter('parcel_id_0', 'parcel');", required: true %>
+            <label for="parcel_id_0">Recojer en instalaciones de Guadalajara, Jal.</label>
           </div>
         <% end %>
         <% @parcels.each do |parcel| %>
-          <div style="display: inline-block">
-            <%= radio_button_tag 'parcel_id', parcel.id, false, autocomplete: :off,
-              onchange: "fetchParcelPrices(this)", required: true %>
-            <%= image_tag parcel.image.url(:mini) %><br>
+          <div>
+            <%= radio_button_tag 'parcel_id', parcel.id, false, autocomplete: :off, required: true, style: "display: none;",
+              onchange: "fetchParcelPrices(this); removeFilter('.parcel_img_#{parcel.id}', 'parcel')"  %>
+            <label for="parcel_id_<%= parcel.id %>">
+              <%= image_tag parcel.image.url(:mini), class: "parcel_img_#{parcel.id} parcel" %>
+            </label>
           </div>
         <% end %>
       </div>
 
-      <div class="row col-sm-12 text-right banks">
-        <h3 class="iconbox-title">Método de pago</h3>
+      <div class="row col-sm-12 banks inline-block dotted">
+        <label>Método de pago</label>
         <% @banks.each do |bank| %>
-          <div style="display: inline-block">
-            <%= radio_button_tag 'payment_method', bank.id, false, 
-              autocomplete: :off, required: true %>
-            <%= image_tag bank.image.url(:mini) %><br>
+          <div>
+            <%= radio_button_tag 'payment_method', bank.id, false, autocomplete: :off, required: true, 
+              onchange: "removeFilter('.payment_img_#{bank.id}', 'payment_type')", style: 'display: none;' %>
+            <label for="payment_method_<%= bank.id %>">
+              <%= image_tag bank.image.url(:mini), class: "payment_img_#{bank.id} payment_type" %>
+            </label>
           </div>
         <% end %>
       </div>
 
-      <div class="row col-sm-12" style="padding-top: 2em;">
-        <div class="col-sm-10 text-right">
-          <%= label_tag "invoice", "Requiero factura" %>&nbsp;&nbsp;
-          <%= check_box_tag "invoice" %>
+      <div class="row col-sm-12 inline-block" style="margin-top: 2em;">
+        <label>Requiero Factura</label>
+        <div>
+          <%= radio_button_tag 'invoice', 1, false, autocomplete: :off, required: true %>
+          <label for="invoice_1" style="font-size: 1.3em; font-weight: normal;">Sí</label>
         </div>
+        <div>
+          <%= radio_button_tag 'invoice', 0, false, autocomplete: :off, 
+            required: true %>
+          <label for="invoice_0" style="font-size: 1.3em; font-weight: normal;">No</label>
+        </div>
+      </div>
+
+      <div class="row col-sm-12">
+        <div class="col-sm-10">.</div>
         <div class="col-sm-2" >
-          <%= hidden_field_tag "delivery_cost" %>
-          <%= hidden_field_tag "guides" %>
-          <%= submit_tag "Comprar", class: "btn btn-block btn-custom-1",
-              data: {confirm: "Seguro(a) de realizar la compra?"} %>
+          <%= hidden_field_tag 'delivery_cost' %>
+          <%= hidden_field_tag 'guides' %>
+          <%= submit_tag 'Comprar', class: 'btn btn-block btn-custom-1',
+            onclick: 'verifyForm();' %>
         </div>
       </div>
     <% end %>
@@ -177,7 +188,51 @@
   NO
 </label>
 
+<style>
+  form img{
+    -webkit-filter: grayscale(90%);
+    filter: grayscale(90%);
+  }
+  .dotted{
+    border-bottom: 1px dotted #DDD;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .removeFilter{
+    -webkit-filter: none;
+    filter: none;
+  }
+  .inline-block > div{ display: inline-block; margin-right: 2em;}
+  .inline-block > label{ margin-right: 2em; }
+  .product-descriptor{ display: block; }
+  @media screen and (max-width: 920px){
+    .inline-block { margin-top: 1em; }
+    .inline-block label{ display: block; }
+    .product-descriptor{ display: inline-block; }
+    .product div{ margin-top: 0.5em; }
+    .extra-padding{ padding-bottom: 4em; }
+    .img-circle{ max-width: 75px;}
+  }
+</style>
+
 <script type="text/javascript">
+  function verifyForm(){
+    let parcel = $("input[type='radio'][name='parcel_id']:checked");
+    let payment_method = $("input[type='radio'][name='payment_method']:checked");
+    let invoice_required = $("input[type='radio'][name='invoice']:checked");
+    if(parcel.length == 0 || payment_method.length == 0 || invoice_required.length == 0){
+      $("#dismissible_alerts").append(`
+        <%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, 
+          message: 'Favor de seleccionar el método de envío, método de pago y si requieren factura'} %>
+      `);
+    }
+  }
+
+  function removeFilter(target, type){
+    $(`.removeFilter.${type}`).removeClass('removeFilter');
+    $(target).addClass('removeFilter');
+  }
+
   function update_quantity(product, new_quantity, current_existence) {
     $("#product").val(product);
     $("#new_quantity").val(new_quantity);
@@ -275,6 +330,7 @@
     $('#order-grand-total').text(money_format(current_sub_total));
     $('.banks').addClass('hidden');
     $('.banks input').removeAttr('required');
+    $('#delivery-time').text('');
   }
 
   $(document).ready(function(){

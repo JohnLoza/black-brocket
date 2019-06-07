@@ -1,6 +1,7 @@
-<% if ["SENT","DELIVERED"].include? params[:type] %>
+<% if o.parcel_id and o.parcel_id != 0 %>
   <p>Paquetería: <strong><%= o.Parcel.parcel_name %></strong></p>
 <% end %>
+<p>Guías: <strong><%= o.guides %></strong></p>
 
 <% if o.tracking_code.present? %>
   <p>Código de rastreo: <strong><%= o.tracking_code %></strong></p>
@@ -41,13 +42,6 @@
 
 <% if @current_user.has_permission?('orders@capture_tracking_code') and params[:type] == "CAPTURE_TRACKING_CODE" %>
   <%= form_tag(admin_capture_tracking_code_path(o.hash_id), method: :put) do %>
-    <br>
-    <%= label_tag :parcel_id, "Paquetería" %>
-    <%= image_tag(o.Parcel.image.url(:mini)) %><br>
-
-    <%= label_tag :guides, "Guías" %>
-    <%= content_tag :p, o.guides %><br>
-
     <%= label_tag :tracking_code, "Código de rastreo" %>
     <%= text_field_tag :tracking_code, "",
         {class: "form-control m-b", maxlength: 20, required: true} %>

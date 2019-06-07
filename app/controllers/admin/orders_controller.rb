@@ -154,7 +154,7 @@ class Admin::OrdersController < AdminController
 
     product_ids = Array.new
     @details = @order.Details
-    product_ids = details.map {|d| d.product_id}.uniq
+    product_ids = @details.map {|d| d.product_id}.uniq
     @products = Product.where("id in (?)", product_ids)
   end # def capture_details #
 

@@ -16,20 +16,20 @@
   <td>
     <!-- hidden-button -->
     <%= link_to "<i class='fa fa-truck'></i> Órdenes".html_safe,
-      admin_client_orders_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs" %>
+      admin_client_orders_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs hidden-button" %>
 
     <%= link_to "<i class='fa fa-pencil'></i> Precios".html_safe,
-      admin_client_prices_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs" %>
+      admin_client_prices_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs hidden-button" %>
 
     <%= link_to "<i class='fa fa-calendar'></i> Revisiones".html_safe,
-      admin_client_revisions_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs" %>
+      admin_client_revisions_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs hidden-button" %>
 
     <%= link_to "<i class='fa fa-calendar'></i> Visitas de distribuidor".html_safe,
-      admin_client_visits_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs" %>
+      admin_client_visits_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs hidden-button" %>
 
     <% if @current_user.has_permission?('clients@supervisor_visit') %>
       <%= link_to "<i class='fa fa-calendar'></i> Visitas de supervisor".html_safe,
-        admin_supervisor_visits_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs"  %>
+        admin_supervisor_visits_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs hidden-button"  %>
     <% end %>
   </td>
   <td><%= client.last_distributor_revision %></td>

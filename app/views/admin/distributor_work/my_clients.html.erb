@@ -61,18 +61,17 @@
               </td>
               <%= render partial: "client_block_content", locals: {client: c} %>
     					<td>
-                <%= link_to "<i class='fa fa-truck'></i> Órdenes".html_safe,
-                            admin_client_orders_path(c),
-                            class: "btn btn-white btn-sm m-b-xs"%>
+                <%= link_to "<i class='fa fa-truck'></i> Órdenes".html_safe, admin_client_orders_path(c),
+                  class: "btn btn-white btn-sm m-b-xs hidden-button"%>
                 <%= link_to "<i class='fa fa-money'></i> Pactar precios".html_safe,
-                            admin_distributor_work_client_prices_path(c),
-                            class: "btn btn-white btn-sm m-b-xs" %>
+                  admin_distributor_work_client_prices_path(c),
+                  class: "btn btn-white btn-sm m-b-xs hidden-button" %>
                 <%= link_to "<i class='fa fa-envelope-o'></i> Mensajes".html_safe,
-                            admin_distributor_work_client_messages_path(c),
-                            class: "btn btn-white btn-sm m-b-xs" %>
+                  admin_distributor_work_client_messages_path(c),
+                  class: "btn btn-white btn-sm m-b-xs hidden-button" %>
                 <%= link_to "Transferir", admin_distributor_work_transfer_client_path(c),
-                            class: "btn btn-danger btn-sm m-b-xs", 
-                            method: :post, data: { confirm: "Seguro(a) de transferir el cliente? esto lo eliminará de su lista" } %>
+                  class: "btn btn-danger btn-sm m-b-xs hidden-button", 
+                  method: :post, data: { confirm: "Seguro(a) de transferir el cliente?" } %>
               </td>
   					</tr>
           <% end %>

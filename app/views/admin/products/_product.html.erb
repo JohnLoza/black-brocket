@@ -37,11 +37,11 @@
           @current_user.has_permission?('products@update_price') or
           @current_user.has_permission?('products@update_show_in_web_page') %>
       <%= link_to "<i class='fa fa-pencil'></i> Modificar".html_safe,
-        edit_admin_product_path(product), class: "btn btn-white btn-sm" %>
+        edit_admin_product_path(product), class: "btn btn-white btn-sm hidden-button" %>
     <% end %>
     <% if @current_user.has_permission?('products@delete') %>
       <%= link_to "<i class='fa fa-trash'></i> Eliminar".html_safe,
-        admin_product_path(product), class: "btn btn-danger btn-sm",
+        admin_product_path(product), class: "btn btn-danger btn-sm hidden-button",
         method: "delete", data: { confirm: "Estas seguro(a) de eliminarlo?" } %>
     <% end %>
   </td>

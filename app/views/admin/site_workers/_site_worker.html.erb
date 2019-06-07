@@ -22,19 +22,19 @@
     <% if @current_user.has_permission?('site_workers@update_permissions') %>
       <%= link_to "<i class='fa fa-pencil'></i> Permisos".html_safe,
       edit_permissions_admin_site_worker_path(site_worker),
-      class: "btn btn-white btn-sm" %>
+      class: "btn btn-white btn-sm hidden-button" %>
     <% end %>
 
     <% if @current_user.has_permission?('site_workers@update_personal_data') or
       @current_user.has_permission?('site_workers@update_warehouse') %>
       <%= link_to "<i class='fa fa-pencil'></i> Modificar".html_safe,
       edit_admin_site_worker_path(site_worker),
-      class: "btn btn-white btn-sm" %>
+      class: "btn btn-white btn-sm hidden-button" %>
     <% end %>
 
     <% if @current_user.has_permission?('site_workers@delete') %>
       <%= link_to "<i class='fa fa-trash'></i> Eliminar".html_safe,
-      admin_site_worker_path(site_worker), class: "btn btn-danger btn-sm",
+      admin_site_worker_path(site_worker), class: "btn btn-danger btn-sm hidden-button",
       method: "delete", data: { confirm: "Estas seguro(a) de eliminarlo?" } %>
     <% end %>
 

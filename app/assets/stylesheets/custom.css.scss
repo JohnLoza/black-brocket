@@ -1,11 +1,13 @@
 /* hidden-button for actions in tables for each row */
 a.hidden-button{
-  display: none;
+  visibility: hidden;
 }
-
 tr:hover td a.hidden-button,
 tr:focus td a.hidden-button{
-  display: inline-block !important;
+  visibility: visible !important;
+}
+@media screen and (max-width: 920px) {
+	a.hidden-button{ visibility: visible }
 }
 /* hidden-button */
 

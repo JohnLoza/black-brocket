@@ -31,6 +31,7 @@ class Client::OrdersController < ApplicationController
   end
 
   def create
+    render_404 and return unless session[:e_cart].present?
     return unless verify_client_address
     return unless verify_fiscal_data
     @order = setBasicInfo
@@ -106,9 +107,12 @@ class Client::OrdersController < ApplicationController
       if params[:order][:pay_img].content_type == "application/pdf"
         @order.remove_pay_img! if !@order.pay_img.blank?
         @order.pay_pdf = params[:order][:pay_img]
-      else
+      elsif params[:order][:pay_img].content_type.include? "image/"
         @order.remove_pay_pdf! if !@order.pay_pdf.blank?
         @order.pay_img = params[:order][:pay_img]
+      else
+        flash[:info] = "Solo se admiten archivos jpg, png y pdf, gracias."
+        redirect_to client_orders_path(@current_user) and return
       end
       @order.state = "PAYMENT_DEPOSITED"
       @order.download_payment_key = SecureRandom.urlsafe_base64
@@ -120,7 +124,7 @@ class Client::OrdersController < ApplicationController
     else
       flash[:info] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: pdf, jpg y png."
     end
-    redirect_to client_orders_path(@current_user.hash_id)
+    redirect_to client_orders_path(@current_user)
   end
 
   def get_payment

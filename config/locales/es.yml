@@ -244,6 +244,7 @@ es:
   errors:
     format: "%{attribute} %{message}"
     messages:
+      extension_whitelist_error: no es el tipo de archivo correcto
       accepted: debe ser aceptado
       blank: no puede estar en blanco
       present: debe estar lleno

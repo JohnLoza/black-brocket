@@ -51,6 +51,7 @@ class Client::EcartsController < ApplicationController
   end
 
   def remove_from_cart
+    render_404 and return unless session[:e_cart].present?
     # remove the selected item from the cart #
     if session[:e_cart].has_key?(params[:product])
       product_weight = WarehouseProduct.find_by!(hash_id: params[:product]).Product.total_weight
@@ -65,10 +66,10 @@ class Client::EcartsController < ApplicationController
   end
 
   def update_quantity
+    render_404 and return unless session[:e_cart].present?
     @updated = false
-    if session[:e_cart].has_key?(params[:product]) and
-            params[:new_quantity] != session[:e_cart][params[:product]] and
-            params[:new_quantity].to_i > 0
+    if session[:e_cart].has_key?(params[:product]) and params[:new_quantity].to_i > 0 and
+      params[:new_quantity] != session[:e_cart][params[:product]]
 
       @prev_quantity = session[:e_cart][params[:product]]
 
@@ -95,6 +96,7 @@ class Client::EcartsController < ApplicationController
   end
 
   def parcel_prices
+    render_404 and return unless session[:e_cart].present?
     @parcel = Parcel.find(params[:id])
     @prices = @parcel.Prices.order(max_weight: :asc)
 

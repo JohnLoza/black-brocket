@@ -44,7 +44,7 @@
                 <div class="form-group">
                   <label class="col-sm-3 control-label"><%= f.label :video, "Elige un nuevo video \'mp4\' o \'webm\'" %></label>
                   <div class="col-sm-9">
-                      <%= f.file_field :video %>
+                      <%= f.file_field :video, required: true %>
                   </div>
                 </div>
 

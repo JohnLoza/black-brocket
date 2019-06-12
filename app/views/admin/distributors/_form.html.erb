@@ -307,11 +307,9 @@
       }
     });
 
-    <% max_date = l(18.years.ago, format: :form_date) %>
     $('#datetimepicker').datetimepicker({
         locale: 'es',
         format: 'YYYY-MM-DD',
-        defaultDate: "<%= max_date %>",
         viewMode: 'years',
         icons: {
             time: 'fa fa-clock-o',
@@ -324,8 +322,6 @@
             clear: 'fa fa-times'
         }
     });
-
-    $('#datetimepicker').data("DateTimePicker").maxDate("<%= max_date %>");
   });
 </script>
 

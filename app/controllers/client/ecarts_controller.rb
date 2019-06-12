@@ -7,7 +7,7 @@ class Client::EcartsController < ApplicationController
       @products = WarehouseProduct.where("hash_id in (?)", session[:e_cart].keys).includes(:Product)
       @product_prices = @current_user.ProductPrices.where("product_id in (?)", @products.map(&:product_id))
       @warehouse = @products[0].Warehouse if @products.any?
-      @parcels = @warehouse.Parcels
+      @parcels = @warehouse.Parcels.exclude_local_delivery
       @banks = Bank.all
 
       @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.product_id})
@@ -19,6 +19,10 @@ class Client::EcartsController < ApplicationController
         19655, # Tlaquepaque, jal
         19658  # Tonalá, jal
       ]
+
+      if @local_regions.include? @current_user.city_id
+        @local_parcel = @warehouse.Parcels.local_delivery.take
+      end
     end
   end
 

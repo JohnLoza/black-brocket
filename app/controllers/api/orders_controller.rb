@@ -8,7 +8,7 @@ class Api::OrdersController < ApiController
     .order(created_at: :desc).paginate(page: params[:page], per_page: 10)
     .includes(:Parcel, City: :State)
     data = Array.new
-    data<<{per_page: 10}
+    data << {per_page: 10}
     orders.each do |order|
 
       extra_data = {hash_id: order.hash_id, date: I18n.l(order.created_at, format: :long),
@@ -43,8 +43,9 @@ class Api::OrdersController < ApiController
 
     extra_data = Array.new
     bank_accounts.each do |account|
-      extra_data << {bank_name: bank.name, account_number: account.account_number, interbank_clabe: account.interbank_clabe,
-                     owner: account.owner, email: account.email, RFC: account.RFC}
+      extra_data << {bank_name: bank.name, account_number: account.account_number, 
+        interbank_clabe: account.interbank_clabe, owner: account.owner, 
+        email: account.email, RFC: account.RFC}
     end
 
     data[:bank_data] = extra_data
@@ -203,6 +204,7 @@ class Api::OrdersController < ApiController
       end
       extra_data[parcel.parcel_name][:prices] = parcel_prices
       extra_data[parcel.parcel_name][:delivery_time] = parcel.delivery_time
+      extra_data[parcel.parcel_name][:local_delivery] = parcel.local_delivery
 
       data << extra_data
     end

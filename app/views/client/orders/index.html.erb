@@ -80,18 +80,17 @@
     </div>
     <% if o.state == "LOCAL" %>
       <div class="row order-box-foot" style="padding-left: 1em;">
-        <p>Recojer en: Galeana 125, col Centro Guadalajara, Jal. cp 44100, Lunes a Sábado 9AM a 6PM</p>
-        <p>El pago deberá ser realizado al momento de recojer la mercancía en las instalaciones.</p>
+        <p>Recojer en: Galeana 125, col Centro Guadalajara, Jal. cp 44100, Lunes a Sábado 9 am a 6 pm</p>
+        <p>El pago puede ser realizado al momento de recojer la mercancía en las instalaciones, 
+          o se puede realizar un depósito como el resto de las órdenes.</p>
       </div>
     <% end %>
-    <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>
+    <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" or o.state=="LOCAL" %>
     <div class="row order-box-foot">
       <div class="col-sm-6">
-        <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>
-          <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id), remote: true,
-                class: 'darklink label-custom-2', style: 'cursor:pointer; color: #FEFEFE;' do %>
-            <span class="btn btn-custom-1 btn-sm pull-right"> <strong>Información para pagar</strong></span><br>
-          <% end %>
+        <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id), remote: true,
+          class: 'darklink label-custom-2', style: 'cursor:pointer; color: #FEFEFE;' do %>
+          <span class="btn btn-custom-1 btn-sm pull-right"> <strong>Información para pagar</strong></span><br>
         <% end %>
       </div>
 
@@ -110,7 +109,7 @@
           <%= f.submit "Subir foto del pago".html_safe,
               id: "pay_img_commit_#{o.hash_id}", style: "display: none;" %>
         </div>
-      <% end if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" %>
+      <% end %>
     </div>
     <% end %>
   </div>
@@ -168,17 +167,8 @@
     </div>
   </div>
 </div>
-<%= render '/shared/modal'%>
 
-<script type="text/javascript">
-$(document).ready(function(){
-  // init ekko-lightbox
-  $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-    event.preventDefault();
-    $(this).ekkoLightbox();
-  });
-});
-</script>
+<%= render '/shared/modal'%>
 
 <style>
   .modal-body .table{
@@ -187,6 +177,3 @@ $(document).ready(function(){
     white-space: nowrap;
   }
 </style>
-
-<%= stylesheet_link_tag 'ekko-lightbox.min', media: 'all' %>
-<%= javascript_include_tag 'ekko-lightbox.min' %>

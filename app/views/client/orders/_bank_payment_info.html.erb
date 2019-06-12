@@ -1,15 +1,13 @@
-<% accounts.each do |account| %>
+<% @bank_accounts.each do |account| %>
   <tr>
-    <td><%= bank_name %></td>
+    <td><%= @bank.name %></td>
     <td><%= account.account_number %></td>
     <td><%= account.interbank_clabe %></td>
-    <td><%= reference %></td>
-    <td><%= account.owner %></td>
+    <td><%= @order.hash_id %></td>
+    <td><%= @bank.owner %></td>
   </tr>
 <% end %>
-<% if accounts.any? %>
 <tr>
   <td>Contacto:</td>
-  <td><%= accounts[0].email %></td>
+  <td><%= @bank.email %></td>
 </tr>
-<% end %>

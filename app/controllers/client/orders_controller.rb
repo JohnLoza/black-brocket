@@ -102,8 +102,9 @@ class Client::OrdersController < ApplicationController
 
   def upload_payment
     @order = Order.find_by!(hash_id: params[:id])
-    if params[:order] and @order and 
-      ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED", "PAYMENT_REJECTED"].include? @order.state
+    redirect_to client_orders_path(@current_user) unless ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED", "PAYMENT_REJECTED", "LOCAL"].include? @order.state
+
+    if params[:order]
       if params[:order][:pay_img].content_type == "application/pdf"
         @order.remove_pay_img! if !@order.pay_img.blank?
         @order.pay_pdf = params[:order][:pay_img]
@@ -114,7 +115,7 @@ class Client::OrdersController < ApplicationController
         flash[:info] = "Solo se admiten archivos jpg, png y pdf, gracias."
         redirect_to client_orders_path(@current_user) and return
       end
-      @order.state = "PAYMENT_DEPOSITED"
+      @order.state = "PAYMENT_DEPOSITED" unless @order.state == "LOCAL"
       @order.download_payment_key = SecureRandom.urlsafe_base64
       @saved = true if @order.save!
     end
@@ -141,8 +142,10 @@ class Client::OrdersController < ApplicationController
 
   def get_bank_payment_info
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
-    @bank = Bank.find_by!(id: @order.payment_method)
-    @bank_accounts = @bank.Accounts
+    if @order.payment_method.present?
+      @bank = Bank.find_by!(id: @order.payment_method)
+      @bank_accounts = @bank.Accounts
+    end
 
     respond_to do |format|
       format.js { render :get_bank_payment_info, layout: false }

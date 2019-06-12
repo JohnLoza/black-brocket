@@ -65,7 +65,8 @@ class Admin::ParcelsController < AdminController
 
   private
     def parcel_params
-      params.require(:parcel).permit(:parcel_name, :delivery_time, :image, :tracking_url)
+      params.require(:parcel).permit(:parcel_name, :delivery_time, :image, 
+        :tracking_url, :local_delivery)
     end
 
 end

@@ -1,15 +1,13 @@
-<% if @order and @bank %>
-  <% link = link_to "Cambiar método de pago", "#", class: "btn btn-default",
-              onclick: "place_payment_method_form();",
-              id: "update_payment_method_form" %>
-  <% hash = {accounts: @bank_accounts, bank_name: @bank.name,
-              reference: @order.hash_id} %>
-
-  $('#bank-payment-info').html("<%= j render partial: 'bank_payment_info', locals: hash %>");
-  $('#update_payment_method_form').remove();
-  $('#myModal').find('.modal-footer').append('<%= link %>');
-  $('#myModal').modal('show');
+$('#bank-payment-info').html("No ha seleccionado un banco aún.");
+<% if @bank %>
+  $('#bank-payment-info').html("<%= j render partial: 'bank_payment_info' %>");
 <% end %>
+
+<% link = link_to "Cambiar método de pago", "#", class: "btn btn-default",
+  onclick: "place_payment_method_form();", id: "update_payment_method_form" %>
+$('#update_payment_method_form').remove();
+$('#myModal').find('.modal-footer').append('<%= link %>');
+$('#myModal').modal('show');
 
 function place_payment_method_form(){
   $('#myModal').modal('hide');

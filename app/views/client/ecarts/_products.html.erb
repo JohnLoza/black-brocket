@@ -98,6 +98,17 @@
             <label for="parcel_id_0">Recojer en instalaciones de Guadalajara, Jal.</label>
           </div>
         <% end %>
+
+        <% if @local_parcel %>
+          <div>
+            <%= radio_button_tag 'parcel_id', @local_parcel.id, false, autocomplete: :off, required: true, style: "display: none;",
+              onchange: "fetchParcelPrices(this); removeFilter('.parcel_img_#{@local_parcel.id}', 'parcel')"  %>
+            <label for="parcel_id_<%= @local_parcel.id %>">
+              <%= image_tag @local_parcel.image.url(:mini), class: "parcel_img_#{@local_parcel.id} parcel" %>
+            </label>
+          </div>
+        <% end %>
+
         <% @parcels.each do |parcel| %>
           <div>
             <%= radio_button_tag 'parcel_id', parcel.id, false, autocomplete: :off, required: true, style: "display: none;",

@@ -2,8 +2,33 @@
 <%= form_for order, remote: true,
     url: client_update_payment_method_path(@current_user.hash_id, order.hash_id) do |f| %>
   <% @banks.each do |bank| %>
-    <%= f.radio_button 'payment_method', bank.id %>
-    <%= image_tag bank.image.url(:mini) %><br>
+    <div style="display: inline-block; margin: 1em;">
+      <%= f.radio_button 'payment_method', bank.id, style: 'display: none;',
+        onchange: "removeFilter('#payment_img_#{bank.id}')" %>
+      <label for="order_payment_method_<%= bank.id %>">
+        <img src="<%= bank.image.url(:mini) %>" id="payment_img_<%=bank.id%>"
+          class="<%= 'removeFilter' if @order.payment_method == bank.id %>">
+      </label>
+    </div>
   <% end %>
-  <%= f.submit 'Actualizar', class: 'btn btn-primary' %>
+  <br>
+  <%= f.submit 'Guardar', class: 'btn btn-primary' %>
 <% end %>
+
+<style>
+  form img{
+    -webkit-filter: grayscale(90%);
+    filter: grayscale(90%);
+  }
+  .removeFilter{
+    -webkit-filter: none;
+    filter: none;
+  }
+</style>
+
+<script type="text/javascript">
+  function removeFilter(target){
+    $(`.removeFilter`).removeClass('removeFilter');
+    $(target).addClass('removeFilter');
+  }
+</script>

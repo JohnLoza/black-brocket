@@ -16,12 +16,13 @@ class Admin::WebController < AdminController
 
   def upload_photos
     deny_access! and return unless @current_user.has_permission?('web@gallery_images')
+    deny_access! and return unless params[:web_photo].present?
 
     params[:web_photo][:photos].each do |photo|
-      WebPhoto.create({ photo: p, name: params[:web_photo][:name] })
-    end if params[:web_photo] and params[:web_photo][:photos]
+      photo = WebPhoto.create({ photo: photo, name: params[:web_photo][:name] })
+    end if params[:web_photo][:photos]
 
-    if params[:web_photo] and params[:web_photo][:photo]
+    if params[:web_photo][:photo]
       photo = WebPhoto.where(name: params[:web_photo][:name]).take
 
       if photo.blank?

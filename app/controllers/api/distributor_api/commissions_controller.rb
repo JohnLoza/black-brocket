@@ -1,6 +1,6 @@
 class Api::DistributorApi::CommissionsController < ApiController
   before_action do
-    authenticate_user!(:distributor)
+    authenticate_user!(Distributor)
   end
 
   def index

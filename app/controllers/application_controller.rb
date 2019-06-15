@@ -6,15 +6,14 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
   include SessionsHelper
 
-  # before_action :set_locale
-
-  # rescue_from Exception, with: :method not working somehow
   rescue_from ActiveRecord::RecordNotFound do |e|
     render_404
   end
+
   rescue_from ActionController::UnknownFormat do |e|
     render_404
   end
+  
   rescue_from ActionController::UnknownController do |e|
     render_404
   end
@@ -25,10 +24,4 @@ class ApplicationController < ActionController::Base
       format.any { head :not_found }
     end
   end
-
-  # def set_locale
-  #   I18n.locale = params[:locale] || I18n.default_locale
-  #   Time.zone = 'Guadalajara'
-  # end
-
 end

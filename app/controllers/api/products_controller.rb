@@ -1,6 +1,6 @@
 class Api::ProductsController < ApiController
   before_action do
-    authenticate_user!(:client)
+    authenticate_user!(Client)
   end
 
   @@base_file_path = "app/views"

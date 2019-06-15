@@ -41,6 +41,7 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
+    barby (0.6.8)
     bcrypt (3.1.12)
     bindex (0.5.0)
     builder (3.2.3)
@@ -58,7 +59,7 @@ GEM
       mime-types (>= 1.16)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
-    chunky_png (1.3.10)
+    chunky_png (1.3.11)
     concurrent-ruby (1.0.5)
     crass (1.0.4)
     erubi (1.7.1)
@@ -126,8 +127,8 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
-    rqrcode-with-patches (0.5.5)
-      chunky_png
+    rqrcode (0.10.1)
+      chunky_png (~> 1.0)
     ruby_dep (1.5.0)
     rubyzip (1.2.1)
     sass (3.5.7)
@@ -181,6 +182,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  barby
   bcrypt (~> 3.1.7)
   byebug
   capybara (~> 2.13)
@@ -192,7 +194,7 @@ DEPENDENCIES
   pg
   puma (~> 3.7)
   rails (~> 5.1.6)
-  rqrcode-with-patches (~> 0.5.4)
+  rqrcode
   sass-rails
   selenium-webdriver
   spring

@@ -16,6 +16,10 @@ class Distributor::OrdersController < ApplicationController
   end
 
   def details
+    require 'barby'
+    require 'barby/barcode/code_128'
+    require 'barby/outputter/html_outputter'
+
     @order = Order.find_by!(hash_id: params[:id])
     @order_address = @order.address_hash
 
@@ -29,6 +33,9 @@ class Distributor::OrdersController < ApplicationController
 
     @client_city = @current_user.City
     @client_state = State.where(id: @client_city.state_id).take
+
+    @barcode = Barby::Code128.new(@order.hash_id)
+    @barcode_for_html = Barby::HtmlOutputter.new(@barcode)
 
     render "/shared/orders/details", layout: false
   end

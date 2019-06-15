@@ -56,6 +56,9 @@ gem 'mini_magick', '~> 4.3.6'
 gem 'will_paginate', '~> 3.0.7'
 # Integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem. #
 gem 'will_paginate-bootstrap', '~> 1.0.1'
-# rqrcode-with-patches for qr code generation #
-gem 'rqrcode-with-patches', '~> 0.5.4'
+# rqrcode for qr code generation #
+gem 'rqrcode'
+# barby for barcode rendering #
+gem 'barby'
+# jQuery #
 gem 'jquery-rails'

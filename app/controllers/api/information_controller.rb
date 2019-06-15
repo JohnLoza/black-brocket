@@ -1,7 +1,7 @@
 class Api::InformationController < ApiController
 
   before_action only: :ecart_info do
-    authenticate_user!(:client)
+    authenticate_user!(Client)
   end
   
   @@base_file_path = "app/views"

@@ -1,6 +1,6 @@
 class Api::WorkersApi::WarehouseProductsController < ApiController
   before_action do
-    authenticate_user!(:site_worker)
+    authenticate_user!(SiteWorker)
   end
 
   def index

@@ -1,37 +1,24 @@
 class ApiController < ActionController::API
-  # rescue_from Exception, with: :method not working somehow
   rescue_from ActiveRecord::RecordNotFound do |e|
     render_404
   end
+
   rescue_from ActionController::UnknownFormat do |e|
     render_404
   end
+
   rescue_from ActionController::UnknownController do |e|
     render_404
   end
-  rescue_from ActionController::RoutingError do |e|
-    render_404
-  end
 
-  def authenticate_user!(type)
-    render_authentication_error and return unless type.present?
+  def authenticate_user!(model)
+    render_authentication_error and return unless model.present?
     render_authentication_error and return unless params[:authentication_token].present?
-
-    case type
-    when :site_worker
-      model = SiteWorker
-    when :distributor
-      model = Distributor
-    when :client
-      model = Client
-    else
-      render_404 and return
-    end
 
     @current_user = model.find_by(authentication_token: params[:authentication_token])
     render_authentication_error and return unless @current_user
 
-    if type == :site_worker
+    if model == SiteWorker
       deny_access! and return unless @current_user.has_permission?('orders@capture_batches')
     end
   end
@@ -45,7 +32,7 @@ class ApiController < ActionController::API
   end
 
   def render_404
-    head :not_found
+    render status: 401, json: {success: false, info: "NOT_FOUND"}
   end
 
   def search_params

@@ -333,7 +333,7 @@ class Admin::WarehouseProductsController < AdminController
       deny_access! and return 
     end
 
-    @product = Product.find_by!(hash_id: params[:product_qr][:product])
+    @product = Product.find(params[:product_qr][:product])
     @qr = RQRCode::QRCode.new( "#{@product.name}|#{params[:product_qr][:batch]}")
 
     render :print_qr, layout: false

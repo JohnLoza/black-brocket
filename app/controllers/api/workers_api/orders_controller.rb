@@ -1,6 +1,6 @@
 class Api::WorkersApi::OrdersController < ApiController
   before_action do
-    authenticate_user!(:site_worker)
+    authenticate_user!(SiteWorker)
   end
 
   def count

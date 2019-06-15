@@ -380,6 +380,9 @@ Rails.application.routes.draw do
 
       get "orders/supplied" => "orders#supplied"
     end
+
+    get 'order/:id/courtesy_available' => 'courtesy#available'
+    post 'order/:id/courtesy/:courtesy_folio' => 'courtesy#update'
   end
 
   match '*path', via: :all, to: 'application#render_404'

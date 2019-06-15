@@ -1,7 +1,7 @@
 class Api::UsersController < ApiController
   
   before_action except: :create do
-    authenticate_user!(:client)
+    authenticate_user!(Client)
   end
 
   def create

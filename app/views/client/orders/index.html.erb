@@ -88,8 +88,9 @@
     <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" or o.state=="LOCAL" %>
     <div class="row order-box-foot">
       <div class="col-sm-6">
-        <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id), remote: true,
-          class: 'darklink label-custom-2', style: 'cursor:pointer; color: #FEFEFE;' do %>
+        <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id),
+          class: 'darklink label-custom-2', style: 'cursor:pointer; color: #FEFEFE;', 
+          remote: true, id: "payment-info-link-#{o.hash_id}" do %>
           <span class="btn btn-custom-1 btn-sm pull-right"> <strong>Información para pagar</strong></span><br>
         <% end %>
       </div>

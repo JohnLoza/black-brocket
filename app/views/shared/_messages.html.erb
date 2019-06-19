@@ -6,37 +6,20 @@
   </div>
 
   <div class="panel-body">
-    <%= form_tag(create_message_url) do %>
-      <%= text_area_tag :comment, nil, class: "form-control form-control-black", maxlength: 250 %><br>
-      <%= submit_tag :Enviar, class: "btn btn-custom-1 pull-right" %>
+    <%= form_tag(create_message_url, remote: true) do %>
+      <%= text_area_tag :comment, nil, class: "form-control form-control-black", 
+        maxlength: 250, onkeypress: 'return submitOnEnter(event);' %><br>
+      <%= submit_tag :Enviar, class: "btn btn-custom-1 pull-right",
+        id: 'new-message-submit' %>
     <% end %>
   </div>
 </div>
 
-
-<% messages.each do |message| %>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <% if message.is_from_client %>
-          <% avatar = @client_image
-             username = @client_username %>
-        <% else %>
-          <% avatar = @distributor_image
-             username = @distributor_username %>
-        <% end %>
-        <%= image_tag avatar, style: "width: 35px;border-radius: 4px;" %>
-        <%= username %> -
-        <small>
-          <%= l(message.created_at, format: :long) %>
-        </small><br>
-      </h4>
-    </div>
-    <div class="panel-body" style="padding: 10px;padding-left: 15px;">
-      <%= message.comment %>
-    </div>
-  </div>
-<% end #messages.each# %>
+<div id="messages-container">
+  <% messages.each do |message| %>
+    <%= render partial: '/shared/message', locals: {message: message} %>
+  <% end #messages.each# %>
+</div>
 
 <div class="row">
   <div class="col-md-12">
@@ -53,3 +36,14 @@
     margin-bottom: 10px;
   }
 </style>
+
+<script type="text/javascript">
+function submitOnEnter(event){
+  var charCode = (event.which) ? event.which : event.keyCode;
+  if (charCode != 13)
+    return true;
+
+  $(`#new-message-submit`).click();
+  return false;
+}
+</script>

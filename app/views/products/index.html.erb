@@ -18,7 +18,7 @@
 
     <% if logged_in?%>
       <div class="text-center">
-        <%= image_tag @current_user.avatar_url(:mini), class: "img-rounded", 
+        <%= image_tag @current_user.avatar_url, class: "img-rounded", 
           style: "width:130px; margin-bottom: 1em;" %><br>
       </div>
     <% end %>
@@ -62,19 +62,19 @@
       <% else %>
         <%= render "product_grid_visiter" %>
       <% end %>
-
-      <div class="text-center">
-        <%= link_to root_path + '#contact', class: 'btn btn-custom-1',
-          onclick: "gtag_report_conversion('#{root_url + '#contact'}')" do %>
-          Más información para muestras gratuitas.
-        <% end %>
-      </div>
-
-      <div class="col-md-9 pull-right text-right">
-        <%= will_paginate @products, renderer: BootstrapPagination::Rails %>
-      </div>
     </div>
     <!-- end of products view -->
+  </div>
+
+  <div class="text-center">
+    <%= link_to root_path + '#contact', class: 'btn btn-custom-1',
+      onclick: "gtag_report_conversion('#{root_url + '#contact'}')" do %>
+      Más información <br>para muestras gratuitas.
+    <% end %>
+  </div>
+
+  <div class="text-center">
+    <%= will_paginate @products, renderer: BootstrapPagination::Rails %>
   </div>
 </div>
 <div class="row">

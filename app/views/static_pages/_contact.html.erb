@@ -24,30 +24,36 @@
           <div class="row">
 
             <div class="col-sm-6 form-group">
-              <%= text_field_tag :name, "", { class: 'form-control', placeholder: "Nombre", maxlength: 50, required: true} %>
+              <%= text_field_tag :name, "", class: 'form-control', 
+                placeholder: "Nombre", maxlength: 50, required: true %>
             </div>
 
             <div class="col-sm-6 form-group">
-              <%= email_field_tag :email, "", { class: 'form-control', placeholder: "Tu email", maxlength: 50, required: true} %>
+              <%= email_field_tag :email, "", class: 'form-control', 
+                placeholder: "Tu email", maxlength: 50, required: true %>
             </div>
 
           </div><!-- .row -->
 
           <div class="row">
             <div class="col-sm-12 form-group">
-              <%= text_field_tag :telephone, "", { class: 'form-control', placeholder: 'Teléfono de contacto', maxlength: 20 }%>
+              <%= text_field_tag :telephone, "", class: 'form-control', 
+                placeholder: 'Teléfono de contacto', maxlength: 20 %>
             </div>
           </div>
 
           <div class="row">
             <div class="col-sm-12 form-group">
-              <%= text_area_tag :message, "", { class: "form-control", placeholder: "Mensaje", maxlength: 250, required: true} %>
+              <%= text_area_tag :message, "", class: "form-control", 
+                placeholder: "Mensaje", maxlength: 250, required: true,
+                onkeypress: "return submitOnEnter(event);" %>
             </div>
           </div><!-- .row -->
 
           <div class="row">
             <div class="col-sm-12 text-center">
-              <button type="submit" class="btn btn-custom-4">Enviar</button>
+              <button type="submit" class="btn btn-custom-4" 
+                id="contact-form-submit">Enviar</button>
             </div>
           </div><!-- .row --><br>
 
@@ -63,3 +69,14 @@
   </div><!-- .container -->
 </section>
 <!-- Contact end -->
+
+<script type="text/javascript">
+function submitOnEnter(event){
+  var charCode = (event.which) ? event.which : event.keyCode;
+  if (charCode != 13)
+    return true;
+
+  $(`#contact-form-submit`).click();
+  return false;
+}
+</script>

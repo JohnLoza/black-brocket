@@ -2,33 +2,6 @@ class Client::ClientsController < ApplicationController
   layout "static_pages.html.erb", only: [ :new ]
   before_action :current_user_is_a_client?, except:  [ :new, :create, :email_confirmation ]
 
-  def distributor
-    if params[:notification]
-      notification = Notification.find(params[:notification])
-      notification.update_attribute(:seen, true)
-    end
-
-    @distributor = @current_user.City.Distributor
-    @distributor_is_a_worker = false
-    if !@distributor and !@current_user.worker_id.blank?
-      # see if there is a worker that will attend this client
-      @distributor = @current_user.Worker
-      @distributor_is_a_worker = true if @distributor
-    end
-
-    if @distributor
-      @messages = @current_user.DistributorMessages.where('distributor_id = ? or worker_id = ?', @distributor.id, @distributor.id)
-        .order(created_at: :desc).paginate(page: params[:page], per_page: 25)
-      @create_message_url = client_create_distributor_comment_path(@distributor.id)
-
-      @client_image = @current_user.avatar_url(:mini)
-      @client_username = @current_user.name
-
-      @distributor_image = @distributor.avatar_url(:mini)
-      @distributor_username = @distributor.username
-    end
-  end
-
   def notifications
     @notifications = @current_user.Notifications.order(created_at: :desc)
       .limit(50).paginate(page: params[:page], per_page: 15)
@@ -132,29 +105,60 @@ class Client::ClientsController < ApplicationController
     redirect_to products_path
   end
 
+  def distributor
+    if params[:notification]
+      notification = Notification.find(params[:notification])
+      notification.update_attribute(:seen, true)
+    end
+
+    @distributor = @current_user.City.Distributor
+    @distributor_is_a_worker = false
+    if !@distributor and !@current_user.worker_id.blank?
+      # see if there is a worker that will attend this client
+      @distributor = @current_user.Worker
+      @distributor_is_a_worker = true if @distributor
+    end
+
+    if @distributor
+      @messages = @current_user.DistributorMessages.where('distributor_id = ? or worker_id = ?', @distributor.id, @distributor.id)
+        .order(created_at: :desc).paginate(page: params[:page], per_page: 25)
+      @create_message_url = client_create_distributor_comment_path(@distributor.id)
+
+      @client_image = @current_user.avatar_url(:mini)
+      @client_username = @current_user.name
+
+      @distributor_image = @distributor.avatar_url(:mini)
+      @distributor_username = @distributor.username
+    end
+  end
+
   def create_distributor_comment
     @distributor = @current_user.City.Distributor
     if !@distributor and !@current_user.worker_id.blank?
       @worker = @current_user.Worker
     end
 
-    message = ClientDistributorComment.new(message_params)
+    @message = ClientDistributorComment.new(message_params)
 
     if @distributor
-      message.distributor_id = @distributor.id
+      @message.distributor_id = @distributor.id
       Notification.create(distributor_id: @distributor.id, icon: "fa fa-comments-o",
         description: "El usuario " + @current_user.name + " te envió un mensaje",
         url: distributor_client_messages_path(@current_user.hash_id))
     elsif @worker
-      message.worker_id = @worker.id
+      @message.worker_id = @worker.id
       Notification.create(worker_id: @worker.id, icon: "fa fa-comments-o",
         description: "El usuario " + @current_user.name + " te envió un mensaje",
         url: admin_distributor_work_client_messages_path(@current_user.hash_id))
     end
 
-    message.save
-    flash[:success] = "Mensaje guardado."
-    redirect_to client_my_distributor_path
+    @client_image = @current_user.avatar_url(:mini)
+    @client_username = @current_user.name
+
+    @message.save
+    respond_to do |format|
+      format.js { render :create_distributor_comment, layout: false }
+    end
   end
 
   def email_confirmation

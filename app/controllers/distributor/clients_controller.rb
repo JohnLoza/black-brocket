@@ -65,13 +65,17 @@ class Distributor::ClientsController < ApplicationController
     region_ids = @current_user.Regions.map(&:id)
     @client = Client.find_by!(hash_id: params[:id], city_id: region_ids)
 
-    ClientDistributorComment.create({client_id: @client.id, 
+    @message = ClientDistributorComment.create({client_id: @client.id, 
       distributor_id: @current_user.id, comment: params[:comment], is_from_client: false})
 
     Notification.create(client_id: @client.id, icon: "fa fa-comments-o",
       description: "El distribuidor respondió a tu mensaje", url: client_my_distributor_path)
 
-    flash[:success] = "Mensaje guardado."
-    redirect_to distributor_client_messages_path(@client.hash_id)
+    @distributor_image = @current_user.avatar_url(:mini)
+    @distributor_username = @current_user.username
+
+    respond_to do |format|
+      format.js { render :create_message, layout: false }
+    end
   end
 end

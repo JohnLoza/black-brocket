@@ -31,13 +31,13 @@
           </div>
           <div class="panel-body">
             <%= form_for(TipRecipeComment.new, url: create_tip_comment_path(@tip.id),
-                        method: :post, remote: true,
-                        html: {id: "form-#{@tip.id}", class: "form"}) do |f| %>
+              method: :post, remote: true) do |f| %>
 
               <!--<%= f.label :description, "Nuevo comentario" %>-->
-              <%= f.text_area :description, class: "text-area form-control", maxlength: 250 %>
+              <%= f.text_area :description, class: "text-area form-control", maxlength: 250,
+                onkeypress: 'return submitOnEnter(event);' %>
               <a onclick="verify_message(this)" class="btn btn-custom-1 pull-right">Comentar</a>
-              <%= f.submit nil, class: "commit", style: "display: none;" %>
+              <%= f.submit nil, class: "commit", style: "display: none;", id: "new-comment-submit" %>
             <% end %>
           </div>
         </div>
@@ -68,14 +68,23 @@
 </div>
 
 <script type="text/javascript">
-  // verify message before submit to not save empty comments
-  function verify_message(triger_object){
-    form = $(triger_object).parent();
-    description_field = form.find("#tip_recipe_comment_description");
-    if (description_field.val().trim() != ""){
-      form.find(".commit").click();
-    }
+// verify message before submit to not save empty comments
+function verify_message(triger_object){
+  form = $(triger_object).parent();
+  description_field = form.find("#tip_recipe_comment_description");
+  if (description_field.val().trim() != ""){
+    form.find(".commit").click();
   }
+}
+
+function submitOnEnter(event){
+  var charCode = (event.which) ? event.which : event.keyCode;
+  if (charCode != 13)
+    return true;
+
+  $(`#new-comment-submit`).click();
+  return false;
+}
 </script>
 
 <style media="screen">

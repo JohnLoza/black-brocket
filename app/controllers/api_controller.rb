@@ -24,15 +24,16 @@ class ApiController < ActionController::API
   end
 
   def render_authentication_error
-    render status: 401, json: {success: false, info: "AUTHENTICATION_ERROR"}
+    render status: 401, json: { success: false, info: "AUTHENTICATION_ERROR" }
   end
 
   def deny_access!
-    render status: 200, json: {success: false, info: "ACCESS_DENIED"}
+    render status: 200, json: { success: false, info: "ACCESS_DENIED" }
   end
 
   def render_404
-    render status: 401, json: {success: false, info: "NOT_FOUND"}
+    # render status: 200, json: { success: false, info: "NOT_FOUND" }
+    head :not_found
   end
 
   def search_params

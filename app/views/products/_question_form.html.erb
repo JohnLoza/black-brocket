@@ -1,5 +1,25 @@
-  <%= form_for(:prod_question, url: product_ask_path(prod_id), remote: true) do |f| %>
-    <h3 class="iconbox-title">Realiza una pregunta aquí</h3>
-    <%= f.text_area :description, { class: 'form-control form-control-black', maxlenght: 250, placeholder: "Escribe tu pregunta...", style: "padding: 5px;margin-bottom: 10px;", required: true } %>
-    <%= f.submit "Preguntar", { class: "btn btn-custom-1 pull-right" } %>
-  <% end %>
+<%= form_for(:prod_question, url: product_ask_path(prod_id), remote: true) do |f| %>
+  <h3 class="iconbox-title">Realiza una pregunta aquí</h3>
+
+  <%= f.text_area :description, class: 'form-control form-control-black', 
+    maxlenght: 250, placeholder: "Escribe tu pregunta...", 
+    style: "padding: 5px;margin-bottom: 10px;", required: true,
+    onkeypress: 'return submitOnEnter(event);' %>
+
+  <div class="text-right" style="margin-bottom: 2em;">
+    <%= f.submit "Preguntar", class: "btn btn-sm btn-custom-1",
+      id: 'product-question-submit' %>
+  </div>
+
+<% end %>
+
+<script type="text/javascript">
+function submitOnEnter(event){
+  var charCode = (event.which) ? event.which : event.keyCode;
+  if (charCode != 13)
+    return true;
+
+  $(`#product-question-submit`).click();
+  return false;
+}
+</script>

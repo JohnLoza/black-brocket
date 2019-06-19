@@ -79,24 +79,25 @@ class Admin::DistributorWorkController < AdminController
     deny_access! and return unless @current_user.has_permission_category?('distributor_work')
     @client = Client.find_by!(hash_id: params[:id])
 
-    ActiveRecord::Base.transaction do
-      ClientDistributorComment.create(client_id: @client.id,
-        worker_id: @current_user.id, comment: params[:comment], is_from_client: false)
+    @message = ClientDistributorComment.create(client_id: @client.id,
+      worker_id: @current_user.id, comment: params[:comment], is_from_client: false)
 
-      Notification.create(client_id: @client.id, icon: "fa fa-comments-o",
-        description: "El distribuidor respondió a tu mensaje", url: client_my_distributor_path)
-      flash[:success] = "Mensaje guardado."
+    Notification.create(client_id: @client.id, icon: "fa fa-comments-o",
+      description: "El distribuidor respondió a tu mensaje", url: client_my_distributor_path)
+
+    @distributor_image = @current_user.avatar_url(:mini)
+    @distributor_username = @current_user.username
+
+    respond_to do |format|
+      format.js { render :create_message, layout: false }
     end
-
-    flash[:info] = "Ocurrió un error al guardar el mensaje" unless flash[:success].present?
-    redirect_to admin_distributor_work_client_messages_path(@client.hash_id)
   end
 
   def orders
     deny_access! and return unless @current_user.has_permission_category?('distributor_work')
 
     @orders = Order.joins(:Client).where(clients: {worker_id: @current_user.id})
-              .order(created_at: :desc).paginate(page: params[:page], per_page: 20)
+      .order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 
   def transfer_client

@@ -1,0 +1,22 @@
+<% if message.is_from_client %>
+  <% avatar = @client_image
+    username = @client_username %>
+<% else %>
+  <% avatar = @distributor_image
+    username = @distributor_username %>
+<% end %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <%= image_tag avatar, style: "width: 35px;border-radius: 4px;" %>
+      <%= username %> -
+      <small>
+        <%= l(message.created_at, format: :long) %>
+      </small><br>
+    </h4>
+  </div>
+  <div class="panel-body" style="padding: 10px;padding-left: 15px;">
+    <%= message.comment %>
+  </div>
+</div>

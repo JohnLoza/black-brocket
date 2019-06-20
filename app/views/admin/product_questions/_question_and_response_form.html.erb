@@ -1,48 +1,52 @@
 <div id="<%= question.hash_id %>" class="social-feed-box">
-    <div class="pull-right social-action dropdown">
-        <button data-toggle="dropdown" class="dropdown-toggle btn-white">
-            <i class="fa fa-angle-down"></i>
-        </button>
-        <ul class="dropdown-menu m-t-xs">
-            <li class="disabled"><a href="#">Eliminar</a></li>
-        </ul>
+  <!--div class="pull-right social-action dropdown">
+      <button data-toggle="dropdown" class="dropdown-toggle btn-white">
+          <i class="fa fa-angle-down"></i>
+      </button>
+      <ul class="dropdown-menu m-t-xs">
+          <li class="disabled"><a href="#">Eliminar</a></li>
+      </ul>
+  </div-->
+  <div class="social-avatar">
+    <h3> <%= question.Product.name %> </h3>
+      <%= link_to admin_client_path(client), class: 'pull-left' do %>
+        <%= image_tag client.avatar_url(:mini) %>
+      <% end %>
+      <div class="media-body">
+          <%= link_to client.name, admin_client_path(client) %>
+          <small class="text-muted"><%= l(question.created_at, format: :long) %></small>
+      </div>
+  </div>
+  <div class="social-body">
+      <p><%= question.description %></p>
+  </div>
+  <div class="social-footer">
+    <div class="social-comment">
+      <%= image_tag @current_user.avatar_url(:mini), class: 'pull-left' %>
+      <div class="media-body">
+        <%= form_for :prod_answer, remote: true do |f| %>
+        <%= f.text_area :description, class: 'form-control', maxlength: 250,
+          placeholder: "Contesta esta pregunta...", required: true,
+          onkeypress: "return submitOnEnter(event, '.submit-#{question.hash_id}');",
+          autocomplete: :off %>
+        <%= f.hidden_field :question_id, value: question.hash_id %>
+        <%= f.submit "Guardar respuesta", 
+          class: "btn btn-primary m-t-sm pull-right submit-#{question.hash_id}",
+          data: { confirm: '¿Estás seguro(a) de tu respuesta?' } %>
+        <% end %>
+      </div>
     </div>
-    <div class="social-avatar">
-    	<h3> <%= question.Product.name %> </h3>
-        <a href="" class="pull-left">
-          <% if !question.Client.photo.blank? %>
-            <%= image_tag question.Client.photo.url(:mini) %>
-          <% else %>
-            <%= image_tag("user_avatar.png") %>
-          <% end %>
-        </a>
-        <div class="media-body">
-            <a href="#"><%= question.Client.username %></a>
-            <small class="text-muted"><%= l(question.created_at, format: :long) %></small>
-        </div>
-    </div>
-    <div class="social-body">
-        <p><%= question.description %></p>
-    </div>
-    <div class="social-footer">
-        <div class="social-comment">
-            <a href="" class="pull-left">
-              <% if !@current_user.photo.blank? %>
-                <%= image_tag @current_user.photo.url(:mini) %>
-              <% else %>
-                <%= image_tag("user_avatar.png") %>
-              <% end %>
-            </a>
-            <div class="media-body">
-            	<%= form_for :prod_answer, remote: true do |f| %>
-	                 <%= f.text_area :description, { class: 'form-control', placeholder: "Contesta esta pregunta...", maxlength: 250, required: true } %>
-	    			 <%= f.hidden_field :question_id, value: question.hash_id %>
-	    			 <%= f.submit "Guardar respuesta", class: 'btn btn-primary m-t-sm pull-right',
-	                  data: { confirm: '¿Estás seguro(a) de tu respuesta?' } %>
-  				<% end %>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
 
 <div class="hr-line-dashed"></div>
+<script type="text/javascript">
+function submitOnEnter(event, target){
+  var charCode = (event.which) ? event.which : event.keyCode;
+  if (charCode != 13)
+    return true;
+
+  $(target).click();
+  return false;
+}
+</script>

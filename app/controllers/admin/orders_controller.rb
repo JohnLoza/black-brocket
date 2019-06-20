@@ -61,7 +61,6 @@ class Admin::OrdersController < AdminController
   def details
     require 'barby'
     require 'barby/barcode/code_128'
-    require 'barby/outputter/html_outputter'
 
     deny_access! and return unless @current_user.has_permission?('orders@show')
 
@@ -81,8 +80,7 @@ class Admin::OrdersController < AdminController
     @client_city = @current_user.City
     @client_state = State.where(id: @client_city.state_id).take
 
-    @barcode = Barby::Code128.new(@order.hash_id)
-    @barcode_for_html = Barby::HtmlOutputter.new(@barcode)
+    @barcode = Barby::Code128.new(@order.hash_id).to_image.to_data_url
 
     render "/shared/orders/details", layout: false
   end # def details #

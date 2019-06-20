@@ -20,25 +20,30 @@
          <% end %>
 
           <% if !params[:only_address] or params[:only_address] != "Y"%>
-              <h3>Pedido</h3>
-              <p><strong>Referencia:</strong> <span class="text-navy"><%= @order.hash_id %> <%if !@order.tracking_code.blank?%> - <strong>Código de envío:</strong> <%= @order.tracking_code %></span><%end%></p>
-              
-              <%= raw @barcode_for_html.to_html %>
-              
-              <p class="pull-right" style="font-size:12px;">
-                <span><strong>Fecha de creación:</strong> <%= l(@order.created_at, format: :long) %></span><br>
-                <span><strong>Última modificación:</strong> <%= l(@order.updated_at, format: :long) %></span><br>
-              </p>
-              <p style="font-size:12px;">
-                  <b>Remitente:</b>
-                  Black Brocket de México S. De R.L de C.V.<br>
-                  <% warehouse=@order.Warehouse %>
-                  <%= warehouse.address %>
-                  <% city = warehouse.City %>
-                  <%= city.name %>,
-                  <%= city.State.name %>, México<br>
-                  Teléfono: (<%= city.lada %>) <%= warehouse.telephone %>
-              </p>
+            <h3>Pedido</h3>
+            <%= image_tag @barcode, class: 'pull-right' %>
+            <p><strong>Referencia:</strong> <span class="text-navy">
+              <%= @order.hash_id %> 
+              <% if !@order.tracking_code.blank? %>
+                - <strong>Código de rastreo:</strong> 
+                <%= @order.tracking_code %>
+              <% end %>
+            </span></p>
+            
+            <p style="font-size:12px;">
+              <span><strong>Fecha de creación:</strong> <%= l(@order.created_at, format: :long) %></span><br>
+              <span><strong>Última modificación:</strong> <%= l(@order.updated_at, format: :long) %></span><br>
+            </p>
+            <p style="font-size:12px;">
+                <b>Remitente:</b>
+                Black Brocket de México S. De R.L de C.V.<br>
+                <% warehouse=@order.Warehouse %>
+                <%= warehouse.address %>
+                <% city = warehouse.City %>
+                <%= city.name %>,
+                <%= city.State.name %>, México<br>
+                Teléfono: (<%= city.lada %>) <%= warehouse.telephone %>
+            </p>
           <% end # if to not show when only want address for etiquette # %>
 
           <%= render "/shared/orders/product_details" %>
@@ -106,10 +111,6 @@
     vertical-align: top;
     font-size: 12px;
   }
-  table.barby-barcode { border-spacing: 0; }
-  tr.barby-row {}
-  td.barby-cell { width: 1px; height: 60px; }
-  td.barby-cell.on { background: #000; }
   @media print
   {
     .print-link, .print-link *

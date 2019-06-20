@@ -14,7 +14,8 @@
     </div>
 
     <% @questions.each do |q| %>
-      <%= render partial: "question_and_response_form", locals: { question: q } %>
+      <%= render partial: "question_and_response_form", 
+        locals: { question: q, client: q.Client } %>
     <% end %>
 
     <%= will_paginate @questions, renderer: BootstrapPagination::Rails %>

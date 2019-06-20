@@ -11,7 +11,6 @@ class Client::OrdersController < ApplicationController
   def show
     require 'barby'
     require 'barby/barcode/code_128'
-    require 'barby/outputter/html_outputter'
 
     if params[:notification]
       notification = Notification.find(params[:notification])
@@ -32,8 +31,7 @@ class Client::OrdersController < ApplicationController
     @client_city = @current_user.City
     @client_state = State.where(id: @client_city.state_id).take
 
-    @barcode = Barby::Code128.new(@order.hash_id)
-    @barcode_for_html = Barby::HtmlOutputter.new(@barcode)
+    @barcode = Barby::Code128.new(@order.hash_id).to_image.to_data_url
 
     render "/shared/orders/details", layout: false
   end

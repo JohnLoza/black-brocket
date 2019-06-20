@@ -18,6 +18,7 @@ class Distributor::OrdersController < ApplicationController
   def details
     require 'barby'
     require 'barby/barcode/code_128'
+    require 'barby/outputter/png_outputter'
 
     @order = Order.find_by!(hash_id: params[:id])
     @order_address = @order.address_hash

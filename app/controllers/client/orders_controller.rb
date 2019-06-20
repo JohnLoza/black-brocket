@@ -11,6 +11,7 @@ class Client::OrdersController < ApplicationController
   def show
     require 'barby'
     require 'barby/barcode/code_128'
+    require 'barby/outputter/png_outputter'
 
     if params[:notification]
       notification = Notification.find(params[:notification])

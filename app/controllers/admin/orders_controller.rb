@@ -61,6 +61,7 @@ class Admin::OrdersController < AdminController
   def details
     require 'barby'
     require 'barby/barcode/code_128'
+    require 'barby/outputter/png_outputter'
 
     deny_access! and return unless @current_user.has_permission?('orders@show')
 

@@ -11,7 +11,7 @@
       <% end %>
       <div class="caption">
         <span class="pull-right">
-          $<%= p.price %> MXN
+          $<%= Product.priceFor(wp, @prices) %> MXN
         </span>
 
         <h3><strong><%= p.name %></strong></h3>

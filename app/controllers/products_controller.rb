@@ -17,7 +17,7 @@ class ProductsController < ApplicationController
         .search(key_words: params[:search], fields: ["products.name"])
         .paginate(page: params[:page], per_page: 20).includes(:Product)
 
-      @product_prices = @current_user.ProductPrices
+      @prices = @current_user.ProductPrices
       @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.product_id})
     else
       @products = Product.active.visible.by_category(params[:category])

@@ -69,14 +69,14 @@
               </td>
               <td><%= l(o.created_at, format: :long) %></td>
               <td>
-                <%= link_to admin_order_details_path(o.hash_id),
-                  class: "btn btn-white btn-sm m-b-xs", target: "_blank" do %>
+                <%= link_to admin_order_details_path(o.hash_id), target: "_blank",
+                  class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
                   <i class="fa fa-eye"></i> Ver pedido
                 <% end %>
 
                 <% if @current_user.has_permission?('orders@capture_batches') and o.state == "LOCAL" %>
                   <%= link_to "Capturar números de lote", admin_capture_details_path(o.hash_id),
-                    class: "btn btn-white btn-sm m-b-xs" %>
+                    class: "btn btn-white btn-sm m-b-xs hidden-button" %>
                 <% end %>
 
                 <% unless ["PAYMENT_ACCEPTED_LOCAL","LOCAL"].include? o.state %>
@@ -89,7 +89,9 @@
                       onchange: "$('#pay_img_commit_#{o.hash_id}').click();" %>
 
                     <a href="#" onclick="$('#field_<%=o.hash_id%>').click();"
-                      class="btn btn-white btn-sm m-b-xs">Subir comprobante</a>
+                      class="btn btn-white btn-sm m-b-xs hidden-button">
+                      Subir comprobante
+                    </a>
 
                     <%= f.submit "Subir foto del pago".html_safe,
                         id: "pay_img_commit_#{o.hash_id}", style: "display: none;" %>
@@ -97,7 +99,7 @@
                 <% end %>
 
                 <% if @current_user.has_permission?('orders@cancel') and o.state == 'LOCAL' %>
-                  <a class="btn btn-danger btn-sm m-b-xs"
+                  <a class="btn btn-danger btn-sm m-b-xs hidden-button"
                     onclick="update_cancel_form('<%=o.hash_id%>')">
                     <i class="fa fa-trash"></i> Cancelar
                   </a>

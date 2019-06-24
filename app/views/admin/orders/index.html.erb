@@ -21,10 +21,14 @@
     <div class="row">
       <% if @current_user.has_permission?('commissions@create') and
           params[:type] == "DELIVERED" and params[:distributor].present? %>
-        <%= form_tag(admin_commissions_path(distributor: params[:distributor])) do %>
+        <%= form_tag(admin_commissions_path(distributor: params[:distributor]),
+          id: 'create-commission-form') do %>
           <div class="col-lg-12">
             <div class="ibox">
-              <%= submit_tag "Crear comisión", class: "btn btn-success pull-right" %>
+              <button class="btn btn-success pull-right"
+                onclick="$('#create-commission-form')[0].submit();">
+                Crear comisión
+              </button>
               <div class="clearfix"></div>
             </div>
           </div>

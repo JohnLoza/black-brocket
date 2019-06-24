@@ -19,6 +19,11 @@ class Admin::CommissionsController < AdminController
 
   def create
     deny_access! and return unless @current_user.has_permission?("commissions@create")
+    unless params[:order_keys].present?
+      flash[:info] = "Seleccione las órdenes que componen la comisión."
+      redirect_to admin_orders_path(distributor: params[:distributor], type: "DELIVERED")
+      return
+    end
 
     distributor = Distributor.find_by!(hash_id: params[:distributor])
     orders = Order.where("hash_id in (?)", params[:order_keys]).where(commission_in_progress: false)

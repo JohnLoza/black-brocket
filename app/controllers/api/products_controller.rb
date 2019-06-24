@@ -69,8 +69,8 @@ class Api::ProductsController < ApiController
     w_product = WarehouseProduct.find_by!(hash_id: params[:id])
 
     product = w_product.Product
-    description_file = @@base_file_path + product.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
-    preparation_file = @@base_file_path + product.preparation_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
+    description_file = @@base_file_path + product.description_render_path.sub(@@replaceable_path, @@replaceable_path+"_")
+    preparation_file = @@base_file_path + product.preparation_render_path.sub(@@replaceable_path, @@replaceable_path+"_")
 
     description = File.open(description_file, "r"){|file| file.read }
     preparation = File.open(preparation_file, "r"){|file| file.read }

@@ -3,7 +3,7 @@ class Admin::ProductsController < AdminController
   @@replaceable_path = "/shared/products/"
 
   def index
-    deny_access! and return unless @current_user.has_permission_category?('products')
+    deny_access! and return unless @current_user.has_permission_category?("products")
     @products = Product.active.order_by_name
       .search(key_words: search_params, fields: [:hash_id, :name])
       .paginate(page: params[:page], per_page: 20)
@@ -11,12 +11,12 @@ class Admin::ProductsController < AdminController
   end
 
   def new
-    deny_access! and return unless @current_user.has_permission?('products@create')
+    deny_access! and return unless @current_user.has_permission?("products@create")
     @product = Product.new
   end
 
   def create
-    deny_access! and return unless @current_user.has_permission?('products@create')
+    deny_access! and return unless @current_user.has_permission?("products@create")
     @product = Product.new(product_params)
 
     if @product.save
@@ -27,30 +27,30 @@ class Admin::ProductsController < AdminController
       # create product special prices slots for each user #
       create_client_prices
 
-      redirect_to admin_products_path, flash: {success: 'Producto creado' }
+      redirect_to admin_products_path, flash: {success: "Producto creado" }
     else
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
+      flash.now[:danger] = "Ocurrió un error al guardar los datos, inténtalo de nuevo por favor."
       render :new
     end
   end
 
   def show
-    deny_access! and return unless @current_user.has_permission?('products@show')
+    deny_access! and return unless @current_user.has_permission?("products@show")
     @product = Product.find_by!(hash_id: params[:id])
     @photos = @product.Photos
   end
 
   def edit
-    unless @current_user.has_permission?('products@update_name') or
-           @current_user.has_permission?('products@update_product_data') or
-           @current_user.has_permission?('products@update_price') or
-           @current_user.has_permission?('products@update_show_in_web_page')
+    unless @current_user.has_permission?("products@update_name") or
+           @current_user.has_permission?("products@update_product_data") or
+           @current_user.has_permission?("products@update_price") or
+           @current_user.has_permission?("products@update_show_in_web_page")
       deny_access! and return
     end
     @product = Product.find_by!(hash_id: params[:id])
 
-    description_file = @@base_file_path + @product.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
-    preparation_file = @@base_file_path + @product.preparation_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
+    description_file = @@base_file_path + @product.description_render_path.sub(@@replaceable_path, @@replaceable_path+"_")
+    preparation_file = @@base_file_path + @product.preparation_render_path.sub(@@replaceable_path, @@replaceable_path+"_")
 
     @product.description = File.open(description_file, "r"){|file| file.read }
     @product.preparation = File.open(preparation_file, "r"){|file| file.read }
@@ -59,10 +59,10 @@ class Admin::ProductsController < AdminController
   end
 
   def update
-    unless @current_user.has_permission?('products@update_name') or
-           @current_user.has_permission?('products@update_product_data') or
-           @current_user.has_permission?('products@update_price') or
-           @current_user.has_permission?('products@update_show_in_web_page')
+    unless @current_user.has_permission?("products@update_name") or
+           @current_user.has_permission?("products@update_product_data") or
+           @current_user.has_permission?("products@update_price") or
+           @current_user.has_permission?("products@update_show_in_web_page")
       deny_access! and return
     end
     @product = Product.find_by!(hash_id: params[:id])
@@ -75,25 +75,25 @@ class Admin::ProductsController < AdminController
       redirect_to admin_products_path
     else
       @photos = @product.Photos
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
+      flash.now[:danger] = "Ocurrió un error al guardar los datos, inténtalo de nuevo por favor."
       render :edit
     end # if @product.update_attributes(product_params) #
   end
 
   def destroy
-    deny_access! and return unless @current_user.has_permission?('products@delete')
+    deny_access! and return unless @current_user.has_permission?("products@delete")
     @product = Product.find_by!(hash_id: params[:id])
 
     if @product.destroy
-      flash[:success] = 'Producto eliminado'
+      flash[:success] = "Producto eliminado"
     else
-      flash[:info] = 'Ocurrió un error al eliminar el trabajador, inténtalo de nuevo por favor.'
+      flash[:info] = "Ocurrió un error al eliminar el trabajador, inténtalo de nuevo por favor."
     end
     redirect_to admin_products_path
   end
 
   def set_principal_photo
-    deny_access! and return unless @current_user.has_permission?('products@update_product_data')
+    deny_access! and return unless @current_user.has_permission?("products@update_product_data")
     @product = Product.find_by!(hash_id: params[:id])
 
     @photo = ProdPhoto.find_by!(hash_id: params[:photo_id])
@@ -108,7 +108,7 @@ class Admin::ProductsController < AdminController
   end
 
   def destroy_photo
-    deny_access! and return unless @current_user.has_permission?('products@update_product_data')
+    deny_access! and return unless @current_user.has_permission?("products@update_product_data")
 
     photo = ProdPhoto.find_by!(hash_id: params[:photo_id])
     photo.destroy
@@ -143,8 +143,8 @@ class Admin::ProductsController < AdminController
 
     def create_render_files_and_photos
       # create the files containing the description and preparation texts
-      create_product_file(description_param, 'description') if description_param
-      create_product_file(preparation_param, 'preparation') if preparation_param
+      create_product_file(description_param, "description") if description_param
+      create_product_file(preparation_param, "preparation") if preparation_param
       # create the main photo and other photos if any
       create_photo(photo: main_photo_param, principal: true) if main_photo_param
       photo_params.each do |photo|
@@ -169,14 +169,13 @@ class Admin::ProductsController < AdminController
         current_principal = ProdPhoto.by_product(@product.id).principal.take
         current_principal.update_attributes(is_principal: false) if current_principal
       end
-      ProdPhoto.create(product_id: @product.id, is_principal: options[:principal],
-                       photo: options[:photo])
+      ProdPhoto.create(product_id: @product.id, is_principal: options[:principal], photo: options[:photo])
     end
 
     def create_warehouse_products
       Warehouse.all.each do |w|
         WarehouseProduct.create(warehouse_id: w.id, describes_total_stock: true,
-                product_id: @product.id, existence: 0, min_stock: 50)
+          product_id: @product.id, existence: 0, min_stock: 50)
       end
     end
 
@@ -193,18 +192,17 @@ class Admin::ProductsController < AdminController
       clients = Client.where(deleted_at: nil)
       clients.each do |client|
         if client.has_custom_prices
-          Notification.create(client_id: client.id, icon: "fa fa-comments-o",
-                          description: "El costo del producto #{@product.name} ha cambiado, favor de contactar a su distribuidor para negociar precio.",
-                          url: client_my_distributor_path)
+          Notification.create(client_id: client.id, icon: "fa fa-comments-o", url: client_my_distributor_path,
+            description: "El costo del producto #{@product.name} ha cambiado, favor de contactar a su distribuidor para negociar precio.")
         end
       end
     end
 
     def prices_have_changed?
       if @product.price != params[:product][:price].to_f or
-         @product.recommended_price != params[:product][:recommended_price].to_f or
-         @product.lowest_price != params[:product][:lowest_price].to_f
-         return true
+        @product.recommended_price != params[:product][:recommended_price].to_f or
+        @product.lowest_price != params[:product][:lowest_price].to_f
+        return true
       end
       return false
     end

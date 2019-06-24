@@ -1,5 +1,5 @@
 <% provide(:title, "Entidades de México") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "México", labels: ['Estados']} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "México", labels: ["Estados"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -18,15 +18,15 @@
       <%= select_tag :state_id, options_from_collection_for_select(
         @states, "id", "name"), class: "form-control m-b", onchange: "state_selected(this);" %>
 
-      <% if @current_user.has_permission?('mexico_db@create') or
-            @current_user.has_permission?('mexico_db@update_city_name') or
-            @current_user.has_permission?('mexico_db@update_city_lada') %>
+      <% if @current_user.has_permission?("mexico_db@create") or
+            @current_user.has_permission?("mexico_db@update_city_name") or
+            @current_user.has_permission?("mexico_db@update_city_lada") %>
         <%= link_to "Ver poblaciones", admin_mexico_state_path(@states[0].id),
           class: "btn btn-white btn-sm m-b", id: "see_cities" %>
       <% end %>
       <br>
 
-      <% if @current_user.has_permission?('mexico_db@update_state_lada') %>
+      <% if @current_user.has_permission?("mexico_db@update_state_lada") %>
         <label id="change_lada_title">Cambiar el LADA para el estado de: "<%= @states[0].name %>"</label>
         <%= form_for(:state, url: admin_mexico_state_path(@states[0].id), method: :put, html: {id: "state_LADA_form"}) do |f| %>
            <%= f.number_field :lada, { class: "form-control m-b", min: 0, max: 99999, step: 1} %>
@@ -42,7 +42,7 @@
 <script type="text/javascript">
   function state_selected(select){
     $("#change_lada_title").text("Cambiar el LADA para el estado de: " +
-                              select.options[select.selectedIndex].textContent);
+      select.options[select.selectedIndex].textContent);
 
     new_destination = "<%= admin_mexico_state_path(0) %>";
     new_destination = new_destination.replace("0", select.value);

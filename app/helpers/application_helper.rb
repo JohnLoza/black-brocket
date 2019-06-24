@@ -25,8 +25,8 @@ module ApplicationHelper
   end
 
   def alphanumericArray
-    ['q','w','e','r','t','y','u','p','a','s','d','f','g','h','j','k','z',
-      'x','c','v','b','n','m','1','2','3','4','5','6','7','8','9','0']
+    ["q","w","e","r","t","y","u","p","a","s","d","f","g","h","j","k","z",
+      "x","c","v","b","n","m","1","2","3","4","5","6","7","8","9","0"]
   end
 
   def process_authorization_result(authorization_result, redirect_to_admin_home_page = true)

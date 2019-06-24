@@ -50,9 +50,10 @@
         </span>
     </div>
     <div class="col-sm-1 text-center">
-      <%= link_to "<span class='icon-close' style='font-size: 34px;'></span>".html_safe,
-          client_remove_from_cart_path(@current_user.hash_id, wp.hash_id),
-          method: :put, data:{confirm: "Estas seguro(a) de quitarlo del carrito?"} %>
+      <%= link_to client_remove_from_cart_path(@current_user.hash_id, wp.hash_id),
+        method: :put, data:{confirm: "Estas seguro(a) de quitarlo del carrito?"} do %>
+        <span class="icon-close" style="font-size: 34px;"></span>
+      <% end %>
     </div>
   </div>
 
@@ -93,7 +94,7 @@
         <label>Método de envío</label>
         <% if @local_regions.include? @current_user.city_id %>
           <div>
-            <%= radio_button_tag 'parcel_id', 0, false, autocomplete: :off,
+            <%= radio_button_tag "parcel_id", 0, false, autocomplete: :off,
               onchange: "noShipping(); removeFilter('parcel_id_0', 'parcel');", required: true %>
             <label for="parcel_id_0">Recojer en instalaciones de Guadalajara, Jal.</label>
           </div>
@@ -101,7 +102,7 @@
 
         <% if @local_parcel %>
           <div>
-            <%= radio_button_tag 'parcel_id', @local_parcel.id, false, autocomplete: :off, required: true, style: "display: none;",
+            <%= radio_button_tag "parcel_id", @local_parcel.id, false, autocomplete: :off, required: true, style: "display: none;",
               onchange: "fetchParcelPrices(this); removeFilter('.parcel_img_#{@local_parcel.id}', 'parcel')"  %>
             <label for="parcel_id_<%= @local_parcel.id %>">
               <%= image_tag @local_parcel.image.url(:mini), class: "parcel_img_#{@local_parcel.id} parcel" %>
@@ -111,7 +112,7 @@
 
         <% @parcels.each do |parcel| %>
           <div>
-            <%= radio_button_tag 'parcel_id', parcel.id, false, autocomplete: :off, required: true, style: "display: none;",
+            <%= radio_button_tag "parcel_id", parcel.id, false, autocomplete: :off, required: true, style: "display: none;",
               onchange: "fetchParcelPrices(this); removeFilter('.parcel_img_#{parcel.id}', 'parcel')"  %>
             <label for="parcel_id_<%= parcel.id %>">
               <%= image_tag parcel.image.url(:mini), class: "parcel_img_#{parcel.id} parcel" %>
@@ -124,7 +125,7 @@
         <label>Método de pago</label>
         <% @banks.each do |bank| %>
           <div>
-            <%= radio_button_tag 'payment_method', bank.id, false, autocomplete: :off, required: true, 
+            <%= radio_button_tag "payment_method", bank.id, false, autocomplete: :off, required: true, 
               onchange: "removeFilter('.payment_img_#{bank.id}', 'payment_type')", style: 'display: none;' %>
             <label for="payment_method_<%= bank.id %>">
               <%= image_tag bank.image.url(:mini), class: "payment_img_#{bank.id} payment_type" %>
@@ -136,11 +137,11 @@
       <div class="row col-sm-12 inline-block" style="margin-top: 2em;">
         <label>Requiero Factura</label>
         <div>
-          <%= radio_button_tag 'invoice', 1, false, autocomplete: :off, required: true %>
+          <%= radio_button_tag "invoice", 1, false, autocomplete: :off, required: true %>
           <label for="invoice_1" style="font-size: 1.3em; font-weight: normal;">Sí</label>
         </div>
         <div>
-          <%= radio_button_tag 'invoice', 0, false, autocomplete: :off, 
+          <%= radio_button_tag "invoice", 0, false, autocomplete: :off, 
             required: true %>
           <label for="invoice_0" style="font-size: 1.3em; font-weight: normal;">No</label>
         </div>
@@ -149,10 +150,9 @@
       <div class="row col-sm-12">
         <div class="col-sm-10">.</div>
         <div class="col-sm-2" >
-          <%= hidden_field_tag 'delivery_cost' %>
-          <%= hidden_field_tag 'guides' %>
-          <%= submit_tag 'Comprar', class: 'btn btn-block btn-custom-1',
-            onclick: 'verifyForm();' %>
+          <%= hidden_field_tag "delivery_cost" %>
+          <%= hidden_field_tag "guides" %>
+          <%= submit_tag "Comprar", class: "btn btn-block btn-custom-1", onclick: "verifyForm();" %>
         </div>
       </div>
     <% end %>
@@ -186,7 +186,7 @@
 </div>
 
 <%= form_tag client_ecart_update_quantity_path(@current_user), method: :put,
-  remote: true, id: 'update_price_form', style: 'visibility: hidden;' do %>
+  remote: true, id: "update_price_form", style: "visibility: hidden;" do %>
   <%= text_field_tag :product, nil %>
   <%= number_field_tag :new_quantity, nil, min: 1, step: 1 %>
   <%= number_field_tag :current_existence, nil, step: 1 %>
@@ -233,15 +233,15 @@
     let invoice_required = $("input[type='radio'][name='invoice']:checked");
     if(parcel.length == 0 || payment_method.length == 0 || invoice_required.length == 0){
       $("#dismissible_alerts").append(`
-        <%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, 
-          message: 'Favor de seleccionar el método de envío, método de pago y si requieren factura'} %>
+        <%= j render partial: "/shared/dismissible_alert", locals: {message_type: :info, 
+          message: "Favor de seleccionar el método de envío, método de pago y si requieren factura"} %>
       `);
     }
   }
 
   function removeFilter(target, type){
-    $(`.removeFilter.${type}`).removeClass('removeFilter');
-    $(target).addClass('removeFilter');
+    $(`.removeFilter.${type}`).removeClass("removeFilter");
+    $(target).addClass("removeFilter");
   }
 
   function update_quantity(product, new_quantity, current_existence) {
@@ -253,19 +253,19 @@
 
   function money_format(number){
     return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
-      return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
+      return i && c !== "." && ((a.length - i) % 3 === 0) ? "," + c : c;
     });
   }
 
   function fetchParcelPrices(trigger){
-    original_target = "<%= Rails.application.routes.url_helpers.client_ecart_parcel_prices_path(@current_user, 'replace_with_id', format: :js) %>";
+    original_target = "<%= client_ecart_parcel_prices_path(@current_user, 'replace_with_id', format: :js) %>";
     new_target = original_target.replace("replace_with_id", trigger.value);
     $.ajax({
       url: new_target,
       context: document.body
     }).done(function(body) {});
-    $('.banks').removeClass('hidden');
-    $('.banks input').attr('required', true);
+    $(".banks").removeClass("hidden");
+    $(".banks input").attr("required", true);
   }
 
   // pick a guide for package delivery based on weight
@@ -333,15 +333,14 @@
     if($("#shipping_cost_is_present").text().trim() == "YES")
       current_sub_total = current_grand_total - last_shipping_cost;
     
-
-    $('#order-shipping-cost').text('0.00');
-    $('#delivery_cost').val(0);
-    $('#guides').val('Recoje en local');
-    $('#shipping_cost_is_present').text('NO');
-    $('#order-grand-total').text(money_format(current_sub_total));
-    $('.banks').addClass('hidden');
-    $('.banks input').removeAttr('required');
-    $('#delivery-time').text('');
+    $("#order-shipping-cost").text("0.00");
+    $("#delivery_cost").val(0);
+    $("#guides").val("Recoje en local");
+    $("#shipping_cost_is_present").text("NO");
+    $("#order-grand-total").text(money_format(current_sub_total));
+    $(".banks").addClass("hidden");
+    $(".banks input").removeAttr("required");
+    $("#delivery-time").text("");
   }
 
   $(document).ready(function(){

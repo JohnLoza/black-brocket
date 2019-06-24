@@ -3,20 +3,20 @@ class Admin::TipRecipesController < AdminController
   @@replaceable_path = "/shared/tips_recipes/"
 
   def index
-    deny_access! and return unless @current_user.has_permission_category?('tips_&_recipes')
+    deny_access! and return unless @current_user.has_permission_category?("tips_&_recipes")
 
-    @tips = TipRecipe.search(key_words: search_params, fields: ['title'])
+    @tips = TipRecipe.search(key_words: search_params, fields: ["title"])
       .recent.paginate(page: params[:page], per_page: 15)
   end
 
   def new
-    deny_access! and return unless @current_user.has_permission_category?('tips_&_recipes')
+    deny_access! and return unless @current_user.has_permission_category?("tips_&_recipes")
 
     @tip = TipRecipe.new
   end
 
   def create
-    deny_access! and return unless @current_user.has_permission_category?('tips_&_recipes')
+    deny_access! and return unless @current_user.has_permission_category?("tips_&_recipes")
 
     @tip =  TipRecipe.new(tip_recipe_params)
 
@@ -38,19 +38,19 @@ class Admin::TipRecipesController < AdminController
   end
 
   def edit
-    deny_access! and return unless @current_user.has_permission_category?('tips_&_recipes')
+    deny_access! and return unless @current_user.has_permission_category?("tips_&_recipes")
 
     @tip = TipRecipe.find_by!(id: params[:id])
-    file_path = @@base_file_path + @tip.description_render_path.sub(@@replaceable_path, @@replaceable_path + '_')
+    file_path = @@base_file_path + @tip.description_render_path.sub(@@replaceable_path, @@replaceable_path + "_")
     @tip.body = File.open(file_path, "r"){|file| file.read }
   end
 
   def update
-    deny_access! and return unless @current_user.has_permission_category?('tips_&_recipes')
+    deny_access! and return unless @current_user.has_permission_category?("tips_&_recipes")
 
     @tip = TipRecipe.find_by!(id: params[:id])
 
-    file_path = @@base_file_path + @tip.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
+    file_path = @@base_file_path + @tip.description_render_path.sub(@@replaceable_path, @@replaceable_path+"_")
     File.open(file_path, "w"){|file| file.write(params[:tip_recipe][:body]) }
 
     if @tip.update_attributes(tip_recipe_params)
@@ -63,13 +63,13 @@ class Admin::TipRecipesController < AdminController
   end
 
   def destroy
-    deny_access! and return unless @current_user.has_permission_category?('tips_&_recipes')
+    deny_access! and return unless @current_user.has_permission_category?("tips_&_recipes")
     @tip = TipRecipe.find_by!(id: params[:id])
 
     if @tip.destroy
-      flash[:success] = 'Tip/Receta eliminado'
+      flash[:success] = "Tip/Receta eliminado"
     else
-      flash[:warning] = 'Error al eliminar el tip o receta'
+      flash[:warning] = "Error al eliminar el tip o receta"
     end
     redirect_to admin_tip_recipes_path
   end

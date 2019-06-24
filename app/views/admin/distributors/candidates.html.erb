@@ -1,5 +1,6 @@
 <% provide(:title, "Candidatos") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Candidatos", labels: ['Distribuidores', 'Candidatos'], links: [admin_distributors_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Candidatos", 
+  labels: ["Distribuidores", "Candidatos"], links: [admin_distributors_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -88,13 +89,13 @@ function showForm(candidate_id){
   title.html("Respuesta al candidato");
 
   body = modal.find(".modal-body");
-  body.html("<%= j render 'candidate_answer_form' %>");
+  body.html("<%= j render "candidate_answer_form" %>");
   $("#candidate_id").val(candidate_id);
   $("#answer-candidate-form");
 
   $("#modal").modal("show");
 
-  url = "<%= admin_answer_candidate_path('x0x') %>";
+  url = "<%= admin_answer_candidate_path("x0x") %>";
   url = url.replace("x0x", candidate_id);
 
   $("#modal form")[0].action = url;
@@ -103,6 +104,6 @@ function showForm(candidate_id){
 
 <script>
 $(document).ready(function() {
-  $('.footable').footable();
+  $(".footable").footable();
 });
 </script>

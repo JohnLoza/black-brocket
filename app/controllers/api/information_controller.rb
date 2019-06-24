@@ -23,7 +23,7 @@ class Api::InformationController < ApiController
 
     data = Array.new
     tips.each do |tip|
-      file_path = @@base_file_path + tip.description_render_path.sub(@@replaceable_path, @@replaceable_path+'_')
+      file_path = @@base_file_path + tip.description_render_path.sub(@@replaceable_path, @@replaceable_path+"_")
       description = File.open(file_path, "r"){|file| file.read }
       # description = ActionController::Base.helpers.strip_tags(description) # get rid of html tags
 

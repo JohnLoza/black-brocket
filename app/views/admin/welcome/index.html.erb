@@ -25,7 +25,11 @@
         <option value="skin-blurple">Blurple</option>
         <option value="skin-deepcove">Deep Cove</option>
       </select>
-      <%= link_to(log_out_path, method: "delete") do %><span class="btn btn-xs btn-danger"><i class="fa fa-sign-out"></i> Cerrar sesión</span><% end %>
+      <%= link_to(log_out_path, method: "delete") do %>
+        <span class="btn btn-xs btn-danger">
+          <i class="fa fa-sign-out"></i> Cerrar sesión
+        </span>
+      <% end %>
     </div>
 
   </div>

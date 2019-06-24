@@ -1,5 +1,6 @@
 <% provide(:title, "Almacenes") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Productos en el almacén", labels: ['Almacenes', 'Productos en el almacén'], links: [admin_warehouses_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Productos en el almacén", 
+  labels: ["Almacenes", "Productos en el almacén"], links: [admin_warehouses_path]} %>
 
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
@@ -9,7 +10,7 @@
       <%= render partial: "presentation_table" %>
     </div>
 
-    <% if @current_user.has_permission?('warehouse_manager@transfer_mercancy') %>
+    <% if @current_user.has_permission?("warehouse_manager@transfer_mercancy") %>
       <div class="row">
         <div class="col-lg-12">
           <div class="ibox ibox-content">
@@ -50,20 +51,20 @@
 
 <%= render "shared/modal" %>
 
-<% if @current_user.has_permission?('warehouse_manager@transfer_mercancy') %>
+<% if @current_user.has_permission?("warehouse_manager@transfer_mercancy") %>
 <script type="text/javascript">
   function update_shipment_preparations_form(product_name, product_id, warehouse_product_id, existencia) {
-    modal = $('#modal')
-    modal.find('.modal-title').html("Transferir existencia de: "+product_name);
-    modal.find('.modal-body').html('<%= j render "transfer_preparation_form" %>');
+    modal = $("#modal")
+    modal.find(".modal-title").html("Transferir existencia de: "+product_name);
+    modal.find(".modal-body").html("<%= j render 'transfer_preparation_form' %>");
 
     $("#warehouse_product_name").val(product_name);
     $("#warehouse_product_quantity").attr("max", existencia);
 
-    var _href = $('#transfer_preparation_form').attr('action');
-    $('#transfer_preparation_form').get(0).setAttribute('action', _href.replace("0x0", product_id));
+    var _href = $("#transfer_preparation_form").attr("action");
+    $("#transfer_preparation_form").get(0).setAttribute("action", _href.replace("0x0", product_id));
 
-    modal.modal('show');
+    modal.modal("show");
   }
 </script>
 <% end # if @actions["TRANSFER_MERCANCY"] # %>

@@ -1,40 +1,43 @@
-
-
-<% if @current_user.has_permission?('orders@show') %>
-  <%= link_to "<i class='fa fa-eye'></i> Ver pedido".html_safe,
-      admin_order_details_path(o.hash_id),
-      class: "btn btn-white btn-sm m-b-xs", target: "_blank" %>
+<% if @current_user.has_permission?("orders@show") %>
+  <%= link_to admin_order_details_path(o.hash_id),
+    class: "btn btn-white btn-sm m-b-xs", target: "_blank" do %>
+    <i class="fa fa-eye"></i> Ver pedido
+  <% end %>
 <% end %>
 
-<% if @current_user.has_permission?('orders@capture_tracking_code') and params[:type] == "CAPTURE_TRACKING_CODE" %>
-  <%= link_to "<i class='fa fa-truck'></i> Datos de entrega".html_safe,
-      admin_order_details_path(o.hash_id) + "?only_address=Y",
-      class: "btn btn-white btn-sm m-b-xs", target: "_blank" %>
+<% if @current_user.has_permission?("orders@capture_tracking_code") and params[:type] == "CAPTURE_TRACKING_CODE" %>
+  <%= link_to admin_order_details_path(o.hash_id) + "?only_address=#{o.hash_id}",
+    class: "btn btn-white btn-sm m-b-xs", target: "_blank" do %>
+    <i class="fa fa-truck"></i> Datos de entrega
+  <% end %>
 <% end %>
 
-<% if @current_user.has_permission?('orders@inspection') and params[:type] == "INSPECTION" %>
+<% if @current_user.has_permission?("orders@inspection") and params[:type] == "INSPECTION" %>
   <%= link_to "Inspeccionado", admin_inspection_order_path(o.hash_id),
-      class: "btn btn-white btn-sm m-b-xs", method: :put,
-      data: {confirm: "Estas seguro(a) de que se surtió correctamente?"} %>
+    class: "btn btn-white btn-sm m-b-xs", method: :put,
+    data: {confirm: "Estas seguro(a) de que se surtió correctamente?"} %>
 
-  <%= link_to "<i class='fa fa-trash'></i> Volver a surtir".html_safe, admin_order_supply_error_path(o.hash_id),
-      class: "btn btn-danger btn-sm m-b-xs", method: :put,
-      data: {confirm: "Estas seguro(a) de regresar el pedido?"} %>
+  <%= link_to admin_order_supply_error_path(o.hash_id),  
+    class: "btn btn-danger btn-sm m-b-xs", method: :put,
+    data: {confirm: "Estas seguro(a) de regresar el pedido?"} do %>
+    <i class="fa fa-trash"></i> Volver a surtir
+  <% end %>
 <% end %>
 
-<% if @current_user.has_permission?('orders@capture_batches') and params[:type] == "CAPTURE_BATCHES" %>
-  <%= link_to "Capturar números de lote", admin_capture_details_path(o.hash_id),
-      class: "btn btn-white btn-sm m-b-xs" %>
+<% if @current_user.has_permission?("orders@capture_batches") and params[:type] == "CAPTURE_BATCHES" %>
+  <%= link_to "Capturar números de lote", admin_capture_details_path(o.hash_id), 
+    class: "btn btn-white btn-sm m-b-xs" %>
 <% end %>
 
-<% if @current_user.has_permission?('orders@stablish_as_delivered') and params[:type] == "SENT" %>
-  <%= link_to "<i class='fa fa-check-square-o'></i> Producto entregado".html_safe, admin_order_delivered_path(o.hash_id),
-      class: "btn btn-white btn-sm m-b-xs", method: :put, data: {
-        confirm: "Estas seguro(a) de que ya se entregó el pedido?"
-        } %>
+<% if @current_user.has_permission?("orders@stablish_as_delivered") and params[:type] == "SENT" %>
+  <%= link_to admin_order_delivered_path(o.hash_id),
+    class: "btn btn-white btn-sm m-b-xs", method: :put, 
+    data: { confirm: "Estas seguro(a) de que ya se entregó el pedido?" } do %>
+    <i class="fa fa-check-square-o"></i> Producto entregado
+  <% end %>
 <% end %>
 
-<% if @current_user.has_permission?('orders@invoices') and params[:type] == "INVOICES" %>
+<% if @current_user.has_permission?("orders@invoices") and params[:type] == "INVOICES" %>
   <td>
     <% if !o.invoice %>
       <label class="label label-info">General</label>
@@ -45,7 +48,7 @@
   </td>
 <% end %>
 
-<% if @current_user.has_permission?('orders@cancel') and (o.state == "WAITING_FOR_PAYMENT" or
+<% if @current_user.has_permission?("orders@cancel") and (o.state == "WAITING_FOR_PAYMENT" or
       o.state == "PAYMENT_REJECTED") and params[:type] != "INVOICES" %>
   <a class="btn btn-danger btn-sm m-b-xs"
     onclick="update_cancel_form('<%=o.hash_id%>')">
@@ -53,7 +56,7 @@
   </a>
 <% end %>
 
-<% if @current_user.has_permission?('commissions@create') and
+<% if @current_user.has_permission?("commissions@create") and
   params[:type] == "DELIVERED" and !params[:distributor].blank? and !o.commission_in_progress
       o.distributor_id != 0 and !o.commission_in_progress %>&nbsp;&nbsp;&nbsp;
   <%= check_box_tag "order_keys[]", o.hash_id %>

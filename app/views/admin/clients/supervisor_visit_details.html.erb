@@ -1,5 +1,6 @@
 <% provide(:title, "Detalles de Visita") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Detalles de visita", labels: ['Clientes', 'Visitas', 'Detalles'], links: [admin_clients_path, admin_supervisor_visits_path(params[:id])]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Detalles de visita", 
+  labels: ["Clientes", "Visitas", "Detalles"], links: [admin_clients_path, admin_supervisor_visits_path(params[:id])]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">

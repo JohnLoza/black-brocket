@@ -1,12 +1,12 @@
 <% provide(:title, "Comisiones") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Comisiones", labels: ['Comisiones']} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Comisiones", labels: ["Comisiones"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
 
-    <%= render partial: '/shared/admin/header_with_search',
-      locals: {title: 'Lista de Comisiones', search_url: admin_commissions_path,
+    <%= render partial: "/shared/admin/header_with_search",
+      locals: {title: "Lista de Comisiones", search_url: admin_commissions_path,
       new_permission: nil, new_url: nil } %>
 
     <div class="ibox">

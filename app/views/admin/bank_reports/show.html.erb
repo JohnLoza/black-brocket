@@ -31,7 +31,7 @@
             <td>
               <% client = order.Client %>
               <%= link_to client.username, admin_client_path(client.hash_id),
-                  target: '_blank'%>
+                  target: "_blank" %>
             </td>
             <td>$<%= order.total %></td>
             <td><%= order.payment_folio %></td>

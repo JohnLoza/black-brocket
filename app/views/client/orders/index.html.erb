@@ -55,13 +55,13 @@
           </a>
         <% end %><br>
         <%= o.tracking_code %>
-        <%= '<span class="label label-default">No aplica</span>'.html_safe if o.state == "LOCAL" %>
+        <%= "No aplica" if o.state == "LOCAL" %>
       </div>
       <div class="col-sm-2 text-center">
 
         <b>Comprobante:</b></br>
         <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
-          <%= link_to client_get_order_payment_path(@current_user.hash_id, o.download_payment_key), target: '_blank' do %>
+          <%= link_to client_get_order_payment_path(@current_user.hash_id, o.download_payment_key), target: "_blank" do %>
             <i class="fa fa-file-o fa-3x"></i>
           <% end %>
         <% elsif o.state == "LOCAL" %>
@@ -89,7 +89,7 @@
     <div class="row order-box-foot">
       <div class="col-sm-6">
         <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id),
-          class: 'darklink label-custom-2', style: 'cursor:pointer; color: #FEFEFE;', 
+          class: "darklink label-custom-2", style: "cursor:pointer; color: #FEFEFE;", 
           remote: true, id: "payment-info-link-#{o.hash_id}" do %>
           <span class="btn btn-custom-1 btn-sm pull-right"> <strong>Información para pagar</strong></span><br>
         <% end %>
@@ -169,7 +169,7 @@
   </div>
 </div>
 
-<%= render '/shared/modal'%>
+<%= render "/shared/modal" %>
 
 <style>
   .modal-body .table{

@@ -1,15 +1,18 @@
 <% if @saved %>
-  $('#warehouse_regions').append('<%= escape_javascript(render partial: "region", locals: { state: @state, warehouse_id: params[:warehouse_id] } ) if @saved %>');
+  $("#warehouse_regions").append(`<%= escape_javascript(render partial: "region", 
+    locals: { state: @state, warehouse_id: params[:warehouse_id] }) %>`);
 
   // remove the element that was added
-  var opts = $('#state_id').find('option');
+  var opts = $("#state_id").find("option");
   for(x=0; x<opts.length; x++){
     if(opts[x].value == "<%= params[:state_id] %>"){
       $(opts[x]).remove();
       break;
     }
   };
-  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Zona agregada.'} %>");
+  $("#dismissible_alerts").append("<%= j render partial: "/shared/dismissible_alert", 
+    locals: {message_type: :success, message: "Zona agregada."} %>");
 <% else %>
-  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'El estado no existe o ya está asignado.'} %>");
+  $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+    locals: {message_type: :info, message: "El estado no existe o ya está asignado."} %>`);
 <% end %>

@@ -3,34 +3,34 @@
   <div class="col-lg-12">
       <div class="ibox float-e-margins">
           <div class="ibox-content">
-            <%= form_for([:admin, @bank], html: {class: 'form-horizontal', id: 'bank_form'}) do |f| %>
-              <%= render partial: '/shared/error_messages', locals:{entity: @bank} %>
+            <%= form_for([:admin, @bank], html: {class: "form-horizontal", id: "bank_form"}) do |f| %>
+              <%= render partial: "/shared/error_messages", locals:{entity: @bank} %>
 
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :bank_name, "Nombre del banco" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_field :name, class: 'form-control', placeholder: "ej. Banamex", required: true, maxlength: 50 %>
+                  <%= f.text_field :name, class: "form-control", placeholder: "ej. Banamex", required: true, maxlength: 50 %>
                 </div>
               </div>
 
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :owner, "A nombre de:" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_field :owner, class: 'form-control', placeholder: "ej. BlackBrocket S.A. de C.V.", required: true, maxlength: 150 %>
+                  <%= f.text_field :owner, class: "form-control", placeholder: "ej. BlackBrocket S.A. de C.V.", required: true, maxlength: 150 %>
                 </div>
               </div>
 
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :email, "Correo electrónico:" %></label>
                 <div class="col-sm-10">
-                  <%= f.email_field :email, class: 'form-control', required: true, maxlength: 150 %>
+                  <%= f.email_field :email, class: "form-control", required: true, maxlength: 150 %>
                 </div>
               </div>
 
               <div class="form-group">
                 <label class="col-sm-2 control-label"><%= f.label :RFC, "RFC:" %></label>
                 <div class="col-sm-10">
-                  <%= f.text_field :RFC, class: 'form-control', required: true, maxlength: 150 %>
+                  <%= f.text_field :RFC, class: "form-control", required: true, maxlength: 150 %>
                 </div>
               </div>
 
@@ -63,7 +63,7 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $('#bank_form').parsley();
+    $("#bank_form").parsley();
   });
 </script>
-<%= javascript_include_tag 'parsley-custom' %>
+<%= javascript_include_tag "parsley-custom" %>

@@ -1,14 +1,14 @@
 class Admin::ClientsController < AdminController
 
   def index
-    deny_access! and return unless @current_user.has_permission_category?('clients')
+    deny_access! and return unless @current_user.has_permission_category?("clients")
 
     if params[:distributor]
       distributor = Distributor.find_by!(hash_id: params[:distributor])
       region_ids = distributor.Regions.map(&:id)
 
       if region_ids.empty?
-        flash[:info] = "El distribuidor '#{distributor.username}' no tiene zonas asignadas."
+        flash[:info] = "El distribuidor \"#{distributor.username}\" no tiene zonas asignadas."
         redirect_to admin_distributors_path and return
       end
     end
@@ -19,14 +19,14 @@ class Admin::ClientsController < AdminController
   end
 
   def show
-    deny_access! and return unless @current_user.has_permission_category?('clients')
+    deny_access! and return unless @current_user.has_permission_category?("clients")
 
     @client = Client.find_by!(hash_id: params[:id])
     @fiscal_data = @client.FiscalData
   end
 
   def orders
-    deny_access! and return unless @current_user.has_permission_category?('clients')
+    deny_access! and return unless @current_user.has_permission_category?("clients")
 
     @client = Client.find_by!(hash_id: params[:id])
 
@@ -35,7 +35,7 @@ class Admin::ClientsController < AdminController
   end
 
   def revisions
-    deny_access! and return unless @current_user.has_permission_category?('clients')
+    deny_access! and return unless @current_user.has_permission_category?("clients")
 
     @client = Client.find_by!(hash_id: params[:id])
 
@@ -45,7 +45,7 @@ class Admin::ClientsController < AdminController
   end
 
   def visits
-    deny_access! and return unless @current_user.has_permission_category?('clients')
+    deny_access! and return unless @current_user.has_permission_category?("clients")
 
     @client = Client.find_by!(hash_id: params[:id])
 
@@ -55,7 +55,7 @@ class Admin::ClientsController < AdminController
   end
 
   def prices
-    deny_access! and return unless @current_user.has_permission_category?('clients')
+    deny_access! and return unless @current_user.has_permission_category?("clients")
 
     @client = Client.find_by!(hash_id: params[:id])
 
@@ -66,7 +66,7 @@ class Admin::ClientsController < AdminController
   end
 
   def supervisor_visits
-    deny_access! and return unless @current_user.has_permission?('clients@supervisor_visit')
+    deny_access! and return unless @current_user.has_permission?("clients@supervisor_visit")
 
     @client = Client.find_by!(hash_id: params[:id])
 
@@ -77,19 +77,19 @@ class Admin::ClientsController < AdminController
   end
 
   def supervisor_visit_details
-    deny_access! and return unless @current_user.has_permission?('clients@supervisor_visit')
+    deny_access! and return unless @current_user.has_permission?("clients@supervisor_visit")
 
     @detail = SupervisorVisitDetail.find_by!(visit_id: params[:visit_id])
   end
 
   def new_supervisor_visit
-    deny_access! and return unless @current_user.has_permission?('clients@supervisor_visit')
+    deny_access! and return unless @current_user.has_permission?("clients@supervisor_visit")
 
     @visit_detail = SupervisorVisitDetail.new
   end
 
   def create_supervisor_visit
-    deny_access! and return unless @current_user.has_permission?('clients@supervisor_visit')
+    deny_access! and return unless @current_user.has_permission?("clients@supervisor_visit")
 
     client = Client.find_by!(hash_id: params[:id])
 
@@ -112,8 +112,8 @@ class Admin::ClientsController < AdminController
 
   private
     def fields_to_search
-      return ['cities.name','states.name','clients.name',
-        'clients.email', 'clients.hash_id']
+      return ["cities.name","states.name","clients.name",
+        "clients.email", "clients.hash_id"]
     end
 
     def visit_params

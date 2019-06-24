@@ -1,5 +1,6 @@
 <% provide(:title, "Estadísticas") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Estadísticas", labels: ['Estadísticas', 'Ventas'], links: [admin_statistics_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Estadísticas", 
+  labels: ["Estadísticas", "Ventas"], links: [admin_statistics_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -47,4 +48,4 @@
 </div>
 </br></br>
 
-<%= javascript_include_tag 'Chart.min' %>
+<%= javascript_include_tag "Chart.min" %>

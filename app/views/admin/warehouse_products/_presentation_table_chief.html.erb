@@ -7,22 +7,26 @@
           <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
         </div>
         <div class="col-md-2">
-          <% if @current_user.has_permission?('warehouse_products@show_shipments') %>
+          <% if @current_user.has_permission?("warehouse_products@show_shipments") %>
             <%= link_to(admin_chief_shipments_path(params[:warehouse_id]), class: "btn btn-white btn-sm full-width m-b-xs") do %>
               <i class="fa fa-truck"></i> Envíos del almacén
             <% end %>
           <% end %>
         </div>
         <div class="col-md-2">
-          <% if @current_user.has_permission?('warehouse_products@inventory') %>
-            <%= link_to "<i class='fa fa-file-text-o'></i> Impresión de inventario".html_safe,
-                    admin_inventory_path(@warehouse.hash_id), class: "btn btn-white btn-sm full-width m-b-xs", target: "_blank" %>
+          <% if @current_user.has_permission?("warehouse_products@inventory") %>
+            <%= link_to admin_inventory_path(@warehouse.hash_id), 
+              class: "btn btn-white btn-sm full-width m-b-xs", target: "_blank" do %>
+              <i class="fa fa-file-text-o"></i> Impresión de inventario
+            <% end %>
           <% end %>
         </div>
         <div class="col-md-2">
-          <% if @current_user.has_permission?('warehouse_products@update_stock') %>
-            <%= link_to "<i class='fa fa-file-text-o'></i> Reportes de inventario".html_safe,
-                    admin_inventory_reports_path(@warehouse.hash_id), class: "btn btn-white btn-sm full-width m-b-xs", target: "_blank" %>
+          <% if @current_user.has_permission?("warehouse_products@update_stock") %>
+            <%= link_to admin_inventory_reports_path(@warehouse.hash_id), 
+              class: "btn btn-white btn-sm full-width m-b-xs", target: "_blank" do %>
+              <i class="fa fa-file-text-o"></i> Reportes de inventario
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -39,7 +43,7 @@
           </tr>
         </thead>
         <tbody>
-          <% if @current_user.has_permission?('warehouse_products@show') %>
+          <% if @current_user.has_permission?("warehouse_products@show") %>
             <% @products.each do |wp| %>
               <% p = wp.Product %>
               <tr class="<%= wp.existence < wp.min_stock ? 'bg-warning' : '' %>">
@@ -48,10 +52,10 @@
                 <td><%= p.name %></td>
                 <td>
                   <button id="stock-<%= p.hash_id %>" type="button" class="btn btn-primary btn-sm m-r-sm"
-                          onclick="update_shipment_preparations_form('<%= p.name %>', '<%= p.id %>');">
-                          <%= wp.existence %>
+                    onclick="update_shipment_preparations_form('<%= p.name %>', '<%= p.id %>');">
+                    <%= wp.existence %>
                   </button>
-                  <% if @current_user.has_permission?('warehouse_products@update_stock') %>
+                  <% if @current_user.has_permission?("warehouse_products@update_stock") %>
                     <%= link_to "Detalles",
                       admin_warehouse_products_stock_details_path(params[:warehouse_id], p.id),
                       class: "btn btn-white btn-sm" %>
@@ -59,8 +63,8 @@
                 </td>
                 <td>
                   <button id="min-stock-<%= p.hash_id %>" type="button" class="btn btn-warning btn-sm m-r-sm"
-                          onclick="update_min_existence_form('<%= p.name %>', '<%= p.hash_id %>');">
-                          <%= wp.min_stock %>
+                    onclick="update_min_existence_form('<%= p.name %>', '<%= p.hash_id %>');">
+                    <%= wp.min_stock %>
                   </button>
                 </td>
               </tr>
@@ -70,7 +74,7 @@
         <tfoot>
           <tr>
             <td colspan="7">
-              <% if @current_user.has_permission?('warehouse_products@show') %>
+              <% if @current_user.has_permission?("warehouse_products@show") %>
                 <div class="pull-right">
                   <%= will_paginate @products, renderer: BootstrapPagination::Rails %>
                 </div>
@@ -86,6 +90,6 @@
 
 <script>
 $(document).ready(function() {
-  $('.footable').footable();
+  $(".footable").footable();
 });
 </script>

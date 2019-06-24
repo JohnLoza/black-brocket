@@ -1,19 +1,19 @@
 <div id="<%= city.id %>">
 	<div class="col-lg-3">
-	    <%= link_to "https://maps.google.com.mx/maps/search/#{city.name}", { target: "_blank" } do %>
-				<div class="widget style1 blue-bg">
-		        <div class="row vertical-align">
-			      <div class="col-xs-9">
-			      	<strong style="color: #FEFEFE;"><%= city.name %></strong>
-			      </div>
-			      <div class="col-xs-3 text-right">
-			          <%= link_to "<i class='fa fa-trash f-size-18'></i>".html_safe,
-									admin_distributor_region_path(dist_id, city), method: :delete,
-									remote: true, data: { confirm: "Estas seguro(a) de eliminarla?" },
-									class: "white-link" %>
-			      </div>
-		        </div>
-		    </div>
-			<% end %>
+		<%= link_to "https://maps.google.com.mx/maps/search/#{city.name}", { target: "_blank" } do %>
+			<div class="widget style1 blue-bg">
+				<div class="row vertical-align">
+				<div class="col-xs-9">
+					<strong style="color: #FEFEFE;"><%= city.name %></strong>
+				</div>
+				<div class="col-xs-3 text-right">
+					<%= link_to admin_distributor_region_path(dist_id, city), method: :delete,
+						remote: true, data: { confirm: "Estas seguro(a) de eliminarla?" }, class: "white-link" do %>
+						<i class="fa fa-trash f-size-18"></i>
+					<% end %>
+				</div>
+				</div>
+			</div>
+		<% end %>
 	</div>
 </div>

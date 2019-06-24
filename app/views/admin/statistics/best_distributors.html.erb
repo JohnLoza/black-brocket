@@ -1,5 +1,6 @@
 <% provide(:title, "Estadísticas") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Estadísticas", labels: ['Estadísticas', 'Ventas'], links: [admin_statistics_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Estadísticas", 
+  labels: ["Estadísticas", "Ventas"], links: [admin_statistics_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -19,12 +20,12 @@
         data:{
           labels: <%= raw @dist_names %>,
           datasets: [{
-                  label: "Ventas",
-                  backgroundColor: "rgba(0, 150, 136, 0.5)",
-                  hoverBackgroundColor: "rgba(0, 150, 136, 0.8)",
-                  borderWidth: 1,
-                  data: <%= raw @details.map{|detail| detail.sum_q}.to_json %>
-              }]
+            label: "Ventas",
+            backgroundColor: "rgba(0, 150, 136, 0.5)",
+            hoverBackgroundColor: "rgba(0, 150, 136, 0.8)",
+            borderWidth: 1,
+            data: <%= raw @details.map{|detail| detail.sum_q}.to_json %>
+          }]
         },
         options: {
           scales: {
@@ -39,4 +40,4 @@
   });
 </script><br/><br/>
 
-<%= javascript_include_tag 'Chart.min' %>
+<%= javascript_include_tag "Chart.min" %>

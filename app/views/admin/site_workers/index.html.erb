@@ -1,12 +1,12 @@
 <% provide(:title, "Trabajadores") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Trabajadores", labels: ['Trabajadores']} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Trabajadores", labels: ["Trabajadores"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-    <%= render partial: '/shared/admin/header_with_search',
-      locals: {title: 'Lista de Trabajadores', search_url: admin_site_workers_path,
-      new_permission: 'site_workers@create', new_url: new_admin_site_worker_path } %>
+    <%= render partial: "/shared/admin/header_with_search",
+      locals: {title: "Lista de Trabajadores", search_url: admin_site_workers_path,
+      new_permission: "site_workers@create", new_url: new_admin_site_worker_path } %>
 
       <div class="row">
         <div class="col-lg-12">
@@ -43,7 +43,7 @@
 
               <script>
               $(document).ready(function() {
-                $('.footable').footable();
+                $(".footable").footable();
               });
               </script>
 

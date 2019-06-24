@@ -1,10 +1,11 @@
 <% provide(:title, "Cuentas de banco") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Cuentas de banco", labels: ['Cuentas de banco', 'Editar cuenta'], links: [admin_bank_accounts_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Cuentas de banco", 
+  labels: ["Cuentas de banco", "Editar cuenta"], links: [admin_bank_accounts_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-	  <%= render 'form' %>
+	  <%= render "form" %>
   </div>
 </div>
 <br>

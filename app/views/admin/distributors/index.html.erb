@@ -1,10 +1,11 @@
 <% provide(:title, "Distribuidores") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Distribuidores", labels: ['Distribuidores']} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Distribuidores", 
+  labels: ["Distribuidores"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-    <%= render 'header_with_search' %>
+    <%= render "header_with_search" %>
 
     <div class="row">
       <div class="col-lg-12">
@@ -42,7 +43,7 @@
 
             <script>
             $(document).ready(function() {
-              $('.footable').footable();
+              $(".footable").footable();
             });
             </script>
 

@@ -1,5 +1,6 @@
 <% provide(:title, "Visitas") %>
-<%= render partial: "/shared/distributor/header_band", locals: {title: "Visitas", labels: ['Clientes', 'Visitas'], links: [distributor_clients_path]} %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Visitas", 
+  labels: ["Clientes", "Visitas"], links: [distributor_clients_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -7,16 +8,15 @@
 
     <div class="ibox">
       <div class="ibox-content">
-        <%= form_tag distributor_client_visits_path(@client.hash_id), method: :post, class: 'pull-right' do %>
+        <%= form_tag distributor_client_visits_path(@client.hash_id), method: :post, class: "pull-right" do %>
 
           <div class="form-group">
             <%= label_tag :visit_date, "Fecha de visita" %> <br>
-            <%= text_field_tag :visit_date, Date.today, class: 'form-control',
+            <%= text_field_tag :visit_date, Date.today, class: "form-control",
               maxlength: 15, placeholder: "YYYY-MM-DD", required: true %>
           </div>
 
-          <%= submit_tag 'Registrar visita', 
-            class: 'btn btn-primary btn-sm m-t' %>
+          <%= submit_tag "Registrar visita", class: "btn btn-primary btn-sm m-t" %>
         <% end %>
         <div class="clearfix"></div>
       </div>
@@ -43,24 +43,24 @@
   $(document).ready(() => {
     // Prepare the calendar script to be run
     options = {
-                locale: 'es',
-                format: 'YYYY-MM-DD',
+                locale: "es",
+                format: "YYYY-MM-DD",
                 // date: new Date(),
                 // maxDate: new Date(),
                 icons: {
-                    time: 'fa fa-clock-o',
-                    date: 'fa fa-calendar',
-                    up: 'fa fa-chevron-up',
-                    down: 'fa fa-chevron-down',
-                    previous: 'fa fa-chevron-left',
-                    next: 'fa fa-chevron-right',
-                    today: 'fa fa-arrows',
-                    clear: 'fa fa-times'
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-chevron-up",
+                    down: "fa fa-chevron-down",
+                    previous: "fa fa-chevron-left",
+                    next: "fa fa-chevron-right",
+                    today: "fa fa-arrows",
+                    clear: "fa fa-times"
                 }
               }
-    $('#visit_date').datetimepicker(options);
+    $("#visit_date").datetimepicker(options);
   });
 </script>
 
-<%= stylesheet_link_tag 'bootstrap-datetimepicker.min', media: 'all' %>
-<%= javascript_include_tag 'bootstrap-datetimepicker-custom' %>
+<%= stylesheet_link_tag "bootstrap-datetimepicker.min", media: "all" %>
+<%= javascript_include_tag "bootstrap-datetimepicker-custom" %>

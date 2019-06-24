@@ -7,13 +7,13 @@
             <input type="text" class="form-control input-sm m-b-xs" id="filter" maxlength="25" placeholder="Buscar en tabla">
           </div>
           <div class="col-md-3">
-            <% if @current_user.has_permission?('warehouse_manager@receive_shipments') %>
+            <% if @current_user.has_permission?("warehouse_manager@receive_shipments") %>
     					<%= link_to(admin_shipments_path(@warehouse.hash_id), class: "btn btn-white btn-sm full-width") do %>
     						<i class="fa fa-truck"></i> Envíos a mi almacén
     					<% end %>
             <% end %>
 
-            <% if @current_user.has_permission_category?('warehouse_manager') %>
+            <% if @current_user.has_permission_category?("warehouse_manager") %>
               <%= link_to(admin_inventory_reports_path(@warehouse.hash_id), class: "btn btn-white btn-sm full-width") do %>
                 <i class="fa fa-file-text-o"></i> Reportes de Inventario
               <% end %>
@@ -69,7 +69,7 @@
 
         <script>
             $(document).ready(function() {
-                $('.footable').footable();
+                $(".footable").footable();
             });
         </script>
 

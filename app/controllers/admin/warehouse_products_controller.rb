@@ -1,9 +1,9 @@
 class Admin::WarehouseProductsController < AdminController
 
   def index
-    if @current_user.has_permission_category?('warehouse_products')
+    if @current_user.has_permission_category?("warehouse_products")
       redirect_to admin_chief_warehouse_products_path(params[:warehouse_id]) and return
-    elsif !@current_user.has_permission_category?('warehouse_manager')
+    elsif !@current_user.has_permission_category?("warehouse_manager")
       deny_access! and return
     end
     session[:shipment_products] = Hash.new if !session[:shipment_products]
@@ -14,14 +14,14 @@ class Admin::WarehouseProductsController < AdminController
       .where(describes_total_stock: true, products: {deleted_at: nil})
       .includes(:Product).order("products.name asc").paginate(page: params[:page], per_page: 20)
 
-    if @current_user.has_permission?('warehouse_manager@transfer_mercancy')
+    if @current_user.has_permission?("warehouse_manager@transfer_mercancy")
       @warehouses = Warehouse.active.where.not(id: @current_user.warehouse_id)
     end
   end # def index #
 
   def stock_details
-    unless @current_user.has_permission_category?('warehouse_manager') or
-      @current_user.has_permission_category?('warehouse_products')
+    unless @current_user.has_permission_category?("warehouse_manager") or
+      @current_user.has_permission_category?("warehouse_products")
       deny_access! and return 
     end
 
@@ -31,7 +31,7 @@ class Admin::WarehouseProductsController < AdminController
   end # def stock_details #
 
   def update_stock
-    deny_access! and return unless @current_user.has_permission?('warehouse_products@update_stock')
+    deny_access! and return unless @current_user.has_permission?("warehouse_products@update_stock")
 
     warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     product = Product.find(params[:id])
@@ -60,12 +60,12 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def chief_index
-    deny_access! and return unless @current_user.has_permission_category?('warehouse_products')
+    deny_access! and return unless @current_user.has_permission_category?("warehouse_products")
     session[:shipment_products] = Hash.new if !session[:shipment_products]
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
 
-    if @current_user.has_permission?('warehouse_products@show')
+    if @current_user.has_permission?("warehouse_products@show")
       @products = @warehouse.Products.joins(:Product)
         .where(describes_total_stock: true, products: {deleted_at: nil})
         .order("products.name asc").paginate(page: params[:page], per_page: 20).includes(:Product)
@@ -73,8 +73,8 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def prepare_product_for_shipment
-    unless @current_user.has_permission?('warehouse_manager@transfer_mercancy') or
-           @current_user.has_permission?('warehouse_products@create_shipments')
+    unless @current_user.has_permission?("warehouse_manager@transfer_mercancy") or
+           @current_user.has_permission?("warehouse_products@create_shipments")
       deny_access! and return
     end
 
@@ -85,9 +85,9 @@ class Admin::WarehouseProductsController < AdminController
     @hash_id = Utils.new_alphanumeric_token(9).upcase
 
     @hash[params[:id]] = {"name" => params[:warehouse_product][:name],
-            @hash_id => {"quantity" => params[:warehouse_product][:quantity],
-                         "batch" => params[:warehouse_product][:batch],
-                         "expiration_date" => params[:warehouse_product][:expiration_date]}}
+      @hash_id => {"quantity" => params[:warehouse_product][:quantity],
+        "batch" => params[:warehouse_product][:batch],
+        "expiration_date" => params[:warehouse_product][:expiration_date]}}
 
     session[:shipment_products][params[:id]] = {}
     session[:shipment_products][params[:id]][@hash_id] = @hash[params[:id]][@hash_id]
@@ -99,8 +99,8 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def discard_shipment_preparation
-    unless @current_user.has_permission?('warehouse_manager@transfer_mercancy') or
-           @current_user.has_permission?('warehouse_products@create_shipments')
+    unless @current_user.has_permission?("warehouse_manager@transfer_mercancy") or
+           @current_user.has_permission?("warehouse_products@create_shipments")
       deny_access! and return
     end
 
@@ -127,8 +127,8 @@ class Admin::WarehouseProductsController < AdminController
 
   def create_shipment
     # TODO refactor
-    unless @current_user.has_permission?('warehouse_manager@transfer_mercancy') or
-      @current_user.has_permission?('warehouse_products@create_shipments')
+    unless @current_user.has_permission?("warehouse_manager@transfer_mercancy") or
+      @current_user.has_permission?("warehouse_products@create_shipments")
       deny_access! and return
     end
     deny_access! and return unless session[:shipment_products].present?
@@ -175,7 +175,7 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def destroy_shipment
-    deny_access! and return unless @current_user.has_permission?('warehouse_products@delete_shipments')
+    deny_access! and return unless @current_user.has_permission?("warehouse_products@delete_shipments")
 
     @shipment = Shipment.find(params[:id])
     @details = @shipment.Details
@@ -192,7 +192,6 @@ class Admin::WarehouseProductsController < AdminController
 
           master_product.update_attributes(existence: master_product.existence + d.quantity)
           product.update_attributes(existence: product.existence + d.quantity)
-
         end # @details.each do #
       end # if @shipment.shipment_type == "TRANSFER" #
 
@@ -207,7 +206,7 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def shipments
-    deny_access! and return unless @current_user.has_permission?('warehouse_manager@receive_shipments')
+    deny_access! and return unless @current_user.has_permission?("warehouse_manager@receive_shipments")
 
     @warehouse = @current_user.Warehouse
     @shipments = @warehouse.IncomingShipments.includes(:Chief, :Worker, :OriginWarehouse)
@@ -215,7 +214,7 @@ class Admin::WarehouseProductsController < AdminController
   end
   
   def shipment_details
-    deny_access! and return unless @current_user.has_permission?('warehouse_manager@receive_shipments')
+    deny_access! and return unless @current_user.has_permission?("warehouse_manager@receive_shipments")
 
     @shipment = Shipment.find(params[:id])
     @warehouse = @shipment.TargetWarehouse
@@ -228,7 +227,7 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def receive_complete_shipment
-    deny_access! and return unless @current_user.has_permission?('warehouse_manager@receive_shipments')
+    deny_access! and return unless @current_user.has_permission?("warehouse_manager@receive_shipments")
 
     shipment = Shipment.find(params[:id])
     if shipment.reviewed == false
@@ -244,7 +243,7 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def chief_shipments
-    deny_access! and return unless @current_user.has_permission?('warehouse_products@show_shipments')
+    deny_access! and return unless @current_user.has_permission?("warehouse_products@show_shipments")
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @shipments = @warehouse.IncomingShipments.includes(:Chief, :Worker, :OriginWarehouse)
@@ -252,7 +251,7 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def chief_shipment_details
-    deny_access! and return unless @current_user.has_permission?('warehouse_products@show_shipments')
+    deny_access! and return unless @current_user.has_permission?("warehouse_products@show_shipments")
 
     @shipment = Shipment.find(params[:id])
     @warehouse = @shipment.TargetWarehouse
@@ -265,7 +264,7 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def add_report_quantity_to_stock
-    deny_access! and return unless @current_user.has_permission?('warehouse_products@reject_shipment_stock')
+    deny_access! and return unless @current_user.has_permission?("warehouse_products@reject_shipment_stock")
 
     shipment = Shipment.find(params[:id])
     if shipment.reviewed == false
@@ -282,7 +281,7 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def create_difference_report
-    deny_access! and return unless @current_user.has_permission?('warehouse_manager@receive_shipments')
+    deny_access! and return unless @current_user.has_permission?("warehouse_manager@receive_shipments")
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @shipment = Shipment.find(params[:id])
@@ -309,7 +308,7 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def update_min_stock
-    deny_access! and return unless @current_user.has_permission?('warehouse_products@update_min_stock')
+    deny_access! and return unless @current_user.has_permission?("warehouse_products@update_min_stock")
 
     if params[:warehouse_product][:min_stock].to_i > 0
       w_product = WarehouseProduct.joins(:Warehouse).joins(:Product)
@@ -328,8 +327,8 @@ class Admin::WarehouseProductsController < AdminController
   end
 
   def print_qr
-    unless @current_user.has_permission_category?('warehouse_products') or
-      @current_user.has_permission_category?('warehouse_manager')
+    unless @current_user.has_permission_category?("warehouse_products") or
+      @current_user.has_permission_category?("warehouse_manager")
       deny_access! and return 
     end
 

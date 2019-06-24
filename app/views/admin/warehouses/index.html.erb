@@ -1,11 +1,11 @@
 <% provide(:title, "Almacenes") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Almacenes", labels: ['Almacenes']} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Almacenes", labels: ["Almacenes"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
 
-    <%= render 'header_with_search' %>
+    <%= render "header_with_search" %>
 
     <!--Table-->
     <div class="row">
@@ -52,6 +52,6 @@
 <!--End content whit animation-->
 <script>
 $(document).ready(function() {
-  $('.footable').footable();
+  $(".footable").footable();
 });
 </script>

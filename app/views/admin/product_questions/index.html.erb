@@ -1,5 +1,6 @@
 <% provide(:title, "Preguntas de los productos") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Preguntas de los productos", labels: ['Preguntas de los productos']} %>
+<%= render partial: "/shared/admin/header_band", 
+  locals: {title: "Preguntas de los productos", labels: ["Preguntas de los productos"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeIn">
@@ -7,9 +8,11 @@
 
     <div class="ibox">
         <div class="ibox-content text-center">
-            <h3 class="m-b-xxs">Lista de preguntas</h3>
-            <small>Aquí verás las preguntas que los clientes realicen por cierto producto
-        y responder a ese usuario. | <%= link_to "Ver preguntas respondidas", admin_product_answered_questions_path %></small>
+          <h3 class="m-b-xxs">Lista de preguntas</h3>
+          <small>
+            Aquí verás las preguntas que los clientes realicen por cierto producto
+            y responder a ese usuario. | <%= link_to "Ver preguntas respondidas", admin_product_answered_questions_path %>
+          </small>
         </div>
     </div>
 

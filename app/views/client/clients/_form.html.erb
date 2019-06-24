@@ -1,77 +1,30 @@
 <%= form_for [:client, @client], html: {id: "client_form"} do |f| %>
-	<%= render partial: '/shared/error_messages', locals:{entity: @client} %>
+	<%= render partial: "/shared/error_messages", locals:{entity: @client} %>
 	<div class="col-md-6">
 		<p>Datos personales</p>
 
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :name, "Nombre Completo" %>
-				<%= f.text_field :name, class: 'form-control form-control-black', placeholder: "Luz Yenny García Ríos",
+				<%= f.text_field :name, class: "form-control form-control-black", placeholder: "Luz Yenny García Ríos",
 						required: true, minlength: 2, maxlength: 100, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
 				<span class="help-text">Solo se admite letras, espacios y puntos</span>
 			</div>
 		</div><!-- .row -->
 
-		<!--div class="row">
-			<div class="col-sm-12 form-group">
-				<%#= f.label :lastname, "Apellido paterno" %>
-				<%#= f.text_field :lastname, class: 'form-control form-control-black', placeholder: "Black",
-						required: true, minlength: 2, maxlength: 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
-			</div>
-		</div--><!-- .row -->
-
-		<!--div class="row">
-			<div class="col-sm-12 form-group">
-				<%#= f.label :mother_lastname, "Apellido materno" %>
-				<%#= f.text_field :mother_lastname, class: 'form-control form-control-black', placeholder: "Smith",
-						required: true, minlength: 2, maxlength: 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
-			</div>
-		</div--><!-- .row -->
-
-		<!--div class="row">
-			<div class="col-sm-12 form-group">
-				<%#= f.label :birthday, "Fecha de nacimiento (yyyy-mm-dd)" %>
-				<div class='input-group date' id="datetimepicker">
-					<%#= f.text_field :birthday, class: 'form-control form-control-black',
-						maxlength: 10  %>
-					<span class="input-group-addon">
-						<span class="fa fa-calendar"></span>
-					</span>
-				</div>
-			</div>
-		</div--><!-- .row -->
-
-		<!--div class="row">
-			<div class="col-sm-12 form-group">
-				<%#= f.label :username, "Nombre comercial o de usuario" %>
-				<%#= f.text_field :username, class: 'form-control form-control-black', placeholder: "John01",
-						required: true, minlength: 5, maxlength: 15 %>
-				<span class="help-text">Mínimo 5 caracteres, máximo 15.</span>
-			</div>
-		</div--><!-- .row -->
-
 		<div class="row">
 			<div class="col-sm-12 form-group">
 	      <%= f.label :email, "Correo electrónico" %>
-	      <%= f.email_field :email, class: 'form-control form-control-black', placeholder: "john@example.com",
+	      <%= f.email_field :email, class: "form-control form-control-black", placeholder: "john@example.com",
 						required: true, maxlength: 50, disabled: true %>
 			</div>
 		</div><!-- .row -->
-
-		<!--div class="row">
-			<div class="col-sm-12 form-group">
-				<%#= f.label :email_confirmation, "Confirma tu correo electrónico" %>
-				<%#= f.email_field :email_confirmation, value: @current_user.email,
-						class: 'form-control form-control-black', placeholder: "john@example.com",
-						required: true, maxlength: 50, "data-parsley-equalto"=>"#client_email" %>
-			</div>
-		</div--><!-- .row -->
 
 		<div class="form-group <%if @client.errors.any?%>parsley-error<%end%>">
 			<div class="row">
 				<div class="col-sm-12 form-group">
 					<%= f.label :password, "Contraseña" %>
-					<%= f.password_field :password, placeholder: 'modificar contraseña', class: 'form-control form-control-black',
+					<%= f.password_field :password, placeholder: "modificar contraseña", class: "form-control form-control-black",
 							minlength: 6, maxlength: 20 %>
 					<span class="help-text">Mínimo 6 caracteres y máximo 20.</span>
 				</div>
@@ -80,7 +33,7 @@
 			<div class="row">
 				<div class="col-sm-12 form-group">
 					<%= f.label :password_confirmation, "Confirma contraseña" %>
-					<%= f.password_field :password_confirmation, placeholder: 'modificar contraseña', class: 'form-control form-control-black',
+					<%= f.password_field :password_confirmation, placeholder: "modificar contraseña", class: "form-control form-control-black",
 							"data-parsley-equalto"=>"#client_password" %>
 				</div>
 			</div><!-- .row -->
@@ -94,7 +47,7 @@
 				<%= params[:lada] ? params[:lada] : "000"  %>
 				</span>)</label><br>
 
-				<%= f.text_field :telephone, class: 'form-control form-control-black', placeholder: "0000 0000",
+				<%= f.text_field :telephone, class: "form-control form-control-black", placeholder: "0000 0000",
 						required: true, minlength: 7, maxlength: 12 %>
 			</div>
 		</div><!-- .row -->
@@ -102,7 +55,7 @@
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :cellphone, "Teléfono celular a 10 dígitos" %>
-				<%= f.text_field :cellphone, class: 'form-control form-control-black', placeholder: "000 000 00",
+				<%= f.text_field :cellphone, class: "form-control form-control-black", placeholder: "000 000 00",
 						required: true, minlength: 9, maxlength: 15 %>
 			</div>
 		</div><!-- .row -->
@@ -126,7 +79,7 @@
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :street, "Calle" %>
-				<%= f.text_field :street, class: 'form-control form-control-black',
+				<%= f.text_field :street, class: "form-control form-control-black",
 						required: true, maxlength: 50 %>
 			</div>
 		</div><!-- .row -->
@@ -134,7 +87,7 @@
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :extnumber, "Número exterior" %>
-				<%= f.number_field :extnumber, class: 'form-control form-control-black',
+				<%= f.number_field :extnumber, class: "form-control form-control-black",
 						required: true, maxlength: 5, step: 1, min: 0 %>
 			</div>
 		</div><!-- .row -->
@@ -142,7 +95,7 @@
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :intnumber, "Número interior" %>
-				<%= f.number_field :intnumber, class: 'form-control form-control-black',
+				<%= f.number_field :intnumber, class: "form-control form-control-black",
 						maxlength: 4, step: 1, min: 0 %>
 			</div>
 		</div><!-- .row -->
@@ -150,7 +103,7 @@
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :col, "Colonia" %>
-				<%= f.text_field :col, class: 'form-control form-control-black',
+				<%= f.text_field :col, class: "form-control form-control-black",
 						required: true, maxlength: 50 %>
 			</div>
 		</div><!-- .row -->
@@ -158,7 +111,7 @@
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :cp, "Código postal" %>
-				<%= f.text_field :cp, class: 'form-control form-control-black',
+				<%= f.text_field :cp, class: "form-control form-control-black",
 						required: true, maxlength: 5 %>
 			</div>
 		</div><!-- .row -->
@@ -166,7 +119,7 @@
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :street_ref1, "Entre calle" %>
-				<%= f.text_field :street_ref1, class: 'form-control form-control-black',
+				<%= f.text_field :street_ref1, class: "form-control form-control-black",
 						required: true, maxlength: 50 %>
 			</div>
 		</div><!-- .row -->
@@ -174,7 +127,7 @@
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :street_ref2, "Y calle" %>
-				<%= f.text_field :street_ref2, class: 'form-control form-control-black',
+				<%= f.text_field :street_ref2, class: "form-control form-control-black",
 						required: true, maxlength: 50 %>
 			</div>
 		</div><!-- .row -->
@@ -272,54 +225,34 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		// Init parsley to validate the formularie
-		$('#client_form').parsley();
+		$("#client_form").parsley();
 
 		telephone = $("#client_telephone");
 	  cellphone = $("#client_cellphone");
 
 		if(telephone.val() != ""){
-			cellphone.removeAttr('required');
+			cellphone.removeAttr("required");
 		}else if (cellphone.val() != "") {
-			telephone.removeAttr('required');
+			telephone.removeAttr("required");
 		}
 
-	  telephone.on('change', function(){
+	  telephone.on("change", function(){
 	    console.log("telephone");
-	    telephone.attr('required', true);
-	    cellphone.removeAttr('required')
+	    telephone.attr("required", true);
+	    cellphone.removeAttr("required")
 	    if (telephone.val() == ""){
-	      cellphone.attr('required', true)
+	      cellphone.attr("required", true)
 	    }
 	  });
 
-	  cellphone.on('change', function(){
+	  cellphone.on("change", function(){
 	    console.log("cellphone");
-	    cellphone.attr('required', true);
-	    telephone.removeAttr('required')
+	    cellphone.attr("required", true);
+	    telephone.removeAttr("required")
 	    if (cellphone.val() == ""){
-	      telephone.attr('required', true)
+	      telephone.attr("required", true)
 	    }
 	  });
-
-		<% max_date = l(18.years.ago, format: :form_date) %>
-		// $('#datetimepicker').datetimepicker({
-		// 		locale: 'es',
-		// 		format: 'YYYY-MM-DD',
-		// 		defaultDate: "<%= max_date %>",
-		// 		viewMode: 'years',
-		// 		icons: {
-		// 				time: 'fa fa-clock-o',
-		// 				date: 'fa fa-calendar',
-		// 				up: 'fa fa-chevron-up',
-		// 				down: 'fa fa-chevron-down',
-		// 				previous: 'fa fa-chevron-left',
-		// 				next: 'fa fa-chevron-right',
-		// 				today: 'fa fa-arrows',
-		// 				clear: 'fa fa-times'
-		// 		}
-		// });
-
-		// $('#datetimepicker').data("DateTimePicker").maxDate("<%= max_date %>");
 	});
 
 	function PreviewImage() {
@@ -332,13 +265,13 @@
 	};
 
 	function openModal(){
-		modal = $('#modal')
-    modal.find('.modal-title').html("Agregar sucursales y/o destinos");
-    modal.find('.modal-body').html('<%= j render "add_more_branches_or_destinations" %>');
+		modal = $("#modal")
+    modal.find(".modal-title").html("Agregar sucursales y/o destinos");
+    modal.find(".modal-body").html(`<%= j render "add_more_branches_or_destinations" %>`);
 		modal.modal("show");
 	}
 </script>
 
-<%= stylesheet_link_tag 'bootstrap-datetimepicker.min', media: 'all' %>
-<%= javascript_include_tag 'bootstrap-datetimepicker-custom' %>
-<%= javascript_include_tag 'parsley-custom' %>
+<%= stylesheet_link_tag "bootstrap-datetimepicker.min", media: "all" %>
+<%= javascript_include_tag "bootstrap-datetimepicker-custom" %>
+<%= javascript_include_tag "parsley-custom" %>

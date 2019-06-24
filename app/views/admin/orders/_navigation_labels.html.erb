@@ -8,77 +8,79 @@
       end
         %>
 
-      <% if @current_user.has_permission?('orders@search') %>
+      <% if @current_user.has_permission?("orders@search") %>
         <%= link_to "Corte", admin_orders_search_path,
             class: "btn btn-white m-b-xs" %>
       <% end %>
 
-      <% if @current_user.has_permission?('orders@local_orders') %>
-        <%= link_to "En efectivo", url + 'LOCAL_ORDERS',
+      <% if @current_user.has_permission?("orders@local_orders") %>
+        <%= link_to "En efectivo", url + "LOCAL_ORDERS",
             class: "btn btn-white m-b-xs LOCAL_ORDERS" %>
       <% end %>
 
-      <% if @current_user.has_permission?('orders@cancel') %>
-        <%= link_to "Sin depósito", url + 'CANCEL',
+      <% if @current_user.has_permission?("orders@cancel") %>
+        <%= link_to "Sin depósito", url + "CANCEL",
             class: "btn btn-white m-b-xs CANCEL" %>
       <% end %>
 
-      <% if @current_user.has_permission?('orders@accept_reject_payment') %>
-        <%= link_to "Con depósito", url + 'ACCEPT_REJECT_PAYMENT',
+      <% if @current_user.has_permission?("orders@accept_reject_payment") %>
+        <%= link_to "Con depósito", url + "ACCEPT_REJECT_PAYMENT",
             class: "btn btn-white m-b-xs ACCEPT_REJECT_PAYMENT" %>
       <% end %>
 
-      <% if @current_user.has_permission?('orders@capture_batches') %>
-      <%= link_to "Por capturar", url + 'CAPTURE_BATCHES',
+      <% if @current_user.has_permission?("orders@capture_batches") %>
+      <%= link_to "Por capturar", url + "CAPTURE_BATCHES",
       class: "btn btn-white m-b-xs CAPTURE_BATCHES" %>
       <% end %>
 
-      <% if @current_user.has_permission?('orders@inspection') %>
-        <%= link_to "Inspeccionar", url + 'INSPECTION',
+      <% if @current_user.has_permission?("orders@inspection") %>
+        <%= link_to "Inspeccionar", url + "INSPECTION",
             class: "btn btn-white m-b-xs INSPECTION" %>
       <% end %>
 
-      <% if @current_user.has_permission?('orders@capture_tracking_code') %>
-        <%= link_to "Código de rastreo", url + 'CAPTURE_TRACKING_CODE',
+      <% if @current_user.has_permission?("orders@capture_tracking_code") %>
+        <%= link_to "Código de rastreo", url + "CAPTURE_TRACKING_CODE",
             class: "btn btn-white m-b-xs CAPTURE_TRACKING_CODE" %>
       <% end %>
 
-      <% if @current_user.has_permission?('orders@show') %>
-        <%= link_to "Enviadas", url + 'SENT',
+      <% if @current_user.has_permission?("orders@show") %>
+        <%= link_to "Enviadas", url + "SENT",
             class: "btn btn-white m-b-xs SENT" %>
       <% end %>
 
-      <% if @current_user.has_permission?('orders@show') %>
-        <%= link_to "Entregadas", url + 'DELIVERED',
+      <% if @current_user.has_permission?("orders@show") %>
+        <%= link_to "Entregadas", url + "DELIVERED",
             class: "btn btn-white m-b-xs DELIVERED" %>
       <% end %>
 
-      <% if @current_user.has_permission?('orders@invoices') %>
-        <%= link_to "Por facturar", url + 'INVOICES',
+      <% if @current_user.has_permission?("orders@invoices") %>
+        <%= link_to "Por facturar", url + "INVOICES",
             class: "btn btn-white m-b-xs INVOICES" %>
         <% if params[:type] == "INVOICES" %>
-          <%= link_to "<i class='fa fa-download'></i> Por facturar".html_safe,
-              admin_download_orders_invoice_data_path(current: false),
-              class: "btn btn-white m-b-xs", target: "_blank", data: {confirm: "Al descargar un nuevo archivo de facturación se perderá el antiguo, ¿Está seguro(a) de descargarlo?"} %>
+          <%= link_to admin_download_orders_invoice_data_path(current: false),
+            class: "btn btn-white m-b-xs", target: "_blank", 
+            data: {confirm: "Al descargar un nuevo archivo de facturación se perderá el antiguo, ¿Está seguro(a) de descargarlo?"} do %>
+            <i class="fa fa-download"></i> Por facturar
+          <% end %>
 
-          <%= link_to "<i class='fa fa-download'></i> Último archivo".html_safe,
-              admin_download_orders_invoice_data_path(current: true),
-              class: "btn btn-white m-b-xs", target: "_blank" %>
+          <%= link_to admin_download_orders_invoice_data_path(current: true),
+            class: "btn btn-white m-b-xs", target: "_blank" do %>
+            <i class="fa fa-download"></i> Último archivo
+          <% end %>
         <% end %>
       <% end %>
   </div>
-  <% if @current_user.has_permission?('orders@accept_reject_payment') and params[:type] == 'ACCEPT_REJECT_PAYMENT' %>
-      <br><div class="btn-group m-b">
-          <%= link_to 'Reporte Bancario', admin_bank_report_path,
-              class: 'btn btn-primary' %>
-      </div>
+  <% if @current_user.has_permission?("orders@accept_reject_payment") and params[:type] == "ACCEPT_REJECT_PAYMENT" %>
+    <div class="btn-group m-b"><br>
+      <%= link_to "Reporte Bancario", admin_bank_report_path, class: "btn btn-primary" %>
+    </div>
   <% end %>
 </div>
 
 <script type="text/javascript">
   $(document).ready(function(){
     current_element = $(".<%=params[:type]%>");
-    current_element.addClass('btn-default');
-    current_element.removeClass('btn-white');
+    current_element.addClass("btn-default");
+    current_element.removeClass("btn-white");
   });
 </script>

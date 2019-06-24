@@ -3,9 +3,9 @@ class StaticPagesController < ApplicationController
 
   def index
     if logged_in?
-      if session[:user_type] == 'w'
+      if session[:user_type] == "w"
         redirect_to admin_welcome_path and return
-      elsif session[:user_type] == 'd'
+      elsif session[:user_type] == "d"
         redirect_to distributor_welcome_path and return
       end
     end

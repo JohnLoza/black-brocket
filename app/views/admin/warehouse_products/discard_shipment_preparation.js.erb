@@ -3,4 +3,5 @@
 <% else %>
   $("#<%=params[:id]%>").remove();
 <% end %>
-$("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Eliminado de los preparativos'} %>");
+$("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+  locals: {message_type: :success, message: "Eliminado de los preparativos"} %>`);

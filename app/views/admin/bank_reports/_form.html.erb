@@ -8,8 +8,8 @@
           <div class="row">
             <div class="col-lg-6">
               <label>Ventas a recopilar desde (formato: YYYY-MM-DD)</label><br>
-              <div class='input-group date' id='from_date_picker'>
-                  <input type='text' class="form-control" name="from_date" id="from_date" maxlength="20" />
+              <div class="input-group date" id="from_date_picker">
+                  <input type="text" class="form-control" name="from_date" id="from_date" maxlength="20" />
                   <span class="input-group-addon">
                       <span class="fa fa-calendar"></span>
                   </span>
@@ -18,8 +18,8 @@
             </div>
             <div class="col-lg-6">
               <label>Hasta (formato: YYYY-MM-DD)</label><br>
-                <div class='input-group date' id='to_date_picker'>
-                    <input type='text' class="form-control" name="to_date" id="to_date" maxlength="20" />
+                <div class="input-group date" id="to_date_picker">
+                    <input type="text" class="form-control" name="to_date" id="to_date" maxlength="20" />
                     <span class="input-group-addon">
                         <span class="fa fa-calendar"></span>
                     </span>
@@ -27,7 +27,7 @@
                 <br/>
             </div>
           </div><br>
-          <%= submit_tag 'Buscar', class: 'btn btn-primary' %>
+          <%= submit_tag "Buscar", class: "btn btn-primary" %>
         <% end %>
       </div>
 
@@ -37,24 +37,24 @@
 
 <script type="text/javascript">
   options = {
-              locale: 'es',
-              format: 'YYYY-MM-DD',
+              locale: "es",
+              format: "YYYY-MM-DD",
               icons: {
-                  time: 'fa fa-clock-o',
-                  date: 'fa fa-calendar',
-                  up: 'fa fa-chevron-up',
-                  down: 'fa fa-chevron-down',
-                  previous: 'fa fa-chevron-left',
-                  next: 'fa fa-chevron-right',
-                  today: 'fa fa-arrows',
-                  clear: 'fa fa-times'
+                  time: "fa fa-clock-o",
+                  date: "fa fa-calendar",
+                  up: "fa fa-chevron-up",
+                  down: "fa fa-chevron-down",
+                  previous: "fa fa-chevron-left",
+                  next: "fa fa-chevron-right",
+                  today: "fa fa-arrows",
+                  clear: "fa fa-times"
               }
-            }
+            };
   $(document).ready(function () {
-      $('#from_date_picker').datetimepicker(options);
-      $('#to_date_picker').datetimepicker(options);
+      $("#from_date_picker").datetimepicker(options);
+      $("#to_date_picker").datetimepicker(options);
   });
 </script>
 
-<%= stylesheet_link_tag 'bootstrap-datetimepicker.min', media: 'all' %>
-<%= javascript_include_tag 'bootstrap-datetimepicker-custom' %>
+<%= stylesheet_link_tag "bootstrap-datetimepicker.min", media: "all" %>
+<%= javascript_include_tag "bootstrap-datetimepicker-custom" %>

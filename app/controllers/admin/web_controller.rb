@@ -3,11 +3,11 @@ class Admin::WebController < AdminController
   @@replaceable_path = "/shared/web/"
 
   def index
-    deny_access! and return unless @current_user.has_permission_category?('web')
+    deny_access! and return unless @current_user.has_permission_category?("web")
   end
 
   def photos
-    deny_access! and return unless @current_user.has_permission?('web@gallery_images')
+    deny_access! and return unless @current_user.has_permission?("web@gallery_images")
 
     @photos = WebPhoto.where(name: "GALLERY")
     @log_in_initial = WebPhoto.where.not(name: "GALLERY")
@@ -15,7 +15,7 @@ class Admin::WebController < AdminController
   end
 
   def upload_photos
-    deny_access! and return unless @current_user.has_permission?('web@gallery_images')
+    deny_access! and return unless @current_user.has_permission?("web@gallery_images")
     deny_access! and return unless params[:web_photo].present?
 
     params[:web_photo][:photos].each do |photo|
@@ -37,7 +37,7 @@ class Admin::WebController < AdminController
   end
 
   def destroy_photo
-    deny_access! and return unless @current_user.has_permission?('web@gallery_images')
+    deny_access! and return unless @current_user.has_permission?("web@gallery_images")
 
     photo = WebPhoto.find_by!(id: params[:id])
     if photo.destroy
@@ -50,14 +50,14 @@ class Admin::WebController < AdminController
   end
 
   def offers
-    deny_access! and return unless @current_user.has_permission?('web@offers')
+    deny_access! and return unless @current_user.has_permission?("web@offers")
 
     @offers = WebOffer.all
     @new_offer = WebOffer.new
   end
 
   def upload_offers
-    deny_access! and return unless @current_user.has_permission?('web@offers')
+    deny_access! and return unless @current_user.has_permission?("web@offers")
 
     offer = WebOffer.new(web_offer_params)
 
@@ -71,7 +71,7 @@ class Admin::WebController < AdminController
   end
 
   def destroy_offer
-    deny_access! and return unless @current_user.has_permission?('web@offers')
+    deny_access! and return unless @current_user.has_permission?("web@offers")
 
     offer = WebOffer.find_by!(id: params[:id])
     if offer.destroy
@@ -85,30 +85,30 @@ class Admin::WebController < AdminController
 
   def edit_info
     case params[:name]
-    when 'TERMS_OF_SERVICE'
-      deny_access! and return unless @current_user.has_permission?('web@terms_of_service')
-    when 'PRIVACY_POLICY'
-      deny_access! and return unless @current_user.has_permission?('web@privacy_policy')
+    when "TERMS_OF_SERVICE"
+      deny_access! and return unless @current_user.has_permission?("web@terms_of_service")
+    when "PRIVACY_POLICY"
+      deny_access! and return unless @current_user.has_permission?("web@privacy_policy")
     else
-      deny_access! and return unless @current_user.has_permission?('web@texts')
+      deny_access! and return unless @current_user.has_permission?("web@texts")
     end
 
     @web_info = WebInfo.where(name: params[:name]).take
     if @web_info
       # adding the starting underscore to the file name as it is stored without it to use with "render" in views #
-      file_path = @web_info.description_render_path.sub(@@replaceable_path, @@replaceable_path + '_')
+      file_path = @web_info.description_render_path.sub(@@replaceable_path, @@replaceable_path + "_")
       @web_info.body = File.open(@@base_file_path + file_path, "r"){|file| file.read }
     end
   end
 
   def update_info
     case params[:name]
-    when 'TERMS_OF_SERVICE'
-      deny_access! and return unless @current_user.has_permission?('web@terms_of_service')
-    when 'PRIVACY_POLICY'
-      deny_access! and return unless @current_user.has_permission?('web@privacy_policy')
+    when "TERMS_OF_SERVICE"
+      deny_access! and return unless @current_user.has_permission?("web@terms_of_service")
+    when "PRIVACY_POLICY"
+      deny_access! and return unless @current_user.has_permission?("web@privacy_policy")
     else
-      deny_access! and return unless @current_user.has_permission?('web@texts')
+      deny_access! and return unless @current_user.has_permission?("web@texts")
     end
 
     web_info = WebInfo.where(name: params[:name]).take
@@ -128,14 +128,14 @@ class Admin::WebController < AdminController
   end
 
   def videos
-    deny_access! and return unless @current_user.has_permission?('web@video')
+    deny_access! and return unless @current_user.has_permission?("web@video")
 
     @video = WebVideo.first
     @video = WebVideo.new if !@video
   end
 
   def upload_video
-    deny_access! and return unless @current_user.has_permission?('web@video')
+    deny_access! and return unless @current_user.has_permission?("web@video")
 
     @video = WebVideo.first
     if @video
@@ -157,7 +157,7 @@ class Admin::WebController < AdminController
   end
 
   def reset_videos
-    deny_access! and return unless @current_user.has_permission?('web@video')
+    deny_access! and return unless @current_user.has_permission?("web@video")
 
     video = WebVideo.first
     video.destroy if video
@@ -166,13 +166,13 @@ class Admin::WebController < AdminController
   end
 
   def social_networks
-    deny_access! and return unless @current_user.has_permission?('web@social_networks')
+    deny_access! and return unless @current_user.has_permission?("web@social_networks")
 
     @networks = SocialNetwork.all
   end
 
   def update_social_networks
-    deny_access! and return unless @current_user.has_permission?('web@social_networks')
+    deny_access! and return unless @current_user.has_permission?("web@social_networks")
 
     @network = SocialNetwork.find_by!(id: params[:id])
     if @network.update_attributes(url: params[:social_network][:url])
@@ -185,13 +185,13 @@ class Admin::WebController < AdminController
   end
 
   def footer_details
-    deny_access! and return unless @current_user.has_permission?('web@footer_details')
+    deny_access! and return unless @current_user.has_permission?("web@footer_details")
 
     @details = FooterExtraDetail.all
   end
 
   def create_footer_detail
-    deny_access! and return unless @current_user.has_permission?('web@footer_details')
+    deny_access! and return unless @current_user.has_permission?("web@footer_details")
 
     detail = FooterExtraDetail.new(footer_params)
     if detail.save
@@ -204,7 +204,7 @@ class Admin::WebController < AdminController
   end
 
   def delete_footer_detail
-    deny_access! and return unless @current_user.has_permission?('web@footer_details')
+    deny_access! and return unless @current_user.has_permission?("web@footer_details")
 
     detail = FooterExtraDetail.find_by!(id: params[:id])
 
@@ -214,18 +214,18 @@ class Admin::WebController < AdminController
   end
 
   def services
-    deny_access! and return unless @current_user.has_permission?('web@texts')
+    deny_access! and return unless @current_user.has_permission?("web@texts")
 
     @infos = WebInfo.where(name: ["HIGH_QUALITY","DISCOUNTS","EASY_SHOPPING","DISTRIBUTORS"])
     @infos.each do |info|
       # adding the starting underscore to the file name as it is stored without it to use with "render" in views #
-      file_path = info.description_render_path.sub(@@replaceable_path, @@replaceable_path + '_')
+      file_path = info.description_render_path.sub(@@replaceable_path, @@replaceable_path + "_")
       info.body = File.open(@@base_file_path + file_path, "r"){|file| file.read }
     end
   end
 
   def update_services
-    deny_access! and return unless @current_user.has_permission?('web@texts')
+    deny_access! and return unless @current_user.has_permission?("web@texts")
 
     web_info = WebInfo.find(params[:id])
     if !web_info.blank?

@@ -1,80 +1,78 @@
-<% if !params[:only_address] or params[:only_address] != "Y"%>
-  <div class="table-responsive m-t">
-    <table class="table invoice-table" style="margin-bottom: 0px;">
-      <thead>
+<div class="table-responsive m-t">
+  <table class="table invoice-table" style="margin-bottom: 0px;">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Presentación</th>
+        <th>Cantidad</th>
+        <th>Precio Unitario</th>
+        <th>(IVA)</th>
+        <th>(IEPS)</th>
+        <th>Importe</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% sub_total = 0 %>
+      <% ieps = 0 %>
+      <% shipment_details = OrderProductShipmentDetail.where(order_id: @details[0].order_id) %>
+      <% @details.each do |d| %>
+        <% p = d.Product %>
         <tr>
-          <th>Producto</th>
-          <th>Presentación</th>
-          <th>Cantidad</th>
-          <th>Precio Unitario</th>
-          <th>(IVA)</th>
-          <th>(IEPS)</th>
-          <th>Importe</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% sub_total = 0 %>
-        <% ieps = 0 %>
-        <% shipment_details = OrderProductShipmentDetail.where(order_id: @details[0].order_id) %>
-        <% @details.each do |d| %>
-          <% p = d.Product %>
-          <tr>
-            <td>
-              <span style="border-bottom: dashed 1px #ccc;"><%= p.name %></span>
-              <% shipment_details.each do |sd| %>
-                <% if sd.product_id == p.id %>
-                  <br>Lot. <%= sd.batch %> (<%= sd.quantity %>)
-                <% end %>
+          <td>
+            <span style="border-bottom: dashed 1px #ccc;"><%= p.name %></span>
+            <% shipment_details.each do |sd| %>
+              <% if sd.product_id == p.id %>
+                <br>Lot. <%= sd.batch %> (<%= sd.quantity %>)
               <% end %>
-            </td>
-            <td><%= p.presentation %><br><br></td>
-            <td><span class="number_format"><%= d.quantity %></span><br><br></td>
-            <% unit_price = d.price %>
-            <td>$<span class="number_format"><%= unit_price %></span><br><br></td>
-            <!-- IVA -->
-            <td>
-              <%=d.iva%> %<br>
-              ($<span class="number_format"><%= d.iva %></span>)<br>
-            </td>
-            <!-- IEPS -->
-            <td>
-              <%=d.ieps%> %<br>
-              ($<span class="number_format"><%= d.ieps %></span>)<br>
-            </td>
-            <% current_import = (d.sub_total - d.total_iva - d.total_ieps).round(2) %>
-            <td>$
-              <span class="number_format"><%= current_import %></span><br><br>
-            </td>
-            <% sub_total += current_import %>
-            <% ieps += current_import*(d.ieps/100) %>
-          </tr>
-        <% end %>
-          <tr>
-            <td align="right" colspan="6"><strong>Sub Total:</strong></td>
-            <td>$<span class="number_format"><%= sub_total.round(2) %></span> MXN
-            </td>
-          </tr>
-          <tr>
-            <td align="right" colspan="6"><strong>IEPS:</strong></td>
-            <td>$<span class="number_format"><%= ieps.round(2) %></span> MXN
-            </td>
-          </tr>
-          <tr>
-            <td align="right" colspan="6"><strong>IVA:</strong></td>
-            <td>$<span class="number_format"><%= (@order.total - @order.shipping_cost - ieps - sub_total).round(2) %></span> MXN
-            </td>
-          </tr>
-          <tr>
-            <td align="right" colspan="6"><strong>Envío:</strong></td>
-            <td>$<span class="number_format"><%= @order.shipping_cost %></span> MXN
-            </td>
-          </tr>
-          <tr>
-            <td align="right" colspan="6"><strong>Total de venta:</strong></td>
-            <td>$<span class="number_format"><%= @order.total %></span> MXN
-            </td>
-          </tr>
-      </tbody>
-    </table>
-  </div><!-- /table-responsive -->
-<% end # if to not show when only want address for etiquette # %>
+            <% end %>
+          </td>
+          <td><%= p.presentation %><br><br></td>
+          <td><span class="number_format"><%= d.quantity %></span><br><br></td>
+          <% unit_price = d.price %>
+          <td>$<span class="number_format"><%= unit_price %></span><br><br></td>
+          <!-- IVA -->
+          <td>
+            <%=d.iva%> %<br>
+            ($<span class="number_format"><%= d.total_iva %></span>)<br>
+          </td>
+          <!-- IEPS -->
+          <td>
+            <%=d.ieps%> %<br>
+            ($<span class="number_format"><%= d.total_ieps %></span>)<br>
+          </td>
+          <% current_import = (d.sub_total - d.total_iva - d.total_ieps).round(2) %>
+          <td>$
+            <span class="number_format"><%= current_import %></span><br><br>
+          </td>
+          <% sub_total += current_import %>
+          <% ieps += current_import*(d.ieps/100) %>
+        </tr>
+      <% end %>
+        <tr>
+          <td align="right" colspan="6"><strong>Sub Total:</strong></td>
+          <td>$<span class="number_format"><%= sub_total.round(2) %></span> MXN
+          </td>
+        </tr>
+        <tr>
+          <td align="right" colspan="6"><strong>IEPS:</strong></td>
+          <td>$<span class="number_format"><%= ieps.round(2) %></span> MXN
+          </td>
+        </tr>
+        <tr>
+          <td align="right" colspan="6"><strong>IVA:</strong></td>
+          <td>$<span class="number_format"><%= (@order.total - @order.shipping_cost - ieps - sub_total).round(2) %></span> MXN
+          </td>
+        </tr>
+        <tr>
+          <td align="right" colspan="6"><strong>Envío:</strong></td>
+          <td>$<span class="number_format"><%= @order.shipping_cost %></span> MXN
+          </td>
+        </tr>
+        <tr>
+          <td align="right" colspan="6"><strong>Total de venta:</strong></td>
+          <td>$<span class="number_format"><%= @order.total %></span> MXN
+          </td>
+        </tr>
+    </tbody>
+  </table>
+</div><!-- /table-responsive -->

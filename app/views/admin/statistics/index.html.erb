@@ -1,22 +1,22 @@
 <% provide(:title, "Estadísticas") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Estadísticas", labels: ['Estadísticas']} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Estadísticas", labels: ["Estadísticas"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
 
     <div class="ibox">
-        <div class="ibox-content text-center">
-            <h3 class="m-b-xxs">Estadísticas</h3>
-            <small>En este menú encotrarás opciones que te permiten desplegar estadísticas de forma gráfica acerca de distintos datos de tu negocio.</small>
-        </div>
+      <div class="ibox-content text-center">
+        <h3 class="m-b-xxs">Estadísticas</h3>
+        <small>En este menú encotrarás opciones que te permiten desplegar estadísticas de forma gráfica acerca de distintos datos de tu negocio.</small>
+      </div>
     </div>
 
-      <% if params[:type] and params[:type]=="sales" %>
-        <%= render "sales_form" %>
-      <% else %>
-        <%= render "main_menu" %>
-      <% end %>
+    <% if params[:type] and params[:type]=="sales" %>
+      <%= render "sales_form" %>
+    <% else %>
+      <%= render "main_menu" %>
+    <% end %>
   </div>
 </div>
 <!--End content whit animation-->

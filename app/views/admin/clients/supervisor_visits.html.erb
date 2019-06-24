@@ -1,5 +1,6 @@
 <% provide(:title, "Visitas") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Visitas", labels: ['Clientes', 'Visitas'], links: [admin_clients_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Visitas", 
+  labels: ["Clientes", "Visitas"], links: [admin_clients_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -39,9 +40,10 @@
                 <% supervisor = v.Supervisor %>
                 <td><%= link_to supervisor.name, admin_site_worker_path(supervisor.hash_id) %></td>
                 <td>
-                  <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
-                            admin_supervisor_visit_details_path(params[:id], v.id),
-                            class: "btn btn-white btn-sm" %>
+                  <%= link_to admin_supervisor_visit_details_path(params[:id], v.id),
+                    class: "btn btn-white btn-sm" do %>
+                    <i class="fa fa-eye"></i> Detalles
+                  <% end %>
                 </td>
               </tr>
             <% end %>
@@ -59,7 +61,7 @@
 
       <script>
           $(document).ready(function() {
-              $('.footable').footable();
+              $(".footable").footable();
           });
       </script>
     </div>

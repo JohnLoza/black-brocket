@@ -2,7 +2,7 @@ class Admin::StatisticsController < AdminController
   @@NoProcessableOrders = ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED","ORDER_CANCELED"]
 
   def index
-    deny_access! and return unless @current_user.has_permission_category?('statistics')
+    deny_access! and return unless @current_user.has_permission_category?("statistics")
 
     if params[:type] and params[:type]=="sales"
       @products = Product.select("id, name").active
@@ -11,7 +11,7 @@ class Admin::StatisticsController < AdminController
   end
 
   def sales
-    deny_access! and return unless @current_user.has_permission_category?('statistics')
+    deny_access! and return unless @current_user.has_permission_category?("statistics")
     # params[:products].sort! { |x,y| x.to_i <=> y.to_i } if params[:products]
 
     # get the orders details given the parameters the user entered #
@@ -43,7 +43,7 @@ class Admin::StatisticsController < AdminController
   end
 
   def best_distributors
-    deny_access! and return unless @current_user.has_permission_category?('statistics')
+    deny_access! and return unless @current_user.has_permission_category?("statistics")
 
     selection = "sum(order_details.quantity) as sum_q, orders.distributor_id as dist_id, distributors.username as dist_username"
 
@@ -55,15 +55,15 @@ class Admin::StatisticsController < AdminController
   end
 
   def best_clients
-    deny_access! and return unless @current_user.has_permission_category?('statistics')
+    deny_access! and return unless @current_user.has_permission_category?("statistics")
 
-    selection = "sum(order_details.quantity) as sum_q, orders.client_id as client_id, clients.username as client_username"
+    selection = "sum(order_details.quantity) as sum_q, orders.client_id as client_id, clients.name as client_name"
 
     @details = OrderDetail.select(selection).joins(Order: :Client)
       .where.not(orders: {state: @@NoProcessableOrders}).order("sum_q desc")
-      .group("client_id, client_username").limit(params[:client_quantity])
+      .group("client_id, client_name").limit(params[:client_quantity])
 
-    @client_names = @details.map{|detail| detail.client_username}.to_json
+    @client_names = @details.map{|detail| detail.client_name}.to_json
   end
 
   private
@@ -77,19 +77,19 @@ class Admin::StatisticsController < AdminController
     if ((from_date != "" and to_date != "") or products or distributors)
       if from_date != "" and to_date != ""
         # add condition to search the orders between those two dates #
-        where_cond += " DATE(order_details.created_at) BETWEEN '" + from_date + "' AND '" + to_date + "' "
+        where_cond += " DATE(order_details.created_at) BETWEEN ' + from_date + "' AND ' + to_date + "' "
       end
       if products and products.any?
         # add condition to search the orders with the specified products #
         where_cond += " AND " if where_cond != ""
-        where_cond += " order_details.product_id IN ("+ products.map(&:inspect).join(', ') +") "
+        where_cond += " order_details.product_id IN ("+ products.map(&:inspect).join(", ") +") "
       end
       if distributors and distributors.any?
         # add condition to search the orders from the specified distributors #
         selection += ", orders.distributor_id as dist_id"
         group_cond = "dist_id, order_details.product_id"
         where_cond += " AND " if where_cond != ""
-        where_cond += " orders.distributor_id IN ("+ distributors.map(&:inspect).join(', ') +") "
+        where_cond += " orders.distributor_id IN ("+ distributors.map(&:inspect).join(", ") +") "
       end
 
       # search #

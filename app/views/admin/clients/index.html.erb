@@ -1,12 +1,12 @@
 <% provide(:title, "Clientes") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Clientes", labels: ['Clientes']} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Clientes", labels: ["Clientes"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
 
-    <%= render partial: '/shared/admin/header_with_search',
-      locals: {title: 'Lista de Clientes', search_url: admin_clients_path,
+    <%= render partial: "/shared/admin/header_with_search",
+      locals: {title: "Lista de Clientes", search_url: admin_clients_path,
       new_permission: nil, new_url: nil } %>
 
     <div class="row">
@@ -48,7 +48,7 @@
 
       <script>
       $(document).ready(function() {
-        $('.footable').footable();
+        $(".footable").footable();
       });
       </script>
     </div>

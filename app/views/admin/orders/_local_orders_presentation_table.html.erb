@@ -29,6 +29,7 @@
             <th>Comprobante</th>
             <th data-hide="all">Fecha de creación</th>
             <th>Acción</th>
+            <th data-hide="all"></th>
           </tr>
         </thead>
         <tbody>
@@ -68,16 +69,17 @@
               </td>
               <td><%= l(o.created_at, format: :long) %></td>
               <td>
-                <%= link_to "<i class='fa fa-eye'></i> Ver pedido".html_safe,
-                  admin_order_details_path(o.hash_id),
-                  class: "btn btn-white btn-sm m-b-xs", target: "_blank" %>
+                <%= link_to admin_order_details_path(o.hash_id),
+                  class: "btn btn-white btn-sm m-b-xs", target: "_blank" do %>
+                  <i class="fa fa-eye"></i> Ver pedido
+                <% end %>
 
                 <% if @current_user.has_permission?('orders@capture_batches') and o.state == "LOCAL" %>
                   <%= link_to "Capturar números de lote", admin_capture_details_path(o.hash_id),
                     class: "btn btn-white btn-sm m-b-xs" %>
                 <% end %>
 
-                <% unless o.pay_img.file or o.pay_pdf.file %>
+                <% unless ["PAYMENT_ACCEPTED_LOCAL","LOCAL"].include? o.state %>
                   <%= form_for(o, url: admin_order_upload_payment_path(o.hash_id), method: :put,
                       data: {confirm: "Seguro(a) de ser el archivo correcto?"},
                       html: {style: 'display: contents;'}) do |f| %>
@@ -100,6 +102,18 @@
                     <i class="fa fa-trash"></i> Cancelar
                   </a>
                 <% end %>
+              </td>
+              <td>
+                <% if @current_user.has_permission?('orders@accept_reject_payment') and 
+                  o.state == "PICKED_UP" and (o.pay_img.present? or o.pay_pdf.present?) %>
+                  <%= form_tag admin_accept_order_pay_path(o.hash_id, "true"), method: :put do  %>
+                    <%= hidden_field_tag :local_order, true %>
+                    <%= label_tag :payment_folio, 'Folio del pago/depósito' %>
+                    <%= text_field_tag :payment_folio, '', class: 'form-control', required: true %>
+                    <%= submit_tag 'Aceptar', class: 'btn btn-primary btn-sm m-t',
+                      data:{confirm: 'Seguro(a) de aceptar el pago?'} %>
+                  <% end %>
+                <% end # if o.state == "PAYMENT_DEPOSITED" # %>
               </td>
             </tr>
           <% end %>

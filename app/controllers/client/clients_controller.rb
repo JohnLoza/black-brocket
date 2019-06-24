@@ -54,13 +54,13 @@ class Client::ClientsController < ApplicationController
       @client.update_attribute(:hash_id, generateAlphKey("C", @client.id))
       SendConfirmationEmailJob.perform_later(@client)
 
-      log_in(@client, 'c')
+      log_in(@client, "c")
       flash[:success] = "Bienvenido a Black Brocket, por ser su primera compra y para brindarle un mejor servicio, nuestro distribuidor de zona se pondrá en contacto o un representante de ventas se comunicará con usted. Si es una Pyme, dueño de una cafetería, tiene negocio relacionado con alimentos o es mayorista le ofrecemos precios y descuentos preferenciales bastante atractivos. Estos se los dará nuestro  representante de ventas, así como una demostración de nuestros productos. Una vez hecho el pago de su pedido los descuentos no se bonifican. Puede contactarnos en el menú en la opción \“distribuidores en la zona\”."
       redirect_to products_path
     else
       @states = State.order_by_name
       @cities = City.where(state_id: @state_id)
-      flash.now[:info] = 'Ocurrió un error al guardar.'
+      flash.now[:info] = "Ocurrió un error al guardar."
       render :new
     end
   end
@@ -84,7 +84,7 @@ class Client::ClientsController < ApplicationController
       flash[:success] = "Tu información ha sido actualizada!"
       redirect_to products_path and return
     else
-      flash.now[:danger] = 'Ocurrió un error al guardar.'
+      flash.now[:danger] = "Ocurrió un error al guardar."
       params[:city_id] = params[:city_id]
       params[:state_id] = params[:state_id]
       @states = State.order_by_name
@@ -120,7 +120,7 @@ class Client::ClientsController < ApplicationController
     end
 
     if @distributor
-      @messages = @current_user.DistributorMessages.where('distributor_id = ? or worker_id = ?', @distributor.id, @distributor.id)
+      @messages = @current_user.DistributorMessages.where("distributor_id = ? or worker_id = ?", @distributor.id, @distributor.id)
         .order(created_at: :desc).paginate(page: params[:page], per_page: 25)
       @create_message_url = client_create_distributor_comment_path(@distributor.id)
 
@@ -168,7 +168,7 @@ class Client::ClientsController < ApplicationController
 
   def resend_email_confirmation
     SendConfirmationEmailJob.perform_later(@current_user)
-    flash[:success] = 'El correo electrónico ha sido enviado'
+    flash[:success] = "El correo electrónico ha sido enviado"
     redirect_to products_path
   end
 

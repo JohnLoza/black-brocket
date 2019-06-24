@@ -1,6 +1,6 @@
-<% if !@fiscal_data.blank? and (!params[:only_address] or params[:only_address] != "Y") %>
+<% if !@fiscal_data.blank? %>
   <div class="pull-left" style="margin-right: 15px;">
-    <table class="tablemn">
+    <table class="table">
       <tbody>
 
         <tr>
@@ -54,12 +54,13 @@
           <td><%= @fiscal_data.cp %></td>
         </tr>
         <tr>
+          <% fiscal_city = @fiscal_data.City %>
           <td>Población:</td>
-          <td><%= @city.name %></td>
+          <td><%= fiscal_city.name %></td>
         </tr>
         <tr>
           <td>Estado:</td>
-          <td><%= @state.name %></td>
+          <td><%= fiscal_city.State.name %></td>
         </tr>
         <tr>
           <td>País:</td>

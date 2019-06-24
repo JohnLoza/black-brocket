@@ -1,6 +1,8 @@
 <% if @destroyed %>
   $("#<%=@order.hash_id%>").remove();
-  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Orden cancelada'} %>");
+  $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+    locals: {message_type: :success, message: "Orden cancelada"} %>`);
 <% else %>
-  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Ocurrió un error al cancelar la orden, inténtalo de nuevo.'} %>");
+  $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+    locals: {message_type: :info, message: "Ocurrió un error al cancelar la orden, inténtalo de nuevo."} %>`);
 <% end %>

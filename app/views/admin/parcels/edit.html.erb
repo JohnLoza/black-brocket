@@ -1,10 +1,12 @@
 <% provide(:title, "Paqueterías") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Almacenes", labels: ['Almacenes', 'Paqueterías', 'Editar'], links: [admin_warehouses_path, admin_warehouse_parcels_path(params[:warehouse_id])]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Almacenes", 
+  labels: ["Almacenes", "Paqueterías", "Editar"], 
+  links: [admin_warehouses_path, admin_warehouse_parcels_path(params[:warehouse_id])]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-	<%= render 'form' %>
+	<%= render "form" %>
   </div>
 </div>
 <br>

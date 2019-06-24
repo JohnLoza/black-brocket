@@ -1,5 +1,6 @@
 <% provide(:title, "Detalles") %>
-<%= render partial: "/shared/distributor/header_band", locals: {title: "Detalles de comisión", labels: ['Comisiones', 'Detalles'], links: [distributor_commissions_path]} %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Detalles de comisión", 
+  labels: ["Comisiones", "Detalles"], links: [distributor_commissions_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -44,13 +45,12 @@
                     <td><%= o.hash_id %></td>
                     <td><%= o.total %></td>
                     <% client = o.Client %>
-                    <td><%= link_to client.username,
-                                    admin_client_path(client.hash_id) %></td>
+                    <td><%= link_to client.username, admin_client_path(client.hash_id) %></td>
                     <td><%= t(o.state) %></td>
                     <td>
-                      <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
-                                  distributor_order_details_path(o.hash_id),
-                                  class: "btn btn-white btn-sm" %>
+                      <%= link_to distributor_order_details_path(o.hash_id), class: "btn btn-white btn-sm" do %>
+                        <i class="fa fa-eye"></i> Detalles
+                      <% end %>
                     </td>
                   </tr>
                 <% end %>
@@ -59,7 +59,7 @@
 
           <script>
               $(document).ready(function() {
-                  $('.footable').footable();
+                  $(".footable").footable();
               });
           </script>
 

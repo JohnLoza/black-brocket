@@ -1,5 +1,5 @@
 <%= form_for [:client, @fiscal_data], url: @url, html: { id: "fiscal_data_form" } do |f| %>
-<%= render partial: '/shared/error_messages', locals: { entity: @fiscal_data } %>
+<%= render partial: "/shared/error_messages", locals: { entity: @fiscal_data } %>
   <div class="col-md-6">
         <h4>Yo soy</h4>
         <table class="table borderless">
@@ -20,7 +20,7 @@
         <div class="row">
   				<div class="col-sm-12 form-group">
   					<%= f.label :name, "Nombre(s) / Razón Social", id:"label_name" %>
-            <%= f.text_field :name, class: 'form-control form-control-black',
+            <%= f.text_field :name, class: "form-control form-control-black",
                   maxlength: 99, disabled: "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
             <span class="help-text">Solo se admite letras, espacios y puntos para nombre y appellidos</span>
   				</div>
@@ -31,7 +31,7 @@
           <div class="row">
     				<div class="col-sm-12 form-group">
     					<%= f.label :lastname, "Apellido paterno" %>
-              <%= f.text_field :lastname, class: 'form-control form-control-black',
+              <%= f.text_field :lastname, class: "form-control form-control-black",
                     maxlength: 25, disabled: "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
     				</div>
     			</div><!-- .row -->
@@ -39,7 +39,7 @@
           <div class="row">
     				<div class="col-sm-12 form-group">
     					<%= f.label :mother_lastname, "Apellido materno" %>
-              <%= f.text_field :mother_lastname, class: 'form-control form-control-black',
+              <%= f.text_field :mother_lastname, class: "form-control form-control-black",
                       maxlength: 25, disabled: "", "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
             </div>
     			</div><!-- .row -->
@@ -48,7 +48,7 @@
         <div class="row">
           <div class="col-sm-12 form-group">
             <%= f.label :rfc, "RFC" %>
-            <%= f.text_field :rfc, class: 'form-control form-control-black', onkeyup:"this.value = this.value.toUpperCase();",
+            <%= f.text_field :rfc, class: "form-control form-control-black", onkeyup:"this.value = this.value.toUpperCase();",
                   required: true, maxlength: 20 %>
           </div>
         </div><!-- .row -->
@@ -71,7 +71,7 @@
       <div class="row">
         <div class="col-sm-12 form-group">
           <%= f.label :street, "Calle" %>
-          <%= f.text_field :street, class: 'form-control form-control-black',
+          <%= f.text_field :street, class: "form-control form-control-black",
                 required: true, maxlength: 50 %>
         </div>
       </div><!-- .row -->
@@ -79,7 +79,7 @@
       <div class="row">
  			 <div class="col-sm-12 form-group">
  				 <%= f.label :extnumber, "Número exterior" %>
- 				 <%= f.number_field :extnumber, class: 'form-control form-control-black',
+ 				 <%= f.number_field :extnumber, class: "form-control form-control-black",
  				 			required: true, maxlength: 5, step: 1, min: 0 %>
  			 </div>
  		 </div><!-- .row -->
@@ -87,7 +87,7 @@
  		 <div class="row">
  			 <div class="col-sm-12 form-group">
  				 <%= f.label :intnumber, "Número interior" %>
- 				 <%= f.number_field :intnumber, class: 'form-control form-control-black',
+ 				 <%= f.number_field :intnumber, class: "form-control form-control-black",
  				 			maxlength: 4, step: 1, min: 0 %>
  			 </div>
  		 </div><!-- .row -->
@@ -95,7 +95,7 @@
       <div class="row">
         <div class="col-sm-12 form-group">
           <%= f.label :col, "Colonia" %>
-          <%= f.text_field :col, class: 'form-control form-control-black',
+          <%= f.text_field :col, class: "form-control form-control-black",
               required: true, maxlength: 50 %>
         </div>
       </div><!-- .row -->
@@ -103,7 +103,7 @@
       <div class="row">
         <div class="col-sm-12 form-group">
           <%= f.label :cp, "Código postal" %>
-          <%= f.text_field :cp, class: 'form-control form-control-black',
+          <%= f.text_field :cp, class: "form-control form-control-black",
                 required: true, maxlength: 5 %>
         </div>
       </div><!-- .row -->
@@ -174,7 +174,7 @@
     }
 
     // Init parsley to validate the formularie
-		$('#fiscal_data_form').parsley();
+		$("#fiscal_data_form").parsley();
   });
 
   function changePerson(value){
@@ -206,4 +206,4 @@
   }
 </script>
 
-<%= javascript_include_tag 'parsley-custom' %>
+<%= javascript_include_tag "parsley-custom" %>

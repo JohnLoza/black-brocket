@@ -1,5 +1,6 @@
 <% provide(:title, "Precios") %>
-<%= render partial: "/shared/distributor/header_band", locals: {title: "Precios del cliente", labels: ['Clientes', 'Precios'], links: [distributor_clients_path]} %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Precios del cliente", 
+  labels: ["Clientes", "Precios"], links: [distributor_clients_path]} %>
 
 <div class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
@@ -75,7 +76,7 @@
                               <%= number_field_tag "product[#{p.id}]", field_value,
                                   {class: "form-control product-control", max: p.price,
                                    recommended: p.recommended_price, min: p.lowest_price,
-                                   step: 0.01, required: 'required'} %>
+                                   step: 0.01, required: "required"} %>
                                    <span class="help-block m-b-none">Escribe el precio pactado para "<%= p.name %>".</span>
                             </td>
                             <td>$ <%= p.lowest_price %></td>
@@ -118,7 +119,8 @@
       p = $(products[indx]);
       p.val(p.attr("recommended"));
     }
-    $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Establecido el precio recomendado.'} %>");
+    $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+      locals: {message_type: :success, message: "Establecido el precio recomendado."} %>`);
   }
   function update_product_prices_to_maximum(){
     products = $(".product-control");
@@ -126,12 +128,13 @@
       p = $(products[indx]);
       p.val(p.attr("max"));
     }
-    $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Establecidos los precios máximos.'} %>");
+    $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+      locals: {message_type: :info, message: "Establecidos los precios máximos."} %>`);
   }
 </script>
 
 <script>
     $(document).ready(function() {
-        $('.footable').footable();
+        $(".footable").footable();
     });
 </script>

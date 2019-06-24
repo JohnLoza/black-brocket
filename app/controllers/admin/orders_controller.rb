@@ -14,7 +14,7 @@ class Admin::OrdersController < AdminController
 
   def index
     permission = params[:type]
-    permission = 'SHOW' if permission == 'SENT' or permission == 'DELIVERED'
+    permission = "SHOW" if permission == "SENT" or permission == "DELIVERED"
     if params[:type]
       deny_access! and return unless @current_user.has_permission?("orders@#{permission}")
     end
@@ -29,48 +29,51 @@ class Admin::OrdersController < AdminController
   end # def index #
 
   def accept_pay
-    deny_access! and return unless @current_user.has_permission?('orders@accept_reject_payment')
+    deny_access! and return unless @current_user.has_permission?("orders@accept_reject_payment")
 
     @order = Order.find_by!(hash_id: params[:id])
     if params[:accept] == "true"
       if Order.find_by(payment_folio: params[:payment_folio])
         # That Folio has already been used 
         flash[:info] = "El folio del pago ya ha sido registrado previamente."
-        redirect_to admin_orders_path(type: 'ACCEPT_REJECT_PAYMENT') and return
+        redirect_to admin_orders_path(type: "ACCEPT_REJECT_PAYMENT") and return
       end
       # Accept the payment
-      @saved=true if @order.update_attributes(state:"PAYMENT_ACCEPTED", reject_description: nil, payment_folio: params[:payment_folio])
+      if params[:local_order].present?
+        @order.update_attributes(state:"PAYMENT_ACCEPTED_LOCAL", 
+          reject_description: nil, payment_folio: params[:payment_folio])
+      else
+        @order.update_attributes(state:"PAYMENT_ACCEPTED", 
+          reject_description: nil, payment_folio: params[:payment_folio])
+      end
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Aceptó pago")
     else
       # Reject the payment and notify the user
-      @saved=true if @order.update_attributes(state:"PAYMENT_REJECTED", reject_description: params[:order][:reject_description])
+      @order.update_attributes(state:"PAYMENT_REJECTED", reject_description: params[:order][:reject_description])
       Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
         description: "El pago de tu pedido ha sido rechazado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Rechazó pago")
     end
 
-    if @saved == true
-      flash[:success] = t(@order.state)
+    flash[:success] = t(@order.state)
+    if params[:local_order].present?
+      redirect_to admin_orders_path(type: "LOCAL_ORDERS")
     else
-      flash[:info] = "Ocurrió un error al procesar el pago, inténtalo de nuevo por favor"
+      redirect_to admin_orders_path(type: "ACCEPT_REJECT_PAYMENT")
     end
-
-    redirect_to admin_orders_path(type: "ACCEPT_REJECT_PAYMENT")
   end # def accept_pay #
 
   def details
-    require 'barby'
-    require 'barby/barcode/code_128'
-    require 'barby/outputter/png_outputter'
+    require "barby"
+    require "barby/barcode/code_128"
+    require "barby/outputter/png_outputter"
 
-    deny_access! and return unless @current_user.has_permission?('orders@show')
+    deny_access! and return unless @current_user.has_permission?("orders@show")
 
     @order = Order.find_by!(hash_id: params[:id])
     @order_address = @order.address_hash
 
-    if !params[:only_address] or params[:only_address] != "Y"
-      @details = @order.Details.includes(:Product)
-    end
+    @details = @order.Details.includes(:Product) unless params[:only_address]
     @client = @order.Client
     @fiscal_data = @client.FiscalData
     if !@fiscal_data.blank?
@@ -83,14 +86,18 @@ class Admin::OrdersController < AdminController
 
     @barcode = Barby::Code128.new(@order.hash_id).to_image.to_data_url
 
-    render "/shared/orders/details", layout: false
+    if params[:only_address]
+      render "shared/orders/address", layout: false
+    else
+      render "shared/orders/details", layout: false
+    end
   end # def details #
 
   def cancel
-    deny_access! and return unless @current_user.has_permission?('orders@cancel')
+    deny_access! and return unless @current_user.has_permission?("orders@cancel")
 
     @order = Order.find_by!(hash_id: params[:id])
-    deny_access! and return unless ['WAITING_FOR_PAYMENT','PAYMENT_REJECTED','LOCAL']
+    deny_access! and return unless ["WAITING_FOR_PAYMENT","PAYMENT_REJECTED","LOCAL"]
 
     ActiveRecord::Base.transaction do
       @details = OrderDetail.where(order_id: @order.id)
@@ -114,7 +121,7 @@ class Admin::OrdersController < AdminController
   end # def cancel #
 
   def inspection
-    deny_access! and return unless @current_user.has_permission?('orders@inspection')
+    deny_access! and return unless @current_user.has_permission?("orders@inspection")
     @order = Order.find_by!(hash_id: params[:id])
 
     if @order.update_attribute(:state, "INSPECTIONED")
@@ -128,7 +135,7 @@ class Admin::OrdersController < AdminController
   end # def supplied #
 
   def supply_error
-    deny_access! and return unless @current_user.has_permission?('orders@inspection')
+    deny_access! and return unless @current_user.has_permission?("orders@inspection")
 
     order = Order.find_by!(hash_id: params[:id])
     shipment_details = OrderProductShipmentDetail.where(order_id: order.id)
@@ -153,7 +160,7 @@ class Admin::OrdersController < AdminController
   end # def supply_error #
 
   def capture_details
-    deny_access! and return unless @current_user.has_permission?('orders@capture_batches')
+    deny_access! and return unless @current_user.has_permission?("orders@capture_batches")
 
     @label_styles = get_label_styles
     @order = Order.find_by!(hash_id: params[:id])
@@ -165,7 +172,7 @@ class Admin::OrdersController < AdminController
   end # def capture_details #
 
   def save_details
-    deny_access! and return unless @current_user.has_permission?('orders@capture_batches')
+    deny_access! and return unless @current_user.has_permission?("orders@capture_batches")
     deny_access! and return if params[:product_id].nil?
 
     order = Order.find_by!(hash_id: params[:id])
@@ -191,7 +198,7 @@ class Admin::OrdersController < AdminController
       validation = CustomValidation.validateOrderShipment(order_details, shipment_details)
       flash[:info] = validation[:error_message] and raise ActiveRecord::Rollback unless validation[:success]
 
-      new_state = (order.state == 'LOCAL') ? 'PICKED_UP' : 'BATCHES_CAPTURED'
+      new_state = (order.state == "LOCAL") ? "PICKED_UP" : "BATCHES_CAPTURED"
       order.update_attribute(:state, new_state)
       OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
       flash[:success] = "Números de lote y cantidades guardadas"
@@ -204,7 +211,7 @@ class Admin::OrdersController < AdminController
   end # def save_details #
 
   def save_tracking_code
-    deny_access! and return unless @current_user.has_permission?('orders@capture_tracking_code')
+    deny_access! and return unless @current_user.has_permission?("orders@capture_tracking_code")
 
     @order = Order.find_by!(hash_id: params[:id])
     @order.tracking_code = params[:tracking_code]
@@ -220,7 +227,7 @@ class Admin::OrdersController < AdminController
   end
 
   def save_as_delivered
-    deny_access! and return unless @current_user.has_permission?('orders@stablish_as_delivered')
+    deny_access! and return unless @current_user.has_permission?("orders@stablish_as_delivered")
     @order = Order.find_by!(hash_id: params[:id])
 
     if @order.update_attribute(:state, "DELIVERED")
@@ -233,7 +240,7 @@ class Admin::OrdersController < AdminController
   end # def save_as_delivered #
 
   def invoice_delivered
-    deny_access! and return unless @current_user.has_permission?('orders@invoices')
+    deny_access! and return unless @current_user.has_permission?("orders@invoices")
     @order = Order.find_by!(hash_id: params[:id])
 
     if @order.update_attribute(:invoice_sent, true)
@@ -246,7 +253,7 @@ class Admin::OrdersController < AdminController
   end # def invoice_delivered #
 
   def search
-    deny_access! and return unless @current_user.has_permission?('orders@search')
+    deny_access! and return unless @current_user.has_permission?("orders@search")
 
     @warehouses = Warehouse.all.order(:name)
     if params[:start_date].blank? and params[:end_date].blank? and params[:reference].blank?
@@ -288,17 +295,20 @@ class Admin::OrdersController < AdminController
   end
 
   def show_activities
-    deny_access! and return unless @current_user.has_permission?('orders@search')
+    deny_access! and return unless @current_user.has_permission?("orders@search")
     @order = Order.find_by!(hash_id: params[:id])
     @actions = @order.Actions.order(created_at: :asc).includes(:Worker)
   end
 
   def download_invoice_data
     # TODO refactor at the end, possibly deprecated
-    deny_access! and return unless @current_user.has_permission?('orders@invoices')
+    deny_access! and return unless @current_user.has_permission?("orders@invoices")
+
+    exclude = ["WAITING_FOR_PAYMENT", "ORDER_CANCELED", "PAYMENT_REJECTED",
+      "PAYMENT_DEPOSITED", "LOCAL", "PICKED_UP"]
 
     orders = Order.where(invoice_sent: false)
-      .where.not(state: ['WAITING_FOR_PAYMENT','ORDER_CANCELED','PAYMENT_REJECTED','PAYMENT_DEPOSITED'])
+      .where.not(state: exclude)
       .includes(Client: [:FiscalData], Details: [:Product])
 
     # if needed the last file send it #
@@ -374,7 +384,7 @@ class Admin::OrdersController < AdminController
   end
 
   def download_payment_file
-    deny_access! and return unless @current_user.has_permission?('orders@accept_reject_payment')
+    deny_access! and return unless @current_user.has_permission?("orders@accept_reject_payment")
     order = Order.find_by!(download_payment_key: params[:payment_key])
 
     if order.pay_img.present?
@@ -385,9 +395,9 @@ class Admin::OrdersController < AdminController
   end
 
   def upload_payment
-    deny_access! and return unless @current_user.has_permission?('orders@local_orders')
+    deny_access! and return unless @current_user.has_permission?("orders@local_orders")
     order = Order.find_by!(hash_id: params[:id])
-    deny_access! and return if order.pay_img.file or order.pay_pdf.file
+    deny_access! and return if ["PAYMENT_ACCEPTED_LOCAL","LOCAL"].include? order.state
 
     if params[:order][:pay_img].content_type == "application/pdf"
       order.remove_pay_img! if order.pay_img.present?
@@ -404,11 +414,11 @@ class Admin::OrdersController < AdminController
     else
       flash[:info] = "Ocurrió un error al guardar el comprobante"
     end
-    redirect_to admin_orders_path(type: 'LOCAL_ORDERS')
+    redirect_to admin_orders_path(type: "LOCAL_ORDERS")
   end
 
   def save_invoice_folio
-    deny_access! and return unless @current_user.has_permission?('orders@save_invoice_folio')
+    deny_access! and return unless @current_user.has_permission?("orders@save_invoice_folio")
     order = Order.find_by!(hash_id: params[:id])
     order.invoice_folio = params[:invoice_folio] and order.save!
     flash[:success] = "Folio guardado"
@@ -421,7 +431,8 @@ class Admin::OrdersController < AdminController
       label_styles =
         {"ORDER_CANCELED"=>"label label-danger",
          "LOCAL"=>"label label-information",
-         "PICKED_UP"=>"label label-primary",
+         "PICKED_UP"=>"label label-success",
+         "PAYMENT_ACCEPTED_LOCAL"=>"label label-primary",
          "WAITING_FOR_PAYMENT"=>"label label-warning",
          "PAYMENT_DEPOSITED"=>"label label-information",
          "PAYMENT_ACCEPTED"=>"label label-primary",
@@ -443,7 +454,7 @@ class Admin::OrdersController < AdminController
         when "CANCEL"
           statements[:where] = "state in ('WAITING_FOR_PAYMENT','PAYMENT_REJECTED')"
         when "LOCAL_ORDERS"
-          statements[:where] = "state in ('LOCAL','PICKED_UP')"
+          statements[:where] = "state in ('LOCAL','PICKED_UP','PAYMENT_ACCEPTED_LOCAL')"
           statements[:order] = {created_at: :desc}
         when "ACCEPT_REJECT_PAYMENT"
           statements[:where] += "'PAYMENT_DEPOSITED'"
@@ -459,7 +470,9 @@ class Admin::OrdersController < AdminController
           statements[:where] += "'DELIVERED'"
           statements[:order] = {created_at: :desc}
         when "INVOICES"
-          statements[:where] = "state not in ('WAITING_FOR_PAYMENT','ORDER_CANCELED','PAYMENT_REJECTED','PAYMENT_DEPOSITED')"
+          statements[:where] = "state not in ('WAITING_FOR_PAYMENT',
+            'ORDER_CANCELED','PAYMENT_REJECTED','PAYMENT_DEPOSITED',
+            'LOCAL','PICKED_UP')"
           statements[:order] = {created_at: :desc}
         else
           return if params[:type].blank?

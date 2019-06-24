@@ -1,5 +1,6 @@
 <% provide(:title, "Estadísticas") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Web", labels: ['Web', 'Redes Sociales'], links: [admin_web_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Web", 
+  labels: ["Web", "Redes Sociales"], links: [admin_web_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -9,19 +10,16 @@
       <div class="col-lg-12">
         <div class="ibox float-e-margins">
           <div class="ibox-title">
-               <h5>Cambia los hipervínculos de las redes sociales</h5>
-               <div class="ibox-tools">
-                   <a class="collapse-link">
-                       <i class="fa fa-chevron-up"></i>
-                   </a>
-               </div>
+            <h5>Cambia los hipervínculos de las redes sociales</h5>
+            <div class="ibox-tools">
+              <a class="collapse-link">
+                <i class="fa fa-chevron-up"></i>
+              </a>
+            </div>
           </div>
           <div class="ibox-content">
-              <br/>
-              <% @networks.each do |n| %>
-
-                <%= form_for(n, url: admin_update_social_network_path(n.id), html: {class: 'form-horizontal'}, method: :put, class: "form") do |f| %>
-
+            <% @networks.each do |n| %>
+              <%= form_for(n, url: admin_update_social_network_path(n.id), html: {class: "form-horizontal"}, method: :put, class: "form") do |f| %>
                 <div class="form-group">
                   <label class="col-sm-2 control-label"> <%= f.label :url, "URL de " + n.name %></label>
                   <div class="col-sm-7">
@@ -31,14 +29,11 @@
                     <%= f.submit "Guardar url de " + n.name, class: "btn btn-primary btn-sm btn-block" %>
                   </div>
                 </div>
-
-                <% end %>
-
               <% end %>
+            <% end %>
 
-              <div class="hr-line-dashed"></div>
-              <%= link_to "Regresar".html_safe, admin_web_path, class: "btn btn-white" %>
-
+            <div class="hr-line-dashed"></div>
+            <%= link_to "Regresar".html_safe, admin_web_path, class: "btn btn-white" %>
           </div>
 
         </div>

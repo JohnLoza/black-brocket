@@ -6,43 +6,48 @@
   <td><%= l(warehouse.created_at, format: :long) %></td>
   <td><%= l(warehouse.updated_at, format: :long) %></td>
   <td>
-    <% if @current_user.has_permission?('warehouses@show') %>
-    <%= link_to "<i class='fa fa-eye'></i> Ver".html_safe, admin_warehouse_path(warehouse),
-      class: "btn btn-white btn-sm m-b-xs" %>
+    <% if @current_user.has_permission?("warehouses@show") %>
+      <%= link_to admin_warehouse_path(warehouse), class: "btn btn-white btn-sm m-b-xs" do %>
+        <i class="fa fa-eye"></i> Ver
+      <% end %>
     <% end %>
 
-    <% if @current_user.has_permission_category?('warehouse_products') or
-          (@current_user.has_permission_category?('warehouse_manager') and
-            @current_user.warehouse_id == warehouse.id) %>
-    <%= link_to "<i class='fa fa-cube'></i> Productos".html_safe,
-      admin_warehouse_products_path(warehouse.hash_id),
-      class: "btn btn-white btn-sm m-b-xs" %>
+    <% if @current_user.has_permission_category?("warehouse_products") or
+      (@current_user.has_permission_category?("warehouse_manager") and @current_user.warehouse_id == warehouse.id) %>
+      <%= link_to admin_warehouse_products_path(warehouse.hash_id),
+        class: "btn btn-white btn-sm m-b-xs" do %>
+        <i class="fa fa-cube"></i> Productos
+      <% end %>
     <% end %>
 
-    <% if @current_user.has_permission?('warehouses@update_regions') %>
-    <%= link_to "<i class='fa fa-globe'></i> Zonas de distribución".html_safe,
-      admin_warehouse_regions_path(warehouse.hash_id),
-      class: "btn btn-white btn-sm m-b-xs" %>
+    <% if @current_user.has_permission?("warehouses@update_regions") %>
+      <%= link_to admin_warehouse_regions_path(warehouse.hash_id),
+        class: "btn btn-white btn-sm m-b-xs" do %>
+        <i class="fa fa-globe"></i> Zonas de distribución
+      <% end %>
     <% end %>
 
-    <% if @current_user.has_permission_category?('parcels') %>
-    <%= link_to "<i class='fa fa-truck'></i> Paqueterías".html_safe,
-      admin_warehouse_parcels_path(warehouse.hash_id),
-      class: "btn btn-white btn-sm m-b-xs" %>
+    <% if @current_user.has_permission_category?("parcels") %>
+      <%= link_to admin_warehouse_parcels_path(warehouse.hash_id),
+        class: "btn btn-white btn-sm m-b-xs" do %>
+        <i class="fa fa-truck"></i> Paqueterías
+      <% end %>
     <% end %>
 
-    <% if @current_user.has_permission?('warehouses@update_warehouse_data') or
-          @current_user.has_permission?('warehouses@update_shipping_cost') or
-          @current_user.has_permission?('warehouses@update_wholesale') %>
-    <%= link_to "<i class='fa fa-pencil'></i> Modificar".html_safe,
-      edit_admin_warehouse_path(warehouse.hash_id),
-      class: "btn btn-white btn-sm m-b-xs" %>
+    <% if @current_user.has_permission?("warehouses@update_warehouse_data") or
+      @current_user.has_permission?("warehouses@update_shipping_cost") or
+      @current_user.has_permission?("warehouses@update_wholesale") %>
+      <%= link_to edit_admin_warehouse_path(warehouse.hash_id),
+        class: "btn btn-white btn-sm m-b-xs" do %>
+        <i class="fa fa-pencil"></i> Modificar
+      <% end %>
     <% end %>
 
-    <% if @current_user.has_permission?('warehouses@delete') %>
-    <%= link_to "<i class='fa fa-trash'></i> Eliminar".html_safe,
-      admin_warehouse_path(warehouse.hash_id), class: "btn btn-white btn-sm m-b-xs" ,
-      method: "delete", data: { confirm: "Estas seguro(a) de eliminarlo?" } %>
+    <% if @current_user.has_permission?("warehouses@delete") %>
+      <%= link_to admin_warehouse_path(warehouse.hash_id), class: "btn btn-white btn-sm m-b-xs" ,
+        method: "delete", data: { confirm: "Estas seguro(a) de eliminarlo?" } do %>
+        <i class="fa fa-trash"></i> Eliminar
+      <% end %>
     <% end %>
   </td>
 </tr>

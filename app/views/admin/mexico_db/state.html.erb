@@ -1,5 +1,6 @@
 <% provide(:title, "Entidades de México") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "México", labels: ['Estados', @state.name], links: [admin_mexico_db_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "México", 
+  labels: ["Estados", @state.name], links: [admin_mexico_db_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -23,16 +24,16 @@
         @cities, "id", "lada"), style: "display: none;" %>
       <div class="hr-line-dashed"></div>
 
-      <% if @current_user.has_permission?('mexico_db@update_city_lada') or
-            @current_user.has_permission?('mexico_db@update_city_name') %>
+      <% if @current_user.has_permission?("mexico_db@update_city_lada") or
+            @current_user.has_permission?("mexico_db@update_city_name") %>
         <h3 class="m-b" id="update_city_title">Actualizar la población: "<%= @cities[0].name %>"</h3>
         <%= form_for(:city, url: admin_mexico_city_path(@cities[0].id), method: :put, html: {id: "update_city_form"}) do |f| %>
-          <% if @current_user.has_permission?('mexico_db@update_city_name') %>
+          <% if @current_user.has_permission?("mexico_db@update_city_name") %>
             <%= f.label :name, "Nombre de la población" %>
             <%= f.text_field :name, { value: @cities[0].name, class: "form-control m-b", maxlength: 50 } %>
           <% end %>
 
-          <% if @current_user.has_permission?('mexico_db@update_city_lada') %>
+          <% if @current_user.has_permission?("mexico_db@update_city_lada") %>
             <%= f.label :lada, "Registrar LADA de la población" %>
             <%= f.number_field "lada", { value: @cities[0].lada, class: "form-control m-b", min: 0, max: 99999, step: 1} %>
           <% end %>
@@ -43,7 +44,7 @@
         <div class="hr-line-dashed"></div>
       <% end # if @actions["UPDATE_CITY_NAME"] or @actions["UPDATE_CITY_LADA"] # %>
 
-      <% if @current_user.has_permission?('mexico_db@create') %>
+      <% if @current_user.has_permission?("mexico_db@create") %>
         <h3>Aquí puedes crear una nueva población para <%=@state.name%></h3>
         <%= form_for(:new_city, url: admin_create_city_path, method: :post) do |f| %>
            <%= f.hidden_field "state_id", value: @state.id %>
@@ -66,7 +67,7 @@
 <script type="text/javascript">
   function city_selected(select){
     $("#update_city_title").text("Actualizar la población: " +
-                              select.options[select.selectedIndex].textContent);
+      select.options[select.selectedIndex].textContent);
 
     $("#city_lada").val($("#current_ladas")[0].options[select.selectedIndex].textContent);
     $("#city_name").val(select.options[select.selectedIndex].textContent);

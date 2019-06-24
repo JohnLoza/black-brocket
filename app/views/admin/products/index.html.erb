@@ -1,12 +1,12 @@
 <% provide(:title, "Productos") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Productos", labels: ['Productos']} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Productos", labels: ["Productos"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-    <%= render partial: '/shared/admin/header_with_search',
-    locals: {title: 'Lista de Productos', search_url: admin_products_path,
-      new_permission: 'products@create', new_url: new_admin_product_path } %>
+    <%= render partial: "/shared/admin/header_with_search",
+      locals: {title: "Lista de Productos", search_url: admin_products_path,
+      new_permission: "products@create", new_url: new_admin_product_path } %>
 
     <!--Table-->
     <div class="row">
@@ -47,7 +47,7 @@
             <!-- Page-Level Scripts -->
             <script>
             $(document).ready(function() {
-              $('.footable').footable();
+              $(".footable").footable();
             });
             </script>
 

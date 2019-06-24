@@ -1,5 +1,5 @@
 <% provide(:title, "Web") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Web", labels: ['Web']} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Web", labels: ["Web"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -22,70 +22,70 @@
         <label>Video</label><br/>
         <i class="fa fa-film big-icon" style="color: #FEFEFE;"></i>
       </div>
-    <% end if @current_user.has_permission?('web@video') %>
+    <% end if @current_user.has_permission?("web@video") %>
 
     <%= link_to(admin_web_photos_path, style:"color: #FEFEFE;") do %>
       <div class="col-md-6 text-center" style="padding: 15px; background-color: #AA66CC;">
         <label>Galería / Imágenes</label><br/>
         <i class="fa fa-image big-icon" style="color: #FEFEFE;"></i>
       </div>
-    <% end if @current_user.has_permission?('web@gallery_images') %>
+    <% end if @current_user.has_permission?("web@gallery_images") %>
 
     <%= link_to(admin_web_offers_path, style:"color: #FEFEFE;") do %>
       <div class="col-md-6 text-center" style="padding: 15px; background-color: #99CC00;">
         <label>Promociones</label><br/>
         <i class="fa fa-tags big-icon" style="color: #FEFEFE;"></i>
       </div>
-    <% end if @current_user.has_permission?('web@offers') %>
+    <% end if @current_user.has_permission?("web@offers") %>
 
     <%= link_to(admin_web_info_path("WELCOME_MESSAGE"), style:"color: #FEFEFE;") do %>
       <div class="col-md-6 text-center" style="padding: 15px; background-color: #FFBB33;">
         <label>Texto de Bienvenida</label><br/>
         <i class="fa fa-child big-icon" style="color: #FEFEFE;"></i>
       </div>
-    <% end if @current_user.has_permission?('web@texts') %>
+    <% end if @current_user.has_permission?("web@texts") %>
 
     <%= link_to(admin_web_footer_details_path, style:"color: #FEFEFE;") do %>
       <div class="col-md-6 text-center" style="padding: 15px; background-color: #AA66CC;">
         <label>Información del pie de página</label><br/>
         <i class="fa fa-info-circle big-icon" style="color: #FEFEFE;"></i>
       </div>
-    <% end if @current_user.has_permission?('web@footer_details') %>
+    <% end if @current_user.has_permission?("web@footer_details") %>
 
     <%= link_to(admin_web_services_path, style:"color: #FEFEFE;") do %>
       <div class="col-md-6 text-center" style="padding: 15px; background-color: #33B5E5;">
         <label>Cuadros de servicios</label><br/>
         <i class="fa fa-file-text big-icon" style="color: #FEFEFE;"></i>
       </div>
-    <% end if @current_user.has_permission?('web@texts') %>
+    <% end if @current_user.has_permission?("web@texts") %>
 
     <%= link_to(admin_web_info_path("PRIVACY_POLICY"), style:"color: #FEFEFE;") do %>
       <div class="col-md-6 text-center" style="padding: 15px; background-color: #3F51B5;">
         <label>Aviso de privacidad</label><br/>
         <i class="fa fa-eye-slash big-icon" style="color: #FEFEFE;"></i>
       </div>
-    <% end if @current_user.has_permission?('web@privacy_policy') %>
+    <% end if @current_user.has_permission?("web@privacy_policy") %>
 
     <%= link_to(admin_web_info_path("TERMS_OF_SERVICE"), style:"color: #FEFEFE;") do %>
       <div class="col-md-6 text-center" style="padding: 15px; background-color: #795548;">
         <label>Términos y condiciones</label><br/>
         <i class="fa fa-shield big-icon" style="color: #FEFEFE;"></i>
       </div>
-    <% end if @current_user.has_permission?('web@terms_of_service') %>
+    <% end if @current_user.has_permission?("web@terms_of_service") %>
 
     <%= link_to(admin_web_info_path("ECART_NOTICE"), style:"color: #FEFEFE;") do %>
       <div class="col-md-6 text-center" style="padding: 15px; background-color: #FFBB33;">
         <label>Aviso del carrito</label><br/>
         <i class="fa fa-shopping-cart big-icon" style="color: #FEFEFE;"></i>
       </div>
-    <% end if @current_user.has_permission?('web@texts') %>
+    <% end if @current_user.has_permission?("web@texts") %>
 
     <%= link_to(admin_web_social_networks_path, style:"color: #FEFEFE;") do %>
       <div class="col-md-6 text-center" style="padding: 15px; background-color: #FF4444;">
         <label>Redes Sociales</label><br/>
         <i class="fa fa-twitch big-icon" style="color: #FEFEFE;"></i>
       </div>
-    <% end if @current_user.has_permission?('web@social_networks') %>
+    <% end if @current_user.has_permission?("web@social_networks") %>
     <!-- Content -->
 
   </div>

@@ -1,5 +1,6 @@
 <% provide(:title, "Galería") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Web", labels: ['Web', 'Imágenes'], links: [admin_web_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Web", 
+  labels: ["Web", "Imágenes"], links: [admin_web_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -11,12 +12,12 @@
         <!-- Gallery Photos -->
         <div class="ibox float-e-margins">
           <div class="ibox-title">
-               <h5>Cambia las imágenes en la galería de productos</h5>
-               <div class="ibox-tools">
-                   <a class="collapse-link">
-                       <i class="fa fa-chevron-up"></i>
-                   </a>
-               </div>
+            <h5>Cambia las imágenes en la galería de productos</h5>
+            <div class="ibox-tools">
+              <a class="collapse-link">
+                <i class="fa fa-chevron-up"></i>
+              </a>
+            </div>
           </div>
           <div class="ibox-content">
 
@@ -28,10 +29,14 @@
                   <% @photos.each do |photo| %>
                     <div class="col-xs-6 col-md-3 " style="display: inline-block">
                       <%= link_to image_tag(photo.photo.url(:thumb), class: "img-thumbnail photo-gallery"),
-                          image_path(photo.photo.url), data: {toggle: "lightbox", gallery: "home-gallery", title: "Imagen de la galería" } %>
+                        image_path(photo.photo.url), data: {toggle: "lightbox", gallery: "home-gallery", title: "Imagen de la galería" } %>
 
-                        <%= link_to "<button type='button' class='btn btn-danger btn-sm m-t btn-block'><i class='fa fa-trash'></i> Eliminar</button>".html_safe, admin_web_destroy_photo_path(photo.id),
-                            method: :delete, data: { confirm: "Estás seguro(a) de eliminar la imágen? esto no se puede deshacer." } %>
+                      <%= link_to admin_web_destroy_photo_path(photo.id), method: :delete, 
+                        data: { confirm: "Estás seguro(a) de eliminar la imágen?" } do %>
+                        <button type="button" class="btn btn-danger btn-sm m-t btn-block">
+                          <i class="fa fa-trash"></i> Eliminar
+                        </button>
+                      <% end %>
                     <div class="hr-line-dashed"></div>
                     </div>
                   <% end %>
@@ -44,22 +49,22 @@
                 </div>
               <% end %>
 
-                <%= form_for @new_photo, url: admin_web_photos_path, html: { method: :post, class: 'form-horizontal' } do |f| %>
+                <%= form_for @new_photo, url: admin_web_photos_path, html: { method: :post, class: "form-horizontal" } do |f| %>
                   <div class="form-group">
                     <label class="col-sm-4 control-label"><%= f.label :photos, "Elige las imágenes que deseas subir, pueden ser jpg, jpeg o png." %></label>
                     <div class="col-sm-8"><br>
-                        <%= f.file_field :photos, multiple: true %>
-                        <%= f.hidden_field :name, value: "GALLERY" %>
+                      <%= f.file_field :photos, multiple: true %>
+                      <%= f.hidden_field :name, value: "GALLERY" %>
                     </div>
                   </div>
 
                   <div class="hr-line-dashed"></div>
 
                   <div class="form-group">
-                      <div class="col-sm-4">
-                          <%= link_to "Regresar".html_safe, admin_web_path, class: "btn btn-white" %>
-                          <%= f.submit "Guardar", class: "btn btn-primary" %>
-                      </div>
+                    <div class="col-sm-4">
+                      <%= link_to "Regresar".html_safe, admin_web_path, class: "btn btn-white" %>
+                      <%= f.submit "Guardar", class: "btn btn-primary" %>
+                    </div>
                   </div>
 
                 <% end %>
@@ -88,7 +93,8 @@
                 <% @log_in_initial.each do |photo| %>
                   <div class="col-xs-6 col-md-3 " style="display: inline-block">
                     <%= link_to image_tag(photo.photo.url(:thumb), class: "img-thumbnail photo-gallery"),
-                                image_path(photo.photo.url), data: {toggle: "lightbox", gallery: "session-gallery", title: "Imagenes de inicio de sesión y portada del sitio" } %>
+                      image_path(photo.photo.url), data: {toggle: "lightbox", gallery: "session-gallery", 
+                        title: "Imagenes de inicio de sesión y portada del sitio" } %>
                     <% if photo.name == "LOGIN" %>
                       <label>Inicio de sesión</label>
                     <% elsif photo.name == "INITIAL" %>
@@ -99,9 +105,13 @@
                       <label>Petición de distribuidor</label>
                     <% end %>
 
-                    <%= link_to "<button type='button' class='btn btn-danger btn-sm m-t btn-block'><i class='fa fa-trash'></i> Eliminar</button>".html_safe, admin_web_destroy_photo_path(photo.id),
-                        method: :delete, data: { confirm: "Estás seguro(a) de eliminar la imágen? esto no se puede deshacer." } %>
-                  <div class="hr-line-dashed"></div>
+                    <%= link_to admin_web_destroy_photo_path(photo.id), method: :delete, 
+                      data: { confirm: "Estás seguro(a) de eliminar la imágen?" } do %>
+                      <button type="button" class="btn btn-danger btn-sm m-t btn-block">
+                        <i class="fa fa-trash"></i> Eliminar
+                      </button>
+                    <% end %>
+                    <div class="hr-line-dashed"></div>
                   </div>
                 <% end %>
               </div>
@@ -110,7 +120,7 @@
               <h3> Se están usando las imágenes por defecto. </h3>
             <% end %>
 
-            <%= form_for @new_photo, url: admin_web_photos_path, html: { method: :post, class: 'form-horizontal', id: "new_web_photo2"} do |f| %>
+            <%= form_for @new_photo, url: admin_web_photos_path, html: { method: :post, class: "form-horizontal", id: "new_web_photo2"} do |f| %>
               <div class="form-group">
                 <label class="col-sm-4 control-label"><%= f.label :photo, "Elige la imágen que deseas subir, pueden ser jpg, jpeg o png." %></label>
                 <div class="col-sm-8">
@@ -130,10 +140,10 @@
               <div class="hr-line-dashed"></div>
 
               <div class="form-group">
-                  <div class="col-sm-4">
-                      <%= link_to "Regresar".html_safe, admin_web_path, class: "btn btn-white" %>
-                      <%= f.submit "Guardar", class: "btn btn-primary" %>
-                  </div>
+                <div class="col-sm-4">
+                  <%= link_to "Regresar".html_safe, admin_web_path, class: "btn btn-white" %>
+                  <%= f.submit "Guardar", class: "btn btn-primary" %>
+                </div>
               </div>
 
             <% end %>
@@ -150,18 +160,20 @@
 <br><br>
 <script>
 $(document).ready(function(){
-  $('#new_web_photo').submit(function(){
-    if($('#web_photo_photos').val().length < 1){
-      $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Elige una imagen.'} %>");
+  $("#new_web_photo").submit(function(){
+    if($("#web_photo_photos").val().length < 1){
+      $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+        locals: {message_type: :info, message: "Elige una imagen."} %>`);
       return false;
     }else{
       return true;
     }
   });
 
-  $('#new_web_photo2').submit(function(){
-    if($('#web_photo_photo').val().length < 1){
-      $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Elige una imagen.'} %>");
+  $("#new_web_photo2").submit(function(){
+    if($("#web_photo_photo").val().length < 1){
+      $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+        locals: {message_type: :info, message: "Elige una imagen."} %>`);
       return false;
     }else{
       c=$("#web_photo_name_initial")[0].checked
@@ -172,19 +184,20 @@ $(document).ready(function(){
       if(c || c2 || c3 || c4){
         return true;
       }else{
-        $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Elige el tipo de imagen ya sea para inicio de sesión, portada, etc.'} %>");
+        $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+          locals: {message_type: :info, message: "Elige el tipo de imagen ya sea para inicio de sesión, portada, etc."} %>`);
         return false;
       }
     }
   });
 
   // init ekko-lightbox
-  $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+  $(document).on("click", "[data-toggle="lightbox"]", function(event) {
     event.preventDefault();
     $(this).ekkoLightbox();
   });
 });
 </script>
 
-<%= stylesheet_link_tag 'ekko-lightbox.min', media: 'all' %>
-<%= javascript_include_tag 'ekko-lightbox.min' %>
+<%= stylesheet_link_tag "ekko-lightbox.min", media: "all" %>
+<%= javascript_include_tag "ekko-lightbox.min" %>

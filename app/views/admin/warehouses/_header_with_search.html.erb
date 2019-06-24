@@ -7,29 +7,33 @@
           <h3 class="m-t-none m-b">Lista de almacenes</h3>
           <%= form_for(:class, url: admin_warehouses_path, method: :get) do |f| %>
             <div class="input-group">
-              <%= f.text_field :search, value: search_params, class: 'input form-control',
-                placeholder: 'Buscar', maxlength: 20, required: true  %>
+              <%= f.text_field :search, value: search_params, class: "input form-control",
+                placeholder: "Buscar", maxlength: 20, required: true  %>
 
               <span class="input-group-btn">
-                <%= f.submit 'Buscar', class: 'btn btn btn-success' %>
+                <%= f.submit "Buscar", class: "btn btn btn-success" %>
               </span>
             </div>
           <% end %>
         </div>
 
         <div class="hr-line-dashed pro-mobile"></div>
-        <% if @current_user.has_permission?('warehouses@create') %>
+        <% if @current_user.has_permission?("warehouses@create") %>
           <div class="col-sm-2 text-center" style="border-right: solid #E7EAEC 1px;">
             <h4>Registrar Nuevo</h4>
-            <%= link_to "<i class='fa fa-cubes med-icon'></i>".html_safe, new_admin_warehouse_path %>
+            <%= link_to new_admin_warehouse_path do %>
+              <i class="fa fa-cubes med-icon"></i>
+            <% end %>
           </div>
         <% end %>
 
         <div class="hr-line-dashed pro-mobile"></div>
-        <% if @current_user.has_permission?('warehouse_products@batch_search') %>
+        <% if @current_user.has_permission?("warehouse_products@batch_search") %>
           <div class="col-sm-2 text-center">
             <h4>Búsqueda de lote</h4>
-            <%= link_to "<i class='fa fa-search med-icon'></i>".html_safe, admin_batch_search_path %>
+            <%= link_to admin_batch_search_path do %>
+              <i class="fa fa-search med-icon"></i>
+            <% end %>
           </div>
         <% end %>
       </div>

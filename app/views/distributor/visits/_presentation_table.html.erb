@@ -2,7 +2,7 @@
   <div class="col-lg-4 col-sm-6">
      <div class="contact-box">
          <div class="col-sm-12">
-            <%= link_to distributor_destroy_client_visit_path(params[:id], v.id), class: 'pull-right',
+            <%= link_to distributor_destroy_client_visit_path(params[:id], v.id), class: "pull-right",
               method: :delete, data: { confirm: "Seguro(a) de cancelar su visita?" } do %>
               <i class="fa fa-trash fa-3x" style="color: #F44336;"></i>
             <% end if v.client_recognizes_visit.nil? %>

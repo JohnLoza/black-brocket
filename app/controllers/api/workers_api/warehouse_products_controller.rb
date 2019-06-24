@@ -35,7 +35,7 @@ class Api::WorkersApi::WarehouseProductsController < ApiController
 
     worker = SiteWorker.joins(:Permissions)
       .where(warehouse_id: @current_user.warehouse_id)
-      .where(permissions: {category: 'WAREHOUSE_MANAGER'}).take
+      .where(permissions: {category: "WAREHOUSE_MANAGER"}).take
 
     render status: 200, json: {success: false, info: "NO_ONE_TO_REPORT_AT"} and return unless worker
 

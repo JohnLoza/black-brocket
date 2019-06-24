@@ -16,9 +16,9 @@ class Distributor::OrdersController < ApplicationController
   end
 
   def details
-    require 'barby'
-    require 'barby/barcode/code_128'
-    require 'barby/outputter/png_outputter'
+    require "barby"
+    require "barby/barcode/code_128"
+    require "barby/outputter/png_outputter"
 
     @order = Order.find_by!(hash_id: params[:id])
     @order_address = @order.address_hash
@@ -36,6 +36,6 @@ class Distributor::OrdersController < ApplicationController
 
     @barcode = Barby::Code128.new(@order.hash_id).to_image.to_data_url
 
-    render "/shared/orders/details", layout: false
+    render "shared/orders/details", layout: false
   end
 end

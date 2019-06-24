@@ -1,5 +1,6 @@
 <% provide(:title, "Comentarios y Sugerencias") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Comentarios y Sugerencias", labels: ['Comentarios y Sugerencias']} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Comentarios y Sugerencias", 
+  labels: ["Comentarios y Sugerencias"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -27,13 +28,17 @@
         <%#= link_to "Establecer como respondido", admin_answer_suggestion_path(s.id), class: "btn btn-primary", method: :post %>
         <% unless params[:answered] %>
           <%= form_tag(admin_answer_suggestion_path(s.id), method: :post) do %>
-            <%= text_area_tag :answer, "", { class: "form-control", placeholder: "Inserta tu respuesta a #{s.name} aquí...", required: true } %> <br/>
-            <%= submit_tag "Enviar respuesta", class: "btn btn-primary btn-sm", data: { confirm: "Estás seguro de enviar tu respuesta? esta acción no se puede deshacer." } %>
-          <% end %><br/><br/>
+            <%= text_area_tag :answer, "", class: "form-control", 
+              placeholder: "Inserta tu respuesta a #{s.name} aquí...", required: true %>
+            <br>
+            <%= submit_tag "Enviar respuesta", class: "btn btn-primary btn-sm", 
+              data: { confirm: "Estás seguro de enviar tu respuesta? esta acción no se puede deshacer." } %>
+          <% end %>
+          <br><br>
         <% end %>
       <% end %>
 
-      <%= will_paginate(@suggestions, params: {controller: 'admin/welcome', action: 'suggestions'},
+      <%= will_paginate(@suggestions, params: {controller: "admin/welcome", action: "suggestions"},
         renderer: BootstrapPagination::Rails) %>
     </div>
 

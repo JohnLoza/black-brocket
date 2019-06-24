@@ -1,5 +1,6 @@
 <% provide(:title, "Órdenes") %>
-<%= render partial: "/shared/distributor/header_band", locals: {title: "Órdenes de cliente", labels: ['Clientes', 'Órdenes'], links: [admin_clients_path]} %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Órdenes de cliente", 
+  labels: ["Clientes", "Órdenes"], links: [admin_clients_path]} %>
 
 <div class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
@@ -88,9 +89,10 @@
                     </td>
                     <td><%= l(o.created_at, format: :long) %></td>
                     <td>
-                      <%= link_to "<i class='fa fa-eye'></i> Ver pedido".html_safe,
-                          admin_order_details_path(o.hash_id),
-                          class: "btn btn-white btn-sm", target: "_blank" %>
+                      <%= link_to admin_order_details_path(o.hash_id),
+                        class: "btn btn-white btn-sm", target: "_blank" do %>
+                        <i class="fa fa-eye"></i> Ver pedido
+                      <% end %>
                     </td>
                   </tr>
                 <% end %>
@@ -108,7 +110,7 @@
 
             <script>
                 $(document).ready(function() {
-                    $('.footable').footable();
+                    $(".footable").footable();
                 });
             </script>
 

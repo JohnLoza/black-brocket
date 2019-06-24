@@ -1,5 +1,6 @@
 <% provide(:title, "Detalles") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Detalles pie de página", labels: ['Web', 'Detalles pie de página'], links: [admin_web_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Detalles pie de página", 
+  labels: ["Web", "Detalles pie de página"], links: [admin_web_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -28,10 +29,13 @@
               <tr>
                 <td><%= detail.name %></td>
                 <td><%= detail.detail %></td>
-                <td><%= link_to "<i class='fa fa-trash'> Eliminar</i>".html_safe,
-                      admin_web_footer_detail_path(detail.id),
-                      class: "btn btn-danger btn-sm", method: :delete,
-                      data: {confirm: "Estás seguro(a) de eliminar el detalle?"} %></td>
+                <td>
+                  <%= link_to admin_web_footer_detail_path(detail.id),
+                    class: "btn btn-danger btn-sm", method: :delete,
+                    data: {confirm: "Estás seguro(a) de eliminar el detalle?"} do %>
+                    <i class="fa fa-trash"> Eliminar</i>
+                  <% end %>
+                </td>
               </tr>
             <% end #@details.each# %>
           </tbody>
@@ -48,7 +52,7 @@
     modal_body = modal.find(".modal-body");
 
     modal_title.html("Nuevo detalle");
-    modal_body.html("<%= j render 'footer_detail_form' %>");
+    modal_body.html("<%= j render "footer_detail_form" %>");
 
     modal.modal("show");
   }

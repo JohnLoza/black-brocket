@@ -1,21 +1,21 @@
 class Admin::BanksController < AdminController
 
   def index
-    unless @current_user.has_permission_category?('banks') or
-           @current_user.has_permission_category?('bank_accounts')
+    unless @current_user.has_permission_category?("banks") or
+           @current_user.has_permission_category?("bank_accounts")
       deny_access! and return
     end
-    @banks = Bank.search(key_words: search_params, fields: ['name'])
+    @banks = Bank.search(key_words: search_params, fields: ["name"])
   end
 
   def new
-    deny_access! and return unless @current_user.has_permission?('banks@create')
+    deny_access! and return unless @current_user.has_permission?("banks@create")
 
     @bank = Bank.new
   end
 
   def create
-    deny_access! and return unless @current_user.has_permission?('banks@create')
+    deny_access! and return unless @current_user.has_permission?("banks@create")
 
     @bank = Bank.new(bank_params)
 
@@ -29,13 +29,13 @@ class Admin::BanksController < AdminController
   end
 
   def edit
-    deny_access! and return unless @current_user.has_permission?('banks@update')
+    deny_access! and return unless @current_user.has_permission?("banks@update")
 
     @bank = Bank.find(params[:id])
   end
 
   def update
-    deny_access! and return unless @current_user.has_permission?('banks@update')
+    deny_access! and return unless @current_user.has_permission?("banks@update")
 
     @bank = Bank.find(params[:id])
 
@@ -48,7 +48,7 @@ class Admin::BanksController < AdminController
   end
 
   def destroy
-    deny_access! and return unless @current_user.has_permission?('banks@delete')
+    deny_access! and return unless @current_user.has_permission?("banks@delete")
 
     @bank = Bank.find(params[:id])
 

@@ -1,24 +1,24 @@
 class Admin::WarehousesController < AdminController
 
   def index
-    unless @current_user.has_permission_category?('warehouses') or
-           @current_user.has_permission_category?('parcels') or
-           @current_user.has_permission_category?('warehouse_products') or
-           @current_user.has_permission_category?('warehouse_manager')
+    unless @current_user.has_permission_category?("warehouses") or
+           @current_user.has_permission_category?("parcels") or
+           @current_user.has_permission_category?("warehouse_products") or
+           @current_user.has_permission_category?("warehouse_manager")
       deny_access! and return
     end
 
-    @warehouses = Warehouse.active.search(key_words: search_params, fields: ['hash_id', 'name'])
+    @warehouses = Warehouse.active.search(key_words: search_params, fields: ["hash_id", "name"])
       .order_by_name.paginate(page: params[:page], per_page: 25).includes(City: :State)
   end
 
   def show
-    deny_access! and return unless @current_user.has_permission?('warehouses@show')
+    deny_access! and return unless @current_user.has_permission?("warehouses@show")
     @warehouse = Warehouse.find_by!(hash_id: params[:id])
   end
 
   def new
-    deny_access! and return unless @current_user.has_permission?('warehouses@create')
+    deny_access! and return unless @current_user.has_permission?("warehouses@create")
 
     @warehouse = Warehouse.new
     @states = State.order_by_name
@@ -26,7 +26,7 @@ class Admin::WarehousesController < AdminController
   end
 
   def create
-    deny_access! and return unless @current_user.has_permission?('warehouses@create')
+    deny_access! and return unless @current_user.has_permission?("warehouses@create")
 
     @warehouse = Warehouse.new(warehouse_params)
     @warehouse.city_id = params[:city_id]
@@ -50,9 +50,9 @@ class Admin::WarehousesController < AdminController
   end
 
   def edit
-    unless @current_user.has_permission?('warehouses@update_warehouse_data') or
-           @current_user.has_permission?('warehouses@update_wholesale') or
-           @current_user.has_permission?('warehouses@update_shipping_cost')
+    unless @current_user.has_permission?("warehouses@update_warehouse_data") or
+           @current_user.has_permission?("warehouses@update_wholesale") or
+           @current_user.has_permission?("warehouses@update_shipping_cost")
       deny_access! and return
     end
 
@@ -64,9 +64,9 @@ class Admin::WarehousesController < AdminController
   end
 
   def update
-    unless @current_user.has_permission?('warehouses@update_warehouse_data') or
-           @current_user.has_permission?('warehouses@update_wholesale') or
-           @current_user.has_permission?('warehouses@update_shipping_cost')
+    unless @current_user.has_permission?("warehouses@update_warehouse_data") or
+           @current_user.has_permission?("warehouses@update_wholesale") or
+           @current_user.has_permission?("warehouses@update_shipping_cost")
       deny_access! and return
     end
 
@@ -74,7 +74,7 @@ class Admin::WarehousesController < AdminController
     @warehouse.city_id = params[:city_id]
 
     if @warehouse.update_attributes(warehouse_params)
-      redirect_to admin_warehouses_path, flash: {success: 'Almacén actualizado' }
+      redirect_to admin_warehouses_path, flash: {success: "Almacén actualizado" }
     else
       @states = State.order_by_name
       @cities = City.where(state_id: params[:state_id]).order_by_name
@@ -83,15 +83,15 @@ class Admin::WarehousesController < AdminController
   end
 
   def destroy
-    deny_access! and return unless @current_user.has_permission?('warehouses@delete')
+    deny_access! and return unless @current_user.has_permission?("warehouses@delete")
 
     @warehouse = Warehouse.find_by!(hash_id: params[:id])
     @warehouse.destroy
-    redirect_to admin_warehouses_path, flash: {success: 'Almacén eliminado' }
+    redirect_to admin_warehouses_path, flash: {success: "Almacén eliminado" }
   end
 
   def batch_search
-    deny_access! and return unless @current_user.has_permission?('warehouse_products@batch_search')
+    deny_access! and return unless @current_user.has_permission?("warehouse_products@batch_search")
 
     if params[:batch]
       @products_in_warehouse = WarehouseProduct.where(batch: params[:batch]).includes(:Warehouse)
@@ -109,7 +109,7 @@ class Admin::WarehousesController < AdminController
   end
 
   def inventory
-    deny_access! and return unless @current_user.has_permission?('warehouse_products@inventory')
+    deny_access! and return unless @current_user.has_permission?("warehouse_products@inventory")
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
 
@@ -152,7 +152,7 @@ class Admin::WarehousesController < AdminController
   def inventory_report_solved
     @report = InventoryReport.find(params[:id])
     @report.update_attributes(done: :true)
-    flash[:success] = 'Reporte guardado exitosamente.'
+    flash[:success] = "Reporte guardado exitosamente."
     redirect_to admin_inventory_reports_path
   end
 

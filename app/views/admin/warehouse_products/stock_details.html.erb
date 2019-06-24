@@ -1,5 +1,6 @@
 <% provide(:title, "Productos") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Productos en el almacén", labels: ['Almacenes', 'Productos en el almacén'], links: [admin_warehouses_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Productos en el almacén", 
+  labels: ["Almacenes", "Productos en el almacén"], links: [admin_warehouses_path]} %>
 
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
@@ -24,8 +25,8 @@
             <td><%= d.batch %></td>
             <td><%= d.expiration_date %></td>
             <td>
-              <% if @current_user.has_permission?('warehouse_products@update_stock') %>
-                <a class="btn btn-white btn-sm" onclick="update_stock_form('<%=d.batch%>','<%=d.expiration_date%>');">Modificar</a>    
+              <% if @current_user.has_permission?("warehouse_products@update_stock") %>
+                <a class="btn btn-white btn-sm" onclick="update_stock_form('<%=d.batch%>','<%=d.expiration_date%>');">Modificar</a>  
               <% end %>
 
               <%= form_for(:product_qr, url: admin_print_qr_path, method: :post, 
@@ -90,7 +91,7 @@
 </script>
 
 <script>
-    $(document).ready(function() {
-        $('.footable').footable();
-    });
+  $(document).ready(function() {
+    $(".footable").footable();
+  });
 </script>

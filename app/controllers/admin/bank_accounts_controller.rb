@@ -1,21 +1,21 @@
 class Admin::BankAccountsController < AdminController
 
   def index
-    deny_access! and return unless @current_user.has_permission_category?('bank_accounts')
+    deny_access! and return unless @current_user.has_permission_category?("bank_accounts")
 
     @bank = Bank.find_by!(id: params[:bank_id])
-    @bank_accounts = @bank.Accounts.search(key_words: search_params, fields: ['account_number', 'interbank_clabe'])
+    @bank_accounts = @bank.Accounts.search(key_words: search_params, fields: ["account_number", "interbank_clabe"])
   end # def index #
 
   def new
-    deny_access! and return unless @current_user.has_permission?('bank_accounts@create')
+    deny_access! and return unless @current_user.has_permission?("bank_accounts@create")
 
     @bank = Bank.find_by!(id: params[:bank_id])
     @bank_account = BankAccount.new
   end # def new #
 
   def create
-    deny_access! and return unless @current_user.has_permission?('bank_accounts@create')
+    deny_access! and return unless @current_user.has_permission?("bank_accounts@create")
 
     @bank = Bank.find_by!(id: params[:bank_id])
 
@@ -32,14 +32,14 @@ class Admin::BankAccountsController < AdminController
   end # def create #
 
   def edit
-    deny_access! and return unless @current_user.has_permission?('bank_accounts@update')
+    deny_access! and return unless @current_user.has_permission?("bank_accounts@update")
 
     @bank = Bank.find_by!(id: params[:bank_id])
     @bank_account = @bank.Accounts.find_by!(id: params[:id])
   end # def edit #
 
   def update
-    deny_access! and return unless @current_user.has_permission?('bank_accounts@update')
+    deny_access! and return unless @current_user.has_permission?("bank_accounts@update")
 
     @bank = Bank.find_by!(id: params[:bank_id])
     @bank_account = @bank.Accounts.find_by!(id: params[:id])
@@ -54,7 +54,7 @@ class Admin::BankAccountsController < AdminController
   end # def update #
 
   def destroy
-    deny_access! and return unless @current_user.has_permission?('bank_accounts@delete')
+    deny_access! and return unless @current_user.has_permission?("bank_accounts@delete")
 
     @bank = Bank.find_by!(id: params[:bank_id])
     @bank_account = @bank.Accounts.find_by!(id: params[:id])

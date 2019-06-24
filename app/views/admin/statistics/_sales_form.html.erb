@@ -2,12 +2,12 @@
   <div class="col-lg-12">
     <div class="ibox float-e-margins">
       <div class="ibox-title">
-            <h5>Historial de ventas</h5>
-            <div class="ibox-tools">
-                <a class="collapse-link">
-                    <i class="fa fa-chevron-up"></i>
-                </a>
-            </div>
+        <h5>Historial de ventas</h5>
+        <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+        </div>
       </div>
       <div class="ibox-content">
         <%= form_tag(admin_sales_statistics_path, method: :post) do %>
@@ -15,8 +15,8 @@
           <div class="row">
             <div class="col-lg-6">
               <label>Ventas a recopilar desde (formato: YYYY-MM-DD)</label><br>
-              <div class='input-group date' id='from_date_picker'>
-                  <input type='text' class="form-control" name="from_date" id="from_date" maxlength="20" />
+              <div class="input-group date" id="from_date_picker">
+                  <input type="text" class="form-control" name="from_date" id="from_date" maxlength="20" />
                   <span class="input-group-addon">
                       <span class="fa fa-calendar"></span>
                   </span>
@@ -25,8 +25,8 @@
             </div>
             <div class="col-lg-6">
               <label>Hasta (formato: YYYY-MM-DD)</label><br>
-                <div class='input-group date' id='to_date_picker'>
-                    <input type='text' class="form-control" name="to_date" id="to_date" maxlength="20" />
+                <div class="input-group date" id="to_date_picker">
+                    <input type="text" class="form-control" name="to_date" id="to_date" maxlength="20" />
                     <span class="input-group-addon">
                         <span class="fa fa-calendar"></span>
                     </span>
@@ -106,46 +106,46 @@
 
 <script type="text/javascript">
   options = {
-                locale: 'es',
-                format: 'YYYY-MM-DD',
-                icons: {
-                    time: 'fa fa-clock-o',
-                    date: 'fa fa-calendar',
-                    up: 'fa fa-chevron-up',
-                    down: 'fa fa-chevron-down',
-                    previous: 'fa fa-chevron-left',
-                    next: 'fa fa-chevron-right',
-                    today: 'fa fa-arrows',
-                    clear: 'fa fa-times'
-                }
+              locale: "es",
+              format: "YYYY-MM-DD",
+              icons: {
+                  time: "fa fa-clock-o",
+                  date: "fa fa-calendar",
+                  up: "fa fa-chevron-up",
+                  down: "fa fa-chevron-down",
+                  previous: "fa fa-chevron-left",
+                  next: "fa fa-chevron-right",
+                  today: "fa fa-arrows",
+                  clear: "fa fa-times"
+              }
             }
   $(document).ready(function () {
-      $('#from_date_picker').datetimepicker(options);
-      $('#to_date_picker').datetimepicker(options);
+      $("#from_date_picker").datetimepicker(options);
+      $("#to_date_picker").datetimepicker(options);
   });
 
   function AddItem(name){
-    opt = $('#'+name+'s_select option:selected');
+    opt = $(`#${name}s_select option:selected`);
     var id = opt.val();
     var item_name = opt.text();
 
     if (id != ""){
       if (name == "distributor" && $(".distributor_selected").length == 8){
-        $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Solo se puede elegir un máximo de 8 distribuidores.'} %>");
+        $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+          locals: {message_type: :info, message: "Solo se puede elegir un máximo de 8 distribuidores."} %>`);
         return
       }
 
-      if ($("#selected_"+name+"_"+id).length == 0){
-
-        $('#selected_'+name+'s').append(""+
-            "<div id='selected_"+name+"_"+id+"' class='btn-success "+name+"_selected'>"+
-              "<input type='hidden' name='"+name+"s[]' value='"+id+"' />"+
-              item_name+
-              "<a onclick='RemoveItem(&quot;"+name+"&quot;,"+id+")' class='white'>"+
-                " <i class='fa fa-times'></i>"+
-              "</a>"+
-            "</div>");
-
+      if ( $(`#selected_${name}_${id}`).length == 0 ){
+        $(`#selected_${name}s`).append(`
+          <div id="selected_${name}_${id}" class="btn-success ${name}_selected">
+            <input type="hidden" name="${names}[]" value="${id}"/>
+            ${item_name}
+            <a onclick="RemoveItem(&quot;${name}&quot;,${id})" class="white">
+              <i class="fa fa-times"></i>
+            </a>
+          </div>`
+        );
       }
     }
   }
@@ -181,5 +181,5 @@
   }
 </style>
 
-<%= stylesheet_link_tag 'bootstrap-datetimepicker.min', media: 'all' %>
-<%= javascript_include_tag 'bootstrap-datetimepicker-custom' %>
+<%= stylesheet_link_tag "bootstrap-datetimepicker.min", media: "all" %>
+<%= javascript_include_tag "bootstrap-datetimepicker-custom" %>

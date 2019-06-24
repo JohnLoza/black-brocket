@@ -5,7 +5,7 @@ class Admin::CommissionsController < AdminController
   # PAID_&_INVOICE #
 
   def index
-    deny_access! and return unless @current_user.has_permission_category?('commissions')
+    deny_access! and return unless @current_user.has_permission_category?("commissions")
 
     if params[:distributor]
       distributor = Distributor.find_by!(hash_id: params[:distributor])
@@ -13,12 +13,12 @@ class Admin::CommissionsController < AdminController
     end
 
     @commissions = Commission.order(created_at: :desc).by_distributor(distributor_id)
-      .search(key_words: search_params, fields: ['hash_id', 'state'])
+      .search(key_words: search_params, fields: ["hash_id", "state"])
       .paginate(page: params[:page], per_page: 25).includes(:Distributor)
   end
 
   def create
-    deny_access! and return unless @current_user.has_permission?('commissions@create')
+    deny_access! and return unless @current_user.has_permission?("commissions@create")
 
     distributor = Distributor.find_by!(hash_id: params[:distributor])
     orders = Order.where("hash_id in (?)", params[:order_keys]).where(commission_in_progress: false)
@@ -28,7 +28,7 @@ class Admin::CommissionsController < AdminController
 
     commission = Commission.new({hash_id: Utils.new_alphanumeric_token(9).upcase,
       distributor_id: distributor.id, worker_id: @current_user.id,
-      state: 'WAITING_FOR_PAYMENT', total: total })
+      state: "WAITING_FOR_PAYMENT", total: total })
     ActiveRecord::Base.transaction do
       commission.save!
       orders.update_all(commission_in_progress: true)
@@ -43,7 +43,7 @@ class Admin::CommissionsController < AdminController
   end
 
   def details
-    deny_access! and return unless @current_user.has_permission_category?('commissions')
+    deny_access! and return unless @current_user.has_permission_category?("commissions")
 
     commission = Commission.find_by!(hash_id: params[:id])
 
@@ -53,7 +53,7 @@ class Admin::CommissionsController < AdminController
   end
 
   def upload_payment
-    deny_access! and return unless @current_user.has_permission?('commissions@pay')
+    deny_access! and return unless @current_user.has_permission?("commissions@pay")
 
     commission = Commission.find_by!(hash_id: params[:id])
 
@@ -71,7 +71,7 @@ class Admin::CommissionsController < AdminController
   end
 
   def download_payment
-    deny_access! and return unless @current_user.has_permission_category?('commissions')
+    deny_access! and return unless @current_user.has_permission_category?("commissions")
 
     commission = Commission.find_by!(hash_id: params[:id])
 
@@ -84,7 +84,7 @@ class Admin::CommissionsController < AdminController
   end
 
   def download_invoice
-    deny_access! and return unless @current_user.has_permission_category?('commissions')
+    deny_access! and return unless @current_user.has_permission_category?("commissions")
 
     commission = Commission.find_by!(hash_id: params[:id])
 

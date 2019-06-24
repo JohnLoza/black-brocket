@@ -1,5 +1,6 @@
 <% provide(:title, "Clientes") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Trabajo de Distribuidor", labels: ['Clientes', 'Mis Clientes'], links: [admin_distributor_work_clients_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Trabajo de Distribuidor", 
+  labels: ["Clientes", "Mis Clientes"], links: [admin_distributor_work_clients_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -11,13 +12,15 @@
           <div class="col-sm-9 b-r margin-bot-resp text-center">
             <h3 class="m-b-xxs">Lista de mis clientes</h3>
             <small>Aquí verás la lista de los clientes de los que me haré cargo.</small>
-           </div>
-           <div class="hr-line-dashed pro-mobile"></div>
-           <div class="col-md-3 b-r margin-bot-resp text-center">
-             <h3 class="m-b-xxs">Órdenes</h3>
-             <%= link_to "<i class='fa fa-truck fa-3x'></i>".html_safe, admin_distributor_work_orders_path %>
-           </div>
-         </div>
+          </div>
+          <div class="hr-line-dashed pro-mobile"></div>
+          <div class="col-md-3 b-r margin-bot-resp text-center">
+            <h3 class="m-b-xxs">Órdenes</h3>
+            <%= link_to admin_distributor_work_orders_path do %>
+              <i class="fa fa-truck fa-3x"></i>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -61,14 +64,18 @@
               </td>
               <%= render partial: "client_block_content", locals: {client: c} %>
     					<td>
-                <%= link_to "<i class='fa fa-truck'></i> Órdenes".html_safe, admin_client_orders_path(c),
-                  class: "btn btn-white btn-sm m-b-xs hidden-button"%>
-                <%= link_to "<i class='fa fa-money'></i> Pactar precios".html_safe,
-                  admin_distributor_work_client_prices_path(c),
-                  class: "btn btn-white btn-sm m-b-xs hidden-button" %>
-                <%= link_to "<i class='fa fa-envelope-o'></i> Mensajes".html_safe,
-                  admin_distributor_work_client_messages_path(c),
-                  class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+                <%= link_to admin_client_orders_path(c),
+                  class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+                  <i class="fa fa-truck"></i> Órdenes
+                <% end %>
+                <%= link_to admin_distributor_work_client_prices_path(c),
+                  class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+                  <i class="fa fa-money"></i> Pactar precios
+                <% end %>
+                <%= link_to admin_distributor_work_client_messages_path(c),
+                  class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+                  <i class="fa fa-envelope-o"></i> Mensajes
+                <% end %>
                 <%= link_to "Transferir", admin_distributor_work_transfer_client_path(c),
                   class: "btn btn-danger btn-sm m-b-xs hidden-button", 
                   method: :post, data: { confirm: "Seguro(a) de transferir el cliente?" } %>
@@ -89,7 +96,7 @@
 
       <script>
           $(document).ready(function() {
-              $('.footable').footable();
+              $(".footable").footable();
           });
       </script>
 

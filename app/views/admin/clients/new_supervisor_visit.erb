@@ -1,5 +1,6 @@
 <% provide(:title, "Nueva visita") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Nueva visita", labels: ['Clientes', 'Visitas', 'Nueva visita'], links: [admin_clients_path, admin_supervisor_visits_path(params[:id])]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Nueva visita", 
+  labels: ["Clientes", "Visitas", "Nueva visita"], links: [admin_clients_path, admin_supervisor_visits_path(params[:id])]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -17,7 +18,7 @@
               </div>
             </div>
             <div class="ibox-content">
-              <%= form_for(@visit_detail, url: admin_new_supervisor_visit_path(params[:id]), html: {class: 'form-horizontal'}) do |f| %>
+              <%= form_for(@visit_detail, url: admin_new_supervisor_visit_path(params[:id]), html: {class: "form-horizontal"}) do |f| %>
                 <h3>1.- Referencia del cliente</h3>
                 <div class="form-group">
                   <label class="col-sm-4 control-label">Tipo de cliente <br></label>

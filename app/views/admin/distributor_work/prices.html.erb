@@ -1,5 +1,6 @@
 <% provide(:title, "Precios") %>
-<%= render partial: "/shared/distributor/header_band", locals: {title: "Precios del cliente", labels: ['Clientes', 'Precios'], links: [admin_distributor_work_clients_path]} %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Precios del cliente", 
+  labels: ["Clientes", "Precios"], links: [admin_distributor_work_clients_path]} %>
 
 <div class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
@@ -119,7 +120,8 @@
       p = $(products[indx]);
       p.val(p.attr("recommended"));
     }
-    $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Establecidos los precios recomendados.'} %>");
+    $("#dismissible_alerts").append("<%= j render partial: "/shared/dismissible_alert", 
+      locals: {message_type: :info, message: "Establecidos los precios recomendados."} %>");
   }
   function update_product_prices_to_maximum(){
     products = $(".product-control");
@@ -127,12 +129,13 @@
       p = $(products[indx]);
       p.val(p.attr("max"));
     }
-    $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Establecidos los precios máximos.'} %>");
+    $("#dismissible_alerts").append("<%= j render partial: "/shared/dismissible_alert", 
+      locals: {message_type: :info, message: "Establecidos los precios máximos."} %>");
   }
 </script>
 
 <script>
     $(document).ready(function() {
-        $('.footable').footable();
+        $(".footable").footable();
     });
 </script>

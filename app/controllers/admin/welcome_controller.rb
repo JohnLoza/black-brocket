@@ -5,7 +5,7 @@ class Admin::WelcomeController < AdminController
   end
 
   def suggestions
-    deny_access! and return unless @current_user.has_permission_category?('comments_and_suggestions')
+    deny_access! and return unless @current_user.has_permission_category?("comments_and_suggestions")
     params[:controller] = "admin/suggestions"
 
     if params[:answered]
@@ -16,7 +16,7 @@ class Admin::WelcomeController < AdminController
   end
 
   def answer_suggestion
-    deny_access! and return unless @current_user.has_permission?('comments_and_suggestions@answer')
+    deny_access! and return unless @current_user.has_permission?("comments_and_suggestions@answer")
 
     suggestion = Suggestion.find(params[:id])
     SendAnswerToCommentJob.perform_later(suggestion, params[:answer])

@@ -1,5 +1,6 @@
 <% provide(:title, "Precios") %>
-<%= render partial: "/shared/distributor/header_band", locals: {title: "Precios de cliente", labels: ['Clientes', 'Precios'], links: [admin_clients_path]} %>
+<%= render partial: "/shared/distributor/header_band", locals: {title: "Precios de cliente", 
+  labels: ["Clientes", "Precios"], links: [admin_clients_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -60,6 +61,6 @@
 
 <script>
     $(document).ready(function() {
-        $('.footable').footable();
+        $(".footable").footable();
     });
 </script>

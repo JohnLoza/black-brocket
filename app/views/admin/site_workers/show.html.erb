@@ -1,10 +1,11 @@
 <% provide(:title, "Trabajadores") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del trabajador", labels: ['Trabajadores', 'Perfil del trabajador'], links: [admin_site_workers_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del trabajador", 
+  labels: ["Trabajadores", "Perfil del trabajador"], links: [admin_site_workers_path]} %>
 
 <div class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
     <div class="row">
-      <%= render partial: 'details_box', locals: {site_worker: @worker} %>
+      <%= render partial: "details_box", locals: {site_worker: @worker} %>
 
       <div class="col-md-8">
         <!--Datos del distribuidor-->

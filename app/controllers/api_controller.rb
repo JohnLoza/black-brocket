@@ -19,7 +19,7 @@ class ApiController < ActionController::API
     render_authentication_error and return unless @current_user
 
     if model == SiteWorker
-      deny_access! and return unless @current_user.has_permission?('orders@capture_batches')
+      deny_access! and return unless @current_user.has_permission?("orders@capture_batches")
     end
   end
 
@@ -53,7 +53,7 @@ class ApiController < ActionController::API
   end
 
   def alphanumericArray
-    ['q','w','e','r','t','y','u','p','a','s','d','f','g','h','j','k','z',
-      'x','c','v','b','n','m','1','2','3','4','5','6','7','8','9','0']
+    ["q","w","e","r","t","y","u","p","a","s","d","f","g","h","j","k","z",
+      "x","c","v","b","n","m","1","2","3","4","5","6","7","8","9","0"]
   end
 end

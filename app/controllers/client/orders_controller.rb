@@ -9,9 +9,9 @@ class Client::OrdersController < ApplicationController
   end
 
   def show
-    require 'barby'
-    require 'barby/barcode/code_128'
-    require 'barby/outputter/png_outputter'
+    require "barby"
+    require "barby/barcode/code_128"
+    require "barby/outputter/png_outputter"
 
     if params[:notification]
       notification = Notification.find(params[:notification])
@@ -22,19 +22,12 @@ class Client::OrdersController < ApplicationController
     @order_address = @order.address_hash
 
     @details = @order.Details.includes(:Product)
-    @client = @order.Client
+    @client = @current_user
     @fiscal_data = @client.FiscalData
-    if !@fiscal_data.blank?
-      @city = @fiscal_data.City
-      @state = @city.State
-    end
-
-    @client_city = @current_user.City
-    @client_state = State.where(id: @client_city.state_id).take
 
     @barcode = Barby::Code128.new(@order.hash_id).to_image.to_data_url
 
-    render "/shared/orders/details", layout: false
+    render "shared/orders/details", layout: false
   end
 
   def create
@@ -172,7 +165,7 @@ class Client::OrdersController < ApplicationController
   private
     def verify_fiscal_data
       if params[:invoice]=="1" and @current_user.FiscalData.nil?
-        flash[:info] = 'Llena tus datos fiscales primero por favor.'
+        flash[:info] = "Llena tus datos fiscales primero por favor."
         redirect_to new_client_fiscal_datum_path and return false
       end
       return true
@@ -180,7 +173,7 @@ class Client::OrdersController < ApplicationController
 
     def verify_client_address
       if @current_user.street.nil?
-        flash[:info] = 'Por favor completa tus datos.'
+        flash[:info] = "Por favor completa tus datos."
         redirect_to edit_client_client_path @current_user and return false
       end
       return true
@@ -197,7 +190,7 @@ class Client::OrdersController < ApplicationController
       order.payment_method = params[:payment_method]
       order.parcel_id = params[:parcel_id]
       order.invoice = params[:invoice] if params[:invoice]
-      order.state = params[:parcel_id] == '0' ? "LOCAL" : "WAITING_FOR_PAYMENT"
+      order.state = params[:parcel_id] == "0" ? "LOCAL" : "WAITING_FOR_PAYMENT"
       address = {street: @current_user.street, extnumber: @current_user.extnumber,
         intnumber: @current_user.intnumber, col: @current_user.col,
         cp: @current_user.cp, street_ref1: @current_user.street_ref1,

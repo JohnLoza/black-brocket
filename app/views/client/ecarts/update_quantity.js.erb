@@ -31,7 +31,7 @@
 
   if(new_sub_total < wholesale){
     $("#shipping_cost_is_present").text("YES");
-    if(typeof parcel_prices !== 'undefined' && typeof parcel_weight_limitations !== 'undefined'){
+    if(typeof parcel_prices !== "undefined" && typeof parcel_weight_limitations !== "undefined"){
       guides = getGuides(<%= session[:e_cart]["total_weight"] %>, parcel_weight_limitations, parcel_prices);
       new_shipping_cost = calculateDeliveryCost(guides);
     }
@@ -54,12 +54,14 @@
     var existence = <%= params[:current_existence] %>;
     $("#"+product+"-quantity-input").val(existence);
     <% message = "Solo contamos con #{params[:current_existence]} unidad(es) de este producto." %>
-    $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: message} %>");
+    $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+      locals: {message_type: :success, message: message} %>`);
   <% end %>
 
 <% elsif params[:new_quantity].to_i <= 0 %>
   <% message = "Houston tenemos un problema!, no podemos enviar " + params[:new_quantity] + " producto(s)" %>
-  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: message} %>");
+  $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+    locals: {message_type: :success, message: message} %>`);
 
   $("#<%=params[:product]%>-quantity-input").val(<%=session[:e_cart][params[:product]]%>);
 <% end %>

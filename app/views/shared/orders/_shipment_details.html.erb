@@ -1,5 +1,5 @@
 <div class="pull-left" style="margin-right: 15px;">
-  <table class="tablemn">
+  <table class="table">
     <tbody>
       <tr>
         <td colspan="2"><br><b>Datos de entrega:</b></td>
@@ -8,7 +8,7 @@
         <td>Destinatario: </td>
         <td>
           <% if @fiscal_data.blank? %>
-            <%= @client.full_name %> 
+            <%= @client.name %> 
           <% else %>
             <%=@fiscal_data.name%> <%=@fiscal_data.lastname%> <%=@fiscal_data.mother_lastname%>
           <% end # if @fiscal_data.blank? # %>

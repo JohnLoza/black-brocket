@@ -1,23 +1,23 @@
-$('#bank-payment-info').html("");
+$("#bank-payment-info").html("");
 <% if @bank %>
-  $('#bank-payment-info').html("<%= j render partial: 'bank_payment_info' %>");
+  $("#bank-payment-info").html(`<%= j render partial: "bank_payment_info" %>`);
 <% end %>
 
 <% link = link_to "Cambiar método de pago", "#", class: "btn btn-default",
   onclick: "place_payment_method_form();", id: "update_payment_method_form" %>
-$('#update_payment_method_form').remove();
-$('#myModal').find('.modal-footer').append('<%= link %>');
+$("#update_payment_method_form").remove();
+$("#myModal").find(".modal-footer").append(`<%= link %>`);
 
 <% if @order.payment_method.nil? %>
   $("#update_payment_method_form").click();
 <% else %>
-  $('#myModal').modal('show');
+  $("#myModal").modal("show");
 <% end %>
 
 function place_payment_method_form(){
-  $('#myModal').modal('hide');
-  modal = $('#modal');
-  modal.find('.modal-title').html('Selecciona método de pago para la órden <%= @order.hash_id %>');
-  modal.find('.modal-body').html("<%= j render partial:'update_payment_method_form', locals:{order: @order} %>");
-  modal.modal('show');
+  $("#myModal").modal("hide");
+  modal = $("#modal");
+  modal.find(".modal-title").html("Selecciona método de pago para la órden <%= @order.hash_id %>");
+  modal.find(".modal-body").html('<%= j render partial: "update_payment_method_form", locals: { order: @order } %>');
+  modal.modal("show");
 }

@@ -3,7 +3,7 @@
   <td>$ <%= commission.total %></td>
   <% distributor = commission.Distributor %>
   <td><%= link_to distributor.username,
-                  admin_distributor_path(distributor.hash_id) %></td>
+    admin_distributor_path(distributor.hash_id) %></td>
   <td>
     <% case t(commission.state)
       when "Por pagar"%>
@@ -18,35 +18,38 @@
   </td>
   <td class="text-center">
     <% if commission.payment_img.present? or commission.payment_pdf.present? %>
-      <%= link_to "<i class='fa fa-file-pdf-o fa-5x'></i>".html_safe,
-          admin_download_commission_payment_path(commission.hash_id), target: "_blank" %>
+      <%= link_to admin_download_commission_payment_path(commission.hash_id), target: "_blank" do %>
+        <i class="fa fa-file-pdf-o fa-5x"></i>
+      <% end %>
     <% end %>
   </td>
   <td><%= l(Time.parse(commission.payment_day), format: :long) if !commission.payment_day.blank? %></td>
   <td class="text-center">
     <% if !commission.invoice.blank? %>
-      <%= link_to "<i class='fa fa-file-archive-o fa-5x'></i>".html_safe,
-          admin_download_commission_invoice_path(commission.hash_id), target: "_blank" %>
+      <%= link_to admin_download_commission_invoice_path(commission.hash_id), target: "_blank" do %>
+        <i class="fa fa-file-archive-o fa-5x"></i>
+      <% end %>
       <% if commission.invoice_downloaded %>
         <i class="fa fa-download fa-3x" style="color: #8BC34A"></i>
       <% end %>
     <% end %>
   </td>
   <td>
-    <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
-                admin_commission_details_path(commission.hash_id),
-                class: "btn btn-white btn-sm m-b-xs" %>
+    <%= link_to admin_commission_details_path(commission.hash_id),
+      class: "btn btn-white btn-sm m-b-xs" do %>
+      <i class="fa fa-eye"></i> Detalles
+    <% end %>
 
-      <%= form_for(Commission.new, url: admin_upload_commission_payment_path(commission.hash_id)) do |f| %>
-        <a onclick="$('#payment_field_<%=commission.hash_id%>').click();" class="btn btn-white btn-sm m-b-xs">
-          <i class="fa fa-upload"></i> Subir comprobante de pago
-        </a>
+    <%= form_for(Commission.new, url: admin_upload_commission_payment_path(commission.hash_id)) do |f| %>
+      <a onclick="$('#payment_field_<%=commission.hash_id%>').click();" class="btn btn-white btn-sm m-b-xs">
+        <i class="fa fa-upload"></i> Subir comprobante de pago
+      </a>
 
-        <%= f.file_field :payment, id: "payment_field_#{commission.hash_id}",
-            style: "display: none;", multiple: false,
-            onchange: "$('#payment_commit_#{commission.hash_id}').click();" %>
-        <%= f.submit "commit", id: "payment_commit_#{commission.hash_id}", style: "display: none;",
-            data: {confirm: "Estas seguro(a) de ser el archivo correcto?"} %>
-      <% end #form end# %>
+      <%= f.file_field :payment, id: "payment_field_#{commission.hash_id}",
+          style: "display: none;", multiple: false,
+          onchange: "$('#payment_commit_#{commission.hash_id}').click();" %>
+      <%= f.submit "commit", id: "payment_commit_#{commission.hash_id}", style: "display: none;",
+          data: {confirm: "Estas seguro(a) de ser el archivo correcto?"} %>
+    <% end #form end# %>
   </td>
 </tr>

@@ -21,8 +21,7 @@ class SiteWorker < ApplicationRecord
 
   validates :password, length: { minimum: 6 }, on: :create
 
-  validates :name, :email, :username,
-            :rfc, :nss, :address, :telephone, presence: true
+  validates :name, :email, :username, :rfc, :nss, :address, :telephone, presence: true
 
   #validates :rfc, :nss, uniqueness: {case_sensitive: false }
 
@@ -85,7 +84,7 @@ class SiteWorker < ApplicationRecord
 
   private
     def generate_hash_id
-      self.hash_id = 'to_be_replaced'
+      self.hash_id = "to_be_replaced"
     end
 
 end

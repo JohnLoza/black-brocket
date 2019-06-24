@@ -62,7 +62,7 @@ class Admin::ParcelPricesController < AdminController
     end
 
     def verify_permissions
-      deny_access! and return unless @current_user.has_permission?('parcels@update')
+      deny_access! and return unless @current_user.has_permission?("parcels@update")
     end
 
 end

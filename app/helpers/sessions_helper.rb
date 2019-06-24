@@ -26,11 +26,11 @@ module SessionsHelper
       user_id = session[:user_id]
       user_type = session[:user_type]
 
-      if user_type == 'w'
+      if user_type == "w"
         @current_user ||= SiteWorker.find_by!(id: user_id)
-      elsif  user_type == 'd'
+      elsif  user_type == "d"
         @current_user ||= Distributor.find_by!(id: user_id)
-      elsif  user_type == 'c'
+      elsif  user_type == "c"
         @current_user ||= Client.find_by!(id: user_id)
       end
 
@@ -38,11 +38,11 @@ module SessionsHelper
       user_id = cookies.signed[:user_id]
       user_type = cookies[:user_type]
 
-      if user_type == 'w'
+      if user_type == "w"
         user = SiteWorker.find_by!(id: user_id)
-      elsif  user_type == 'd'
+      elsif  user_type == "d"
         user = Distributor.find_by!(id: user_id)
-      elsif  user_type == 'c'
+      elsif  user_type == "c"
         user = Client.find_by!(id: user_id)
       end
 

@@ -1,6 +1,8 @@
 <% if @answer.persisted? %>
   $("#<%= params[:prod_answer][:question_id] %>").remove();
-  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Respuesta Guardada'} %>");
+  $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+    locals: {message_type: :success, message: "Respuesta Guardada"} %>`);
 <% else %>
-  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Ocurrió un error al guardar la respuesta, vuelva a intentarlo por favor'} %>");
+  $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+    locals: {message_type: :info, message: "Ocurrió un error al guardar la respuesta"} %>`);
 <% end %>

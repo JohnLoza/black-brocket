@@ -1,5 +1,6 @@
 <% provide(:title, "Órdenes") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Órdenes", labels: ['Órdenes', 'Captura de Detalles'], links: [admin_orders_path + "?type=CAPTURE_BATCHES"]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Órdenes", 
+  labels: ["Órdenes", "Captura de Detalles"], links: [admin_orders_path + "?type=CAPTURE_BATCHES"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight ecommerce">
@@ -31,9 +32,10 @@
                     </td>
                     <td><%= l(@order.created_at, format: :long) %></td>
                     <td>
-                      <%= link_to "<i class='fa fa-eye'></i> Ver pedido".html_safe,
-                          admin_order_details_path(@order.hash_id),
-                          class: "btn btn-white btn-sm", target: "_blank" %>
+                      <%= link_to admin_order_details_path(@order.hash_id),
+                        class: "btn btn-white btn-sm", target: "_blank" do %>
+                        <i class="fa fa-eye"></i> Ver pedido
+                      <% end %>
                     </td>
                   </tr>
               </table>
@@ -72,6 +74,6 @@
 <script type="text/javascript">
   function add_fields_to_form(){
     var form_content = $("#form-content");
-    form_content.append('<%= j render "detail_fields" %>');
+    form_content.append("<%= j render 'detail_fields' %>");
   }
 </script>

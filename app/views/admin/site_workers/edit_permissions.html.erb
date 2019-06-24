@@ -1,10 +1,11 @@
 <% provide(:title, "Trabajadores") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del trabajador", labels: ['Trabajadores', 'Perfil del trabajador'], links: [admin_site_workers_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del trabajador", 
+  labels: ["Trabajadores", "Perfil del trabajador"], links: [admin_site_workers_path]} %>
 
 <div class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
     <div class="row">
-      <%= render partial: 'details_box', locals: {site_worker: @worker} %>
+      <%= render partial: "details_box", locals: {site_worker: @worker} %>
 
       <div class="col-md-8">
 
@@ -156,14 +157,14 @@
 $(document).ready(function(){
   var switches = $(".js-switch");
   for(i=0;i<switches.length;i++){
-    new Switchery(switches[i], { color: '#1AB394' });
+    new Switchery(switches[i], { color: "#1AB394" });
   }
 });
 
 // toggle all switches
 function toggleAll(source) {
-  checkboxes = document.getElementsByClassName('js-switch');
-  switches = $('.switchery');
+  checkboxes = document.getElementsByClassName("js-switch");
+  switches = $(".switchery");
 
   toggleChecks(checkboxes, switches, source);
 }
@@ -171,7 +172,7 @@ function toggleAll(source) {
 function toggleSection(source, section){
   div_section = $("#"+section);
   checkboxes = div_section.find(".js-switch");
-  switches = div_section.find('.switchery');
+  switches = div_section.find(".switchery");
 
   toggleChecks(checkboxes, switches, source);
 }
@@ -179,7 +180,7 @@ function toggleSection(source, section){
 function toggleChecks(checkboxes, switches, source){
   for(var i=0, n=checkboxes.length;i<n;i++){
     if (checkboxes[i].checked != source.checked){
-      $(switches[i]).trigger('click');
+      $(switches[i]).trigger("click");
     }// end if
   }// end for
 }

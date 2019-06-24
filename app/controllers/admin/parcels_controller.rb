@@ -1,21 +1,21 @@
 class Admin::ParcelsController < AdminController
 
   def index
-    deny_access! and return unless @current_user.has_permission_category?('parcels')
+    deny_access! and return unless @current_user.has_permission_category?("parcels")
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @parcels = @warehouse.Parcels
   end
 
   def new
-    deny_access! and return unless @current_user.has_permission?('parcels@create')
+    deny_access! and return unless @current_user.has_permission?("parcels@create")
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @parcel = Parcel.new
   end
 
   def create
-    deny_access! and return unless @current_user.has_permission?('parcels@create')
+    deny_access! and return unless @current_user.has_permission?("parcels@create")
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
 
@@ -30,14 +30,14 @@ class Admin::ParcelsController < AdminController
   end
 
   def edit
-    deny_access! and return unless @current_user.has_permission?('parcels@update')
+    deny_access! and return unless @current_user.has_permission?("parcels@update")
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @parcel = Parcel.find(params[:id])
   end
 
   def update
-    deny_access! and return unless @current_user.has_permission?('parcels@update')
+    deny_access! and return unless @current_user.has_permission?("parcels@update")
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @parcel = Parcel.find(params[:id])
@@ -51,7 +51,7 @@ class Admin::ParcelsController < AdminController
   end
 
   def destroy
-    deny_access! and return unless @current_user.has_permission?('parcels@delete')
+    deny_access! and return unless @current_user.has_permission?("parcels@delete")
 
     @parcel = Parcel.find(params[:id])
     if @parcel.destroy

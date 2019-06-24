@@ -3,33 +3,43 @@
   <td class="project-people">
     <%= link_to admin_client_path(client.hash_id) do %>
       <img src="<%= client.avatar_url(:mini) %>" class="img-circle"
-        style="<%= 'border:2px #f44 solid' unless client.cp.present? %>"/>
+        style="<%= "border:2px #f44 solid" unless client.cp.present? %>"/>
     <% end %>
   </td>
   <td>
     <%= content_tag(:p, client.name) %>
-    <%= content_tag(:label, 'Nuevo', class: 'label label-primary') if client.is_new %>
+    <%= content_tag(:label, "Nuevo", class: "label label-primary") if client.is_new %>
   </td>
   <td><%= client.email %></td>
   <td><%= client.location %></td>
   <td><%= client.telephone_with_lada %></td>
   <td>
     <!-- hidden-button -->
-    <%= link_to "<i class='fa fa-truck'></i> Órdenes".html_safe,
-      admin_client_orders_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+    <%= link_to admin_client_orders_path(client.hash_id), 
+      class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+      <i class="fa fa-truck"></i> Órdenes
+    <% end %>
 
-    <%= link_to "<i class='fa fa-pencil'></i> Precios".html_safe,
-      admin_client_prices_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+    <%= link_to admin_client_prices_path(client.hash_id), 
+      class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+      <i class="fa fa-pencil"></i> Precios
+    <% end %>
 
-    <%= link_to "<i class='fa fa-calendar'></i> Revisiones".html_safe,
-      admin_client_revisions_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+    <%= link_to admin_client_revisions_path(client.hash_id), 
+      class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+      <i class="fa fa-calendar"></i> Revisiones
+    <% end %>
 
-    <%= link_to "<i class='fa fa-calendar'></i> Visitas de distribuidor".html_safe,
-      admin_client_visits_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+    <%= link_to admin_client_visits_path(client.hash_id), 
+      class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+      <i class="fa fa-calendar"></i> Visitas de distribuidor
+    <% end %>
 
-    <% if @current_user.has_permission?('clients@supervisor_visit') %>
-      <%= link_to "<i class='fa fa-calendar'></i> Visitas de supervisor".html_safe,
-        admin_supervisor_visits_path(client.hash_id), class: "btn btn-white btn-sm m-b-xs hidden-button"  %>
+    <% if @current_user.has_permission?("clients@supervisor_visit") %>
+      <%= link_to admin_supervisor_visits_path(client.hash_id), 
+        class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+        <i class="fa fa-calendar"></i> Visitas de supervisor
+      <% end %>
     <% end %>
   </td>
   <td><%= client.last_distributor_revision %></td>

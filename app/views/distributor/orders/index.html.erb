@@ -1,5 +1,6 @@
 <% provide(:title, "Órdenes por entregar") %>
-<%= render partial: "/shared/distributor/header_band", locals: {title: "Órdenes", labels: ['Órdenes por entregar']} %>
+<%= render partial: "/shared/distributor/header_band", 
+  locals: {title: "Órdenes", labels: ["Órdenes por entregar"]} %>
 
 <div class="wrapper wrapper-content animated fadeInRight ecommerce">
   <div class="row">
@@ -74,9 +75,10 @@
                           <% end %>
                       </td>
                       <td>
-                        <%= link_to "<i class='fa fa-eye'></i> Detalles".html_safe,
-                          distributor_order_details_path(o.hash_id), target: '_blank',
-                          class: "btn btn-white btn-sm" %>
+                        <%= link_to distributor_order_details_path(o.hash_id), 
+                          target: "_blank", class: "btn btn-white btn-sm" do %>
+                          <i class="fa fa-eye"></i> Detalles
+                        <% end %>
                       </td>
                     </tr>
                   <% end %>
@@ -103,7 +105,7 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        $('.footable').footable();
-    });
+  $(document).ready(function() {
+    $(".footable").footable();
+  });
 </script>

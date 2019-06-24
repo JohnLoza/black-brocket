@@ -187,7 +187,7 @@ class Api::OrdersController < ApiController
       data << extra_data
     end
 
-    render status: 200, json: {success: true, info: 'DATA_RETURNED', data: data}
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def available_parcels
@@ -209,7 +209,7 @@ class Api::OrdersController < ApiController
       data << extra_data
     end
 
-    render status: 200, json: {success: true, info: 'DATA_RETURNED', data: data}
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def update_payment_method
@@ -218,7 +218,7 @@ class Api::OrdersController < ApiController
 
     order.update_attributes(payment_method: params[:payment_method])
 
-    render status: 200, json: {success: true, info: 'SAVED'}
+    render status: 200, json: {success: true, info: "SAVED"}
   end
 
   def download_payment
@@ -243,7 +243,7 @@ class Api::OrdersController < ApiController
       order.payment_method = params[:payment_method]
       order.parcel_id = params[:parcel_id]
       order.invoice = params[:invoice] if params[:invoice]
-      order.state = params[:parcel_id] == '0' ? "LOCAL" : "WAITING_FOR_PAYMENT"
+      order.state = params[:parcel_id] == "0" ? "LOCAL" : "WAITING_FOR_PAYMENT"
       address = {street: @current_user.street, extnumber: @current_user.extnumber,
         intnumber: @current_user.intnumber, col: @current_user.col,
         cp: @current_user.cp, street_ref1: @current_user.street_ref1,

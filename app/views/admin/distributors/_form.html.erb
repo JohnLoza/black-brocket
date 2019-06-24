@@ -11,23 +11,23 @@
           </div>
           <div class="ibox-content">
             <%= form_for [:admin, @distributor], html: {id: "distributor_form",
-                class: 'form-horizontal'} do |f| %>
-            <%= render partial: '/shared/error_messages', locals:{entity: @distributor} %>
+                class: "form-horizontal"} do |f| %>
+            <%= render partial: "/shared/error_messages", locals:{entity: @distributor} %>
 
-              <% if @current_user.has_permission?('distributors@update_personal_data') or
-                    @current_user.has_permission?('distributors@create') %>
+              <% if @current_user.has_permission?("distributors@update_personal_data") or
+                    @current_user.has_permission?("distributors@create") %>
 
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :name, "Código" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :hash_id, class: 'form-control', disabled: true %>
+                    <%= f.text_field :hash_id, class: "form-control", disabled: true %>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :name, "Nombre" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :name, class: 'form-control', placeholder: "John",
+                    <%= f.text_field :name, class: "form-control", placeholder: "John",
                           required: true, minlength: 2, maxlength: 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
                   </div>
                 </div>
@@ -35,7 +35,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :lastname, "Apellido paterno" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :lastname, class: 'form-control', placeholder: "Black",
+                    <%= f.text_field :lastname, class: "form-control", placeholder: "Black",
                           required: true, minlength: 2, maxlength: 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
                   </div>
                 </div>
@@ -43,7 +43,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :mother_lastname, "Apellido materno" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :mother_lastname, class: 'form-control', placeholder: "Smith",
+                    <%= f.text_field :mother_lastname, class: "form-control", placeholder: "Smith",
                           required: true, minlength: 2, maxlength: 25, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
                   </div>
                 </div>
@@ -51,8 +51,8 @@
                 <div class="form-group">
                   <%= f.label :birthday, "Fecha de nacimiento (yyyy-mm-dd)", class: "col-sm-2 control-label" %>
                   <div class="col-sm-10">
-                  	<div class='input-group date' id="datetimepicker">
-                  		<%= f.text_field :birthday, class: 'form-control form-control-black',
+                  	<div class="input-group date" id="datetimepicker">
+                  		<%= f.text_field :birthday, class: "form-control form-control-black",
                   			     required: true, maxlength: 10  %>
                   		<span class="input-group-addon">
                   			<span class="fa fa-calendar"></span>
@@ -65,7 +65,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :username, "Nombre comercial o de usuario" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :username, class: 'form-control', placeholder: "John01",
+                    <%= f.text_field :username, class: "form-control", placeholder: "John01",
                           required: true, minlength: 5, maxlength: 25 %>
                     <span class="help-block m-b-none">Mínimo 5 caracteres y máximo 25.</span>
                   </div>
@@ -74,7 +74,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :email, "Correo electrónico" %></label>
                   <div class="col-sm-10">
-                    <%= f.email_field :email, class: 'form-control', placeholder: "john@example.com",
+                    <%= f.email_field :email, class: "form-control", placeholder: "john@example.com",
                           required: true, maxlength: 50 %>
                   </div>
                 </div>
@@ -85,7 +85,7 @@
                     <label class="col-sm-2 control-label"><%= f.label :email_confirmation, "Confirma tu correo electrónico" %></label>
                     <div class="col-sm-10">
                       <%= f.email_field :email_confirmation, value: @distributor.email,
-                          class: 'form-control form-control-black', placeholder: "john@example.com",
+                          class: "form-control form-control-black", placeholder: "john@example.com",
                           required: true, maxlength: 50, "data-parsley-equalto"=>"#distributor_email" %>
                     </div>
                   </div>
@@ -93,7 +93,7 @@
                   <div class="form-group <%if @distributor.errors.any?%>has-error<%end%>">
                     <label class="col-sm-2 control-label"><%= f.label :password, "Contraseña" %></label>
                     <div class="col-sm-10">
-                      <%= f.password_field :password, placeholder: '********', class: 'form-control',
+                      <%= f.password_field :password, placeholder: "********", class: "form-control",
                             minlength: 6, maxlength: 20 %>
                     </div>
                   </div>
@@ -101,7 +101,7 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><%= f.label :password_confirmation, "Confirma contraseña" %></label>
                     <div class="col-sm-10">
-                      <%= f.password_field :password_confirmation, placeholder: '********', class: 'form-control',
+                      <%= f.password_field :password_confirmation, placeholder: "********", class: "form-control",
                             "data-parsley-equalto" => "#distributor_password" %>
                     </div>
                   </div>
@@ -111,7 +111,7 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><%= f.label :email_confirmation, "Confirma tu correo electrónico" %></label>
                     <div class="col-sm-10">
-                      <%= f.email_field :email_confirmation, class: 'form-control form-control-black', placeholder: "john@example.com",
+                      <%= f.email_field :email_confirmation, class: "form-control form-control-black", placeholder: "john@example.com",
             							required: true, maxlength: 50, "data-parsley-equalto"=>"#distributor_email" %>
                     </div>
                   </div>
@@ -119,7 +119,7 @@
                   <div class="form-group <%if @distributor.errors.any?%>has-error<%end%>">
                     <label class="col-sm-2 control-label"><%= f.label :password, "Contraseña" %></label>
                     <div class="col-sm-10">
-                      <%= f.password_field :password, placeholder: '********', class: 'form-control',
+                      <%= f.password_field :password, placeholder: "********", class: "form-control",
                             required: true, minlength: 6, maxlength: 20 %>
                       <span class="help-block m-b-none">Mínimo 6 caracteres.</span>
                     </div>
@@ -128,7 +128,7 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><%= f.label :password_confirmation, "Confirma contraseña" %></label>
                     <div class="col-sm-10">
-                      <%= f.password_field :password_confirmation, placeholder: '********', class: 'form-control',
+                      <%= f.password_field :password_confirmation, placeholder: "********", class: "form-control",
                             required: true, "data-parsley-equalto" => "#distributor_password" %>
                     </div>
                   </div>
@@ -139,7 +139,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :telephone, "Teléfono" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :telephone, class: 'form-control',
+                    <%= f.text_field :telephone, class: "form-control",
                           required: true, minlength: 7, maxlength: 12 %>
                     <span class="help-block m-b-none">Mínimo 6 caracteres.</span>
                   </div>
@@ -148,7 +148,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :cellphone, "Celular" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :cellphone, class: 'form-control',
+                    <%= f.text_field :cellphone, class: "form-control",
                           required: true, minlength: 9, maxlength: 15 %>
                   </div>
                 </div>
@@ -156,7 +156,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :address, "Dirección" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :address, class: 'form-control', placeholder: "calle #0000, col. ejemplo",
+                    <%= f.text_field :address, class: "form-control", placeholder: "calle #0000, col. ejemplo",
                           required: true, maxlength: 150 %>
                   </div>
                 </div>
@@ -167,12 +167,12 @@
                 <div class="hr-line-dashed"></div>
               <% end # if @actions["UPDATE_PERSONAL_DATA"] end # %>
 
-              <% if @current_user.has_permission?('distributors@update_fiscal_data') or
-                    @current_user.has_permission?('distributors@create')%>
+              <% if @current_user.has_permission?("distributors@update_fiscal_data") or
+                    @current_user.has_permission?("distributors@create")%>
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :rfc, "RFC" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :rfc, class: 'form-control', placeholder: "RFC", onkeyup:"this.value = this.value.toUpperCase();",
+                    <%= f.text_field :rfc, class: "form-control", placeholder: "RFC", onkeyup:"this.value = this.value.toUpperCase();",
                           required: true, maxlength: 20 %>
                   </div>
                 </div>
@@ -180,7 +180,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :fiscal_number, "Nombre Fiscal ó Razón Social" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :fiscal_number, class: 'form-control', onkeyup:"this.value = this.value.toUpperCase();",
+                    <%= f.text_field :fiscal_number, class: "form-control", onkeyup:"this.value = this.value.toUpperCase();",
                           required: true, maxlength: 100 %>
                   </div>
                 </div>
@@ -188,12 +188,12 @@
                 <div class="hr-line-dashed"></div>
               <% end # if @actions["UPDATE_FISCAL_DATA"] # %>
 
-              <% if @current_user.has_permission?('distributors@update_bank_data') or
-                    @current_user.has_permission?('distributors@create')%>
+              <% if @current_user.has_permission?("distributors@update_bank_data") or
+                    @current_user.has_permission?("distributors@create")%>
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :bank_name, "Nombre del banco al que se depositará" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :bank_name, class: 'form-control', onkeyup:"this.value = this.value.toUpperCase();",
+                    <%= f.text_field :bank_name, class: "form-control", onkeyup:"this.value = this.value.toUpperCase();",
                           required: true, maxlength: 50 %>
                   </div>
                 </div>
@@ -201,7 +201,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :bank_account_owner, "Beneficiario" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :bank_account_owner, class: 'form-control',
+                    <%= f.text_field :bank_account_owner, class: "form-control",
                           required: true, maxlength: 99 %>
                   </div>
                 </div>
@@ -209,7 +209,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :bank_account_number, "Número de cuenta" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :bank_account_number, class: 'form-control',
+                    <%= f.text_field :bank_account_number, class: "form-control",
                           required: true, minlength: 5, maxlength: 30 %>
                   </div>
                 </div>
@@ -217,7 +217,7 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :interbank_clabe, "CLABE interbancaria" %></label>
                   <div class="col-sm-10">
-                    <%= f.text_field :interbank_clabe, class: 'form-control',
+                    <%= f.text_field :interbank_clabe, class: "form-control",
                           required: true, minlength: 5, maxlength: 30 %>
                   </div>
                 </div>
@@ -225,8 +225,8 @@
                 <div class="hr-line-dashed"></div>
               <% end # if @actions["UPDATE_BANK_DATA"] # %>
 
-              <% if @current_user.has_permission?('distributors@update_show_address') or
-                    @current_user.has_permission?('distributors@create') %>
+              <% if @current_user.has_permission?("distributors@update_show_address") or
+                    @current_user.has_permission?("distributors@create") %>
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :show_address, "Mostrar domicilio al público" %></label>
                   <div class="col-sm-10">
@@ -237,8 +237,8 @@
                 <div class="hr-line-dashed"></div>
               <% end # if @actions["UPDATE_SHOW_ADDRESS"] # %>
 
-              <% if @current_user.has_permission?('distributors@update_commission') or
-                    @current_user.has_permission?('distributors@create') %>
+              <% if @current_user.has_permission?("distributors@update_commission") or
+                    @current_user.has_permission?("distributors@create") %>
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :commission, "Porcentaje de comisión" %></label>
                   <div class="col-sm-10">
@@ -250,8 +250,8 @@
                 <div class="hr-line-dashed"></div>
               <% end # if @actions["UPDATE_PHOTO"] # %>
 
-              <% if @current_user.has_permission?('distributors@update_photo') or
-                    @current_user.has_permission?('distributors@create') %>
+              <% if @current_user.has_permission?("distributors@update_photo") or
+                    @current_user.has_permission?("distributors@create") %>
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= f.label :photo, "Subir foto" %></label>
                   <div class="col-sm-10">
@@ -278,53 +278,53 @@
 <script type="text/javascript">
   $(document).ready(function () {
     // Init parsley to validate the formularie
-  	$('#distributor_form').parsley();
+  	$("#distributor_form").parsley();
 
     telephone = $("#distributor_telephone");
     cellphone = $("#distributor_cellphone");
 
     if(telephone.val() != ""){
-			cellphone.removeAttr('required');
+			cellphone.removeAttr("required");
 		}else if (cellphone.val() != "") {
-			telephone.removeAttr('required');
+			telephone.removeAttr("required");
 		}
 
-    telephone.on('change', function(){
+    telephone.on("change", function(){
       console.log("telephone");
-      telephone.attr('required', true);
-      cellphone.removeAttr('required')
+      telephone.attr("required", true);
+      cellphone.removeAttr("required")
       if (telephone.val() == ""){
-        cellphone.attr('required', true)
+        cellphone.attr("required", true)
       }
     });
 
-    cellphone.on('change', function(){
+    cellphone.on("change", function(){
       console.log("cellphone");
-      cellphone.attr('required', true);
-      telephone.removeAttr('required')
+      cellphone.attr("required", true);
+      telephone.removeAttr("required")
       if (cellphone.val() == ""){
-        telephone.attr('required', true)
+        telephone.attr("required", true)
       }
     });
 
-    $('#datetimepicker').datetimepicker({
-        locale: 'es',
-        format: 'YYYY-MM-DD',
-        viewMode: 'years',
+    $("#datetimepicker").datetimepicker({
+        locale: "es",
+        format: "YYYY-MM-DD",
+        viewMode: "years",
         icons: {
-            time: 'fa fa-clock-o',
-            date: 'fa fa-calendar',
-            up: 'fa fa-chevron-up',
-            down: 'fa fa-chevron-down',
-            previous: 'fa fa-chevron-left',
-            next: 'fa fa-chevron-right',
-            today: 'fa fa-arrows',
-            clear: 'fa fa-times'
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-chevron-up",
+            down: "fa fa-chevron-down",
+            previous: "fa fa-chevron-left",
+            next: "fa fa-chevron-right",
+            today: "fa fa-arrows",
+            clear: "fa fa-times"
         }
     });
   });
 </script>
 
-<%= stylesheet_link_tag 'bootstrap-datetimepicker.min', media: 'all' %>
-<%= javascript_include_tag 'bootstrap-datetimepicker-custom' %>
-<%= javascript_include_tag 'parsley-custom' %>
+<%= stylesheet_link_tag "bootstrap-datetimepicker.min", media: "all" %>
+<%= javascript_include_tag "bootstrap-datetimepicker-custom" %>
+<%= javascript_include_tag "parsley-custom" %>

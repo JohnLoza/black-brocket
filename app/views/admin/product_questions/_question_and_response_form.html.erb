@@ -9,7 +9,7 @@
   </div-->
   <div class="social-avatar">
     <h3> <%= question.Product.name %> </h3>
-      <%= link_to admin_client_path(client), class: 'pull-left' do %>
+      <%= link_to admin_client_path(client), class: "pull-left" do %>
         <%= image_tag client.avatar_url(:mini) %>
       <% end %>
       <div class="media-body">
@@ -22,17 +22,17 @@
   </div>
   <div class="social-footer">
     <div class="social-comment">
-      <%= image_tag @current_user.avatar_url(:mini), class: 'pull-left' %>
+      <%= image_tag @current_user.avatar_url(:mini), class: "pull-left" %>
       <div class="media-body">
         <%= form_for :prod_answer, remote: true do |f| %>
-        <%= f.text_area :description, class: 'form-control', maxlength: 250,
+        <%= f.text_area :description, class: "form-control", maxlength: 250,
           placeholder: "Contesta esta pregunta...", required: true,
           onkeypress: "return submitOnEnter(event, '.submit-#{question.hash_id}');",
           autocomplete: :off %>
         <%= f.hidden_field :question_id, value: question.hash_id %>
         <%= f.submit "Guardar respuesta", 
           class: "btn btn-primary m-t-sm pull-right submit-#{question.hash_id}",
-          data: { confirm: '¿Estás seguro(a) de tu respuesta?' } %>
+          data: { confirm: "¿Estás seguro(a) de tu respuesta?" } %>
         <% end %>
       </div>
     </div>

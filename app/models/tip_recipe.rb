@@ -18,11 +18,11 @@ class TipRecipe < ApplicationRecord
   private
     def get_embed_link
       return unless self.video.present?
-      return unless self.video.include? 'youtube.com'
-      return if self.video.include? '/embed/'
+      return unless self.video.include? "youtube.com"
+      return if self.video.include? "/embed/"
 
       video_key = self.video.scan(/v=.........../) # get the video key
-      video_key = video_key[0].remove 'v=' # remove the 'v' attribute
+      video_key = video_key[0].remove "v=" # remove the "v" attribute
 
       self.video = "https://www.youtube.com/embed/#{video_key}"
     end

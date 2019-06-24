@@ -1,8 +1,9 @@
 <% if @saved %>
-  $('#distributor_regions').append('<%= escape_javascript( render partial: "region", locals: { city: @city, dist_id: params[:dist_id] } ) %>');
+  $("#distributor_regions").append("<%= escape_javascript( render partial: 'region', 
+    locals: { city: @city, dist_id: params[:dist_id] } ) %>");
 
   // find and remove the element that was added
-  var opts = $('#city_id').find('option');
+  var opts = $("#city_id").find("option");
   for(x=0; x<opts.length; x++){
     if(opts[x].value == "<%= params[:city_id] %>"){
       $(opts[x]).remove();
@@ -10,7 +11,9 @@
     }
   };
 
-  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Zona de distribución agregada'} %>");
+  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', 
+    locals: {message_type: :success, message: 'Zona de distribución agregada'} %>");
 <% else %>
-  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'No elegiste una población o ya esta asignada a este distribuidor'} %>");
+  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', 
+    locals: {message_type: :info, message: 'No elegiste una población o ya esta asignada a este distribuidor'} %>");
 <% end %>

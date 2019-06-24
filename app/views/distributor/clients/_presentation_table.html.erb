@@ -50,21 +50,25 @@
     						<td><%= c.City.name %>, <%= c.City.State.name %></td>
     						<td>(<%=c.City.lada%>) <%= c.telephone %></td>
                 <td>
-                  <%= link_to "<i class='fa fa-pencil'></i> Precios".html_safe,
-                      distributor_client_prices_path(c.hash_id),
-                      class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+                  <%= link_to distributor_client_prices_path(c.hash_id),
+                    class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+                    <i class="fa fa-pencil"></i> Precios
+                  <% end %>
 
-                  <%= link_to "<i class='fa fa-truck'></i> Órdenes".html_safe,
-                      distributor_orders_path(client: c.hash_id),
-                      class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+                  <%= link_to distributor_orders_path(client: c.hash_id),
+                    class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+                    <i class="fa fa-truck"></i> Órdenes
+                  <% end %>
 
-                  <%= link_to "<i class='fa fa-calendar'></i> Visitas".html_safe,
-                      distributor_client_visits_path(c.hash_id),
-                      class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+                  <%= link_to distributor_client_visits_path(c.hash_id),
+                    class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+                    <i class="fa fa-calendar"></i> Visitas
+                  <% end %>
 
-                  <%= link_to "<i class='fa fa-envelope-o'></i> Mensajes".html_safe,
-                      distributor_client_messages_path(c.hash_id),
-                      class: "btn btn-white btn-sm m-b-xs hidden-button" %>
+                  <%= link_to distributor_client_messages_path(c.hash_id),
+                    class: "btn btn-white btn-sm m-b-xs hidden-button" do %>
+                    <i class="fa fa-envelope-o"></i> Mensajes
+                  <% end %>
                 </td>
                 <td><%= c.last_distributor_revision %></td>
                 <td><%= c.last_distributor_visit %></td>
@@ -84,7 +88,7 @@
 
         <script>
             $(document).ready(function() {
-                $('.footable').footable();
+                $(".footable").footable();
             });
         </script>
 

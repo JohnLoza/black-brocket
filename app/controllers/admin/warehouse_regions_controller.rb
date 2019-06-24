@@ -1,14 +1,14 @@
 class Admin::WarehouseRegionsController < AdminController
 
   def index
-    deny_access! and return unless @current_user.has_permission?('warehouses@update_regions')
+    deny_access! and return unless @current_user.has_permission?("warehouses@update_regions")
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     @regions = @warehouse.Regions
     @states = State.where(warehouse_id: nil).order_by_name
   end
 
   def create
-    deny_access! and return unless @current_user.has_permission?('warehouses@update_regions')
+    deny_access! and return unless @current_user.has_permission?("warehouses@update_regions")
 
     @saved = false
     @state = State.find_by!(id: params[:state_id])
@@ -24,7 +24,7 @@ class Admin::WarehouseRegionsController < AdminController
   end
 
   def destroy
-    deny_access! and return unless @current_user.has_permission?('warehouses@update_regions')
+    deny_access! and return unless @current_user.has_permission?("warehouses@update_regions")
 
     @deleted = false
     @state = State.find_by!(id: params[:id])

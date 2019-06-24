@@ -1,10 +1,11 @@
 <% provide(:title, "Productos") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Registrar producto", labels: ['Productos', 'Registrar producto'], links: [admin_products_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Registrar producto", 
+  labels: ["Productos", "Registrar producto"], links: [admin_products_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-	<%= render 'form' %>
+	<%= render "form" %>
   </div>
 </div>
 <br>

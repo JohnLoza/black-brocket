@@ -1,7 +1,7 @@
 class Admin::SiteWorkersController < AdminController
 
   def index
-    deny_access! and return unless @current_user.has_permission_category?('site_workers')
+    deny_access! and return unless @current_user.has_permission_category?("site_workers")
 
     @workers =
       SiteWorker.non_admin.not(@current_user.id).active.order_by_name
@@ -10,7 +10,7 @@ class Admin::SiteWorkersController < AdminController
   end # def index end #
 
   def new
-    deny_access! unless @current_user.has_permission?('site_workers@create')
+    deny_access! unless @current_user.has_permission?("site_workers@create")
 
     @worker = SiteWorker.new
     @states = State.order_by_name
@@ -19,7 +19,7 @@ class Admin::SiteWorkersController < AdminController
   end # def new end #
 
   def create
-    deny_access! unless @current_user.has_permission?('site_workers@create')
+    deny_access! unless @current_user.has_permission?("site_workers@create")
 
     @worker = SiteWorker.new(worker_params)
     @worker.city_id = params[:city_id]
@@ -33,21 +33,21 @@ class Admin::SiteWorkersController < AdminController
       @warehouse_id = params[:site_worker][:warehouse_id]
       @warehouses = Warehouse.active
 
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
+      flash.now[:danger] = "Ocurrió un error al guardar los datos, inténtalo de nuevo por favor."
       render :new
     end
   end # def create end #
 
   def show
-    deny_access! and return unless @current_user.has_permission?('site_workers@show')
+    deny_access! and return unless @current_user.has_permission?("site_workers@show")
 
     @worker = SiteWorker.includes(City: :State).find_by!(hash_id: params[:id])
     deny_access! and return unless current_user_is_admin_or_same_warehouse?(@worker)
   end # def show end #
 
   def edit
-    deny_access! and return unless @current_user.has_permission?('site_workers@update_personal_data') or
-      @current_user.has_permission?('site_workers@update_warehouse')
+    deny_access! and return unless @current_user.has_permission?("site_workers@update_personal_data") or
+      @current_user.has_permission?("site_workers@update_warehouse")
 
     @worker = SiteWorker.find_by!(hash_id: params[:id])
     deny_access! and return unless current_user_is_admin_or_same_warehouse?(@worker)
@@ -61,8 +61,8 @@ class Admin::SiteWorkersController < AdminController
   end # def edit end #
 
   def update
-    deny_access! and return unless @current_user.has_permission?('site_workers@update_personal_data') or
-      @current_user.has_permission?('site_workers@update_warehouse')
+    deny_access! and return unless @current_user.has_permission?("site_workers@update_personal_data") or
+      @current_user.has_permission?("site_workers@update_warehouse")
 
     @worker = SiteWorker.find_by!(hash_id: params[:id])
     deny_access! and return unless current_user_is_admin_or_same_warehouse?(@worker)
@@ -70,33 +70,33 @@ class Admin::SiteWorkersController < AdminController
     @worker.city_id = params[:city_id]
 
     if @worker.update_attributes(worker_params)
-      redirect_to admin_site_workers_path, flash: {success: 'Trabajador actualizado correctamente.' }
+      redirect_to admin_site_workers_path, flash: {success: "Trabajador actualizado correctamente."}
     else
       @warehouse_id = params[:site_worker][:warehouse_id]
       @warehouses = Warehouse.active.order_by_name
       @cities = City.where(state_id: params[:state_id]).order_by_name
       @states = State.order_by_name
 
-      flash.now[:danger] = 'Ocurrió un error al guardar los datos, inténtalo de nuevo por favor.'
+      flash.now[:danger] = "Ocurrió un error al guardar los datos, inténtalo de nuevo por favor."
       render :edit
     end
   end # def update end #
 
   def destroy
-    deny_access! and return unless @current_user.has_permission?('site_workers@delete')
+    deny_access! and return unless @current_user.has_permission?("site_workers@delete")
 
     @worker = SiteWorker.find_by!(hash_id: params[:id])
     deny_access! and return unless current_user_is_admin_or_same_warehouse?(@worker)
 
     if @worker.destroy
-      redirect_to admin_site_workers_path, flash: {success: 'Trabajador eliminado.' }
+      redirect_to admin_site_workers_path, flash: {success: "Trabajador eliminado." }
     else
-      redirect_to admin_site_workers_path, flash: { warning: 'Ocurrió un error al eliminar el trabajador.' }
+      redirect_to admin_site_workers_path, flash: { warning: "Ocurrió un error al eliminar el trabajador." }
     end
   end # def destroy end #
 
   def edit_permissions
-    deny_access! and return unless @current_user.has_permission?('site_workers@update_permissions')
+    deny_access! and return unless @current_user.has_permission?("site_workers@update_permissions")
 
     @worker = SiteWorker.find_by!(hash_id: params[:id])
     deny_access! and return unless current_user_is_admin_or_same_warehouse?(@worker)
@@ -107,7 +107,7 @@ class Admin::SiteWorkersController < AdminController
   end # def edit_permissions end #
 
   def update_permissions
-    deny_access! and return unless @current_user.has_permission?('site_workers@update_permissions')
+    deny_access! and return unless @current_user.has_permission?("site_workers@update_permissions")
 
     @worker = SiteWorker.find_by!(hash_id: params[:id])
     deny_access! and return unless current_user_is_admin_or_same_warehouse?(@worker)
@@ -144,9 +144,9 @@ class Admin::SiteWorkersController < AdminController
     end
 
     def fields_to_search
-      return ['cities.name','states.name','site_workers.name',
-        'site_workers.lastname','site_workers.mother_lastname',
-        'site_workers.hash_id']
+      return ["cities.name","states.name","site_workers.name",
+        "site_workers.lastname","site_workers.mother_lastname",
+        "site_workers.hash_id"]
     end
 
     def current_user_is_admin_or_same_warehouse?(worker)

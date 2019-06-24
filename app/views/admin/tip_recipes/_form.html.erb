@@ -11,12 +11,12 @@
       </div>
 
       <div class="ibox-content">
-        <%= form_for([:admin, @tip], html: {class: 'form-horizontal'}) do |f| %>
-          <%= render partial: '/shared/error_messages', locals:{entity: @tip} %>
+        <%= form_for([:admin, @tip], html: {class: "form-horizontal"}) do |f| %>
+          <%= render partial: "/shared/error_messages", locals:{entity: @tip} %>
           <div class="form-group">
             <label class="col-sm-2 control-label"><%= f.label :title, "Título" %></label>
             <div class="col-sm-10">
-              <%= f.text_field :title, { class: 'form-control', maxlength: 50, required: true } %>
+              <%= f.text_field :title, { class: "form-control", maxlength: 50, required: true } %>
               <span class="help-block m-b-none">Máximo 50 caracteres.</span>
             </div>
           </div>
@@ -31,8 +31,8 @@
           <div class="form-group">
             <label class="col-sm-2 control-label"><%= f.label :video, "Incluir Video de Youtube" %></label>
             <div class="col-sm-10">
-              <%= f.text_field :video, class: 'form-control',
-                placeholder: 'youtube.com/watch?v=6A83BS718GS', maxlength: 50 %>
+              <%= f.text_field :video, class: "form-control",
+                placeholder: "youtube.com/watch?v=6A83BS718GS", maxlength: 50 %>
             </div>
           </div>
 
@@ -40,7 +40,7 @@
             <div class="col-sm-2"></div>
             <div class="col-sm-10">
               <% if @tip.video.present? %>
-                <%= render partial: '/shared/embed_video', locals: {url: @tip.video} %>
+                <%= render partial: "/shared/embed_video", locals: {url: @tip.video} %>
               <% end %>
             </div>
           </div>
@@ -56,7 +56,7 @@
             <div class="col-sm-2"></div>
             <div class="col-sm-10">
               <% if @tip.image.present? %>
-                <%= image_tag @tip.image.url(:thumb), class: 'img-responsive' %>
+                <%= image_tag @tip.image.url(:thumb), class: "img-responsive" %>
               <% end %>
             </div>
           </div>
@@ -77,14 +77,14 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  $('.summernote').summernote({
+  $(".summernote").summernote({
     toolbar: [
-      ['misc', ['undo', 'redo']],
-      ['style', ['style']],
-      ['style', ['bold', 'italic', 'underline', 'clear']],
-      ['para', ['ul', 'ol', 'paragraph']],
-      ['insert', ['link']],
-      ['view', ['codeview']]
+      ["misc", ["undo", "redo"]],
+      ["style", ["style"]],
+      ["style", ["bold", "italic", "underline", "clear"]],
+      ["para", ["ul", "ol", "paragraph"]],
+      ["insert", ["link"]],
+      ["view", ["codeview"]]
     ],
     placeholder: "Escribe aquí...",
     disableDragAndDrop: true,
@@ -94,5 +94,5 @@ $(document).ready(function() {
 });
 </script>
 
-<%= stylesheet_link_tag 'summernote', media: 'all' %>
-<%= javascript_include_tag 'summernote.min' %>
+<%= stylesheet_link_tag "summernote", media: "all" %>
+<%= javascript_include_tag "summernote.min" %>

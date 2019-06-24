@@ -1,5 +1,6 @@
 <% provide(:title, "Búsqueda por lote") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Búsqueda por lote", labels: ['Almacenes', "Búsqueda por lote"], links: [admin_warehouses_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Búsqueda por lote", 
+  labels: ["Almacenes", "Búsqueda por lote"], links: [admin_warehouses_path]} %>
 
 <br>
 <div class="ibox">
@@ -16,7 +17,7 @@
         <div class="form-group">
           <%= label_tag :batch, "Lote a búscar: " %>
           <%= text_field_tag :batch, params[:batch],
-              class: "form-control", maxlenght: 20, placeholder: "Introduce el lote" %>
+            class: "form-control", maxlenght: 20, placeholder: "Introduce el lote" %>
           <%= submit_tag "Búscar", class: "btn btn-white" %>
         </div>
       <% end %>
@@ -75,8 +76,7 @@
             <div class="col-sm-6 col-md-4 col-lg-3">
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <strong>Cliente:</strong> <%= link_to client.username,
-                            admin_client_path(client.hash_id) %>
+                  <strong>Cliente:</strong> <%= link_to client.name, admin_client_path(client.hash_id) %>
                 </div>
                 <div class="panel-body">
                   <p>
@@ -96,8 +96,7 @@
             <div class="col-sm-6 col-md-4 col-lg-3">
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <strong>Cliente:</strong> <%= link_to client.username,
-                            admin_client_path(client.hash_id) %>
+                  <strong>Cliente:</strong> <%= link_to client.name, admin_client_path(client.hash_id) %>
                 </div>
                 <div class="panel-body">
                   <p>

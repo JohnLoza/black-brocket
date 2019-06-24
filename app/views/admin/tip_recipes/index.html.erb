@@ -1,13 +1,13 @@
 <% provide(:title, "Tips") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Tips y Recetas", labels: ['Tips y Recetas']} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Tips y Recetas", labels: ["Tips y Recetas"]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
 
-    <%= render partial: '/shared/admin/header_with_search',
-    locals: {title: 'Lista de Tips y Recetas', search_url: admin_tip_recipes_path,
-      new_permission: 'tips_&_recipes@all', new_url: new_admin_tip_recipe_path } %>
+    <%= render partial: "/shared/admin/header_with_search",
+    locals: {title: "Lista de Tips y Recetas", search_url: admin_tip_recipes_path,
+      new_permission: "tips_&_recipes@all", new_url: new_admin_tip_recipe_path } %>
 
   	<div class="row">
   	  <div class="col-lg-12">
@@ -47,6 +47,6 @@
 
 <script>
 $(document).ready(function() {
-  $('.footable').footable();
+  $(".footable").footable();
 });
 </script>

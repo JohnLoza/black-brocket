@@ -42,6 +42,6 @@ class Warehouse < ApplicationRecord
 
   private
     def generate_hash_id
-      self.hash_id = 'to_be_replaced'
+      self.hash_id = "to_be_replaced"
     end
 end

@@ -1,10 +1,10 @@
 <%= form_for [:client, @client], html: {id: "client_form"} do |f| %>
-	<%= render partial: '/shared/error_messages', locals:{entity: @client} %>
+	<%= render partial: "/shared/error_messages", locals:{entity: @client} %>
 	<div class="col-md-6 pull-right bg-light">
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :name, "Nombre Completo" %>
-				<%= f.text_field :name, class: 'form-control form-control-black', placeholder: "Luz Yenny García Ríos",
+				<%= f.text_field :name, class: "form-control form-control-black", placeholder: "Luz Yenny García Ríos",
 						required: true, minlength: 2, maxlength: 100, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
 				<span class="help-text">Solo se admite letras, espacios y puntos</span>
 			</div>
@@ -13,16 +13,16 @@
 		<div class="row">
 			<div class="col-sm-12 form-group">
 	      <%= f.label :email, "Correo electrónico" %>
-	      <%= f.email_field :email, class: 'form-control form-control-black', placeholder: "john@example.com",
+	      <%= f.email_field :email, class: "form-control form-control-black", placeholder: "john@example.com",
 						required: true, maxlength: 50 %>
 			</div>
 		</div><!-- .row -->
 
-    <div class="form-group <%= 'parsley-error' if @client.errors.any? %>">
+    <div class="form-group <%= "parsley-error" if @client.errors.any? %>">
       <div class="row">
         <div class="col-sm-12 form-group">
           <%= f.label :password, "Contraseña" %>
-          <%= f.password_field :password, placeholder: '********', class: 'form-control form-control-black',
+          <%= f.password_field :password, placeholder: "********", class: "form-control form-control-black",
               required: true, minlength: 6, maxlength: 20 %>
           <span class="help-text">Mínimo 6 caracteres máximo 20.</span>
         </div>
@@ -31,7 +31,7 @@
       <div class="row">
         <div class="col-sm-12 form-group">
           <%= f.label :password_confirmation, "Confirma contraseña" %>
-          <%= f.password_field :password_confirmation, placeholder: '********', class: 'form-control form-control-black',
+          <%= f.password_field :password_confirmation, placeholder: "********", class: "form-control form-control-black",
               required: true, "data-parsley-equalto"=>"#client_password" %>
         </div>
       </div><!-- .row -->
@@ -39,7 +39,7 @@
 			<div class="row">
 				<div class="col-sm-12 form-group">
 					<%= f.label :cellphone, "Teléfono celular a 10 dígitos" %>
-					<%= f.text_field :cellphone, class: 'form-control form-control-black', 
+					<%= f.text_field :cellphone, class: "form-control form-control-black", 
 						placeholder: "000 000 00", minlength: 9, maxlength: 15 %>
 				</div>
 			</div><!-- .row -->
@@ -130,10 +130,10 @@ form a{color: #B39767;}
 <script type="text/javascript">
 	$(document).ready(function(){
 		// Init parsley to validate the formularie
-		$('#client_form').parsley();
+		$("#client_form").parsley();
 	});
 </script>
 
-<%= stylesheet_link_tag 'bootstrap-datetimepicker.min', media: 'all' %>
-<%= javascript_include_tag 'bootstrap-datetimepicker-custom' %>
-<%= javascript_include_tag 'parsley-custom' %>
+<%= stylesheet_link_tag "bootstrap-datetimepicker.min", media: "all" %>
+<%= javascript_include_tag "bootstrap-datetimepicker-custom" %>
+<%= javascript_include_tag "parsley-custom" %>

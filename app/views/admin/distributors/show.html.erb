@@ -1,5 +1,6 @@
 <% provide(:title, "Distribuidores") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del distribuidor", labels: ['Distribuidores', 'Perfil del distribuidor'], links: [admin_distributors_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Perfil del distribuidor", 
+  labels: ["Distribuidores", "Perfil del distribuidor"], links: [admin_distributors_path]} %>
 
 <div class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
@@ -20,7 +21,7 @@
 
 
         <div class="col-md-8">
-          <% if @current_user.has_permission?('distributors@show_personal_data') %>
+          <% if @current_user.has_permission?("distributors@show_personal_data") %>
             <!--Datos del distribuidor-->
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -67,7 +68,7 @@
                           <tr>
                             <td><b>Email:</b></td>
                               <td><%= @distributor.email %></td>
-                            <% if @current_user.has_permission?('distributors@show_commission') %>
+                            <% if @current_user.has_permission?("distributors@show_commission") %>
                               <td><strong>Comisión:</strong></td>
                               <td><%= @distributor.commission %>%</td>
                             <% end %>
@@ -78,7 +79,7 @@
             </div>
           <% end # if @actions["SHOW_PERSONAL_DATA"] end #%>
 
-          <% if @current_user.has_permission?('distributors@show_fiscal_data') %>
+          <% if @current_user.has_permission?("distributors@show_fiscal_data") %>
             <!-- Fiscal Data -->
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -92,7 +93,7 @@
             </div>
           <% end %>
 
-          <% if @current_user.has_permission?('distributors@show_bank_data') %>
+          <% if @current_user.has_permission?("distributors@show_bank_data") %>
             <!-- Fiscal Data -->
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -108,7 +109,7 @@
             </div>
           <% end %>
 
-          <% if @current_user.has_permission?('distributors@show_distribution_regions') %>
+          <% if @current_user.has_permission?("distributors@show_distribution_regions") %>
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Zonas de distribución</h5>

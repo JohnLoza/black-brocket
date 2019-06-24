@@ -1,15 +1,15 @@
 class Admin::MexicoDbController < AdminController
 
   def index
-    deny_access! and return unless @current_user.has_permission_category?('mexico_db')
+    deny_access! and return unless @current_user.has_permission_category?("mexico_db")
 
     @states = State.order_by_name
   end
 
   def state
-    unless @current_user.has_permission?('mexico_db@create') or
-           @current_user.has_permission?('mexico_db@update_city_name') or
-           @current_user.has_permission?('mexico_db@update_city_lada')
+    unless @current_user.has_permission?("mexico_db@create") or
+      @current_user.has_permission?("mexico_db@update_city_name") or
+      @current_user.has_permission?("mexico_db@update_city_lada")
       deny_access! and return
     end
 
@@ -18,7 +18,7 @@ class Admin::MexicoDbController < AdminController
   end
 
   def update_state_lada
-    deny_access! and return unless @current_user.has_permission?('mexico_db@update_state_lada')
+    deny_access! and return unless @current_user.has_permission?("mexico_db@update_state_lada")
 
     @state = State.find_by!(id: params[:id])
     @state.Cities.update_all(lada: params[:state][:lada])
@@ -28,8 +28,8 @@ class Admin::MexicoDbController < AdminController
   end
 
   def update_city
-    unless @current_user.has_permission?('mexico_db@update_city_name') or
-           @current_user.has_permission?('mexico_db@update_city_lada')
+    unless @current_user.has_permission?("mexico_db@update_city_name") or
+      @current_user.has_permission?("mexico_db@update_city_lada")
       deny_access! and return
     end
 
@@ -42,7 +42,7 @@ class Admin::MexicoDbController < AdminController
   end
 
   def create_city
-    deny_access! and return unless @current_user.has_permission?('mexico_db@create')
+    deny_access! and return unless @current_user.has_permission?("mexico_db@create")
 
     city = City.new(new_city_params)
     if city.save

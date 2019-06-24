@@ -10,7 +10,7 @@ class Distributor < ApplicationRecord
 
   belongs_to :City, foreign_key: :city_id
   has_many :Orders
-  has_many :Regions, class_name: 'City', foreign_key: :distributor_id
+  has_many :Regions, class_name: "City", foreign_key: :distributor_id
 
   has_many :DistributorVisits
   has_many :ClientMessages, class_name: :ClientDistributorComment, foreign_key: :distributor_id
@@ -80,6 +80,6 @@ class Distributor < ApplicationRecord
 
   private
     def generate_hash_id
-      self.hash_id = 'to_be_replaced'
+      self.hash_id = "to_be_replaced"
     end
 end

@@ -1,7 +1,7 @@
 class Utils
-  SPLITTER = ' | '.freeze
-  SEPARATOR = ', '.freeze
-  REGEXP_SPLITTER = '|'.freeze
+  SPLITTER = " | ".freeze
+  SEPARATOR = ", ".freeze
+  REGEXP_SPLITTER = "|".freeze
 
   # Returns the hash digest of the given string.
     def self.digest(string)

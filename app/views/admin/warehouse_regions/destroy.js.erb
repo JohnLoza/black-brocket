@@ -1,6 +1,8 @@
 <% if @deleted %>
-  $('#<%= params[:id] %>').remove();
-  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Zona de distribución eliminada.'} %>");
+  $("#<%= params[:id] %>").remove();
+  $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+    locals: {message_type: :success, message: "Zona de distribución eliminada."} %>`);
 <% else %>
-  $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :info, message: 'Ocurrió un error al eliminar la zona, si este persiste contacte al administrador.'} %>");
+  $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+    locals: {message_type: :info, message: "Ocurrió un error al eliminar la zona"} %>`);
 <% end %>

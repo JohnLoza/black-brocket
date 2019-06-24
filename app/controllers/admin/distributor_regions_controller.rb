@@ -1,7 +1,7 @@
 class Admin::DistributorRegionsController < AdminController
 
   def index
-    deny_access! and return unless @current_user.has_permission?('distributors@update_distribution_regions')
+    deny_access! and return unless @current_user.has_permission?("distributors@update_distribution_regions")
 
     @distributor = Distributor.find_by!(hash_id: params[:dist_id])
 
@@ -11,7 +11,7 @@ class Admin::DistributorRegionsController < AdminController
   end
 
   def create
-    deny_access! and return unless @current_user.has_permission?('distributors@update_distribution_regions')
+    deny_access! and return unless @current_user.has_permission?("distributors@update_distribution_regions")
     @saved = false
     @city = City.find_by!(id: params[:city_id])
 
@@ -26,7 +26,7 @@ class Admin::DistributorRegionsController < AdminController
   end
 
   def destroy
-    deny_access! and return unless @current_user.has_permission?('distributors@update_distribution_regions')
+    deny_access! and return unless @current_user.has_permission?("distributors@update_distribution_regions")
 
     @deleted = false
     @city = City.find_by!(id: params[:id])

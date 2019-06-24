@@ -10,7 +10,7 @@
    </div>
 
   <div class="show-tips-container">
-    <%= render 'landing_page_form' %>
+    <%= render "landing_page_form" %>
   </div>
 </div>
 
@@ -21,5 +21,5 @@
 <% else %>
   <% url = image.photo.url %>
 <% end %>
-body { background: url('<%= url %>') center center / cover no-repeat; }
+body { background: url("<%= url %>") center center / cover no-repeat; }
 </style>

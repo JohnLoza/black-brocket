@@ -10,19 +10,19 @@
           </div>
         </div>
         <div class="ibox-content">
-          <%= form_for([:admin, @warehouse, @parcel, @price], html: {class: 'form-horizontal'}) do |f| %>
-          <%= render partial: '/shared/error_messages', locals:{entity: @price} %>
+          <%= form_for([:admin, @warehouse, @parcel, @price], html: {class: "form-horizontal"}) do |f| %>
+          <%= render partial: "/shared/error_messages", locals:{entity: @price} %>
             <div class="form-group">
               <label class="col-sm-2 control-label"><%= f.label :max_weight, "Peso máximo en Kilogramos" %></label>
               <div class="col-sm-10">
                 <%= f.number_field :max_weight, value: @price.max_weight/1000, 
-                  class: 'form-control', placeholder: "10", min: 1, max: 999, required: true %>
+                  class: "form-control", placeholder: "10", min: 1, max: 999, required: true %>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-2 control-label"><%= f.label :price, "Precio" %></label>
               <div class="col-sm-10">
-                <%= f.number_field :price, class: 'form-control', placeholder: "249.99",
+                <%= f.number_field :price, class: "form-control", placeholder: "249.99",
                   min: 0.11, max: 999999, step: 0.01, required: true %>
               </div>
             </div>

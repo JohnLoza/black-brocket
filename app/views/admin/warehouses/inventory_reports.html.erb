@@ -1,5 +1,6 @@
 <% provide(:title, "Reportes de Inventario") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Reportes de Inventario", labels: ['Almacenes', 'Reportes de Inventario'], links: [admin_warehouses_path]} %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Reportes de Inventario", 
+  labels: ["Almacenes", "Reportes de Inventario"], links: [admin_warehouses_path]} %>
 
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
@@ -44,7 +45,7 @@
                         <%= content_tag :td, report.description %>
                         <%= content_tag :td, l(report.created_at, format: :short) %>
                         <td>
-                          <%= link_to "Ver detalles", admin_inventory_report_path(params[:warehouse_id], report), class: 'btn btn-sm btn-white' %>
+                          <%= link_to "Ver detalles", admin_inventory_report_path(params[:warehouse_id], report), class: "btn btn-sm btn-white" %>
 
                           <% if report.done %>
                             <i class="fa fa-check fa-2x" style="color: rgb(139, 195, 74)">
@@ -66,7 +67,7 @@
 
               <script>
                   $(document).ready(function() {
-                      $('.footable').footable();
+                      $(".footable").footable();
                   });
               </script>
 

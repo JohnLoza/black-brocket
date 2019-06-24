@@ -1,15 +1,14 @@
 class Admin::DistributorWorkController < AdminController
 
   def index
-    deny_access! and return unless @current_user.has_permission_category?('distributor_work')
+    deny_access! and return unless @current_user.has_permission_category?("distributor_work")
 
     @clients = Client.joins(:City).active.where(cities: {distributor_id: nil})
-            .where(worker_id: nil).includes(City: :State)
-            .paginate(page: params[:page], per_page: 25)
+      .where(worker_id: nil).includes(City: :State).paginate(page: params[:page], per_page: 25)
   end
 
   def take_client
-    deny_access! and return unless @current_user.has_permission_category?('distributor_work')
+    deny_access! and return unless @current_user.has_permission_category?("distributor_work")
 
     client = Client.find_by!(hash_id: params[:id])
     deny_access! and return unless client.worker_id.nil?
@@ -20,13 +19,13 @@ class Admin::DistributorWorkController < AdminController
   end
 
   def my_clients
-    deny_access! and return unless @current_user.has_permission_category?('distributor_work')
+    deny_access! and return unless @current_user.has_permission_category?("distributor_work")
 
     @clients = @current_user.Clients
   end
 
   def prices
-    deny_access! and return unless @current_user.has_permission_category?('distributor_work')
+    deny_access! and return unless @current_user.has_permission_category?("distributor_work")
 
     @client = Client.find_by!(hash_id: params[:id])
 
@@ -36,7 +35,7 @@ class Admin::DistributorWorkController < AdminController
   end
 
   def create_prices
-    deny_access! and return unless @current_user.has_permission_category?('distributor_work')
+    deny_access! and return unless @current_user.has_permission_category?("distributor_work")
     @client = Client.find_by!(hash_id: params[:id])
 
     ActiveRecord::Base.transaction do
@@ -54,7 +53,7 @@ class Admin::DistributorWorkController < AdminController
   end
 
   def messages
-    deny_access! and return unless @current_user.has_permission_category?('distributor_work')
+    deny_access! and return unless @current_user.has_permission_category?("distributor_work")
     @client = Client.find_by!(hash_id: params[:id])
 
     if params[:notification]
@@ -76,7 +75,7 @@ class Admin::DistributorWorkController < AdminController
   end
 
   def create_message
-    deny_access! and return unless @current_user.has_permission_category?('distributor_work')
+    deny_access! and return unless @current_user.has_permission_category?("distributor_work")
     @client = Client.find_by!(hash_id: params[:id])
 
     @message = ClientDistributorComment.create(client_id: @client.id,
@@ -94,14 +93,14 @@ class Admin::DistributorWorkController < AdminController
   end
 
   def orders
-    deny_access! and return unless @current_user.has_permission_category?('distributor_work')
+    deny_access! and return unless @current_user.has_permission_category?("distributor_work")
 
     @orders = Order.joins(:Client).where(clients: {worker_id: @current_user.id})
       .order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 
   def transfer_client
-    deny_access! and return unless @current_user.has_permission_category?('distributor_work')
+    deny_access! and return unless @current_user.has_permission_category?("distributor_work")
     client = Client.find_by!(hash_id: params[:id])
     deny_access! and return unless client.worker_id == @current_user.id
 

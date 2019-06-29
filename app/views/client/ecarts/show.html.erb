@@ -93,19 +93,18 @@
         </div>
       </div>
   </div>
+
+  <%= form_tag client_ecart_update_quantity_path(@current_user), method: :put,
+    remote: true, id: "update_price_form", style: "visibility: hidden;" do %>
+    <%= text_field_tag :product, nil %>
+    <%= number_field_tag :new_quantity, nil, min: 1, step: 1 %>
+    <%= number_field_tag :current_existence, nil, step: 1 %>
+  <% end %>
+  <i id="wholesale" class="hidden"><%= @warehouse.wholesale %></i>
+  <i id="shipping_cost_is_present" class="hidden">NO</i>
 <% else %>
   <%= render partial: "empty_cart" %>
 <% end %>
-
-<%= form_tag client_ecart_update_quantity_path(@current_user), method: :put,
-  remote: true, id: "update_price_form", style: "visibility: hidden;" do %>
-  <%= text_field_tag :product, nil %>
-  <%= number_field_tag :new_quantity, nil, min: 1, step: 1 %>
-  <%= number_field_tag :current_existence, nil, step: 1 %>
-<% end %>
-
-<i id="wholesale" class="hidden"><%= @warehouse.wholesale %></i>
-<i id="shipping_cost_is_present" class="hidden">NO</i>
 
 <style>
   h4{ margin-bottom: 2em; }

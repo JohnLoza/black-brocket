@@ -9,9 +9,9 @@
       <% if !params[:from_date].blank? and !params[:to_date].blank? %>
         <p class="text-center" style="font_size: 1.5em;">
           Ventas de productos desde
-          <strong><%= l(Date.parse(params[:from_date]), format: :long) %></strong>
+          <b><%= l(Date.parse(params[:from_date]), format: :long) %></b>
           Hasta
-          <strong><%= l(Date.parse(params[:to_date]), format: :long) %></strong>
+          <b><%= l(Date.parse(params[:to_date]), format: :long) %></b>
         </p>
       <% else %>
         <h3 class="text-center">Ventas de toda la historia</h3><br>

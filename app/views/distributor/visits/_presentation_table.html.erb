@@ -6,10 +6,10 @@
               method: :delete, data: { confirm: "Seguro(a) de cancelar su visita?" } do %>
               <i class="fa fa-trash fa-3x" style="color: #F44336;"></i>
             <% end if v.client_recognizes_visit.nil? %>
-            <h3><strong>Fecha de visita</strong></h3>
+            <h3><b>Fecha de visita</b></h3>
             <p><i class="fa fa-calendar"></i> <%=l(v.visit_date, format: :long)%></p>
             <address>
-                <strong>Visita reconocida por el cliente:</strong>
+                <b>Visita reconocida por el cliente:</b>
                 <% if v.client_recognizes_visit %>
                   <i class="fa fa-check fa-2x" style="color: #8BC34A;"></i>
                 <% elsif v.client_recognizes_visit == false %>

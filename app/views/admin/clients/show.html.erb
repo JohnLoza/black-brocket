@@ -16,7 +16,7 @@
         					<%= image_tag(image, { class: "img-responsive full-width" }) %>
                 </div>
                 <div class="ibox-content profile-content">
-                    <h4><strong><%= @client.name %></strong></h4>
+                    <h4><b><%= @client.name %></b></h4>
 
                     <% if @client.worker_id.nil? %>
 
@@ -56,61 +56,61 @@
                   <div class="table-responsive">
                       <table class="table table-hover">
                         <tr>
-                          <td><strong>Clave:</strong></td>
+                          <td><b>Clave:</b></td>
                           <td><%= @client.hash_id %></td>
-                          <!--td><strong>Fecha nacimiento:</strong></td>
+                          <!--td><b>Fecha nacimiento:</b></td>
                           <td><%#= l(@client.birthday, format: :long) if @client.birthday %></td-->
                         </tr>
                         <tr>
-                            <!--td><strong>Nombre comercial o de usuario:</strong></td>
+                            <!--td><b>Nombre comercial o de usuario:</b></td>
                             <td><%#= @client.username %></td-->
-                            <td><strong>Nombre:</strong></td>
+                            <td><b>Nombre:</b></td>
                             <td><%= @client.name %></td>
                         </tr>
                         <!--tr>
-                            <td><strong>Apellido paterno:</strong></td>
+                            <td><b>Apellido paterno:</b></td>
                             <td><%#= @client.lastname %></td>
-                            <td><strong>Apellido materno:</strong></td>
+                            <td><b>Apellido materno:</b></td>
                             <td><%#= @client.mother_lastname %></td>
                         </tr-->
                         <tr>
-                            <td><strong>Población:</strong></td>
+                            <td><b>Población:</b></td>
                             <td><%= @client.City.name %></td>
-                            <td><strong>Estado:</strong></td>
+                            <td><b>Estado:</b></td>
                             <td><%= @client.City.State.name %></td>
                         </tr>
                         <tr>
-                            <td><strong>Colonia:</strong></td>
+                            <td><b>Colonia:</b></td>
                             <td><%= @client.col %></td>
-                            <td><strong>Calle:</strong></td>
+                            <td><b>Calle:</b></td>
                             <td><%= @client.street %></td>
                         </tr>
                         <tr>
-                          <td><strong>Núm ext:</strong></td>
+                          <td><b>Núm ext:</b></td>
                           <td><%= @client.extnumber %></td>
-                          <td><strong>Núm int:</strong></td>
+                          <td><b>Núm int:</b></td>
                           <td><%= @client.intnumber %></td>
                         </tr>
                         <tr>
-                          <td><strong>CP:</strong></td>
+                          <td><b>CP:</b></td>
                           <td><%= @client.cp %></td>
-                          <td><strong>Entre calles:</strong></td>
+                          <td><b>Entre calles:</b></td>
                           <td><%= @client.street_ref1 %> y <%= @client.street_ref2 %></td>
                         </tr>
                         <tr>
-                          <td><strong>Teléfono:</strong></td>
+                          <td><b>Teléfono:</b></td>
                           <td>(<%=@client.City.lada%>) <%= @client.telephone %></td>
-                          <td><strong>Celular:</strong></td>
+                          <td><b>Celular:</b></td>
                           <td><%= @client.cellphone %></td>
                         </tr>
                         <tr>
-                          <td><strong>Correo electrónico:</strong></td>
+                          <td><b>Correo electrónico:</b></td>
                           <td colspan="3"><%= @client.email %></td>
                         </tr>
                         <tr>
-                          <td><strong>Fecha de creación:</strong></td>
+                          <td><b>Fecha de creación:</b></td>
                           <td><%= l(@client.created_at, format: :long) %></td>
-                          <td><strong>Última modificación:</strong></td>
+                          <td><b>Última modificación:</b></td>
                           <td><%= l(@client.updated_at, format: :long) %></td>
                         </tr>
                       </table>
@@ -143,19 +143,19 @@
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <tr>
-                              <td><strong>Clave:</strong></td>
+                              <td><b>Clave:</b></td>
                               <td colspan="3"><%= @fiscal_data.hash_id %></td>
                             </tr>
                             <tr>
-                                <td><strong>Nombre:</strong></td>
+                                <td><b>Nombre:</b></td>
                                 <td><%= @fiscal_data.name %> <%= @fiscal_data.lastname %> <%= @fiscal_data.mother_lastname %></td>
                             </tr>
                             <tr>
-                                <td><strong>RFC:</strong></td>
+                                <td><b>RFC:</b></td>
                                 <td><%= @fiscal_data.rfc %></td>
                             </tr>
                             <tr>
-                                <td><strong>Domicilio:</strong></td>
+                                <td><b>Domicilio:</b></td>
                                 <td>
                                   <%= @fiscal_data.street %>
                                     #<%=@fiscal_data.extnumber%>(<%=@fiscal_data.intnumber%>),

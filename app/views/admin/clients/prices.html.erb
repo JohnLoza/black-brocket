@@ -38,7 +38,7 @@
               <td class="warning">
               <% @prices.each do |price| %>
                 <% if price.product_id == p.id %>
-                  <strong>$ <%=price.client_price%></strong>
+                  <b>$ <%=price.client_price%></b>
                   <% break %>
                 <% end %>
               <% end %>

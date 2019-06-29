@@ -21,40 +21,40 @@
             <div class="table-responsive">
               <table class="table">
                 <tr>
-                  <td><strong>Clave:</strong></td>
+                  <td><b>Clave:</b></td>
                   <td><%= @worker.hash_id %></td>
-                  <td><strong>Fecha nacimiento:</strong></td>
+                  <td><b>Fecha nacimiento:</b></td>
                   <td><%= l(@worker.birthday, format: :long) if @worker.birthday %></td>
                 </tr>
                 <tr>
-                  <td><strong>Nombre:</strong></td>
+                  <td><b>Nombre:</b></td>
                   <%= content_tag(:td, @worker.full_name, col_span: 3) %>
                 </tr>
                 <tr>
-                  <td><strong>Ubicación:</strong></td>
+                  <td><b>Ubicación:</b></td>
                   <%= content_tag(:td, @worker.location) %>
-                  <td><strong>Dirección:</strong></td>
+                  <td><b>Dirección:</b></td>
                   <td><%= @worker.address %></td>
                 </tr>
                 <tr>
-                  <td><strong>Teléfono:</strong></td>
+                  <td><b>Teléfono:</b></td>
                   <%= content_tag(:td, @worker.telephone_with_lada) %>
-                  <td><strong>Teléfono celular:</strong></td>
+                  <td><b>Teléfono celular:</b></td>
                   <td><%= @worker.cellphone %></td>
                   <tr>
-                    <td><strong>RFC:</strong></td>
+                    <td><b>RFC:</b></td>
                     <td><%= @worker.rfc %></td>
-                    <td><strong>NSS:</strong></td>
+                    <td><b>NSS:</b></td>
                     <td><%= @worker.nss %></td>
                   </tr>
                   <tr>
-                    <td><strong>Fecha de creación:</strong></td>
+                    <td><b>Fecha de creación:</b></td>
                     <td><%= l(@worker.created_at, format: :long) %></td>
-                    <td><strong>Última modificación:</strong></td>
+                    <td><b>Última modificación:</b></td>
                     <td><%= l(@worker.updated_at, format: :long) %></td>
                   </tr>
                   <tr>
-                    <td><strong>Email:</strong></td>
+                    <td><b>Email:</b></td>
                     <td colspan="3"><%= @worker.email %></td>
                   </tr>
                 </table>

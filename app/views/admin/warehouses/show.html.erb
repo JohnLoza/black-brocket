@@ -15,7 +15,7 @@
         					<%= image_tag("warehouse_image_small.jpg", { class: "img-responsive full-width" }) %>
                 </div>
                 <div class="ibox-content profile-content">
-                    <h4><strong><%= @warehouse.name %></strong></h4>
+                    <h4><b><%= @warehouse.name %></b></h4>
                 </div>
             </div>
         </div>
@@ -38,25 +38,25 @@
                   <div class="table-responsive">
                       <table class="table table-hover">
                         <tr>
-                          <td><strong>Clave:</strong></td>
+                          <td><b>Clave:</b></td>
                           <td><%= @warehouse.hash_id %></td>
                         </tr>
                         <tr>
-                            <td><strong>Ubicación:</strong></td>
+                            <td><b>Ubicación:</b></td>
                             <td><%= @warehouse.location %></td>
                         </tr>
                         <tr>
-                          <td><strong>Dirección:</strong></td>
+                          <td><b>Dirección:</b></td>
                           <td><%= @warehouse.address %></td>
                         </tr>
                         <tr>
-                            <td><strong>Teléfono:</strong></td>
+                            <td><b>Teléfono:</b></td>
                             <td><%= @warehouse.telephone_with_lada %></td>
                         </tr>
                         <tr>
-                          <td><strong>Fecha de creación:</strong></td>
+                          <td><b>Fecha de creación:</b></td>
                           <td><%= l(@warehouse.created_at, format: :long) %></td>
-                          <td><strong>Última modificación:</strong></td>
+                          <td><b>Última modificación:</b></td>
                           <td><%= l(@warehouse.updated_at, format: :long) %></td>
                         </tr>
                       </table>

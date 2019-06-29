@@ -51,13 +51,13 @@
           <% if !@order.blank? %>
             <%= render partial: "order_search", locals: {orders: [@order], totals: false} %>
           <% else %>
-            <tr><td colspan="9"><strong>FACTURAS NO REQUERIDAS POR CLIENTE</strong></td></tr>
+            <tr><td colspan="9"><b>FACTURAS NO REQUERIDAS POR CLIENTE</b></td></tr>
             <%= render partial: "order_search", locals: {orders: @no_invoice_required_orders, totals: true} %>
 
-            <tr><td colspan="9"><strong>FACTURAS REQUERIDAS</strong></td></tr>
+            <tr><td colspan="9"><b>FACTURAS REQUERIDAS</b></td></tr>
             <%= render partial: "order_search", locals: {orders:   @invoice_required_orders, totals: true} %>
 
-            <tr><td colspan="9"><strong>PEDIDOS PAGADOS POR ENVIAR</strong></td></tr>
+            <tr><td colspan="9"><b>PEDIDOS PAGADOS POR ENVIAR</b></td></tr>
             <%= render partial: "order_search", locals: {orders: @orders_to_be_sent, totals: true} %>
 
             <tr style="background-color: #42A5F5; color: #fefefe;">
@@ -78,7 +78,7 @@
               </td>
             </tr>
 
-            <tr><td colspan="9"><strong>PEDIDOS POR PAGAR</strong></td></tr>
+            <tr><td colspan="9"><b>PEDIDOS POR PAGAR</b></td></tr>
             <%= render partial: "order_search", locals: {orders: @orders_to_be_paid, totals: false} %>
           <% end %>
 

@@ -8,7 +8,7 @@
     <% elsif !tip_recipe.image.blank? %>
       <%= image_tag tip_recipe.image.url(:thumb) %>
     <% else %>
-      <strong>Sin foto</strong>
+      <b>Sin foto</b>
     <% end %>
   </td>
   <td><%= tip_recipe.title %></td>

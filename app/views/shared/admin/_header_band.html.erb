@@ -7,7 +7,7 @@
 
        	  <% labels.each.with_index do |label, index| %>
        	  	<% if index == labels.size - 1 %>
-       	  		<li><strong><%= link_to label, nil %></strong></li>
+       	  		<li><b><%= link_to label, nil %></b></li>
        	  	<% else %>
        	  	  <li><%= link_to label, links[index] %></li>
        	  	<% end %>

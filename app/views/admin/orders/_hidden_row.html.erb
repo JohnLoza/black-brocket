@@ -1,10 +1,10 @@
 <% if o.parcel_id and o.parcel_id != 0 %>
-  <p>Paquetería: <strong><%= o.Parcel.parcel_name %></strong></p>
+  <p>Paquetería: <b><%= o.Parcel.parcel_name %></b></p>
 <% end %>
-<p>Guías: <strong><%= o.guides %></strong></p>
+<p>Guías: <b><%= o.guides %></b></p>
 
 <% if o.tracking_code.present? %>
-  <p>Código de rastreo: <strong><%= o.tracking_code %></strong></p>
+  <p>Código de rastreo: <b><%= o.tracking_code %></b></p>
 <% end  %>
 
 <% if o.invoice_folio.nil? and @current_user.has_permission?('orders@save_invoice_folio') and 
@@ -19,7 +19,7 @@
 <% end %>
 
 <% if o.invoice_folio.present? %>
-  <p>Folio de factura: <strong><%= o.invoice_folio %></strong></p>
+  <p>Folio de factura: <b><%= o.invoice_folio %></b></p>
 <% end %>
 
 <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>

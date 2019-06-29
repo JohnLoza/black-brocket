@@ -1,8 +1,8 @@
 <div id="<%=product_key%>" class="col-lg-3 col-md-4">
   <div class="hr-line-solid-light"></div>
-  <p><strong>Cantidad:</strong> <%=product["quantity"]%></p>
-  <p><strong>Lote:</strong> <%=product["batch"]%></p>
-  <p><strong>Caducidad:</strong> <%=product["expiration_date"]%></p>
+  <p><b>Cantidad:</b> <%=product["quantity"]%></p>
+  <p><b>Lote:</b> <%=product["batch"]%></p>
+  <p><b>Caducidad:</b> <%=product["expiration_date"]%></p>
   <%= link_to admin_discard_shipment_preparation_path(params[:warehouse_id], product_key), 
     method: :delete, class: "btn btn-danger btn-sm", remote: true,
     data: {confirm: "Seguro(a) de eliminar este lote de los preparativos"} do %>

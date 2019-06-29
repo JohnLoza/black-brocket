@@ -25,8 +25,8 @@
       <% if !@products_in_warehouse.nil? and @products_in_warehouse.any? %>
       <div class="hr-line-dashed"></div>
 
-      <h3>Nombre del producto: <strong><%= @products_in_warehouse[0].Product.name %></strong></h3>
-      <p><strong>Fecha de caducidad:</strong>  <i class="fa fa-calendar"></i> <%= @products_in_warehouse[0].expiration_date %></p>
+      <h3>Nombre del producto: <b><%= @products_in_warehouse[0].Product.name %></b></h3>
+      <p><b>Fecha de caducidad:</b>  <i class="fa fa-calendar"></i> <%= @products_in_warehouse[0].expiration_date %></p>
       <%= form_for(:product_qr, url: admin_print_qr_path, method: :post, html: {target: "_blank"}) do |f| %>
         <%= f.hidden_field :warehouse, value: @products_in_warehouse[0].Warehouse.hash_id %>
         <%= f.hidden_field :product, value: @products_in_warehouse[0].Product.hash_id %>
@@ -37,72 +37,72 @@
       <% end %><br>
 
       <address>
-        <strong>Productos en almacén:</strong><br><br>
+        <b>Productos en almacén:</b><br><br>
         <div class="row">
           <% @products_in_warehouse.each do |p_in_w| %>
             <div class="col-md-12">
               <div class="panel panel-success">
                 <div class="panel-heading">
-                  <i class="fa fa-cubes"></i> <strong>Almacén:</strong> <%= p_in_w.Warehouse.name %>
+                  <i class="fa fa-cubes"></i> <b>Almacén:</b> <%= p_in_w.Warehouse.name %>
                 </div>
                 <div class="panel-body">
-                    <p><strong>Cantidad:</strong> <%= p_in_w.existence %></p>
+                    <p><b>Cantidad:</b> <%= p_in_w.existence %></p>
                 </div>
               </div>
             </div>
           <% end %>
         </div>
 
-        <strong>Reportes de inventario</strong><br><br>
+        <b>Reportes de inventario</b><br><br>
         <div class="row">
           <% @inventory_reports.each do |report| %>
             <div class="col-sm-6 col-md-4 col-lg-3">
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <strong>Emitió reporte:</strong> <%= link_to report.Worker.name, admin_site_worker_path(report.Worker) %>
+                  <b>Emitió reporte:</b> <%= link_to report.Worker.name, admin_site_worker_path(report.Worker) %>
                 </div>
                 <div class="panel-body">
-                  <p><strong>Descripción:</strong> <%= report.description %></p>
+                  <p><b>Descripción:</b> <%= report.description %></p>
                 </div>
               </div>
             </div>
           <% end %>
         </div>
 
-        <strong>Productos preparados para enviar al cliente:</strong><br><br>
+        <b>Productos preparados para enviar al cliente:</b><br><br>
         <div class="row">
           <% @products_to_ship.each do |ps| %>
             <% client = ps.Order.Client %>
             <div class="col-sm-6 col-md-4 col-lg-3">
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <strong>Cliente:</strong> <%= link_to client.name, admin_client_path(client.hash_id) %>
+                  <b>Cliente:</b> <%= link_to client.name, admin_client_path(client.hash_id) %>
                 </div>
                 <div class="panel-body">
                   <p>
-                    <strong>Referencia: </strong> <%= ps.Order.hash_id %>
+                    <b>Referencia: </b> <%= ps.Order.hash_id %>
                   </p>
-                  <p><strong>Cantidad:</strong> <%= ps.quantity %></p>
+                  <p><b>Cantidad:</b> <%= ps.quantity %></p>
                 </div>
               </div>
             </div>
           <% end %>
         </div>
 
-        <strong>Productos enviados a clientes:</strong><br><br>
+        <b>Productos enviados a clientes:</b><br><br>
         <div class="row">
           <% @products_shipped.each do |ps| %>
             <% client = ps.Order.Client %>
             <div class="col-sm-6 col-md-4 col-lg-3">
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <strong>Cliente:</strong> <%= link_to client.name, admin_client_path(client.hash_id) %>
+                  <b>Cliente:</b> <%= link_to client.name, admin_client_path(client.hash_id) %>
                 </div>
                 <div class="panel-body">
                   <p>
-                    <strong>Referencia: </strong> <%= ps.Order.hash_id %>
+                    <b>Referencia: </b> <%= ps.Order.hash_id %>
                   </p>
-                  <p><strong>Cantidad:</strong> <%= ps.quantity %></p>
+                  <p><b>Cantidad:</b> <%= ps.quantity %></p>
                 </div>
               </div>
             </div>

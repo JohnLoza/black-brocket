@@ -4,7 +4,7 @@
 <h3>Inventario del almacén <%=@warehouse.name%></h3>
 <% @products_in_stock.each do |ps| %>
   <p style="font-size: 12px;">
-    <b style="font-size: 14px;">Nombre del producto: <%= ps.Product.name %></strong><br>
+    <b style="font-size: 14px;">Nombre del producto: <%= ps.Product.name %></b><br>
       <% total = 0 %>
       Disponible para venta: <%= ps.existence %> |
       <% total += ps.existence %>

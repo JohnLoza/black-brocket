@@ -11,22 +11,22 @@
 				<div class="ibox-content" style="display: block;">
 						<div class="row">
 							<div class="col-sm-6 b-r margin-bot-resp">
-								<h3 class="m-t-none m-b"><strong>Almacén:</strong> <%= @warehouse.name %></h3>
+								<h3 class="m-t-none m-b"><b>Almacén:</b> <%= @warehouse.name %></h3>
 								<table>
 									<tr>
-										<td class="table-padd"><strong><i class="fa fa-key"></i> Identificador:</strong></td>
+										<td class="table-padd"><b><i class="fa fa-key"></i> Identificador:</b></td>
 										<td><%= @warehouse.hash_id %></td>
 									</tr>
 									<tr>
-										<td><strong><i class="fa fa-home"></i> Dirección:</strong></td>
+										<td><b><i class="fa fa-home"></i> Dirección:</b></td>
 										<td><%= @warehouse.address %></td>
 									</tr>
 									<tr>
-										<td><strong><i class="fa fa-phone"></i> Teléfono:</strong></td>
+										<td><b><i class="fa fa-phone"></i> Teléfono:</b></td>
 										<td><%= @warehouse.telephone_with_lada %></td>
 									</tr>
 									<tr>
-										<td><strong><i class="fa fa-calendar-o"></i> Creado el:</strong></td>
+										<td><b><i class="fa fa-calendar-o"></i> Creado el:</b></td>
 										<td><%= l(@warehouse.created_at, format: :long) %></td>
 									</tr>
 								</table>

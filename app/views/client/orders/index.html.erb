@@ -10,7 +10,7 @@
   <div id="<%=o.hash_id%>" class="order-box">
     <div class="row order-box-title">
       <div class="col-xs-9">
-        <strong>Referencia:</strong> <span><%= o.hash_id %></span>
+        <b>Referencia:</b> <span><%= o.hash_id %></span>
       </div>
       <div class="col-xs-3 text-right">
         <% if o.state == "WAITING_FOR_PAYMENT" or o.state == "LOCAL" %>
@@ -24,7 +24,7 @@
 
     <div class="row order-box-info">
       <div class="col-sm-3 order-info">
-        <strong>Stado:</strong>
+        <b>Stado:</b>
         <% case o.state %>
         <%when "ORDER_CANCELED"%>
           <label class="label label-danger"><%=t(o.state)%></label>
@@ -38,7 +38,7 @@
       </div>
 
       <div class="col-sm-3 order-info">
-        <strong>Código de rastreo:</strong>
+        <b>Código de rastreo:</b>
         <span>
           <% if o.tracking_code and o.parcel_id and o.parcel_id != 0 %>
             <% parcel = o.Parcel %>
@@ -54,12 +54,12 @@
       </div>
 
       <div class="col-sm-2 order-info">
-        <strong>Total:</strong>
+        <b>Total:</b>
         <span style="margin-top: 5px;">$<%= o.total %> MXN</span>
       </div>
       
       <div class="col-sm-2 order-info">
-        <strong>Comprobante:</strong>
+        <b>Comprobante:</b>
         <span class="text-center">
           <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
             <%= link_to client_get_order_payment_path(@current_user.hash_id, o.download_payment_key), target: "_blank" do %>
@@ -72,7 +72,7 @@
       </div>
 
       <div class="col-sm-2 text-center order-info">
-        <strong>Ver pedido</strong>
+        <b>Ver pedido</b>
         <%= link_to "<span class='icon-eye'></span>".html_safe, client_order_path(@current_user.hash_id, o.hash_id),
           class: "darklink", style: "font-size: 32px;", target: "_blank" %>
       </div>
@@ -135,15 +135,15 @@
         <h3 class="iconbox-title">Instrucciones de pago</h3>
       </div>
       <div class="modal-body">
-        <p><strong>Nota:</strong> Si eligió recoger en el almacén tiene la opción de pagar en efectivo
+        <p><b>Nota:</b> Si eligió recoger en el almacén tiene la opción de pagar en efectivo
           al recibir su pedido o bien hacer un depósito/tránsferencia como se indica a continuación:</p>
-        <p><strong>Paso 1:</strong> Realice el pago total de su compra en la siguiente cuenta.</p>
+        <p><b>Paso 1:</b> Realice el pago total de su compra en la siguiente cuenta.</p>
         
         <section id="bank-payment-info"></section>
 
-        <p><strong>Paso 2:</strong> Tome una foto, escanee o guarde el archivo del comprobante de pago.</p>
-        <p><strong>Paso 3:</strong> Seleccione el comprobante de pago dando click en “Enviar comprobante de pago”</p>
-        <p><strong>Nota:</strong> Si  por error eligió un archivo equivocado y desea enviar otro, solo de click  nuevamente  en “Enviar comprobante de pago” y seleccione  el correcto.</p>
+        <p><b>Paso 2:</b> Tome una foto, escanee o guarde el archivo del comprobante de pago.</p>
+        <p><b>Paso 3:</b> Seleccione el comprobante de pago dando click en “Enviar comprobante de pago”</p>
+        <p><b>Nota:</b> Si  por error eligió un archivo equivocado y desea enviar otro, solo de click  nuevamente  en “Enviar comprobante de pago” y seleccione  el correcto.</p>
         <p>
           Si tiene alguna duda o comentario comuníquese sin costo al teléfono 01 800 500 7050
         </p>
@@ -204,7 +204,7 @@
   .order-box-info{ background-color: #f6f6f6; }
 
   .order-info{ margin-top: 0.5em; }
-  .order-info strong,
+  .order-info b,
   .order-info span,
   .order-info label{
     display: block;
@@ -221,7 +221,7 @@
   }
 
   @media screen and (max-width: 720px) {
-    .order-info strong,
+    .order-info b,
     .order-info span,
     .order-info label{
       display: inline-block;

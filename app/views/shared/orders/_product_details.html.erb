@@ -49,27 +49,27 @@
         </tr>
       <% end %>
         <tr>
-          <td align="right" colspan="6"><strong>Sub Total:</strong></td>
+          <td align="right" colspan="6"><b>Sub Total:</b></td>
           <td>$<span class="number_format"><%= sub_total.round(2) %></span> MXN
           </td>
         </tr>
         <tr>
-          <td align="right" colspan="6"><strong>IEPS:</strong></td>
+          <td align="right" colspan="6"><b>IEPS:</b></td>
           <td>$<span class="number_format"><%= ieps.round(2) %></span> MXN
           </td>
         </tr>
         <tr>
-          <td align="right" colspan="6"><strong>IVA:</strong></td>
+          <td align="right" colspan="6"><b>IVA:</b></td>
           <td>$<span class="number_format"><%= (@order.total - @order.shipping_cost - ieps - sub_total).round(2) %></span> MXN
           </td>
         </tr>
         <tr>
-          <td align="right" colspan="6"><strong>Envío:</strong></td>
+          <td align="right" colspan="6"><b>Envío:</b></td>
           <td>$<span class="number_format"><%= @order.shipping_cost %></span> MXN
           </td>
         </tr>
         <tr>
-          <td align="right" colspan="6"><strong>Total de venta:</strong></td>
+          <td align="right" colspan="6"><b>Total de venta:</b></td>
           <td>$<span class="number_format"><%= @order.total %></span> MXN
           </td>
         </tr>

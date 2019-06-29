@@ -30,7 +30,7 @@
                       <%= image_tag offer.photo.url(:thumb) %>
                       <div class="row">
                         <div class="col-md-9 p-r-7">
-                          <a href="<%= offer.url %>" class="btn btn-white btn-sm m-t btn-block" style="text-align: left;"><strong>URL:</strong> <%= offer.url %></a>
+                          <a href="<%= offer.url %>" class="btn btn-white btn-sm m-t btn-block" style="text-align: left;"><b>URL:</b> <%= offer.url %></a>
                         </div>
                         <div class="col-md-3 p-l-7">
                           <%= link_to admin_web_destroy_offer_path(offer.id), method: :delete, 

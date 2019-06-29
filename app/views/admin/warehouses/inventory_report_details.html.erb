@@ -13,15 +13,15 @@
         	<div class="ibox-content">
 
             <% worker = @report.Worker %>
-            <p><strong>Emitió:</strong> <%= link_to worker.name, admin_site_worker_path(worker) %></p>
+            <p><b>Emitió:</b> <%= link_to worker.name, admin_site_worker_path(worker) %></p>
 
             <% product = @report.Product%>
-            <p><strong>Producto:</strong> <%= link_to product.name, admin_product_path(product) %></p>
+            <p><b>Producto:</b> <%= link_to product.name, admin_product_path(product) %></p>
 
-            <%= content_tag :p, "<strong>Lote:</strong> #{@report.batch}".html_safe %>
-            <%= content_tag :p, "<strong>Fecha del reporte:</strong> #{l(@report.created_at, format: :long)}".html_safe %>
-            <p><strong>Descripción:</strong> <%= @report.description %></p>
-            <p><strong>Commentario:</strong> </p>
+            <%= content_tag :p, "<b>Lote:</b> #{@report.batch}".html_safe %>
+            <%= content_tag :p, "<b>Fecha del reporte:</b> #{l(@report.created_at, format: :long)}".html_safe %>
+            <p><b>Descripción:</b> <%= @report.description %></p>
+            <p><b>Commentario:</b> </p>
             <%= content_tag :p, @report.comment %>
 
         	</div>

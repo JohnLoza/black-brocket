@@ -14,14 +14,14 @@
 
     <div class="row dotted extra-padding">
       <div class="col-md-10 col-xs-6 text-right">
-        <strong>Sub total:</strong>
+        <b>Sub total:</b>
       </div>
       <div class="col-md-2 col-xs-6" >
         $ <span id="order-sub-total"><%= @total %></span> MXN
       </div>
 
       <div class="col-md-10 col-xs-6 text-right">
-        <strong>Coste de envío:</strong>
+        <b>Coste de envío:</b>
       </div>
       <div class="col-md-2 col-xs-6" >
         $ <span id="order-shipping-cost">
@@ -34,7 +34,7 @@
       </div>
 
       <div class="col-md-10 col-xs-6 text-right text-lg">
-        <strong>Total:</strong>
+        <b>Total:</b>
       </div>
       <div class="col-md-2 col-xs-6 text-lg" >
         $ <span id="order-grand-total"><%= @total %></span> MXN
@@ -71,8 +71,8 @@
   <div class="row">
     <div class="col-md-12">
       <p>
-        <strong>NOTA:</strong> Para que el envío sea totalmente gratis y con el beneficio de un precio de mayoreo,
-        es necesario la compra mínima de <strong>$<span class="individual-cost"><%= @warehouse.wholesale %></strong></span>
+        <b>NOTA:</b> Para que el envío sea totalmente gratis y con el beneficio de un precio de mayoreo,
+        es necesario la compra mínima de <b>$<span class="individual-cost"><%= @warehouse.wholesale %></b></span>
         de cualquiera de nuestros productos.
       </p>
     </div>

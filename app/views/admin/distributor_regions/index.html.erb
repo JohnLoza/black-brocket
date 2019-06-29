@@ -11,7 +11,7 @@
         <div class="ibox-content" style="display: block;">
           <div class="row">
             <div class="col-sm-6 b-r margin-bot-resp">
-              <h3 class="m-t-none m-b"><strong>Distribuidor:</strong> <%= @distributor.full_name %></h3>
+              <h3 class="m-t-none m-b"><b>Distribuidor:</b> <%= @distributor.full_name %></h3>
               <div class="col-sm-4">
                 <div class="text-center">
                   <%= image_tag(@distributor.avatar_url(:mini),
@@ -21,19 +21,19 @@
               <div class="col-sm-8">
                 <table>
                   <tr>
-                    <td class="table-padd"><strong><i class="fa fa-key"></i> Identificador:</strong></td>
+                    <td class="table-padd"><b><i class="fa fa-key"></i> Identificador:</b></td>
                     <td><%= @distributor.hash_id %></td>
                   </tr>
                   <tr>
-                    <td><strong><i class="fa fa-map-marker"></i> Ubicación:</strong></td>
+                    <td><b><i class="fa fa-map-marker"></i> Ubicación:</b></td>
                     <td><%= @distributor.location %></td>
                   </tr>
                   <tr>
-                    <td><strong><i class="fa fa-phone"></i> Teléfono:</strong></td>
+                    <td><b><i class="fa fa-phone"></i> Teléfono:</b></td>
                     <td><%= @distributor.telephone_with_lada %></td>
                   </tr>
                   <tr>
-                    <td><strong><i class="fa fa-calendar-o"></i> Creado el:</strong></td>
+                    <td><b><i class="fa fa-calendar-o"></i> Creado el:</b></td>
                     <td><%= l(@distributor.created_at, format: :long) %></td>
                   </tr>
                 </table>

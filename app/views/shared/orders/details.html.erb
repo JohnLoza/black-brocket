@@ -27,20 +27,20 @@
 
         <h3>Pedido</h3>
         <%= image_tag @barcode, style: "float: right !important;" %>
-        <p><strong>Referencia:</strong> <span class="text-navy">
+        <p><b>Referencia:</b> <span class="text-navy">
           <%= @order.hash_id %> 
           <% if !@order.tracking_code.blank? %>
-            - <strong>Código de rastreo:</strong> 
+            - <b>Código de rastreo:</b> 
             <%= @order.tracking_code %>
           <% end %>
         </span></p>
         
         <p style="font-size:12px;">
-          <span><strong>Fecha de creación:</strong> <%= l(@order.created_at, format: :long) %></span><br>
-          <span><strong>Última modificación:</strong> <%= l(@order.updated_at, format: :long) %></span><br>
+          <span><b>Fecha de creación:</b> <%= l(@order.created_at, format: :long) %></span><br>
+          <span><b>Última modificación:</b> <%= l(@order.updated_at, format: :long) %></span><br>
         </p>
         <p style="font-size:12px;">
-            <strong>Remitente:</strong>
+            <b>Remitente:</b>
             Black Brocket de México S. De R.L de C.V.<br>
             <% warehouse=@order.Warehouse %>
             <%= warehouse.address %>

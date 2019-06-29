@@ -21,21 +21,21 @@
 
               <div class="col-lg-4 col-md-6">
                 <div class="well m-t">
-                  <p><strong>Producto:</strong> <%= d.Product.name %></p>
-                  <p><strong>Cantidad:</strong> <%= d.quantity %></p>
+                  <p><b>Producto:</b> <%= d.Product.name %></p>
+                  <p><b>Cantidad:</b> <%= d.quantity %></p>
 
                   <% if @report %>
                     <% @report_details.each do |rd| %>
                       <% if rd.shipment_detail_id == d.id %>
                       <p style="color: #900">
-                        <strong>Existencia real:</strong> <%= rd.difference %>
+                        <b>Existencia real:</b> <%= rd.difference %>
                       </p>
                       <% end %>
                     <% end %>
                   <% end %>
 
-                  <p><strong>Lote:</strong> <%= d.batch %></p>
-                  <p><strong>Fecha de caducidad capturada:</strong> <%= d.expiration_date %></p>
+                  <p><b>Lote:</b> <%= d.batch %></p>
+                  <p><b>Fecha de caducidad capturada:</b> <%= d.expiration_date %></p>
                 </div>
               </div>
 
@@ -44,7 +44,7 @@
 
             <% if @report %>
             <p>
-              <strong>Observaciones:</strong> <%= @report.observations %>
+              <b>Observaciones:</b> <%= @report.observations %>
             </p>
             <% end %>
 

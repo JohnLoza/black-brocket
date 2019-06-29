@@ -57,7 +57,8 @@
 <% end %>
 
 <% if @current_user.has_permission?("commissions@create") and
-  params[:type] == "DELIVERED" and !params[:distributor].blank? and !o.commission_in_progress
-  o.distributor_id != 0 and !o.commission_in_progress %>&nbsp;&nbsp;&nbsp;
-  <%= check_box_tag "order_keys[]", o.hash_id %>
+  params[:type] == "DELIVERED" and !params[:distributor].blank? and 
+  !o.commission_in_progress %>&nbsp;&nbsp;&nbsp;
+  <%= check_box_tag "order", o.hash_id, false, autocomplete: :off,
+    onchange: "update_orders_for_commission(this)" %>
 <% end %>

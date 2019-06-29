@@ -14,7 +14,7 @@
           <strong><%= l(Date.parse(params[:to_date]), format: :long) %></strong>
         </p>
       <% else %>
-        <h3 class="text-center">Ventas de toda la historia</h3></br>
+        <h3 class="text-center">Ventas de toda la historia</h3><br>
       <% end %>
 
       <%# render "sales_with_distributors_table" %>
@@ -46,6 +46,6 @@
     </div>
   </div>
 </div>
-</br></br>
+<br><br>
 
 <%= javascript_include_tag "Chart.min" %>

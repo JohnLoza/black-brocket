@@ -18,10 +18,11 @@ Rails.application.routes.draw do
   get 'log_in/' => 'sessions#new'
   post   'log_in/'   => 'sessions#create'
   delete 'log_out/'  => 'sessions#destroy'
-  get 'recover_password' => 'sessions#recover_password'
-  post 'recover_password' => 'sessions#recover_password'
-  get 'update_password/:token' => 'sessions#update_password', as: :update_password
-  post 'update_password/:token' => 'sessions#update_password'
+  get 'forgot_password' => 'sessions#forgot_password', as: :forgot_password
+  post 'forgot_password' => 'sessions#forgot_password'
+  get 'recover_password/:token' => 'sessions#recover_password', as: :recover_password
+  post 'recover_password/:token' => 'sessions#recover_password'
+  post 'update_password' => 'sessions#update_password', as: :update_password
 
   # product paths (what the client sees) #
   get '/products' => 'products#index', as: :products
@@ -298,9 +299,10 @@ Rails.application.routes.draw do
   namespace :api do
     get 'notifications' => 'users#notifications'
     post 'update_visit' => 'users#update_distributor_visit'
-
+    
     post 'log_in' => 'sessions#create'
     post 'log_out' => 'sessions#destroy'
+    post 'update_password' => 'sessions#update_password'
 
     get 'states' => 'locations#states'
     get 'state/:id/cities' => 'locations#cities'

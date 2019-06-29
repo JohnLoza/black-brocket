@@ -38,15 +38,12 @@ class Admin::OrdersController < AdminController
         flash[:info] = "El folio del pago ya ha sido registrado previamente."
         redirect_to admin_orders_path(type: "ACCEPT_REJECT_PAYMENT") and return
       end
+
       # Accept the payment
-      if params[:local_order].present?
-        @order.update_attributes(state:"PAYMENT_ACCEPTED_LOCAL", 
-          reject_description: nil, payment_folio: params[:payment_folio])
-      else
-        @order.update_attributes(state:"PAYMENT_ACCEPTED", 
-          reject_description: nil, payment_folio: params[:payment_folio])
-      end
-      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Aceptó pago")
+      new_state = params[:local_order].present? ? "PAYMENT_ACCEPTED_LOCAL" : "PAYMENT_ACCEPTED"
+      @order.update_attributes(state: new_state, reject_description: nil, payment_folio: params[:payment_folio])
+
+      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Aceptó/Verificó el pago")
     else
       # Reject the payment and notify the user
       @order.update_attributes(state:"PAYMENT_REJECTED", reject_description: params[:order][:reject_description])
@@ -176,7 +173,7 @@ class Admin::OrdersController < AdminController
     deny_access! and return if params[:product_id].nil?
 
     order = Order.find_by!(hash_id: params[:id])
-    unless order.state == "PAYMENT_ACCEPTED" or order.state == "LOCAL"
+    unless ["PAYMENT_ACCEPTED","LOCAL"].include? order.state
       redirect_to admin_orders_path + "?type=CAPTURE_BATCHES" and return
     end
 
@@ -198,7 +195,7 @@ class Admin::OrdersController < AdminController
       validation = CustomValidation.validateOrderShipment(order_details, shipment_details)
       flash[:info] = validation[:error_message] and raise ActiveRecord::Rollback unless validation[:success]
 
-      new_state = (order.state == "LOCAL") ? "PICKED_UP" : "BATCHES_CAPTURED"
+      new_state = order.state == "LOCAL" ? "PICKED_UP" : "BATCHES_CAPTURED"
       order.update_attribute(:state, new_state)
       OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
       flash[:success] = "Números de lote y cantidades guardadas"
@@ -479,7 +476,7 @@ class Admin::OrdersController < AdminController
       end # case params[:type] #
 
       if search_params.present?
-        statements[:where] += " and hash_id like '%#{search_params}%'"
+        statements[:where] += " and orders.hash_id like '%#{search_params}%'"
       end
       return statements
     end

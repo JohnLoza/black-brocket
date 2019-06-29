@@ -77,13 +77,16 @@
                     <% end %>
 
                     <%= form_for(Commission.new, url: distributor_upload_commission_invoice_path(c.hash_id)) do |f| %>
-                      <a onclick="$("#invoice_field_<%=c.hash_id%>").click();" class="btn btn-white btn-sm m-b-xs">
+                      
+                      <a onclick="$('#invoice_field_<%=c.hash_id%>').click();" 
+                        class="btn btn-white btn-sm m-b-xs">
                         <i class="fa fa-upload"></i> Cargar factura
                       </a>
 
                       <%= f.file_field :invoice, id: "invoice_field_#{c.hash_id}",
                           style: "display: none;", multiple: false,
                           onchange: "$('#invoice_commit_#{c.hash_id}').click();" %>
+
                       <%= f.submit "commit", id: "invoice_commit_#{c.hash_id}", style: "display: none;",
                           data: {confirm: "Estas seguro(a) de ser el archivo correcto?"} %>
                     <% end #form end# %>

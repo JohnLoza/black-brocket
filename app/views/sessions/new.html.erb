@@ -45,13 +45,13 @@
 
       <div class="checkbox">
         <label>
-          <%= f.check_box 'remember_me', checked: true %>
+          <%= f.check_box 'remember_me', checked: false %>
           Recordar mis datos
         </label>
       </div>
       <p class="text-center" style="margin-top: 1em;">
         <%= link_to "Regístrate", client_sign_up_path %> |
-        <%= link_to "Recuperar Contraseña", recover_password_path %>
+        <%= link_to "Recuperar Contraseña", forgot_password_path %>
       </p>
       <%= button_tag(type: 'submit', class: "btn btn-login btn-danger btn-float") do %>
         <i class="fa fa-arrow-right" style="margin-left: -8px;"></i>
@@ -67,14 +67,7 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    <% image = WebPhoto.where(name: "LOGIN").take %>
-    <% if image.blank? %>
-      <% url = image_url "person-woman-coffee-cup-large.jpg" %>
-    <% else %>
-      <% url = image.photo.url %>
-    <% end %>
-
-    $("body").css({"background-image": "url('<%= url %>')",
+    $("body").css({"background-image": "url('<%= @bg_img %>')",
       "background-position": "center", "background-repeat": "no-repeat",
       "-webkit-background-size": "cover", "-moz-background-size": "cover",
       "-o-background-size": "cover", "background-size": "cover"});

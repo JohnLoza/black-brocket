@@ -1,355 +1,60 @@
-<div id="ecart_content">
+<section class="row step step-1">
   <% @products.each do |wp| %>
-  <div id="<%=wp.hash_id%>" class="col-sm-12 product dotted">
-    <% p = wp.Product %>
+    <div id="<%=wp.hash_id%>" class="col-sm-12 product dotted">
+      <% p = wp.Product %>
 
-    <div class="col-sm-1 text-center">
-      <% @photos.each do |photo| %>
-        <% if photo.product_id == p.id %>
-          <%= link_to image_tag(photo.photo.url(:mini), class: "img-circle"), product_path(wp.hash_id) %>
-          <% break %>
-        <% end %>
-      <% end %>
-    </div>
-    <div class="col-sm-4 text-center">
-      <label class="product-descriptor">Nombre:</label>
-      <span><%= p.name %></span>
-    </div>
-    <div class="col-sm-1 text-center no-mobile">
-      <label class="product-descriptor">Clave:</label> 
-      <span><%= p.hash_id %></span>
-    </div>
-    <div class="col-sm-2 text-center">
-      <label>Cantidad:</label>
-      <input type="number" min="1" value="<%= session[:e_cart][wp.hash_id] %>"
-      onchange="update_quantity('<%=wp.hash_id%>', this.value, <%=wp.existence%>)"
-      id="<%=wp.hash_id%>-quantity-input" class="form-control form-control-black text-center"/>
-    </div>
-    <div class="col-sm-2 text-center">
-      <label class="product-descriptor">Precio Unitario:</label>
-        $<span>
-          <% monto = 0 %>
-          <% if @product_prices.any? %>
-            <% @product_prices.each do |pp| %>
-              <% if p.id == pp.product_id %>
-                <% monto = pp.client_price * session[:e_cart][wp.hash_id].to_i %>
-                <%= pp.client_price %>
-              <% end # if p.id == pp.product_id # %>
-            <% end # @product_prices.each # %>
-          <% else %>
-            <% monto = p.price * session[:e_cart][wp.hash_id].to_i %>
-            <%= p.price %>
-          <% end # if @product_prices.any? # %>
-        </span>
-    </div>
-    <div class="col-sm-1 text-center">
-      <% @total += monto %>
-      <label class="product-descriptor">Importe: </label>
-        $<span id="<%=wp.hash_id%>-cost" class="individual-cost">
-          <%= monto %>
-        </span>
-    </div>
-    <div class="col-sm-1 text-center">
-      <%= link_to client_remove_from_cart_path(@current_user.hash_id, wp.hash_id),
-        method: :put, data:{confirm: "Estas seguro(a) de quitarlo del carrito?"} do %>
-        <span class="icon-close" style="font-size: 34px;"></span>
-      <% end %>
-    </div>
-  </div>
-
-  <% end %>
-
-  <div class="col-md-12 dotted extra-padding">
-    <div class="col-md-10 col-xs-6 text-right">
-      <strong>Sub total:</strong>
-    </div>
-    <div class="col-md-2 col-xs-6" >
-      $ <label id="order-sub-total"><%= @total %></label> MXN
-    </div>
-
-    <div class="col-md-10 col-xs-6 text-right">
-      <strong>Coste de envío:</strong>
-    </div>
-    <div class="col-md-2 col-xs-6" >
-      $ <label id="order-shipping-cost">
-        0.00
-      </label> MXN
-    </div>
-
-    <div class="col-md-10 text-right">
-      <label id="delivery-time"></label>
-    </div>
-
-    <div class="col-md-10 col-xs-6 text-right">
-      <strong>Total:</strong>
-    </div>
-    <div class="col-md-2 col-xs-6" >
-      $ <label id="order-grand-total"><%= @total %></label> MXN
-    </div>
-  </div>
-
-  <div class="col-sm-12 dotted" style="margin-bottom: 40px;">
-    <%= form_tag client_create_order_path(@current_user.hash_id), method: :post do %>
-      <div class="row col-sm-12 inline-block dotted">
-        <label>Método de envío</label>
-        <% if @local_regions.include? @current_user.city_id %>
-          <div>
-            <%= radio_button_tag "parcel_id", 0, false, autocomplete: :off,
-              onchange: "noShipping(); removeFilter('parcel_id_0', 'parcel');", required: true %>
-            <label for="parcel_id_0">Recojer en instalaciones de Guadalajara, Jal.</label>
-          </div>
-        <% end %>
-
-        <% if @local_parcel %>
-          <div>
-            <%= radio_button_tag "parcel_id", @local_parcel.id, false, autocomplete: :off, required: true, style: "display: none;",
-              onchange: "fetchParcelPrices(this); removeFilter('.parcel_img_#{@local_parcel.id}', 'parcel')"  %>
-            <label for="parcel_id_<%= @local_parcel.id %>">
-              <%= image_tag @local_parcel.image.url(:mini), class: "parcel_img_#{@local_parcel.id} parcel" %>
-            </label>
-          </div>
-        <% end %>
-
-        <% @parcels.each do |parcel| %>
-          <div>
-            <%= radio_button_tag "parcel_id", parcel.id, false, autocomplete: :off, required: true, style: "display: none;",
-              onchange: "fetchParcelPrices(this); removeFilter('.parcel_img_#{parcel.id}', 'parcel')"  %>
-            <label for="parcel_id_<%= parcel.id %>">
-              <%= image_tag parcel.image.url(:mini), class: "parcel_img_#{parcel.id} parcel" %>
-            </label>
-          </div>
+      <div class="col-sm-1 text-center">
+        <% @photos.each do |photo| %>
+          <% if photo.product_id == p.id %>
+            <%= link_to image_tag(photo.photo.url(:mini), class: "img-circle"), product_path(wp.hash_id) %>
+            <% break %>
+          <% end %>
         <% end %>
       </div>
-
-      <div class="row col-sm-12 banks inline-block dotted">
-        <label>Método de pago</label>
-        <% @banks.each do |bank| %>
-          <div>
-            <%= radio_button_tag "payment_method", bank.id, false, autocomplete: :off, required: true, 
-              onchange: "removeFilter('.payment_img_#{bank.id}', 'payment_type')", style: 'display: none;' %>
-            <label for="payment_method_<%= bank.id %>">
-              <%= image_tag bank.image.url(:mini), class: "payment_img_#{bank.id} payment_type" %>
-            </label>
-          </div>
+      <div class="col-sm-4 text-center">
+        <label class="product-descriptor">Nombre:</label>
+        <span><%= p.name %></span>
+      </div>
+      <div class="col-sm-1 text-center no-mobile">
+        <label class="product-descriptor">Clave:</label> 
+        <span><%= p.hash_id %></span>
+      </div>
+      <div class="col-sm-2 text-center">
+        <label>Cantidad:</label>
+        <input type="number" min="1" value="<%= session[:e_cart][wp.hash_id] %>"
+        onchange="update_quantity('<%=wp.hash_id%>', this.value, <%=wp.existence%>)"
+        id="<%=wp.hash_id%>-quantity-input" class="form-control form-control-black text-center"/>
+      </div>
+      <div class="col-sm-2 text-center">
+        <label class="product-descriptor">Precio Unitario:</label>
+          $<span>
+            <% monto = 0 %>
+            <% if @product_prices.any? %>
+              <% @product_prices.each do |pp| %>
+                <% if p.id == pp.product_id %>
+                  <% monto = pp.client_price * session[:e_cart][wp.hash_id].to_i %>
+                  <%= pp.client_price %>
+                <% end # if p.id == pp.product_id # %>
+              <% end # @product_prices.each # %>
+            <% else %>
+              <% monto = p.price * session[:e_cart][wp.hash_id].to_i %>
+              <%= p.price %>
+            <% end # if @product_prices.any? # %>
+          </span>
+      </div>
+      <div class="col-sm-1 text-center">
+        <% @total += monto %>
+        <label class="product-descriptor">Importe: </label>
+          $<span id="<%=wp.hash_id%>-cost" class="individual-cost">
+            <%= monto %>
+          </span>
+      </div>
+      <div class="col-sm-1 text-center">
+        <%= link_to client_remove_from_cart_path(@current_user.hash_id, wp.hash_id),
+          method: :put, data:{confirm: "Estas seguro(a) de quitarlo del carrito?"} do %>
+          <span class="icon-close" style="font-size: 34px;"></span>
         <% end %>
-      </div>
-
-      <div class="row col-sm-12 inline-block" style="margin-top: 2em;">
-        <label>Requiero Factura</label>
-        <div>
-          <%= radio_button_tag "invoice", 1, false, autocomplete: :off, required: true %>
-          <label for="invoice_1" style="font-size: 1.3em; font-weight: normal;">Sí</label>
-        </div>
-        <div>
-          <%= radio_button_tag "invoice", 0, false, autocomplete: :off, 
-            required: true %>
-          <label for="invoice_0" style="font-size: 1.3em; font-weight: normal;">No</label>
-        </div>
-      </div>
-
-      <div class="row col-sm-12">
-        <div class="col-sm-10">.</div>
-        <div class="col-sm-2" >
-          <%= hidden_field_tag "delivery_cost" %>
-          <%= hidden_field_tag "guides" %>
-          <%= submit_tag "Comprar", class: "btn btn-block btn-custom-1", onclick: "verifyForm();" %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-</div>
-
-<div class="row" style="border-top: 1px dotted #DDD;">
-  <div class="col-md-12">
-    <p>
-      <b>NOTA:</b> Para que el envío sea totalmente gratis y con el beneficio de un precio de mayoreo,
-      es necesario la compra mínima de <b>$<span class="individual-cost"><%= @warehouse.wholesale %></b></span>
-      de cualquiera de nuestros productos.
-    </p>
-  </div>
-  <% if !@product_prices.any? %>
-    <div class="col-md-12 text-center">
-      <h3 class="iconbox-title">¿Es usted mayorista?</h3>
-      <div class="col-sm-12">
-        <% notice = WebInfo.where(name: "ECART_NOTICE").take %>
-        <%= render notice.description_render_path %>
       </div>
     </div>
   <% end %>
-</div>
-<div class="row">
-    <div class="col-sm-6 col-sm-offset-3">
-      <div class="devider m-b-xxl">
-        <%= image_tag("divider-down.svg") %>
-      </div>
-    </div>
-</div>
-
-<%= form_tag client_ecart_update_quantity_path(@current_user), method: :put,
-  remote: true, id: "update_price_form", style: "visibility: hidden;" do %>
-  <%= text_field_tag :product, nil %>
-  <%= number_field_tag :new_quantity, nil, min: 1, step: 1 %>
-  <%= number_field_tag :current_existence, nil, step: 1 %>
-<% end %>
-
-<label id="wholesale" style="display: none;">
-  <%= @warehouse.wholesale %>
-</label>
-<label id="shipping_cost_is_present" style="display: none;">
-  NO
-</label>
-
-<style>
-  form img{
-    -webkit-filter: grayscale(90%);
-    filter: grayscale(90%);
-  }
-  .dotted{
-    border-bottom: 1px dotted #DDD;
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  .removeFilter{
-    -webkit-filter: none;
-    filter: none;
-  }
-  .inline-block > div{ display: inline-block; margin-right: 2em;}
-  .inline-block > label{ margin-right: 2em; }
-  .product-descriptor{ display: block; }
-  @media screen and (max-width: 920px){
-    .inline-block { margin-top: 1em; }
-    .inline-block label{ display: block; }
-    .product-descriptor{ display: inline-block; }
-    .product div{ margin-top: 0.5em; }
-    .extra-padding{ padding-bottom: 4em; }
-    .img-circle{ max-width: 75px;}
-  }
-</style>
-
-<script type="text/javascript">
-  function verifyForm(){
-    let parcel = $("input[type='radio'][name='parcel_id']:checked");
-    let payment_method = $("input[type='radio'][name='payment_method']:checked");
-    let invoice_required = $("input[type='radio'][name='invoice']:checked");
-    if(parcel.length == 0 || payment_method.length == 0 || invoice_required.length == 0){
-      $("#dismissible_alerts").append(`
-        <%= j render partial: "/shared/dismissible_alert", locals: {message_type: :info, 
-          message: "Favor de seleccionar el método de envío, método de pago y si requieren factura"} %>
-      `);
-    }
-  }
-
-  function removeFilter(target, type){
-    $(`.removeFilter.${type}`).removeClass("removeFilter");
-    $(target).addClass("removeFilter");
-  }
-
-  function update_quantity(product, new_quantity, current_existence) {
-    $("#product").val(product);
-    $("#new_quantity").val(new_quantity);
-    $("#current_existence").val(current_existence);
-    $("#update_price_form").submit();
-  }
-
-  function money_format(number){
-    return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
-      return i && c !== "." && ((a.length - i) % 3 === 0) ? "," + c : c;
-    });
-  }
-
-  function fetchParcelPrices(trigger){
-    original_target = "<%= client_ecart_parcel_prices_path(@current_user, 'replace_with_id', format: :js) %>";
-    new_target = original_target.replace("replace_with_id", trigger.value);
-    $.ajax({
-      url: new_target,
-      context: document.body
-    }).done(function(body) {});
-    $(".banks").removeClass("hidden");
-    $(".banks input").attr("required", true);
-  }
-
-  // pick a guide for package delivery based on weight
-  function pickGuide(weight, available_weights){
-    // if total package weight is less than max guide weight pick it
-    for (let index = 0; index < available_weights.length; index++) {
-      if(weight <= available_weights[index]){
-        return index;
-      }
-    }
-
-    // if total package weight is more than max guide weight then send last one
-    // because it has the highest max weight possible
-    return available_weights.length - 1;
-  }
-
-  // get an object with the necessary guides for shipment
-  function getGuides(total_weight, weights, prices){
-    var guides = new Object();
-
-    // keep adding guides until we dont have product ramaining
-    while (total_weight > 0) {
-      // pick the correct guide using weight as reference
-      guide_index = pickGuide(total_weight, weights);
-      price = prices[guide_index];
-
-      // add the picked guide to our guides object
-      if(guides[price] !== undefined)
-        guides[price] += 1;
-      else
-        guides[price] = 1;
-
-      // remove the weight that can carry that guide
-      total_weight -= weights[guide_index];
-    }
-
-    return guides;
-  }
-
-  // parse the guides object to String format
-  function guidesToString(guides){
-    guides_array = [];
-    Object.keys(guides).forEach(guide_type => {
-      guides_array.push(`${guides[guide_type]} guía(s) de $${guide_type}`)
-    });
-    return guides_array.join("|");
-  }
-
-  // calculate delivery cost based on number and type of guides
-  function calculateDeliveryCost(guides){
-    var delivery_cost = 0;
-
-    Object.keys(guides).forEach(guide_type => {
-      delivery_cost += (guide_type * guides[guide_type]);
-    });
-
-    return delivery_cost;
-  }
-
-  function noShipping() {
-    // obtain the current_sub_total
-    var last_shipping_cost = parseFloat($("#order-shipping-cost").text().replace(",",""));
-    var current_grand_total = parseFloat($("#order-grand-total").text().replace(",",""));
-    var current_sub_total = current_grand_total;
-    if($("#shipping_cost_is_present").text().trim() == "YES")
-      current_sub_total = current_grand_total - last_shipping_cost;
-    
-    $("#order-shipping-cost").text("0.00");
-    $("#delivery_cost").val(0);
-    $("#guides").val("Recoje en local");
-    $("#shipping_cost_is_present").text("NO");
-    $("#order-grand-total").text(money_format(current_sub_total));
-    $(".banks").addClass("hidden");
-    $(".banks input").removeAttr("required");
-    $("#delivery-time").text("");
-  }
-
-  $(document).ready(function(){
-    costs = $(".individual-cost");
-    costs.each(function(){
-      $(this).html(money_format($(this).text()));
-    });
-
-    total = $("#grand-total");
-    total.html(money_format(total.text()));
-  });
-</script>
+</section>

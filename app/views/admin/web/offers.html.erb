@@ -54,7 +54,7 @@
                 </div>
 
               <% end %>
-             </br>
+             <br>
               <%= form_for @new_offer, url: admin_web_offers_path, html: {class: "form-horizontal"}, method: :post do |f| %>
 
                 <div class="form-group">
@@ -66,7 +66,7 @@
 
                 <div class="form-group">
                   <label class="col-sm-4 control-label"><%= f.label :photo, "Elige las imágenes que deseas subir, pueden ser jpg, jpeg o png." %></label>
-                  <div class="col-sm-8"></br>
+                  <div class="col-sm-8"><br>
                     <%= f.file_field :photo %>
                   </div>
                 </div>

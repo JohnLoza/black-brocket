@@ -1,0 +1,17 @@
+<section class="row inline-block step step-4 hidden text-center">
+  <h4>Requiero Factura</h4>
+  <div>
+    <%= radio_button_tag "invoice", 1, false, autocomplete: :off, style: 'display: none;',
+      required: true, onchange: "removeFilter('.invoice_1', 'invoice')", info: "Sí" %>
+    <label for="invoice_1">
+      <%= image_tag "yes.svg", class: "invoice_1 invoice" %>
+    </label>
+  </div>
+  <div>
+    <%= radio_button_tag "invoice", 0, false, autocomplete: :off, style: 'display: none;',
+      required: true, onchange: "removeFilter('.invoice_0', 'invoice')", info: "No" %>
+    <label for="invoice_0">
+      <%= image_tag "no.svg", class: "invoice_0 invoice" %>
+    </label>
+  </div>
+</section>

@@ -46,11 +46,11 @@
           <tbody>
             <%= render "add_to_cart_mobile" if logged_in? and session[:user_type] == 'c' and @warehouse_product.existence > 0 %>
             <tr>
-              <td><b>Nombre:</b></td>
+              <td><strong>Nombre:</strong></td>
               <td colspan="2"><%= @product.name %></td>
             </tr>
             <tr>
-              <td><b>Clave:</b></td>
+              <td><strong>Clave:</strong></td>
               <td><%= @product.hash_id %></td>
               <td></td>
             </tr>
@@ -62,13 +62,13 @@
                      else
                        var = '<span style="color: #F44336;">Agotado</span>'
                      end %>
-                  <p><b>Existencia:</b></p>
+                  <p><strong>Existencia:</strong></p>
                 </td>
                 <td colspan="2"><%= var.html_safe %></td>
               </tr>
             <% end # if logged_in? and session[:user_type] == 'c' # %>
             <tr>
-              <td><b>Categorías:</b></td>
+              <td><strong>Categorías:</strong></td>
               <td colspan="2">
                 <% var = ''
                   if @product.cold
@@ -87,11 +87,11 @@
               </td>
             </tr>
             <tr>
-              <td><b>Presentación:</b></td>
+              <td><strong>Presentación:</strong></td>
               <td colspan="2"><%= @product.presentation %></td>
             </tr>
             <tr>
-              <td><b>Precio:</b></td>
+              <td><strong>Precio:</strong></td>
               <% if !@product_price.blank?
                   price = @product_price.client_price
                  else
@@ -100,7 +100,7 @@
               <td colspan="2">$ <span class="money_format"><%= price %></span> MXN
             </tr>
             <tr>
-              <td colspan="3"><b>Descripción:</b></td>
+              <td colspan="3"><strong>Descripción:</strong></td>
             </tr>
             <tr>
               <td colspan="3">
@@ -120,7 +120,7 @@
       </div>
     </div>
   </div>
-  </br>
+  <br>
 
   <% if !@product.video.blank? %>
     <div class="row divider-row-top">

@@ -20,9 +20,3 @@
  *= require simple-line-icons
  *= require login
  */
-.message{
-  padding: 7px;
-  background-color: whitesmoke;
-  margin: 5px;
-  border-radius: 5px;
-}

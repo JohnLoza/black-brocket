@@ -20,25 +20,6 @@
 			</div>
 		</div><!-- .row -->
 
-		<div class="form-group <%if @client.errors.any?%>parsley-error<%end%>">
-			<div class="row">
-				<div class="col-sm-12 form-group">
-					<%= f.label :password, "Contraseña" %>
-					<%= f.password_field :password, placeholder: "modificar contraseña", class: "form-control form-control-black",
-							minlength: 6, maxlength: 20 %>
-					<span class="help-text">Mínimo 6 caracteres y máximo 20.</span>
-				</div>
-			</div><!-- .row -->
-
-			<div class="row">
-				<div class="col-sm-12 form-group">
-					<%= f.label :password_confirmation, "Confirma contraseña" %>
-					<%= f.password_field :password_confirmation, placeholder: "modificar contraseña", class: "form-control form-control-black",
-							"data-parsley-equalto"=>"#client_password" %>
-				</div>
-			</div><!-- .row -->
-		</div>
-
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :telephone, "Teléfono fijo" %> -
@@ -144,25 +125,14 @@
 				<img id="uploadPreview" class="img-rounded" style="margin-bottom:10px;max-height: 150px;float: right;"/>
 				<%= f.file_field :photo, multiple: false, onchange: "PreviewImage();", accept: "image/*" %>
 			</div>
-		</div><!-- .row --></br></br>
+		</div><!-- .row -->
+	</div>
 
-		<% if logged_in? %>
-			<div class="row">
-				<div class="col-sm-6">
-					<%= link_to "Cancelar", products_path, class: "btn btn-block btn-custom-1 m-b-sm" %>
-				</div>
-				<div class="col-sm-6">
-					<%= f.submit "Guardar cambios", class: "btn btn-block btn-custom-1 m-b-sm" %><br>
-				</div>
-			</div><!-- .row -->
-		<% else %>
-			<div class="row">
-				<div class="col-sm-12">
-					<%= f.submit "Guardar cambios", class: "btn btn-block btn-custom-1 m-b-sm" %>
-				</div>
-			</div><!-- .row -->
-		<% end %>
+	<div class="row text-center">
+		<%= f.submit "Guardar", class: "btn btn-custom-1" %>
 
+		<%= link_to "Cambiar contraseña", "#",
+			class: "btn btn-custom-1", onclick: "updatePassword();" %>
 	</div>
 
 <% end # form end # %>
@@ -220,6 +190,10 @@
 	}
 
 	.long-up-2x{ margin-top: 0.5em !important;}
+
+	.btn.btn-custom-1{
+		margin: 1em;
+	}
 </style>
 
 <script type="text/javascript">
@@ -268,6 +242,14 @@
 		modal = $("#modal")
     modal.find(".modal-title").html("Agregar sucursales y/o destinos");
     modal.find(".modal-body").html(`<%= j render "add_more_branches_or_destinations" %>`);
+		modal.modal("show");
+	}
+
+	function updatePassword(){
+		modal = $("#modal")
+    modal.find(".modal-title").html("Actualizar contraseña");
+    modal.find(".modal-body").html(`<%= j render "/shared/update_password" %>`);
+		$("#update_password").parsley();
 		modal.modal("show");
 	}
 </script>

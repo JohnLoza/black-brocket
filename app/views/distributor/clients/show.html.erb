@@ -42,61 +42,61 @@
                   <div class="table-responsive">
                       <table class="table table-hover">
                         <tr>
-                          <td><b>Clave:</b></td>
+                          <td><strong>Clave:</strong></td>
                           <td><%= @client.hash_id %></td>
-                          <!--td><b>Fecha nacimiento:</b></td>
+                          <!--td><strong>Fecha nacimiento:</strong></td>
                           <td><%#= l(@client.birthday, format: :long) if @client.birthday %></td-->
                         </tr>
                         <tr>
-                            <!--td><b>Nombre comercial o de usuario:</b></td>
+                            <!--td><strong>Nombre comercial o de usuario:</strong></td>
                             <td><%#= @client.username %></td-->
-                            <td><b>Nombre:</b></td>
+                            <td><strong>Nombre:</strong></td>
                             <td><%= @client.name %></td>
                         </tr>
                         <!--tr>
-                            <td><b>Apellido paterno:</b></td>
+                            <td><strong>Apellido paterno:</strong></td>
                             <td><%#= @client.lastname %></td>
-                            <td><b>Apellido materno:</b></td>
+                            <td><strong>Apellido materno:</strong></td>
                             <td><%#= @client.mother_lastname %></td>
                         </tr-->
                         <tr>
-                          <td><b>Población:</b></td>
+                          <td><strong>Población:</strong></td>
                           <td><%= @client.City.name %></td>
-                          <td><b>Estado:</b></td>
+                          <td><strong>Estado:</strong></td>
                           <td><%= @client.City.State.name %></td>
                         </tr>
                         <tr>
-                            <td><b>Colonia:</b></td>
+                            <td><strong>Colonia:</strong></td>
                             <td><%= @client.col %></td>
-                            <td><b>Calle:</b></td>
+                            <td><strong>Calle:</strong></td>
                             <td><%= @client.street %></td>
                         </tr>
                         <tr>
-                          <td><b>Núm ext:</b></td>
+                          <td><strong>Núm ext:</strong></td>
                           <td><%= @client.extnumber %></td>
-                          <td><b>Núm int:</b></td>
+                          <td><strong>Núm int:</strong></td>
                           <td><%= @client.intnumber %></td>
                         </tr>
                         <tr>
-                          <td><b>CP:</b></td>
+                          <td><strong>CP:</strong></td>
                           <td><%= @client.cp %></td>
-                          <td><b>Entre calles:</b></td>
+                          <td><strong>Entre calles:</strong></td>
                           <td><%= @client.street_ref1 %> y <%= @client.street_ref1 %></td>
                         </tr>
                         <tr>
-                          <td><b>Teléfono:</b></td>
+                          <td><strong>Teléfono:</strong></td>
                           <td>(<%=@client.City.lada%>) <%= @client.telephone %></td>
-                          <td><b>Celular:</b></td>
+                          <td><strong>Celular:</strong></td>
                           <td><%= @client.cellphone %></td>
                         </tr>
                         <tr>
-                          <td><b>Correo electrónico:</b></td>
+                          <td><strong>Correo electrónico:</strong></td>
                           <td colspan="3"><%= @client.email %></td>
                         </tr>
                         <tr>
-                          <td><b>Fecha de creación:</b></td>
+                          <td><strong>Fecha de creación:</strong></td>
                           <td><%= l(@client.created_at, format: :long) %></td>
-                          <td><b>Última modificación:</b></td>
+                          <td><strong>Última modificación:</strong></td>
                           <td><%= l(@client.updated_at, format: :long) %></td>
                         </tr>
                       </table>

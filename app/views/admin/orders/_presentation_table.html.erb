@@ -3,20 +3,31 @@
     <div class="ibox-content">
 
       <%= render "navigation_labels" %>
+
       <%= form_for :class, url: admin_orders_path, method: :get  do |f| %>
         <%= hidden_field_tag :type, params[:type] %>
         <div class="input-group">
-          <% if params[:type] == "DELIVERED" %>
-            <%= f.text_field :search, value: search_params, class: 'form-control',
-              placeholder: 'Buscar', maxlength: 20 %>
-          <% else %>
-            <%= f.text_field :search, value: search_params, class: 'form-control',
-              placeholder: 'Buscar', maxlength: 20, required: true %>
+          <%= f.text_field :search, value: search_params, class: 'form-control',
+            placeholder: 'Buscar', maxlength: 20, required: true %>
+
+          <% if params[:distributor].present? %>
+            <%= hidden_field_tag :distributor, params[:distributor] %>
           <% end %>
+          
           <span class="input-group-btn">
             <%= f.submit 'Buscar', class: 'btn btn btn-success' %>
           </span>
         </div>
+      <% end %>
+
+      <% if @current_user.has_permission?('commissions@create') and 
+        params[:distributor].present? and params[:type]== "DELIVERED" %>
+        <%= form_tag(admin_commissions_path(distributor: params[:distributor]), id: 'create-commission-form') do %>
+          <button class="btn btn-success pull-right" style="margin-top: 2em"
+            onclick="$('#create-commission-form')[0].submit();">
+            Crear comisión
+          </button>
+        <% end %>
       <% end %>
 
       <table class="footable table table-stripped toggle-arrow-tiny" data-filter=#filter>
@@ -113,6 +124,19 @@
 
     $("#reject_pay_form").attr("action", new_action);
   }
+
+  function update_orders_for_commission(checkbox){
+    let commission_form = $("#create-commission-form");
+
+    if(checkbox.checked){
+      input = `<input type="hidden" name="order_keys[]" 
+        value="${checkbox.value}" 
+        id="order-key-${checkbox.value}"></input>`;
+      commission_form.append(input);
+    }else{
+      $(`#order-key-${checkbox.value}`).remove();
+    }
+  }
 </script>
 
 <!-- Modal -->
@@ -121,7 +145,7 @@
 
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header text-center">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title">Cancelar orden/pedido</h4>
       </div>
@@ -146,7 +170,7 @@
 
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header text-center">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title">Rechazar pago de orden/pedido</h4>
       </div>

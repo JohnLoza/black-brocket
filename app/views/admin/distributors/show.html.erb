@@ -36,37 +36,37 @@
                     <div class="table-responsive">
                         <table class="table">
                           <tr>
-                              <td><b>Clave:</b></td>
+                              <td><strong>Clave:</strong></td>
                               <td><%= @distributor.hash_id %></td>
-                              <td><b>Fecha nacimiento:</b></td>
+                              <td><strong>Fecha nacimiento:</strong></td>
                               <td><%= l(@distributor.birthday, format: :long) if @distributor.birthday %></td>
                           </tr>
                           <tr>
-                              <td><b>Nombre:</b></td>
+                              <td><strong>Nombre:</strong></td>
                               <td><%= @distributor.full_name %></td>
-                              <td><b>Nombre comercial o de usuario:</b></td>
+                              <td><strong>Nombre comercial o de usuario:</strong></td>
                               <td><%= @distributor.username %></td>
                           </tr>
                           <tr>
-                              <td><b>Ubicación:</b></td>
+                              <td><strong>Ubicación:</strong></td>
                               <td><%= @distributor.location %></td>
-                              <td><b>Dirección:</b></td>
+                              <td><strong>Dirección:</strong></td>
                               <td><%= @distributor.address %></td>
                           </tr>
                           <tr>
-                              <td><b>Teléfono:</b></td>
+                              <td><strong>Teléfono:</strong></td>
                               <td><%= @distributor.telephone_with_lada %></td>
-                              <td><b>Celular:</b></td>
+                              <td><strong>Celular:</strong></td>
                               <td><%= @distributor.cellphone %></td>
                           </tr>
                           <tr>
-                            <td><b>Fecha de creación:</b></td>
+                            <td><strong>Fecha de creación:</strong></td>
                             <td><%= l(@distributor.created_at, format: :long) %></td>
-                            <td><b>Última modificación:</b></td>
+                            <td><strong>Última modificación:</strong></td>
                             <td><%= l(@distributor.updated_at, format: :long) %></td>
                           </tr>
                           <tr>
-                            <td><b>Email:</b></td>
+                            <td><strong>Email:</strong></td>
                               <td><%= @distributor.email %></td>
                             <% if @current_user.has_permission?("distributors@show_commission") %>
                               <td><strong>Comisión:</strong></td>

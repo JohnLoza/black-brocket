@@ -2,7 +2,7 @@
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content" style="padding: .5em;">
-      <div class="modal-header">
+      <div class="modal-header text-center">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Visita del distribuidor</h4>
       </div>
@@ -24,7 +24,7 @@
 
         <div class="col-sm-12">
           <p>En garantía de nuestro servicio y en atención a su persona,
-          el distribuidor <b><%= distributor.name %> <%= distributor.lastname %></b> ¿Pasó a visitarle el día <%= l(@visit.visit_date, format: :long) %>?
+          el distribuidor <strong><%= distributor.name %> <%= distributor.lastname %></strong> ¿Pasó a visitarle el día <%= l(@visit.visit_date, format: :long) %>?
           <select name="distributor_visit[client_recognizes_visit]"
             id="distributor_visit_client_recognizes_visit" required="required" onchange="update_visit_form(this);">
             <option value="">Selecciona...</option>
@@ -45,7 +45,7 @@
             <option value="Malo">Malo</option>
           </select></p>
 
-          <p><b>Sugerencias y/o comentarios:</b></p>
+          <p><strong>Sugerencias y/o comentarios:</strong></p>
           <%= f.text_area :extra_comments, class: "input form-control", style: "border: solid #999 1px;" %><br>
         </div>
         <div class="clearfix"></div>

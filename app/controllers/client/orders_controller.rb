@@ -67,7 +67,7 @@ class Client::OrdersController < ApplicationController
       end
       flash[:success] = "Orden guardada"
       session.delete(:e_cart)
-      redirect_to client_orders_path(@current_user.hash_id) and return
+      redirect_to client_orders_path(@current_user.hash_id, info_for: @order.hash_id) and return
     end
 
     flash[:info] = "Ocurrió un error al guardar tu pedido, vuelve a intentarlo por favor..."

@@ -1,6 +1,12 @@
 class SessionsController < ApplicationController
 
   def new
+    image = WebPhoto.where(name: "LOGIN").take
+    if image.blank?
+      @bg_img = image_url "person-woman-coffee-cup-large.jpg"
+    else
+      @bg_img = image.photo.url
+    end 
     render :new, layout: false and return unless logged_in?
 
     redirect_to admin_welcome_path if session[:user_type] == "w"
@@ -41,7 +47,7 @@ class SessionsController < ApplicationController
     redirect_to root_path
   end
 
-  def recover_password
+  def forgot_password
     if params[:session] and params[:session][:email]
       user = Client.find_by(email: params[:session][:email])
       if user
@@ -53,10 +59,10 @@ class SessionsController < ApplicationController
       end
     end
 
-    render :recover_password, layout: false
+    render :forgot_password, layout: false
   end
 
-  def update_password
+  def recover_password
     user = Client.find_by!(recover_pass_digest: params[:token])
 
     if params[:session] and params[:session][:password]
@@ -67,7 +73,34 @@ class SessionsController < ApplicationController
       redirect_to root_path and return
     end
 
-    render :update_password, layout: false
+    render :recover_password, layout: false
+  end
+
+  def update_password
+    render_404 and return unless logged_in?
+
+    case current_user.class.to_s
+    when "Client"
+      try_again_path = edit_client_client_path(current_user)
+      success_path = products_path()
+    when "Distributor"
+      try_again_path = distributor_welcome_path()
+      success_path = distributor_welcome_path()
+    when "SiteWorker"
+      try_again_path = admin_welcome_path()
+      success_path = admin_welcome_path()
+    end
+
+    unless current_user.authenticate(params[:old_password])
+      flash[:info] = "Contraseña incorrecta"
+      redirect_to try_again_path and return
+    end
+
+    current_user.update_attributes(password: params[:new_password],
+      password_confirmation: params[:new_password_confirmation])
+
+    flash[:success] = "¡Contraseña actualizada!"
+    redirect_to success_path
   end
 
   private

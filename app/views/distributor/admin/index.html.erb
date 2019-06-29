@@ -57,7 +57,13 @@
                 <option value="skin-blurple">Blurple</option>
                 <option value="skin-deepcove">Deep Cove</option>
               </select>
-              <%= link_to(log_out_path, method: "delete") do %><span class="btn btn-xs btn-danger"><i class="fa fa-sign-out"></i> Cerrar sesión</span><% end %>
+
+              <%= link_to "Cambiar contraseña", "#", 
+                class: "btn btn-primary", onclick: "updatePassword()" %>
+
+              <%= link_to(log_out_path, method: "delete", class: "btn btn-danger") do %>
+                <i class="fa fa-sign-out"></i> Cerrar sesión
+              <% end %>
             </div>
         </div>
     </div>
@@ -65,6 +71,8 @@
   </div>
 </div>
 <!--End content whit animation-->
+
+<%= render "shared/modal" %>
 
 <script type="text/javascript">
 function updateUI() {
@@ -86,4 +94,14 @@ function updateUI() {
 
   });
 }
+
+function updatePassword(){
+  modal = $("#modal")
+  modal.find(".modal-title").html("Actualizar contraseña");
+  modal.find(".modal-body").html(`<%= j render "/shared/update_password" %>`);
+  $("#update_password").parsley();
+  modal.modal("show");
+}
 </script>
+
+<%= javascript_include_tag "parsley-custom" %>

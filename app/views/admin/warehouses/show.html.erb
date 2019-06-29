@@ -38,25 +38,25 @@
                   <div class="table-responsive">
                       <table class="table table-hover">
                         <tr>
-                          <td><b>Clave:</b></td>
+                          <td><strong>Clave:</strong></td>
                           <td><%= @warehouse.hash_id %></td>
                         </tr>
                         <tr>
-                            <td><b>Ubicación:</b></td>
+                            <td><strong>Ubicación:</strong></td>
                             <td><%= @warehouse.location %></td>
                         </tr>
                         <tr>
-                          <td><b>Dirección:</b></td>
+                          <td><strong>Dirección:</strong></td>
                           <td><%= @warehouse.address %></td>
                         </tr>
                         <tr>
-                            <td><b>Teléfono:</b></td>
+                            <td><strong>Teléfono:</strong></td>
                             <td><%= @warehouse.telephone_with_lada %></td>
                         </tr>
                         <tr>
-                          <td><b>Fecha de creación:</b></td>
+                          <td><strong>Fecha de creación:</strong></td>
                           <td><%= l(@warehouse.created_at, format: :long) %></td>
-                          <td><b>Última modificación:</b></td>
+                          <td><strong>Última modificación:</strong></td>
                           <td><%= l(@warehouse.updated_at, format: :long) %></td>
                         </tr>
                       </table>

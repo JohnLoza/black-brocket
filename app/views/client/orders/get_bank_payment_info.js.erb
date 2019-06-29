@@ -3,10 +3,10 @@ $("#bank-payment-info").html("");
   $("#bank-payment-info").html(`<%= j render partial: "bank_payment_info" %>`);
 <% end %>
 
-<% link = link_to "Cambiar método de pago", "#", class: "btn btn-default",
+<% link = link_to "Cambiar método de pago", "#", class: "btn btn-primary",
   onclick: "place_payment_method_form();", id: "update_payment_method_form" %>
 $("#update_payment_method_form").remove();
-$("#myModal").find(".modal-footer").append(`<%= link %>`);
+$("#myModal").find(".modal-footer").prepend(`<%= link %>`);
 
 <% if @order.payment_method.nil? %>
   $("#update_payment_method_form").click();

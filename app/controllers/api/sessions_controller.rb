@@ -44,4 +44,27 @@ class Api::SessionsController < ApiController
     user.update_attribute(:authentication_token, nil)
     render status: 200, json: {success: true, info: "LOGGED_OUT"}
   end
+
+  def update_password
+    case params[:user_type]
+    when "client"
+      model = Client
+    when "distributor"
+      model = Distributor
+    when "worker"
+      model = SiteWorker
+    end
+
+    current_user = model.find_by(authentication_token: params[:authentication_token])
+    render_authentication_error and return unless current_user
+
+    unless current_user.authenticate(params[:old_password])
+      render status: 200, json: {success: false, info: "WRONG_PASSWORD"}
+    end
+
+    current_user.update_attributes(password: params[:new_password],
+      password_confirmation: params[:new_password_confirmation])
+
+    render status: 200, json: {success: false, info: "SAVED"}
+  end
 end

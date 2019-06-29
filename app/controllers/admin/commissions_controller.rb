@@ -26,7 +26,7 @@ class Admin::CommissionsController < AdminController
     end
 
     distributor = Distributor.find_by!(hash_id: params[:distributor])
-    orders = Order.where("hash_id in (?)", params[:order_keys]).where(commission_in_progress: false)
+    orders = Order.where(hash_id: params[:order_keys]).where(commission_in_progress: false)
     raise ActiveRecord::RecordNotFound unless orders.any?
 
     total = Commission.calculateCommission(orders, distributor.commission)

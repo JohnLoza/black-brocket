@@ -13,28 +13,28 @@
             </thead>
             <tbody>
               <tr>
-                <td><b>Nombre:</b></td>
+                <td><strong>Nombre:</strong></td>
                 <td colspan="3"><%= @distributor.name %> <%= @distributor.lastname %> <%= @distributor.mother_lastname %></td>
               </tr>
               <% distributor_city = @distributor.City %>
               <% if (@distributor_is_a_worker == false and @distributor.show_address) or
                     @distributor_is_a_worker == true %>
                 <tr>
-                  <td><b>Ubicación:</b></td>
+                  <td><strong>Ubicación:</strong></td>
                   <td><%= distributor_city.name %>, <%= distributor_city.State.name %></td>
 
-                  <td><b>Dirección:</b></td>
+                  <td><strong>Dirección:</strong></td>
                   <td><%= @distributor.address %></td>
                 </tr>
               <% end %>
               <tr>
-                <td><b>Teléfono:</b></td>
+                <td><strong>Teléfono:</strong></td>
                 <td>(<%= distributor_city.lada %>) <%= @distributor.telephone %></td>
-                <td><b>Celular:</b></td>
+                <td><strong>Celular:</strong></td>
                 <td><%= @distributor.cellphone %></td>
               </tr>
               <tr>
-                <td><b>Email:</b></td>
+                <td><strong>Email:</strong></td>
                 <td><%= @distributor.email %></td>
                 <td></td>
                 <td></td>

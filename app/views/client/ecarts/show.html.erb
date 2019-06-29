@@ -7,19 +7,336 @@
 </div>
 
 <% if session[:e_cart] %>
-  <%= render partial: "products" %>
+
+  <div id="ecart_content">
+    <%= render "products" %>
+    <%= render "review" %>
+
+    <div class="row dotted extra-padding">
+      <div class="col-md-10 col-xs-6 text-right">
+        <strong>Sub total:</strong>
+      </div>
+      <div class="col-md-2 col-xs-6" >
+        $ <span id="order-sub-total"><%= @total %></span> MXN
+      </div>
+
+      <div class="col-md-10 col-xs-6 text-right">
+        <strong>Coste de envío:</strong>
+      </div>
+      <div class="col-md-2 col-xs-6" >
+        $ <span id="order-shipping-cost">
+          0.00
+        </span> MXN
+      </div>
+
+      <div class="col-md-10 text-right">
+        <span id="delivery-time"></span>
+      </div>
+
+      <div class="col-md-10 col-xs-6 text-right text-lg">
+        <strong>Total:</strong>
+      </div>
+      <div class="col-md-2 col-xs-6 text-lg" >
+        $ <span id="order-grand-total"><%= @total %></span> MXN
+      </div>
+    </div>
+
+    <%= form_tag client_create_order_path(@current_user.hash_id), 
+      method: :post, id: "create-order-form" do %>
+
+      <%= render "shipment_method" %>
+      <%= render "payment_method" %>
+      <%= render "invoice_requirement" %>
+      <%= hidden_field_tag "delivery_cost" %>
+      <%= hidden_field_tag "guides" %>
+
+      <section class="row progress-bar text-center" style="width:100%;">
+        <div class="progress-bit progress-1 active">1</div>
+        <div class="progress-bit progress-2">2</div>
+        <div class="progress-bit progress-3">3</div>
+        <div class="progress-bit progress-4">4</div>
+        <div class="progress-bit progress-5">5</div>
+      </section>
+
+      <span id="step-down" class="btn btn-custom-1 hidden pull-left"
+        onclick="stepBack()">Volver</span>
+      <span id="step-up" class="btn btn-custom-1 pull-right"
+        onclick="stepForward()">Continuar</span>
+      <span id="create-order" class="btn btn-custom-1 pull-right hidden"
+        onclick="$('#create-order-form').submit()">Guardar</span>
+    <% end %>
+  </div>
+
+  <br><br><br><br><br><br><br><br>
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        <strong>NOTA:</strong> Para que el envío sea totalmente gratis y con el beneficio de un precio de mayoreo,
+        es necesario la compra mínima de <strong>$<span class="individual-cost"><%= @warehouse.wholesale %></strong></span>
+        de cualquiera de nuestros productos.
+      </p>
+    </div>
+    <% if @product_prices.size == 0 %>
+      <div class="col-md-12 text-center">
+        <h3 class="iconbox-title">¿Es usted mayorista?</h3>
+        <div class="col-sm-12">
+          <% notice = WebInfo.where(name: "ECART_NOTICE").take %>
+          <%= render notice.description_render_path %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="devider m-b-xxl">
+          <%= image_tag("divider-down.svg") %>
+        </div>
+      </div>
+  </div>
 <% else %>
-  <%= render partial: "no_products" %>
+  <%= render partial: "empty_cart" %>
 <% end %>
 
-<script type="text/javascript">
-window.addEventListener( "pageshow", function ( event ) {
-  var historyTraversal = event.persisted || 
-    ( typeof window.performance != "undefined" && 
-        window.performance.navigation.type === 2 );
-  if ( historyTraversal ) {
-    // Handle page restore.
-    window.location.reload();
+<%= form_tag client_ecart_update_quantity_path(@current_user), method: :put,
+  remote: true, id: "update_price_form", style: "visibility: hidden;" do %>
+  <%= text_field_tag :product, nil %>
+  <%= number_field_tag :new_quantity, nil, min: 1, step: 1 %>
+  <%= number_field_tag :current_existence, nil, step: 1 %>
+<% end %>
+
+<i id="wholesale" class="hidden"><%= @warehouse.wholesale %></i>
+<i id="shipping_cost_is_present" class="hidden">NO</i>
+
+<style>
+  h4{ margin-bottom: 2em; }
+  form img{
+    -webkit-filter: grayscale(90%);
+    filter: grayscale(90%);
+    border-radius: 5px;
+    height: 75px;
   }
-});
+  .dotted{
+    border-bottom: 1px dotted #DDD;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .removeFilter{
+    -webkit-filter: none;
+    filter: none;
+  }
+  .inline-block > div{ display: inline-block; margin-right: 3em; }
+  .product-descriptor{ display: block; }
+  .step{ margin-top: 3em; }
+  .text-lg{ font-size: 1.4em; }
+  .progress-bar{ width: 100%; margin-top: 2em; margin-bottom: 2em; }
+  .progress-bar > div{ display: inline-block; width: 18%; }
+  .progress-bar > div.active{ background-color: #333; }
+  @media screen and (max-width: 920px){
+    .inline-block { margin-top: 1em; }
+    .inline-block label{ display: block; }
+    .product-descriptor{ display: inline-block; }
+    .product div{ margin-top: 0.5em; }
+    .extra-padding{ padding-bottom: 4em; }
+    .img-circle{ max-width: 75px; }
+  }
+</style>
+
+<script type="text/javascript">
+  let step = 1;
+
+  function removeFilter(target, type){
+    $(`.removeFilter.${type}`).removeClass("removeFilter");
+    $(target).addClass("removeFilter");
+  }
+
+  function update_quantity(product, new_quantity, current_existence) {
+    $("#product").val(product);
+    $("#new_quantity").val(new_quantity);
+    $("#current_existence").val(current_existence);
+    $("#update_price_form").submit();
+  }
+
+  function money_format(number){
+    return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
+      return i && c !== "." && ((a.length - i) % 3 === 0) ? "," + c : c;
+    });
+  }
+
+  function fetchParcelPrices(trigger){
+    original_target = "<%= client_ecart_parcel_prices_path(@current_user, 'replace_with_id', format: :js) %>";
+    new_target = original_target.replace("replace_with_id", trigger.value);
+    $.ajax({
+      url: new_target,
+      context: document.body
+    }).done(function(body) {});
+    // $(".banks").removeClass("hidden");
+    $(".banks input").attr("required", true);
+  }
+
+  // pick a guide for package delivery based on weight
+  function pickGuide(weight, available_weights){
+    // if total package weight is less than max guide weight pick it
+    for (let index = 0; index < available_weights.length; index++) {
+      if(weight <= available_weights[index]){
+        return index;
+      }
+    }
+
+    // if total package weight is more than max guide weight then send last one
+    // because it has the highest max weight possible
+    return available_weights.length - 1;
+  }
+
+  // get an object with the necessary guides for shipment
+  function getGuides(total_weight, weights, prices){
+    var guides = new Object();
+
+    // keep adding guides until we dont have product ramaining
+    while (total_weight > 0) {
+      // pick the correct guide using weight as reference
+      guide_index = pickGuide(total_weight, weights);
+      price = prices[guide_index];
+
+      // add the picked guide to our guides object
+      if(guides[price] !== undefined)
+        guides[price] += 1;
+      else
+        guides[price] = 1;
+
+      // remove the weight that can carry that guide
+      total_weight -= weights[guide_index];
+    }
+
+    return guides;
+  }
+
+  // parse the guides object to String format
+  function guidesToString(guides){
+    guides_array = [];
+    Object.keys(guides).forEach(guide_type => {
+      guides_array.push(`${guides[guide_type]} guía(s) de $${guide_type}`)
+    });
+    return guides_array.join("|");
+  }
+
+  // calculate delivery cost based on number and type of guides
+  function calculateDeliveryCost(guides){
+    var delivery_cost = 0;
+
+    Object.keys(guides).forEach(guide_type => {
+      delivery_cost += (guide_type * guides[guide_type]);
+    });
+
+    return delivery_cost;
+  }
+
+  function noShipping() {
+    // obtain the current_sub_total
+    var last_shipping_cost = parseFloat($("#order-shipping-cost").text().replace(",",""));
+    var current_grand_total = parseFloat($("#order-grand-total").text().replace(",",""));
+    var current_sub_total = current_grand_total;
+    if($("#shipping_cost_is_present").text().trim() == "YES")
+      current_sub_total = current_grand_total - last_shipping_cost;
+    
+    $("#order-shipping-cost").text("0.00");
+    $("#delivery_cost").val(0);
+    $("#guides").val("Recoje en local");
+    $("#shipping_cost_is_present").text("NO");
+    $("#order-grand-total").text(money_format(current_sub_total));
+    // $(".banks").addClass("hidden");
+    $(".banks input").removeAttr("required");
+    $("#delivery-time").text("");
+  }
+
+  function stepForward(){
+    let radiobutton = null;
+    if(step == 5) return; // Do not step forward if you are on last step (5)
+    switch (step) {
+      case 2:
+        radiobutton = $("input[name='parcel_id']:checked");
+        break;
+      case 3:
+        radiobutton = $("input[name='payment_method']:checked");
+        break;
+      case 4:
+        radiobutton = $("input[name='invoice']:checked");
+        break;
+    }
+    // Do not step forward if there is no selected option in current step
+    if(radiobutton && radiobutton.length == 0){ 
+      $("#dismissible_alerts").append(`
+        <%= j render partial: "/shared/dismissible_alert",
+          locals: {message_type: :info, message: "Favor de seleccionar una opción"} %>
+      `);
+      return;
+    }else if(step == 2 && radiobutton[0].value == 0){
+      $("input[name='payment_method']")[0].checked = true;
+      step += 1;
+    }
+
+    step += 1; // Step forward
+    showHideButtons();
+    showStep();
+  }
+
+  function stepBack(){
+    if(step == 1) return; // Do not step back if you are on first step
+    step -= 1; // Step back
+    showHideButtons();
+    showStep();
+  }
+
+  function showHideButtons() {
+    // Show hide buttons accordingly
+    if(step == 1) $("#step-down").addClass("hidden");
+    if(step != 1) $("#step-down").removeClass("hidden");
+    if(step == 5) {
+      $("#step-up").addClass("hidden");
+      $("#create-order").removeClass("hidden");
+    }
+    if(step != 5){
+      $("#step-up").removeClass("hidden");
+      $("#create-order").addClass("hidden");
+    }
+  }
+
+  function showStep() {
+    if(step == 5){
+      shipment = $("input[type='radio'][name='parcel_id']:checked");
+      payment = $("input[type='radio'][name='payment_method']:checked");
+      invoice = $("input[type='radio'][name='invoice']:checked");
+
+      $("#review-shipment-method").text(shipment[0].getAttribute("info"));
+      $("#review-payment-method").text(payment[0].getAttribute("info"));
+      $("#review-invoice-requirement").text(invoice[0].getAttribute("info"));
+    }
+
+    // Add hidden class to all steps
+    $(".step").addClass("hidden");
+    // Remove hidden class to the current step
+    $(`.step-${step}`).removeClass("hidden");
+
+    $(".progress-bit").removeClass("active");
+    $(`.progress-${step}`).addClass("active");
+  }
+
+  $(document).ready(function(){
+    costs = $(".individual-cost");
+    costs.each(function(){
+      $(this).html(money_format($(this).text()));
+    });
+
+    total = $("#grand-total");
+    total.html(money_format(total.text()));
+  });
+
+  window.addEventListener( "pageshow", function ( event ) {
+    var historyTraversal = event.persisted || 
+      ( typeof window.performance != "undefined" && 
+          window.performance.navigation.type === 2 );
+    if ( historyTraversal ) {
+      // Handle page restore.
+      window.location.reload();
+    }
+  });
 </script>

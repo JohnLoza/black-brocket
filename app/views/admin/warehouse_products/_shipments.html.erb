@@ -26,13 +26,13 @@
                 </div>
                 <div class="hr-line-dashed pro-mobile"></div>
                 <div class="col-sm-2 b-r text-center">
-                  <h4>Revisar envío</br>
+                  <h4>Revisar envío<br>
                   <%= link_to details_url.sub("s_id", s.id.to_s) do %>
                     <i class="fa fa-eye size-icon"></i>
                   <% end %>
                   <br>
                   <% if @current_user.has_permission?("warehouse_products@delete_shipments") and !s.reviewed %>
-                    <h4>Eliminar</br>
+                    <h4>Eliminar<br>
                     <%= link_to admin_chief_destroy_shipment_path(params[:warehouse_id], s.id),
                       method: :delete, data: {confirm: "Estas seguro(a) de eliminar el envío?"} do %>
                       <i class="fa fa-trash size-icon"></i>

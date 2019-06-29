@@ -1,0 +1,35 @@
+<section class="row inline-block step step-2 hidden text-center">
+  <h4>Seleccione el método de envío</h4>
+  <% if @local_regions.include? @current_user.city_id %>
+    <div>
+      <%= radio_button_tag "parcel_id", 0, false, autocomplete: :off, style: "display: none;",
+        onchange: "noShipping(); removeFilter('.parcel_img_0', 'parcel');", required: true,
+        info: "Recoger en almacén Galeana 125, Centro, Guadalajara, Jal. cp 44100" %>
+      <label for="parcel_id_0">
+        <%= image_tag "recoger-en-almacen.svg", class: "parcel_img_0 parcel" %>
+      </label>
+    </div>
+  <% end %>
+
+  <% if @local_parcel %>
+    <div>
+      <%= radio_button_tag "parcel_id", @local_parcel.id, false, autocomplete: :off, required: true,
+        onchange: "fetchParcelPrices(this); removeFilter('.parcel_img_#{@local_parcel.id}', 'parcel')",
+        info: "Paquetería Black Brocket", style: "display: none;" %>
+      <label for="parcel_id_<%= @local_parcel.id %>">
+        <%= image_tag @local_parcel.image.url(:mini), class: "parcel_img_#{@local_parcel.id} parcel" %>
+      </label>
+    </div>
+  <% end %>
+
+  <% @parcels.each do |parcel| %>
+    <div>
+      <%= radio_button_tag "parcel_id", parcel.id, false, autocomplete: :off, required: true, 
+        onchange: "fetchParcelPrices(this); removeFilter('.parcel_img_#{parcel.id}', 'parcel')",
+        info: parcel.parcel_name, style: "display: none;" %>
+      <label for="parcel_id_<%= parcel.id %>">
+        <%= image_tag parcel.image.url(:mini), class: "parcel_img_#{parcel.id} parcel" %>
+      </label>
+    </div>
+  <% end %>
+</section>

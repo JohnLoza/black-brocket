@@ -5,7 +5,7 @@
       </tr>
     </thead>
     <tr>
-      <td><b>Revisado:</b></td>
+      <td><strong>Revisado:</strong></td>
       <td>
         <% if s.reviewed %>
           <span class="badge badge-primary">
@@ -19,11 +19,11 @@
       </td>
     </tr>
     <tr>
-      <td><b>Fecha del envío:</b></td>
+      <td><strong>Fecha del envío:</strong></td>
       <td><%= l(s.created_at, format: :long) %></td>
     </tr>
     <tr>
-      <td><b>Jefe de almacén que autorizó el envío:</b></td>
+      <td><strong>Jefe de almacén que autorizó el envío:</strong></td>
       <td><%= link_to s.Chief.name, admin_site_worker_path(s.Chief.hash_id) %></td>
     </tr>
     <% if !s.origin_warehouse_id.nil? %>
@@ -31,7 +31,7 @@
         <td><%= s.OriginWarehouse.name %></td></tr>
     <% end %>
     <tr>
-      <td><b>Estatus:</b></td>
+      <td><strong>Estatus:</strong></td>
       <td>
         <% if s.got_safe_to_destination %>
           <l class="text-info">Llegó completo</l>
@@ -44,7 +44,7 @@
     </tr>
     <% if s.got_safe_to_destination or s.got_safe_to_destination == false %>
       <tr>
-        <td><b>Trabajador que recibió el envío:</b></td>
+        <td><strong>Trabajador que recibió el envío:</strong></td>
         <td><%= link_to s.Worker.name, admin_site_worker_path(s.Worker.hash_id) %></td>
       </tr>
     <% end %>

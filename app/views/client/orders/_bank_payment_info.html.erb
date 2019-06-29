@@ -1,13 +1,10 @@
-<% @bank_accounts.each do |account| %>
-  <tr>
-    <td><%= @bank.name %></td>
-    <td><%= account.account_number %></td>
-    <td><%= account.interbank_clabe %></td>
-    <td><%= @order.hash_id %></td>
-    <td><%= @bank.owner %></td>
-  </tr>
-<% end %>
-<tr>
-  <td>Contacto:</td>
-  <td><%= @bank.email %></td>
-</tr>
+<p><strong>Banco:</strong> <%= @bank.name %></p>
+<p><strong>Beneficiario:</strong> <%= @bank.owner %></p>
+<p><strong>Referencia:</strong> <%= @order.hash_id %></p>
+
+<p><strong>Número de cuenta:</strong> <%= @bank_accounts[0].account_number %></p>
+<p><strong>Clabe Interbancaria:</strong> <%= @bank_accounts[0].interbank_clabe %></p>
+
+<p><strong>Total a pagar:</strong> $<%= @order.total %> MXN</p>
+
+<p><strong>Contacto:</strong> <%= @bank.email %></p>

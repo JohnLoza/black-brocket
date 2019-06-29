@@ -48,33 +48,33 @@
             <div class="table-responsive">
               <table class="table">
                 <tr>
-                  <td><b>Clave:</b></td>
+                  <td><strong>Clave:</strong></td>
                   <td><%= @product.hash_id %></td>
-                  <td><b>Nombre:</b></td>
+                  <td><strong>Nombre:</strong></td>
                   <td><%= @product.name %></td>
                 </tr>
                 <tr>
-                  <td><b>Precio del producto:</b></td>
+                  <td><strong>Precio del producto:</strong></td>
                   <td>$ <%= @product.price %></td>
-                  <td><b>Precio recomendado:</b></td>
+                  <td><strong>Precio recomendado:</strong></td>
                   <td>$ <%= @product.recommended_price %></td>
                 </tr>
                 <tr>
-                  <td><b>Precio mínimo:</b></td>
+                  <td><strong>Precio mínimo:</strong></td>
                   <td>$ <%= @product.lowest_price %></td>
-                  <td><b>Costo de envío (por menudeo):</b></td>
+                  <td><strong>Costo de envío (por menudeo):</strong></td>
                   <td>$ <%= @product.shipping_cost %></td>
                 </tr>
                 <tr>
-                  <td><b>Fecha de creación:</b></td>
+                  <td><strong>Fecha de creación:</strong></td>
                   <td><%= l(@product.updated_at, format: :long) %></td>
-                  <td><b>Última modificación:</b></td>
+                  <td><strong>Última modificación:</strong></td>
                   <td><%= l(@product.created_at, format: :long) %></td>
                 </tr>
                 <tr>
-                  <td><b>Presentación:</b></td>
+                  <td><strong>Presentación:</strong></td>
                   <td><%= @product.presentation %></td>
-                  <td><b>Publicación:</b></td>
+                  <td><strong>Publicación:</strong></td>
                   <td><% if @product.show %>
                     <span class="label label-primary">Publicado</span>
                     <% else %>
@@ -82,7 +82,7 @@
                     <% end %></td>
                   </tr>
                   <tr>
-                    <td><b>Descripción:</b></td>
+                    <td><strong>Descripción:</strong></td>
                   </tr>
                   <tr>
                     <td colspan="4"><%= render @product.description_render_path %></td>

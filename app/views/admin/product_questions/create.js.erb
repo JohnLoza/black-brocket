@@ -6,3 +6,4 @@
   $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
     locals: {message_type: :info, message: "Ocurrió un error al guardar la respuesta"} %>`);
 <% end %>
+$(".loader-overlay").remove();

@@ -10,74 +10,95 @@
   <div id="<%=o.hash_id%>" class="order-box">
     <div class="row order-box-title">
       <div class="col-xs-9">
-        <b>orden</b>
+        <strong>Referencia:</strong> <span><%= o.hash_id %></span>
       </div>
       <div class="col-xs-3 text-right">
         <% if o.state == "WAITING_FOR_PAYMENT" or o.state == "LOCAL" %>
           <!-- to cancel an order -->
           <%= link_to "<span class='icon-close' style='font-size: 30px;'></span>".html_safe,
-            client_cancel_order_path(@current_user.hash_id, o.hash_id),
+            client_cancel_order_path(@current_user.hash_id, o.hash_id), class: "text-danger",
             data:{confirm: "Seguro(a) de cancelar el pedido?"}, remote: true, method: :delete %>
         <% end %>
       </div>
     </div>
 
     <div class="row order-box-info">
-      <div class="col-sm-2">
-        <b>Referencia:</b></br>
-        <%= o.hash_id %>
+      <div class="col-sm-3 order-info">
+        <strong>Stado:</strong>
+        <% case o.state %>
+        <%when "ORDER_CANCELED"%>
+          <label class="label label-danger"><%=t(o.state)%></label>
+        <%when "PAYMENT_REJECTED"%>
+          <label class="label label-warning"><%=t(o.state)%></label>
+        <%when "PAYMENT_DEPOSITED"%>
+          <label class="label label-custom-2"><%=t(o.state)%></label>
+        <%else%>
+          <label class="label label-success"><%=t(o.state)%></label>
+        <%end%>
       </div>
-      <!-- div class="col-sm-2">
-        <b>Fecha:</b></br> <%#= l(o.created_at, format: :long) %>
-      </div -->
-      <div class="col-sm-2">
-         <b>Status:</b></br>
-         <% case o.state %>
-         <%when "ORDER_CANCELED"%>
-           <label class="label label-danger" style="font-size: 13px;"><%=t(o.state)%></label>
-         <%when "PAYMENT_REJECTED"%>
-           <label class="label label-warning" style="font-size: 13px;"><%=t(o.state)%></label>
-         <%when "PAYMENT_DEPOSITED"%>
-           <label class="label label-custom-2" style="font-size: 13px;"><%=t(o.state)%></label>
-         <%else%>
-           <label class="label label-success" style="font-size: 13px;"><%=t(o.state)%></label>
-         <%end%>
-      </div>
-      <div class="col-sm-2">
-        <b>Total:</b></br> $<%= o.total %> MXN
-      </div>
-      <div class="col-sm-2">
-        <b>Código de rastreo:</b>
-        <% if o.tracking_code and o.parcel_id and o.parcel_id != 0 %>
-          <% parcel = o.Parcel %>
-          <a href="<%=parcel.tracking_url%>" target="_blank">
-            <%= image_tag parcel.image.url(:mini), class: "img-rounded", style: "width:60px;" %>
-          </a>
-        <% end %><br>
-        <%= o.tracking_code %>
-        <%= "No aplica" if o.state == "LOCAL" %>
-      </div>
-      <div class="col-sm-2 text-center">
 
-        <b>Comprobante:</b></br>
-        <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
-          <%= link_to client_get_order_payment_path(@current_user.hash_id, o.download_payment_key), target: "_blank" do %>
-            <i class="fa fa-file-o fa-3x"></i>
+      <div class="col-sm-3 order-info">
+        <strong>Código de rastreo:</strong>
+        <span>
+          <% if o.tracking_code and o.parcel_id and o.parcel_id != 0 %>
+            <% parcel = o.Parcel %>
+            <a href="<%=parcel.tracking_url%>" target="_blank">
+              <%= image_tag parcel.image.url(:mini), class: "img-rounded", style: "width:60px;" %>
+            </a>
           <% end %>
-        <% elsif o.state == "LOCAL" %>
-          <span class="label label-default">No aplica</span>
-        <% else %>
-          <span class="label label-default">No se ha subido ninguna foto.</span>
-        <% end %>
-
+          <%= o.tracking_code %>
+          <% if ["LOCAL","PICKED_UP","PAYMENT_ACCEPTED_LOCAL"].include? o.state %>
+            <label class="label label-default">Recojer en local</label>
+          <% end %>
+        </span>
       </div>
 
-      <div class="col-sm-2 text-center">
-        <p><strong>Ver pedido</strong></p>
+      <div class="col-sm-2 order-info">
+        <strong>Total:</strong>
+        <span style="margin-top: 5px;">$<%= o.total %> MXN</span>
+      </div>
+      
+      <div class="col-sm-2 order-info">
+        <strong>Comprobante:</strong>
+        <span class="text-center">
+          <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
+            <%= link_to client_get_order_payment_path(@current_user.hash_id, o.download_payment_key), target: "_blank" do %>
+              <i class="fa fa-file-o fa-3x"></i>
+            <% end %>
+          <% else %>
+            <label class="label label-default">Sin comprobante</label>
+          <% end %>
+        </span>
+      </div>
+
+      <div class="col-sm-2 text-center order-info">
+        <strong>Ver pedido</strong>
         <%= link_to "<span class='icon-eye'></span>".html_safe, client_order_path(@current_user.hash_id, o.hash_id),
           class: "darklink", style: "font-size: 32px;", target: "_blank" %>
       </div>
     </div>
+
+    <% if ["WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED","PAYMENT_REJECTED","LOCAL"].include? o.state %>
+      <div class="row order-box-foot">
+        <%= form_for(o, url: client_upload_pay_order_path(@current_user.hash_id, o.hash_id),
+          method: :put, html:{ id:"form_photo_#{o.hash_id}"}) do |f| %>
+
+          <%= f.file_field :pay_img, id: "field_#{o.hash_id}",
+            style: "display: none;", multiple: false,
+            onchange: "$('#form_photo_#{o.hash_id}').submit();" %>
+
+          <span onclick="$('#field_<%=o.hash_id%>').click();"
+            class="btn btn-gold pull-right">Enviar comprobante de pago</span>
+        <% end %>
+
+        <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id),
+          class: "darklink label-custom-2", style: "cursor:pointer; color: #FEFEFE;", 
+          remote: true, id: "payment-info-link-#{o.hash_id}" do %>
+          <span class="btn btn-white pull-right">Información para pagar</span>
+        <% end %>
+      </div>
+    <% end %>
+
     <% if o.state == "LOCAL" %>
       <div class="row order-box-foot" style="padding-left: 1em;">
         <p>Recojer en: Galeana 125, col Centro Guadalajara, Jal. cp 44100, Lunes a Sábado 9 am a 6 pm</p>
@@ -85,36 +106,8 @@
           o se puede realizar un depósito como el resto de las órdenes.</p>
       </div>
     <% end %>
-    <% if o.state=="WAITING_FOR_PAYMENT" or o.state=="PAYMENT_DEPOSITED" or o.state=="PAYMENT_REJECTED" or o.state=="LOCAL" %>
-    <div class="row order-box-foot">
-      <div class="col-sm-6">
-        <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id),
-          class: "darklink label-custom-2", style: "cursor:pointer; color: #FEFEFE;", 
-          remote: true, id: "payment-info-link-#{o.hash_id}" do %>
-          <span class="btn btn-custom-1 btn-sm pull-right"> <strong>Información para pagar</strong></span><br>
-        <% end %>
-      </div>
-
-      <%= form_for(o, url: client_upload_pay_order_path(@current_user.hash_id, o.hash_id),
-                      method: :put, html:{id:"form_photo_#{o.hash_id}"},
-                      data:{confirm: "Seguro(a) de ser el archivo correcto?"}) do |f| %>
-        <div class="col-sm-2 text-right">
-          <%= f.file_field :pay_img, id: "field_#{o.hash_id}",
-              style: "display: none;", multiple: false,
-              onchange: "$('#pay_img_commit_#{o.hash_id}').click();" %></br>
-        </div>
-        <div class="col-sm-4">
-          <span onclick="$('#field_<%=o.hash_id%>').click();"
-             class="btn btn-custom-1 btn-sm pull-right">Enviar comprobante de pago</span>
-
-          <%= f.submit "Subir foto del pago".html_safe,
-              id: "pay_img_commit_#{o.hash_id}", style: "display: none;" %>
-        </div>
-      <% end %>
-    </div>
-    <% end %>
+    
   </div>
-  </br></br>
 <% end %>
 
 <div class="row">
@@ -124,43 +117,36 @@
      </div>
    </div>
 </div>
-<br><br>
+
 <div class="row">
-    <div class="col-sm-6 col-sm-offset-3">
-      <div class="devider m-b-xxl">
-        <%= image_tag("divider-down.svg") %>
-      </div>
+  <div class="col-sm-6 col-sm-offset-3">
+    <div class="devider m-b-xxl">
+      <%= image_tag("divider-down.svg") %>
     </div>
+  </div>
 </div>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header text-center">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h3 class="iconbox-title">Instrucciones de pago</h3>
       </div>
       <div class="modal-body">
-         <p><b>Paso 1:</b> Realice el pago total de su compra a una de las siguientes cuentas.</p>
-         <table class="table">
-           <thead>
-             <tr><th>Banco</th>
-               <th>Número de cuenta</th>
-               <th>Clabe interbancaria</th>
-               <th>Referencia</th>
-               <th>Beneficiario</th>
-             </tr>
-           </thead>
-           <tbody id="bank-payment-info">
-           </tbody>
-         </table>
-         <p><b>Paso 2:</b> Tome una foto, escanee o guarde el archivo del comprobante de pago.</p>
-         <p><b>Paso 3:</b> Seleccione el comprobante de pago dando click en “Enviar comprobante de pago”</p>
-         <p><b>NOTA:</b> Si  por error eligió un archivo equivocado y desea enviar otro, solo de click  nuevamente  en “Enviar comprobante de pago” y seleccione  el correcto.</p>
-         <p>
-           Si tiene alguna duda o comentario comuníquese sin costo al teléfono 01 800 500 7050
-         </p>
+        <p><strong>Nota:</strong> Si eligió recoger en el almacén tiene la opción de pagar en efectivo
+          al recibir su pedido o bien hacer un depósito/tránsferencia como se indica a continuación:</p>
+        <p><strong>Paso 1:</strong> Realice el pago total de su compra en la siguiente cuenta.</p>
+        
+        <section id="bank-payment-info"></section>
+
+        <p><strong>Paso 2:</strong> Tome una foto, escanee o guarde el archivo del comprobante de pago.</p>
+        <p><strong>Paso 3:</strong> Seleccione el comprobante de pago dando click en “Enviar comprobante de pago”</p>
+        <p><strong>Nota:</strong> Si  por error eligió un archivo equivocado y desea enviar otro, solo de click  nuevamente  en “Enviar comprobante de pago” y seleccione  el correcto.</p>
+        <p>
+          Si tiene alguna duda o comentario comuníquese sin costo al teléfono 01 800 500 7050
+        </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -177,5 +163,76 @@
     overflow-x: auto;
     white-space: nowrap;
   }
-  .modal-footer > .btn.btn-default{ margin: 0.5em; }
+  .modal-footer > .btn{ margin: 0.5em !important; }
+
+  .btn{
+    margin: 1em;
+    border-radius: 5px;
+  }
+
+  .btn-gold{
+    background: #E6CA9A;
+    border-color: #E6CA9A;
+    color: #333;
+  }
+
+  .btn-gold:hover,
+  .btn-gold:focus,
+  .btn-gold:active,
+  .btn-gold.active{
+    background: #D5B989;
+    border-color: #D5B989;
+  }
+
+  .btn-white{
+    background: #fff;
+    border-color: #bbb;
+    color: #333;
+  }
+
+  .btn-white:hover,
+  .btn-white:focus,
+  .btn-white:active,
+  .btn-white.active{
+    background: #efefef;
+    border-color: #777;
+  }
+
+  .order-box{ margin-bottom: 3em; }
+  .order-box,
+  .order-box-title,
+  .order-box-info{ background-color: #f6f6f6; }
+
+  .order-info{ margin-top: 0.5em; }
+  .order-info strong,
+  .order-info span,
+  .order-info label{
+    display: block;
+  }
+
+  .label{ font-size: 13px !important; }
+
+  #bank-payment-info{
+    background-color: #f6f6f6;
+    border: 1px solid #cacaca;
+    margin: 1em;
+    padding: 1em;
+    width: max-content;
+  }
+
+  @media screen and (max-width: 720px) {
+    .order-info strong,
+    .order-info span,
+    .order-info label{
+      display: inline-block;
+    }
+  }
 </style>
+
+<% if params[:info_for].present? %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#payment-info-link-<%= params[:info_for] %>").click();
+  });
+</script>
+<% end %>

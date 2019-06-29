@@ -10,15 +10,17 @@ class Api::WorkersApi::OrdersController < ApiController
   end
 
   def index
-    orders = Order.where(state: "PAYMENT_ACCEPTED", warehouse_id: @current_user.warehouse_id)
-              .order(created_at: :asc).paginate(page: params[:page], per_page: 25).includes(:Client, :Distributor)
+    state = params[:state].present? ? params[:state] : ["PAYMENT_ACCEPTED","LOCAL"]
+
+    orders = Order.where(state: state, warehouse_id: @current_user.warehouse_id)
+      .order(created_at: :asc).paginate(page: params[:page], per_page: 25).includes(:Client, :Distributor)
 
     data = Array.new
     orders.each do |order|
       client = order.Client
       distributor = order.Distributor
       hash = {folio: order.hash_id, date: order.created_at, client: order.client_id,
-        client_avatar: client.avatar_url, client_username: client.name,
+        client_avatar: client.avatar_url, client_username: client.name, state: order.state,
         distributor: order.distributor_id, distributor_avatar: nil, distributor_username: nil}
 
       if distributor
@@ -65,14 +67,15 @@ class Api::WorkersApi::OrdersController < ApiController
       data << {folio: order.hash_id, date: order.created_at, client: order.client_id, distributor: order.distributor_id}
     end
 
-    render status: 200,
-           json: {success: true, info: "DATA_RETURNED", data: data}
+    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
   def save_details
     used_render_already = false
     order = Order.find_by!(hash_id: params[:id])
-    render status: 200, json: {success: false, info: "ORDER_NOT_ELIGIBLE"} and return unless order.state == "PAYMENT_ACCEPTED"
+    unless ["PAYMENT_ACCEPTED", "LOCAL"].include? order.state 
+      render status: 200, json: {success: false, info: "ORDER_NOT_ELIGIBLE"} and return
+    end
     
     ActiveRecord::Base.transaction do
       indx = 0
@@ -98,9 +101,11 @@ class Api::WorkersApi::OrdersController < ApiController
         used_render_already = true and raise ActiveRecord::Rollback
       end
 
-      order.update_attribute(:state, "BATCHES_CAPTURED")
+      new_state = order.state == "LOCAL" ? "PICKED_UP" : "BATCHES_CAPTURED"
+      order.update_attribute(:state, new_state)
       OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
     end # Transaction #
+
     return if used_render_already
     render status: 200, json: {success: true, info: "BATCHES_CAPTURED"}
   end # def save_details #

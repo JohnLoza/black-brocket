@@ -227,6 +227,7 @@ Rails.application.routes.draw do
   namespace :distributor do
     # distributor paths
     get '/' => 'admin#index', as: :welcome
+    get '/products/prices' => 'admin#prices', as: :prices
     post '/update_home_image' => 'admin#update_home_image', as: :update_home_image
     post '/update_ui_theme/:theme' => 'admin#update_ui_theme', as: :update_ui_theme
 

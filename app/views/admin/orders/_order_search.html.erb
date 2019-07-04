@@ -16,7 +16,7 @@
         <%= o.hash_id %>
       </td>
       <td>
-        <%= link_to o.Client.username, admin_client_path(o.Client.hash_id) %>
+        <%= link_to o.Client.name, admin_client_path(o.Client.hash_id) %>
       </td>
       <td>
         <% if totals %>

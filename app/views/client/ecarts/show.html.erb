@@ -265,10 +265,10 @@
     if(radiobutton && radiobutton.length == 0){ 
       $("#dismissible_alerts").append(`
         <%= j render partial: "/shared/dismissible_alert",
-          locals: {message_type: :info, message: "Favor de seleccionar una opción"} %>
-      `);
+          locals: {message_type: :info, message: "Favor de seleccionar una opción"} %>`);
       return;
     }else if(step == 2 && radiobutton[0].value == 0){
+    // Omit payment method if user is going to go to the warehouse
       $("input[name='payment_method']")[0].checked = true;
       step += 1;
     }

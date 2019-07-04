@@ -8,7 +8,7 @@
   <div class="panel-body">
     <%= form_tag(create_message_url, remote: true) do %>
       <%= text_area_tag :comment, nil, class: "form-control form-control-black", 
-        maxlength: 250, onkeypress: 'return submitOnEnter(event);' %><br>
+        maxlength: 250, onkeypress: "return submitOnEnter(event);", required: true %><br>
       <%= submit_tag :Enviar, class: "btn btn-custom-1 pull-right",
         id: 'new-message-submit' %>
     <% end %>

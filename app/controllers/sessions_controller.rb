@@ -1,13 +1,10 @@
 class SessionsController < ApplicationController
 
   def new
-    image = WebPhoto.where(name: "LOGIN").take
-    if image.blank?
-      @bg_img = image_url "person-woman-coffee-cup-large.jpg"
-    else
-      @bg_img = image.photo.url
-    end 
-    render :new, layout: false and return unless logged_in?
+    unless logged_in?
+      loadBgImage()
+      render :new, layout: false and return
+    end
 
     redirect_to admin_welcome_path if session[:user_type] == "w"
     redirect_to distributor_welcome_path if session[:user_type] == "d"
@@ -38,6 +35,7 @@ class SessionsController < ApplicationController
 
     flash.now[:danger] = "Email o contraseña incorrecto"
     @email = params[:session][:email].downcase
+    loadBgImage()
     render :new, layout: false
   end
 
@@ -111,5 +109,14 @@ class SessionsController < ApplicationController
         return true
       end
       return false
+    end
+
+    def loadBgImage()
+      image = WebPhoto.where(name: "LOGIN").take
+      if image.blank?
+        @bg_img = image_url "person-woman-coffee-cup-large.jpg"
+      else
+        @bg_img = image.photo.url
+      end
     end
 end

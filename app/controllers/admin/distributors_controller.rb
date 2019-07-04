@@ -1,5 +1,5 @@
 class Admin::DistributorsController < AdminController
-  skip_before_action :verify_authenticity_token, only: :answer_candidate
+  # skip_before_action :verify_authenticity_token, only: :answer_candidate
 
   def index
     deny_access! unless @current_user.has_permission_category?("distributors")

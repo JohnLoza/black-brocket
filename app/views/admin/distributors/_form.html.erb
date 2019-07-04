@@ -292,7 +292,7 @@
     telephone.on("change", function(){
       console.log("telephone");
       telephone.attr("required", true);
-      cellphone.removeAttr("required")
+      cellphone.removeAttr("required");
       if (telephone.val() == ""){
         cellphone.attr("required", true)
       }
@@ -301,7 +301,7 @@
     cellphone.on("change", function(){
       console.log("cellphone");
       cellphone.attr("required", true);
-      telephone.removeAttr("required")
+      telephone.removeAttr("required");
       if (cellphone.val() == ""){
         telephone.attr("required", true)
       }

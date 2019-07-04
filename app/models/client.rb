@@ -34,7 +34,7 @@ class Client < ApplicationRecord
   # validates :email, confirmation: true
   # validates :email_confirmation, presence: true, on: :create
 
-  validates :name, format: { with: /\A[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙ\s\.']+\z/ }
+  # validates :name, format: { with: /\A[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙ\s\.']+\z/ }
 
   mount_uploader :photo, AvatarUploader
 

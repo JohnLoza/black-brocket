@@ -6,6 +6,11 @@ class Distributor::AdminController < ApplicationController
     @regions = @current_user.Regions
   end
 
+  def prices
+    @products = Product.where(deleted_at: nil).order(name: :asc)
+      .paginate(page: params[:page], per_page: 25)
+  end
+
   def update_home_image
     @current_user.update_attribute(:home_img, params[:distributor][:home_img])
     flash[:success] = "Imagen guardada"

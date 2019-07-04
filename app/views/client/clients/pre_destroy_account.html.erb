@@ -18,7 +18,8 @@
     </div>
     <div class="col-sm-5">
       <label style="pull-left">Contraseña:</label>
-      <%= password_field_tag :password, nil, class: "input form-control", maxlength: 20, placeholder: "**********" %>
+      <%= password_field_tag :password, nil, class: "input form-control", 
+        maxlength: 20, placeholder: "**********", required: true %>
     </div>
     <div class="col-sm-3" style="padding-top: 37px;">
       <%= submit_tag "Dar de baja mi cuenta", class: "btn btn-danger btn-sm btn-block", data: {confirm: "Estas seguro(a)? esto es irreversible."} %>

@@ -32,13 +32,13 @@
       <div class="input-group m-b-20">
           <span class="input-group-addon addon-login"><i class="fa fa-user"></i></span>
           <%= f.email_field :email, class: 'form-control form-clean',
-              style: 'padding-left: 10px;', placeholder: "email@example.com", value: @email, maxlength: 50 %>
+            required: true, placeholder: "email@example.com", value: @email, maxlength: 50 %>
       </div>
 
       <div class="input-group m-b-20">
           <span class="input-group-addon addon-login"><i class="fa fa-unlock-alt"></i></span>
           <%= f.password_field :password, class: 'form-control form-clean',
-              style: 'padding-left: 10px;', placeholder: "**********", maxlength: 20 %>
+            required: true, placeholder: "**********", maxlength: 20 %>
       </div>
 
       <div class="clearfix"></div>

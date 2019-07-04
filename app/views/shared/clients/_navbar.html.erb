@@ -84,8 +84,7 @@
           <li><%= link_to "Regístrate", client_sign_up_path %></li>
           <li><%= link_to "Iniciar sesión", log_in_path %></li>
         <% else %>
-          <%= render partial: '/shared/clients/desktop_navbar_options.html.erb',
-                      locals: {notifications: notifications} %>
+          <%= render partial: '/shared/clients/desktop_navbar_options.html.erb', locals: {notifications: notifications} %>
 
           <%= render '/shared/clients/mobile_navbar_options.html.erb' %>
         <% end %>

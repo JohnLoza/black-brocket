@@ -108,6 +108,8 @@
                 
                 <% unless logged_in? %>
                   <br><br>
+                  <%= link_to "Inicia sesión", log_in_path, class: "btn btn-custom-1" %>
+
                   <%= link_to 'Regístrate ahora!', client_sign_up_path, class: 'btn btn-custom-1', 
                     onclick: "gtag_report_conversion('#{client_sign_up_url}')" %>
                 <% end %>  

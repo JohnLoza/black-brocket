@@ -1,6 +1,7 @@
 class Client::OrdersController < ApplicationController
   before_action :logged_in?
   before_action :current_user_is_a_client?
+  before_action :verify_client_address, only: [:create]
   before_action :verify_fiscal_data, only: [:create]
 
   def index
@@ -32,8 +33,6 @@ class Client::OrdersController < ApplicationController
 
   def create
     render_404 and return unless session[:e_cart].present?
-    return unless verify_client_address
-    return unless verify_fiscal_data
     @order = setBasicInfo
 
     # find the products the client want to buy and verify stock #
@@ -189,8 +188,13 @@ class Client::OrdersController < ApplicationController
       order.guides = params[:guides]
       order.payment_method = params[:payment_method]
       order.parcel_id = params[:parcel_id]
+
       order.invoice = params[:invoice] if params[:invoice]
+      order.cfdi = params[:cfdi] if params[:invoice] == "1"
+      order.invoice_payment = params["invoice-payment-method"] if params[:invoice] == "1"
+
       order.state = params[:parcel_id] == "0" ? "LOCAL" : "WAITING_FOR_PAYMENT"
+
       address = {street: @current_user.street, extnumber: @current_user.extnumber,
         intnumber: @current_user.intnumber, col: @current_user.col,
         cp: @current_user.cp, street_ref1: @current_user.street_ref1,

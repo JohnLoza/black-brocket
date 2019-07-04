@@ -9,21 +9,21 @@
 <% @orders.each do |o| %>
   <div id="<%=o.hash_id%>" class="order-box">
     <div class="row order-box-title">
-      <div class="col-xs-9">
-        <b>Referencia:</b> <span><%= o.hash_id %></span>
-      </div>
-      <div class="col-xs-3 text-right">
-        <% if o.state == "WAITING_FOR_PAYMENT" or o.state == "LOCAL" %>
-          <!-- to cancel an order -->
-          <%= link_to "<span class='icon-close' style='font-size: 30px;'></span>".html_safe,
-            client_cancel_order_path(@current_user.hash_id, o.hash_id), class: "text-danger",
-            data:{confirm: "Seguro(a) de cancelar el pedido?"}, remote: true, method: :delete %>
-        <% end %>
-      </div>
+      <b>Fecha: </b>
+      <%= content_tag :span, l(o.created_at, format: :long)%>
+      <%# render partial: "dropdown_options", locals: {o: o} %>
+
+      <!-- Link to cancel the order -->
+      <% if o.state == "WAITING_FOR_PAYMENT" or o.state == "LOCAL" %>
+        <%= link_to "", client_cancel_order_path(@current_user.hash_id, o.hash_id), 
+          class: "pull-right icon-close text-danger", remote: true, method: :delete,
+          data:{confirm: "Seguro(a) de cancelar el pedido?"},
+          style: "font-size:24px; padding-right: 1em;" %>
+      <% end %>
     </div>
 
     <div class="row order-box-info">
-      <div class="col-sm-3 order-info">
+      <div class="col-sm-3 order-info text-center">
         <b>Stado:</b>
         <% case o.state %>
         <%when "ORDER_CANCELED"%>
@@ -37,7 +37,7 @@
         <%end%>
       </div>
 
-      <div class="col-sm-3 order-info">
+      <div class="col-sm-3 order-info text-center">
         <b>Código de rastreo:</b>
         <span>
           <% if o.tracking_code and o.parcel_id and o.parcel_id != 0 %>
@@ -53,17 +53,17 @@
         </span>
       </div>
 
-      <div class="col-sm-2 order-info">
+      <div class="col-sm-2 order-info text-center">
         <b>Total:</b>
         <span style="margin-top: 5px;">$<%= o.total %> MXN</span>
       </div>
       
-      <div class="col-sm-2 order-info">
+      <div class="col-sm-2 order-info text-center">
         <b>Comprobante:</b>
         <span class="text-center">
           <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
             <%= link_to client_get_order_payment_path(@current_user.hash_id, o.download_payment_key), target: "_blank" do %>
-              <i class="fa fa-file-o fa-3x"></i>
+              <i class="fa fa-file-o fa-2x"></i>
             <% end %>
           <% else %>
             <label class="label label-default">Sin comprobante</label>
@@ -71,10 +71,12 @@
         </span>
       </div>
 
-      <div class="col-sm-2 text-center order-info">
-        <b>Ver pedido</b>
-        <%= link_to "<span class='icon-eye'></span>".html_safe, client_order_path(@current_user.hash_id, o.hash_id),
-          class: "darklink", style: "font-size: 32px;", target: "_blank" %>
+      <div class="col-sm-2 order-info text-center">
+        <b>Ver detalles:</b>
+        <%= link_to client_order_path(@current_user.hash_id, o.hash_id),
+          class: "darklink", target: "_blank", style: "font-size: 24px;" do %>
+          <i class="icon-eye"></i>
+        <% end %>
       </div>
     </div>
 
@@ -98,6 +100,7 @@
         <% end %>
       </div>
     <% end %>
+
 
     <% if o.state == "LOCAL" %>
       <div class="row order-box-foot" style="padding-left: 1em;">
@@ -158,17 +161,7 @@
 <%= render "/shared/modal" %>
 
 <style>
-  .modal-body .table{
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-  .modal-footer > .btn{ margin: 0.5em !important; }
-
-  .btn{
-    margin: 1em;
-    border-radius: 5px;
-  }
+  .btn{ margin: 0.5em !important; }
 
   .btn-gold{
     background: #E6CA9A;
@@ -199,6 +192,8 @@
   }
 
   .order-box{ margin-bottom: 3em; }
+  .order-box-title{ padding-left: 15px; }
+
   .order-box,
   .order-box-title,
   .order-box-info{ background-color: #f6f6f6; }
@@ -206,9 +201,7 @@
   .order-info{ margin-top: 0.5em; }
   .order-info b,
   .order-info span,
-  .order-info label{
-    display: block;
-  }
+  .order-info label{ display: block; }
 
   .label{ font-size: 13px !important; }
 

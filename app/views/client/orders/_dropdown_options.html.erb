@@ -1,0 +1,62 @@
+<style>
+/* add this style to whenever i need this partial */
+.ellipsis-menu-icon{ color: #666; padding-left: 2em; padding-right: 2em; }
+.ellipsis-menu-icon:hover,
+.ellipsis-menu-icon:focus,
+.ellipsis-menu-icon:active{
+  color: #333;
+}
+.dropdown-right{ left: auto; right: 0 !important; }
+.dropdown-menu li a.icon span{ padding-left: 0.5em; }
+</style>
+
+<span class="pull-right dropdown">
+  <a href="#" class="ellipsis-menu-icon" data-toggle="dropdown" role="button" 
+    aria-haspopup="true" aria-expanded="true">
+    <i class="fa fa-ellipsis-v fa-2x"></i>
+  </a>
+  <ul class="dropdown-menu dropdown-alerts dropdown-right">
+    <li class="dropdown-header">Acciones</li>
+
+    <li>
+      <%= link_to client_order_path(@current_user.hash_id, o.hash_id),
+        class: "icon", target: "_blank" do %>
+        <i class="icon-eye"></i><span>Ver detalles</span>
+      <% end %>
+    </li>
+
+    <% if ["WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED","PAYMENT_REJECTED","LOCAL"].include? o.state %>
+      <%= form_for(o, url: client_upload_pay_order_path(@current_user.hash_id, o.hash_id),
+        method: :put, html:{ id:"form_photo_#{o.hash_id}"}) do |f| %>
+
+        <%= f.file_field :pay_img, id: "field_#{o.hash_id}",
+          style: "display: none;", multiple: false,
+          onchange: "$('#form_photo_#{o.hash_id}').submit();" %>
+      <% end %>
+
+      <li>
+        <a href="#" class="icon" onclick="$('#field_<%=o.hash_id%>').click();">
+          <i class="fa fa-upload"></i><span>Enviar comprobante</span>
+        </a>
+      </li>
+
+      <li>
+        <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id),
+          class: "icon", remote: true, id: "payment-info-link-#{o.hash_id}" do %>
+          <i class="fa fa-credit-card"></i><span>Información para pagar</span>
+        <% end %>
+      </li>
+    <% end %>
+
+    <!-- Link to cancel the order -->
+    <% if o.state == "WAITING_FOR_PAYMENT" or o.state == "LOCAL" %>
+      <li role="separator" class="divider"></li>
+      <li>
+        <%= link_to client_cancel_order_path(@current_user.hash_id, o.hash_id), class: "icon",
+          data:{confirm: "Seguro(a) de cancelar el pedido?"}, remote: true, method: :delete do %>
+          <i class="fa fa-trash"></i><span>Cancelar</span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</span>

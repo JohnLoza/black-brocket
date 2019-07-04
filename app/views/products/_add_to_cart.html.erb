@@ -1,12 +1,20 @@
 <tr class="no-mobile">
-  <td style="vertical-align: bottom;" align="right"><b>Cantidad:</b></td>
-  <td><input type="number" placeholder="0" min="1" max="10000000000" step="1" class="form-control"
-    onchange="update_quantity(this, this.value, '');" id="input_quantity" 
-    onkeypress="return isNumberKey(event)"/></td>
-  <td><%= link_to "Añadir al carrito!",
-      client_add_to_cart_path(@warehouse_product.hash_id)+"?quantity=NAN",
-      method: :put, remote: true, class: "btn btn-custom-3 btn-block", style: "font-size: 11.3px;",
-      id: "add_to_cart" %></td>
+  <td>
+    <b>Cantidad:</b>
+    <input type="number" placeholder="0" min="1" max="10000000000" step="1" class="form-control"
+      onchange="update_quantity(this, this.value, '');" id="input_quantity" 
+      onkeypress="return isNumberKey(event)" value="1"/>
+  </td>
+
+  <td>
+    <%= link_to "Añadir al carrito", 
+      client_add_to_cart_path(@warehouse_product.hash_id)+"?quantity=1", id: "add_to_cart",
+      method: :put, remote: true, class: "btn btn-custom-3 btn-block", style: "font-size: 11.3px;" %>
+
+    <%= link_to "Comprar ahora", 
+      client_add_to_cart_path(@warehouse_product.hash_id)+"?quantity=1&to_cart=true",
+      method: :put, remote: true, class: "btn btn-custom-3 btn-block", style: "font-size: 11.3px;" %>
+  </td>
 </tr>
 
 <script type="text/javascript">

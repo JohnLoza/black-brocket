@@ -282,12 +282,13 @@ class Admin::OrdersController < AdminController
       .where.not(state: ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED"])
       .where(where_statement).where(invoice: false).includes(:Client, :Distributor, :Details)
 
-    @invoice_required_orders = Order.where(state: ["SENT","DELIVERED"])
+    @invoice_required_orders = Order.where(state: ["SENT","DELIVERED","PAYMENT_ACCEPTED_LOCAL"])
       .where.not(state: ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED"])
       .where(where_statement).where(invoice: true).includes(:Client, :Distributor, :Details)
 
     @orders_to_be_sent = Order.where(state: "BATCHES_CAPTURED").where(where_statement).includes(:Client, :Distributor, :Details)
-    @orders_to_be_paid = Order.where(state: ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED"]).where(where_statement).includes(:Client, :Distributor, :Details)
+    @orders_to_be_paid = Order.where(state: ["WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED","LOCAL","PICKED_UP"])
+      .where(where_statement).includes(:Client, :Distributor, :Details)
     @label_styles = get_label_styles
   end
 

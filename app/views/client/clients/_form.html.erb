@@ -6,9 +6,8 @@
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :name, "Nombre Completo" %>
-				<%= f.text_field :name, class: "form-control form-control-black", placeholder: "Luz Yenny García Ríos",
-						required: true, minlength: 2, maxlength: 100, "data-parsley-pattern" => "/^[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙü\\s\\.']+$/" %>
-				<span class="help-text">Solo se admite letras, espacios y puntos</span>
+				<%= f.text_field :name, class: "form-control form-control-black", 
+					placeholder: "Luz Yenny García Ríos", required: true, minlength: 2, maxlength: 100 %>
 			</div>
 		</div><!-- .row -->
 
@@ -16,7 +15,7 @@
 			<div class="col-sm-12 form-group">
 	      <%= f.label :email, "Correo electrónico" %>
 	      <%= f.email_field :email, class: "form-control form-control-black", placeholder: "john@example.com",
-						required: true, maxlength: 50, disabled: true %>
+					required: true, maxlength: 50, disabled: true %>
 			</div>
 		</div><!-- .row -->
 
@@ -61,23 +60,21 @@
 			<div class="col-sm-12 form-group">
 				<%= f.label :street, "Calle" %>
 				<%= f.text_field :street, class: "form-control form-control-black",
-						required: true, maxlength: 50 %>
+					required: true, maxlength: 50 %>
 			</div>
 		</div><!-- .row -->
 
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :extnumber, "Número exterior" %>
-				<%= f.number_field :extnumber, class: "form-control form-control-black",
-						required: true, maxlength: 5, step: 1, min: 0 %>
+				<%= f.text_field :extnumber, class: "form-control form-control-black", required: true, maxlength: 8 %>
 			</div>
 		</div><!-- .row -->
 
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :intnumber, "Número interior" %>
-				<%= f.number_field :intnumber, class: "form-control form-control-black",
-						maxlength: 4, step: 1, min: 0 %>
+				<%= f.text_field :intnumber, class: "form-control form-control-black", maxlength: 8 %>
 			</div>
 		</div><!-- .row -->
 
@@ -85,7 +82,7 @@
 			<div class="col-sm-12 form-group">
 				<%= f.label :col, "Colonia" %>
 				<%= f.text_field :col, class: "form-control form-control-black",
-						required: true, maxlength: 50 %>
+					required: true, maxlength: 50 %>
 			</div>
 		</div><!-- .row -->
 
@@ -93,7 +90,7 @@
 			<div class="col-sm-12 form-group">
 				<%= f.label :cp, "Código postal" %>
 				<%= f.text_field :cp, class: "form-control form-control-black",
-						required: true, maxlength: 5 %>
+					required: true, maxlength: 5 %>
 			</div>
 		</div><!-- .row -->
 
@@ -101,7 +98,7 @@
 			<div class="col-sm-12 form-group">
 				<%= f.label :street_ref1, "Entre calle" %>
 				<%= f.text_field :street_ref1, class: "form-control form-control-black",
-						required: true, maxlength: 50 %>
+					required: true, maxlength: 50 %>
 			</div>
 		</div><!-- .row -->
 
@@ -109,7 +106,7 @@
 			<div class="col-sm-12 form-group">
 				<%= f.label :street_ref2, "Y calle" %>
 				<%= f.text_field :street_ref2, class: "form-control form-control-black",
-						required: true, maxlength: 50 %>
+					required: true, maxlength: 50 %>
 			</div>
 		</div><!-- .row -->
 

@@ -2,8 +2,10 @@
   badge = $(".ecart-badge");
   badge.addClass("badge");
   badge.text("<%= session[:e_cart].size - 1 %>");
-  $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
-    locals: {message_type: :success, message: "Añadido al carrito de compras."} %>`);
+  
+  <% flash[:success] = "Producto agregado al carrito de compras" %>
+  redirect_to = "<%= params[:to_cart] ? client_ecart_url(@current_user) : products_url %>";
+  window.location.replace(redirect_to);
 <% else %>
   <% if params[:quantity].to_i <= 0 %>
     <% message = "Houston tenemos un problema!, no podemos enviar " + params[:quantity] + " producto(s)" %>

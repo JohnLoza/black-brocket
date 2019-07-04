@@ -41,7 +41,7 @@
 
 <!--Ecart-->
 <li>
-  <%= link_to client_ecart_path(@current_user.hash_id),
+  <%= link_to client_ecart_path(@current_user),
       style: "padding-top: 11px; padding-bottom: 10px;", class: 'no-mobile' do %>
       <i class="icon-basket-loaded" style="font-size: 20px;"></i>
       <span class="yes-mobile"> Carrito </span>
@@ -66,6 +66,8 @@
     <li><%= link_to "Editar información fiscal", edit_client_fiscal_datum_path(@current_user.hash_id) %></li>
     <li role="separator" class="divider" style="margin: 0px;"></li>
     <li><%= link_to "Cerrar sesión", log_out_path, method: "delete" %></li>
+    <li role="separator" class="divider" style="margin: 0px;"></li>
+    <li><%= link_to "Manual de usuario", root_url + "user-guide.pdf" %></li>
     <li role="separator" class="divider" style="margin: 0px;"></li>
     <li><%= link_to "Dar de baja mi cuenta", client_destroy_account_path(@current_user.hash_id) %></li>
   </ul>

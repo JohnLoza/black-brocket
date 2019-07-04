@@ -1,10 +1,10 @@
 <% if !@fiscal_data.blank? %>
-  <div class="pull-left" style="margin-right: 15px;">
+  <div class="pull-left fiscal-data">
     <table class="table">
       <tbody>
 
         <tr>
-          <td colspan="2"><br><b>Datos fiscales:</b></td>
+          <td colspan="2"><b>Datos fiscales:</b></td>
         </tr>
 
         <tr>
@@ -71,3 +71,20 @@
     </table>
   </div>
 <% end # if !@fiscal_data.blank? # %>
+
+<% if @order.cfdi.present? %>
+  <div class="pull-left">
+    <table class="table cfdi">
+      <tbody>
+        <tr>
+          <td><b>CFDI:</b></td>
+          <td><%= @order.cfdi %></td>
+        </tr>
+        <tr>
+          <td><b>Medio de pago:</b></td>
+          <td><%= @order.invoice_payment %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<% end #if @order.cfdi.present? %>

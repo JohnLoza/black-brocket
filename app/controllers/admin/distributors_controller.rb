@@ -41,10 +41,10 @@ class Admin::DistributorsController < AdminController
 
   def show
     unless @current_user.has_permission?("distributors@show_personal_data") or
-           @current_user.has_permission?("distributors@show_fiscal_data") or
-           @current_user.has_permission?("distributors@show_bank_data") or
-           @current_user.has_permission?("distributors@show_distribution_regions") or
-           @current_user.has_permission?("distributors@show_commission")
+      @current_user.has_permission?("distributors@show_fiscal_data") or
+      @current_user.has_permission?("distributors@show_bank_data") or
+      @current_user.has_permission?("distributors@show_distribution_regions") or
+      @current_user.has_permission?("distributors@show_commission")
       deny_access! and return
     end
 

@@ -11,6 +11,9 @@
       <% end %>
       <div class="caption">
         <span class="pull-right">
+          <span style="text-decoration: line-through; color: #f44336;">
+            $<%= p.price %> MXN
+          </span><br>
           $<%= Product.priceFor(wp, @prices) %> MXN
         </span>
 

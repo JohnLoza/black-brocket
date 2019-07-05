@@ -278,7 +278,7 @@ class Admin::OrdersController < AdminController
     
     where_statement += "created_at BETWEEN '#{params[:start_date].strip}' and '#{params[:end_date].strip}'"
 
-    @no_invoice_required_orders = Order.where(state: ["SENT","DELIVERED"])
+    @no_invoice_required_orders = Order.where(state: ["SENT","DELIVERED","PAYMENT_ACCEPTED_LOCAL"])
       .where.not(state: ["PAYMENT_REJECTED","WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED"])
       .where(where_statement).where(invoice: false).includes(:Client, :Distributor, :Details)
 

@@ -43,7 +43,7 @@
           <tbody>
             <% @candidates.each do |candidate| %>
             <tr>
-              <%= content_tag :td, candidate.getFullName %>
+              <%= content_tag :td, candidate.name %>
               <%= content_tag :td, candidate.email %>
               <%= content_tag :td, candidate.telephone %>
               <%= content_tag :td, candidate.cellphone %>

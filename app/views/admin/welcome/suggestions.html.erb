@@ -24,6 +24,10 @@
         <p><b>Nombre:</b> <%= s.name %></p>
         <p><b>Mensaje:</b> <%= s.message %></p>
         <p><b>E-mail:</b> <%= s.email %></p>
+        <p><b>Fecha:</b> <%= l(s.created_at, format: :long) %></p>
+        <% if params[:answered]  %>
+          <p><b>Respondió:</b> <%= l(s.updated_at, format: :long) %></p>
+        <% end %>
         <div class="hr-line-dashed"></div>
         <%#= link_to "Establecer como respondido", admin_answer_suggestion_path(s.id), class: "btn btn-primary", method: :post %>
         <% unless params[:answered] %>

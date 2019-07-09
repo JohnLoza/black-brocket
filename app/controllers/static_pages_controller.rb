@@ -43,7 +43,8 @@ class StaticPagesController < ApplicationController
   end
 
   def create_distributor_request
-    if DistributorCandidate.create(distributor_request_params)
+    req =  DistributorCandidate.new(distributor_request_params)
+    if req.save
       flash[:success] = "Tus datos fueron enviados, un representante se contactará contigo muy pronto."
     else
       flash[:info] = "Ocurrió un error al guardar tu información, inténtalo de nuevo por favor."

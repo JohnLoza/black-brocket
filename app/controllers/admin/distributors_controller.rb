@@ -121,7 +121,7 @@ class Admin::DistributorsController < AdminController
     if candidate
       SendAnswerToCandidateJob.perform_later(candidate, params[:answer])
       candidate.update_attribute(:read, true)
-      flash[:success] = "Respuesta a #{candidate.getFullName} enviada!."
+      flash[:success] = "Respuesta a #{candidate.name} enviada!."
       redirect_to admin_distributor_candidates_path
     end
   end

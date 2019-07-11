@@ -418,7 +418,10 @@ class Admin::OrdersController < AdminController
   def save_invoice_folio
     deny_access! and return unless @current_user.has_permission?("orders@save_invoice_folio")
     order = Order.find_by!(hash_id: params[:id])
-    order.invoice_folio = params[:invoice_folio] and order.save!
+    unless order.invoice_folio.present?
+      order.invoice_folio = params[:invoice_folio]
+      order.save!
+    end
     flash[:success] = "Folio guardado"
 
     redirect_to admin_orders_path(type: params[:type])

@@ -2,8 +2,20 @@
   <table class="table">
     <tbody>
       <tr>
-        <td colspan="2"><b>Datos de entrega:</b></td>
+        <td colspan="2" class="text-center"><b>
+          Datos de entrega:
+        </b></td>
       </tr>
+      <% unless @guides_json.nil? %>
+        <tr>
+          <td colspan="2" class="text-center"><b>
+            <%= "#{@guides_json['service']} 
+              #{@guides_json['service_level_name']} 
+              ($#{@guides_json['shipping_cost']})
+              #{@guides_json['days']}" %>
+          </b></td>
+        </tr>
+      <% end %>
       <tr>
         <td>Destinatario: </td>
         <td>
@@ -51,10 +63,6 @@
       <tr>
         <td>Estado:</td>
         <td><%= @order.City.State.name %></td>
-      </tr>
-      <tr>
-        <td>País:</td>
-        <td>México</td>
       </tr>
     </tbody>
   </table>

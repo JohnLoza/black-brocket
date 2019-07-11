@@ -13,7 +13,8 @@ class Api::OrdersController < ApiController
 
       extra_data = {hash_id: order.hash_id, date: I18n.l(order.created_at, format: :long),
         total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, parcel: "",
-        parcel_url: "", payment_method: order.payment_method, download_payment_key: order.download_payment_key}
+        parcel_url: "", payment_method: order.payment_method, download_payment_key: order.download_payment_key,
+        account: {}}
 
       if order.parcel_id.present?
         if order.parcel_id == 0
@@ -179,11 +180,15 @@ class Api::OrdersController < ApiController
   end
 
   def available_banks
-    banks = Bank.all
+    banks = Bank.all.includes(:Accounts)
     data = Array.new
 
     banks.each do |bank|
-      extra_data = {bank_name: bank.name, image_url: bank.image.url(:mini), id: bank.id}
+      account = bank.Accounts[0]
+      extra_data = {bank_name: bank.name, image_url: bank.image.url(:mini), id: bank.id,
+        account: {bank_name: bank.name, account_number: account.account_number, 
+          interbank_clabe: account.interbank_clabe, owner: account.owner, 
+          email: account.email, RFC: account.RFC}}
       data << extra_data
     end
 
@@ -242,7 +247,11 @@ class Api::OrdersController < ApiController
       order.guides = params[:guides]
       order.payment_method = params[:payment_method]
       order.parcel_id = params[:parcel_id]
+
       order.invoice = params[:invoice] if params[:invoice]
+      order.cfdi = params[:cfdi] if params[:invoice] == "1"
+      order.invoice_payment = params[:invoice_payment_method] if params[:invoice] == "1"
+
       order.state = params[:parcel_id] == "0" ? "LOCAL" : "WAITING_FOR_PAYMENT"
       address = {street: @current_user.street, extnumber: @current_user.extnumber,
         intnumber: @current_user.intnumber, col: @current_user.col,

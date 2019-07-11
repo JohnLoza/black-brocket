@@ -1,30 +1,30 @@
-<% if !@fiscal_data.blank? %>
+<% if @fiscal_data.nil? %>
+  <div class="pull-left fiscal-data">
+    <table class="table">
+      <tbody>
+        <tr>
+          <td colspan="2" class="text-center"><b>
+            Datos fiscales sin completar
+          </b></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<% else %>
   <div class="pull-left fiscal-data">
     <table class="table">
       <tbody>
 
         <tr>
-          <td colspan="2"><b>Datos fiscales:</b></td>
+          <td colspan="2" class="text-center"><b>
+            Datos fiscales:
+          </b></td>
         </tr>
 
         <tr>
-          <% if @fiscal_data.lastname != "" %>
-            <td class="table-padd">Nombre(s):</td>
-          <% else %>
-            <td class="table-padd">Razón Social:</td>
-          <% end %>
+          <td class="table-padd">Nombre(s) / Razón Social:</td>
           <td><%= @fiscal_data.name %></td>
         </tr>
-        <% if @fiscal_data.lastname != "" %>
-          <tr>
-            <td>Apellido paterno:</td>
-            <td><%= @fiscal_data.lastname %></td>
-          </tr>
-          <tr>
-            <td>Apellido materno:</td>
-            <td><%= @fiscal_data.mother_lastname %></td>
-          </tr>
-        <% end %>
 
         <tr>
           <td>RFC:</td>
@@ -61,10 +61,6 @@
         <tr>
           <td>Estado:</td>
           <td><%= fiscal_city.State.name %></td>
-        </tr>
-        <tr>
-          <td>País:</td>
-          <td>México</td>
         </tr>
 
       </tbody>

@@ -14,14 +14,14 @@ class ProductsController < ApplicationController
 
       @products = @warehouse.Products.joins(:Product).active.visible
         .describes_total_stock.by_category(params[:category])
-        .search(key_words: params[:search], fields: ["products.name"])
+        .search(key_words: params[:search], fields: ["products.name"]).order("products.name ASC")
         .paginate(page: params[:page], per_page: 20).includes(:Product)
 
       @prices = @current_user.ProductPrices
       @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.product_id})
     else
       @products = Product.active.visible.by_category(params[:category])
-        .search(key_words: params[:search], fields: [:name])
+        .search(key_words: params[:search], fields: [:name]).order_by_name
         .paginate(page: params[:page], per_page: 20)
       @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.id}) if @products
     end # if logged_in? and session[:user_type] == "c" #

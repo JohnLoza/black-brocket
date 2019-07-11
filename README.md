@@ -67,3 +67,11 @@ If the app is running on a production server you might need to precompile
 the project assets.
 
     rails assets:precompile RAILS_ENV=production
+
+## 8. Configuration of website
+Once you log in as administrator configure the following:
+
+1. Warehouse information and regions
+2. Web information like video, and texts
+3. Create products and upload their photos
+4. Configure the shipping boxes

@@ -2,7 +2,7 @@ class Client::OrdersController < ApplicationController
   before_action :logged_in?
   before_action :current_user_is_a_client?
   before_action :verify_client_address, only: [:create]
-  before_action :verify_fiscal_data, only: [:create]
+  # before_action :verify_fiscal_data, only: [:create]
 
   def index
     @orders = @current_user.Orders.where.not(state: "ORDER_CANCELED").order(created_at: :desc).paginate(page: params[:page], per_page: 10).includes(City: :State)
@@ -20,6 +20,13 @@ class Client::OrdersController < ApplicationController
     end
 
     @order = Order.find_by!(hash_id: params[:id])
+    
+    begin
+      @guides_json = JSON.parse @order.guides
+    rescue => exception
+      @guides_json = nil
+    end
+
     @order_address = @order.address_hash
 
     @details = @order.Details.includes(:Product)
@@ -66,6 +73,8 @@ class Client::OrdersController < ApplicationController
       end
       flash[:success] = "Orden guardada"
       session.delete(:e_cart)
+
+      return unless verify_fiscal_data
       redirect_to client_orders_path(@current_user.hash_id, info_for: @order.hash_id) and return
     end
 
@@ -164,7 +173,8 @@ class Client::OrdersController < ApplicationController
   private
     def verify_fiscal_data
       if params[:invoice]=="1" and @current_user.FiscalData.nil?
-        flash[:info] = "Llena tus datos fiscales primero por favor."
+        session[:order] = @order.hash_id
+        flash[:info] = "Llena tus datos fiscales por favor."
         redirect_to new_client_fiscal_datum_path and return false
       end
       return true

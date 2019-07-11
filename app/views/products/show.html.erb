@@ -44,7 +44,9 @@
       <div class="caption-full">
         <table class="table borderless" style="width: initial;">
           <tbody>
-            <%= render "add_to_cart_mobile" if logged_in? and session[:user_type] == 'c' and @warehouse_product.existence > 0 %>
+
+            <%= render "add_to_cart" if logged_in? and session[:user_type] == 'c' and @warehouse_product.existence > 0 %>
+
             <tr>
               <td><b>Nombre:</b></td>
               <td colspan="2"><%= @product.name %></td>
@@ -115,7 +117,6 @@
                 <% end %>  
               </td>
             </tr>
-            <%= render "add_to_cart" if logged_in? and session[:user_type] == 'c' and @warehouse_product.existence > 0 %>
 
           </tbody>
         </table>
@@ -198,19 +199,14 @@
     $(this).ekkoLightbox();
   });
 
-  function update_quantity(input, quantity, mobile) {
-    if(quantity == ""){
-      input.value = "";
-    }
+  function update_quantity(quantity) {
+    var _href = $(".add-to-cart").attr('href');
+    new_url = _href.replace(/quantity=[^&]+/, 'quantity=' + quantity);
+    $(".add-to-cart").attr('href', new_url);
 
-    var link = '#add_to_cart';
-    if(mobile == 'mobile'){
-        link = '#add_to_cart_mobile'
-    }
-
-    var _href = $(link).attr('href');
-    $(link).attr('href',
-              _href.replace(/quantity=[^&]+/, 'quantity=' + quantity));
+    var _href = $(".add-to-cart-n-go").attr('href');
+    new_url = _href.replace(/quantity=[^&]+/, 'quantity=' + quantity);
+    $(".add-to-cart-n-go").attr('href', new_url);
   }
 
   function money_format(number){

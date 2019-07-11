@@ -10,17 +10,17 @@
 warehouses = Warehouse.all
 if !warehouses.any?
   Warehouse.create(name: "Almacén Guadalajara", address: "Some address",
-                   telephone: "xx xx xx xx", city_id: 19597, hash_id: "A0001",
-                   shipping_cost: 250, wholesale: 1999)
+    telephone: "xx xx xx xx", city_id: 19597, hash_id: "A0001",
+    shipping_cost: 250, wholesale: 1999)
 end
 
 if SiteWorker.where(is_admin: true).take.blank?
   SiteWorker.create(city_id: 19597, warehouse_id: 1, hash_id: "T0001",
-                   name: "Admin", lastname: "foo", mother_lastname: "bar",
-                   password: "foobar", password_confirmation: "foobar",
-                   email: "admin@example.com", rfc: "LA872ASD7783A",
-                   nss: "11298478923", address: "foobar", telephone: "33 33 33 33",
-                   is_admin: true, username: "admin", cellphone: "33 33 33 33 33")
+    name: "Admin", lastname: "foo", mother_lastname: "bar",
+    password: "foobar", password_confirmation: "foobar",
+    email: "admin@example.com", rfc: "LA872ASD7783A",
+    nss: "11298478923", address: "foobar", telephone: "33 33 33 33",
+    is_admin: true, username: "admin", cellphone: "33 33 33 33 33")
 end
 
 info_names = [

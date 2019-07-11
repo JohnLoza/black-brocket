@@ -42,3 +42,6 @@
 !/app/views/shared/tips_recipes/readme.txt
 
 !/app/views/shared/web/_init_file.html.erb
+
+# Ignore Black Brocket configuration files
+config/black_brocket/*

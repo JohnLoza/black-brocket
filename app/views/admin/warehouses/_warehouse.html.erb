@@ -27,12 +27,12 @@
       <% end %>
     <% end %>
 
-    <% if @current_user.has_permission_category?("parcels") %>
-      <%= link_to admin_warehouse_parcels_path(warehouse.hash_id),
+    <%# if @current_user.has_permission_category?("parcels") %>
+      <%#= link_to admin_warehouse_parcels_path(warehouse.hash_id),
         class: "btn btn-white btn-sm m-b-xs" do %>
-        <i class="fa fa-truck"></i> Paqueterías
-      <% end %>
-    <% end %>
+        <!--i class="fa fa-truck"></i> Paqueterías-->
+      <%# end %>
+    <%# end %>
 
     <% if @current_user.has_permission?("warehouses@update_warehouse_data") or
       @current_user.has_permission?("warehouses@update_shipping_cost") or

@@ -1,4 +1,4 @@
-<tr class="yes-mobile">
+<tr class="-mobile">
   <td>
     <b>Cantidad:</b>
     <input type="number" placeholder="0" min="1" max="10000000000" step="1" class="form-control"
@@ -7,15 +7,14 @@
   </td>
 </tr>
 
-<tr class="yes-mobile">
+<tr class="-mobile">
   <td>
     <%= link_to "Añadir al carrito!",
       client_add_to_cart_path(@warehouse_product.hash_id)+"?quantity=1",
-      method: :put, remote: true, class: "btn btn-custom-3 btn-block", style: "font-size: 11.3px;",
-      id: "add_to_cart_mobile" %>
+      method: :put, remote: true, class: "btn btn-custom-3 btn-block", style: "font-size: 11.3px;" %>
 
     <%= link_to "Comprar ahora", 
-      client_add_to_cart_path(@warehouse_product.hash_id)+"?quantity=1&to_cart=true",
+      client_add_to_cart_path(@warehouse_product.hash_id)+"?to_cart=true&quantity=1",
       method: :put, remote: true, class: "btn btn-custom-3 btn-block", style: "font-size: 11.3px;" %>
   </td>
 </tr>

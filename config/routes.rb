@@ -50,16 +50,19 @@ Rails.application.routes.draw do
     get '/clients/:id/revisions' => 'clients#revisions', as: :client_revisions
     get '/clients/:id/visits' => 'clients#visits', as: :client_visits
 
+    # mexico db #
     get 'mexico-db/states' => 'mexico_db#index', as: :mexico_db
     get 'mexico-db/states/:id' => 'mexico_db#state', as: :mexico_state
     put 'mexico-db/states/:id' => 'mexico_db#update_state_lada'
     put 'mexico-db/states/cities/:id' => 'mexico_db#update_city', as: :mexico_city
     post 'mexico-db/states/cities' => 'mexico_db#create_city', as: :create_city
 
+    # banks #
     resources :banks, except: :show do
       resources :bank_accounts, except: :show, as: 'accounts'
     end
 
+    # site workers #
     resources :site_workers do
       get 'permissions/edit', action: :edit_permissions, on: :member, as: :edit_permissions
       put 'permissions', action: :update_permissions, on: :member, as: :update_permissions
@@ -219,9 +222,13 @@ Rails.application.routes.draw do
     get '/commissions/:id/invoice' => 'commissions#download_invoice', as: :download_commission_invoice
     get '/commissions/:id/payment' => 'commissions#download_payment', as: :download_commission_payment
 
+    # warehouse reports #
     get 'warehouse/:warehouse_id/inventory_reports' => 'warehouses#inventory_reports', as: :inventory_reports
     get 'warehouse/:warehouse_id/inventory_report/:id' => 'warehouses#inventory_report_details', as: :inventory_report
     post 'warehouse/:warehouse_id/inventory_reports/:id/solved' => 'warehouses#inventory_report_solved', as: :inventory_report_solved
+
+    # black brocket configuration #
+    resources :bb_configuration, only: [:edit, :update]
   end
 
   namespace :distributor do
@@ -283,7 +290,7 @@ Rails.application.routes.draw do
     put 'products/:id/add_to_cart' => 'ecarts#add_to_cart', as: :add_to_cart
     put 'user/:user_id/ecart/remove/:product' => "ecarts#remove_from_cart", as: :remove_from_cart
     put 'user/:user_id/ecart/change_quantity' => "ecarts#update_quantity", as: :ecart_update_quantity
-    get 'user/:user_id/ecart/parcel/:id/prices' => "ecarts#parcel_prices", as: :ecart_parcel_prices
+    get 'user/:user_id/ecart/sr_parcel_prices' => "ecarts#sr_parcel_prices", as: :ecart_sr_parcel_prices
 
     get 'user/:user_id/orders/' => "orders#index", as: :orders
     get 'user/:user_id/orders/:id' => "orders#show", as: :order

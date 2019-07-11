@@ -3,33 +3,107 @@
   <% if @local_regions.include? @current_user.city_id %>
     <div>
       <%= radio_button_tag "parcel_id", 0, false, autocomplete: :off, style: "display: none;",
-        onchange: "noShipping(); removeFilter('.parcel_img_0', 'parcel');", required: true,
+        onchange: "noShipping(); removeFilter('.parcel_img_local', 'parcel');", required: true,
         info: "Recoger en almacén Galeana 125, Centro, Guadalajara, Jal. cp 44100" %>
       <label for="parcel_id_0">
-        <%= image_tag "recoger-en-almacen.svg", class: "parcel_img_0 parcel" %>
+        <%= image_tag "recoger-en-almacen.svg", class: "parcel_img_local parcel" %>
       </label>
     </div>
   <% end %>
 
-  <% if @local_parcel %>
+  <% if @local_regions.include? @current_user.city_id %>
     <div>
-      <%= radio_button_tag "parcel_id", @local_parcel.id, false, autocomplete: :off, required: true,
-        onchange: "fetchParcelPrices(this); removeFilter('.parcel_img_#{@local_parcel.id}', 'parcel')",
+      <%= radio_button_tag "parcel_id", 1, false, autocomplete: :off, required: true,
+        onchange: "blackBrocketParcel(); removeFilter('.parcel_img_bb', 'parcel')",
         info: "Paquetería Black Brocket", style: "display: none;" %>
-      <label for="parcel_id_<%= @local_parcel.id %>">
-        <%= image_tag @local_parcel.image.url(:mini), class: "parcel_img_#{@local_parcel.id} parcel" %>
+      <label for="parcel_id_1">
+        <%= image_tag "black-brocket-parcel.png", class: "parcel_img_bb parcel" %>
       </label>
     </div>
   <% end %>
 
-  <% @parcels.each do |parcel| %>
-    <div>
-      <%= radio_button_tag "parcel_id", parcel.id, false, autocomplete: :off, required: true, 
-        onchange: "fetchParcelPrices(this); removeFilter('.parcel_img_#{parcel.id}', 'parcel')",
-        info: parcel.parcel_name, style: "display: none;" %>
-      <label for="parcel_id_<%= parcel.id %>">
-        <%= image_tag parcel.image.url(:mini), class: "parcel_img_#{parcel.id} parcel" %>
-      </label>
-    </div>
-  <% end %>
+  <div>
+    <%= radio_button_tag "parcel_id", 2, false, autocomplete: :off, required: true, 
+      onchange: "fetchSrParcelPrices(); removeFilter('.parcel_img_sr', 'parcel')",
+      info: "Sr Envío", style: "display: none;" %>
+    <label for="parcel_id_2">
+      <%= image_tag "sr-envio-logo.jpg", class: "parcel_img_sr parcel" %>
+    </label>
+  </div>
 </section>
+
+
+<script type="text/javascript">
+  function fetchSrParcelPrices(){
+    initLoader();
+
+    $.ajax({
+      url: "<%= client_ecart_sr_parcel_prices_path(@current_user, format: :js) %>",
+      context: document.body
+    }).done(function(body) {});
+    $(".banks input").attr("required", true);
+  }
+
+  function noShipping() {
+    $("#sr-envio-parcels").remove();
+    setShippingCost(0, "Recojo en almacén");
+
+    $("#guides").val("Recoje en almacén");
+    $(".banks input").removeAttr("required");
+  }
+
+  function blackBrocketParcel() {
+    $("#sr-envio-parcels").remove();
+    setShippingCost(35, "Día siguiente");
+
+    $("#guides").val("Envío por paquetería BlackBrocket");
+  }
+
+  function setSrEnvioShippingCost() {
+    opt = $("#sr-parcel").children("option:selected");
+    $("#parcel_id_2").attr("info", opt.text());
+
+    boxes = $("#sr-parcel").attr("boxes");
+    boxes = boxes.replace(/(=>)/g,":");
+
+    json = new Object();
+    json["shipping_cost"] = parseFloat(opt.attr("shipping_cost"));
+    json["days"] = opt.attr("days");
+    json["service"] = opt.attr("service");
+    json["service_level_name"] = opt.attr("service_level_name");
+    json["boxes"] = JSON.parse(boxes);
+
+    let new_value = JSON.stringify(json);
+    $("#guides").val(new_value);
+
+    setShippingCost(json["shipping_cost"], json["days"]);
+  }
+
+  function setShippingCost(shipping_cost, delivery_time) {
+    // obtain the current_sub_total
+    var last_shipping_cost = parseFloat($("#order-shipping-cost").text().replace(",",""));
+    var current_grand_total = parseFloat($("#order-grand-total").text().replace(",",""));
+    var wholesale = parseFloat($("#wholesale").text());
+
+    var current_sub_total = current_grand_total;
+    if($("#shipping_cost_is_present").text().trim() == "YES")
+      current_sub_total = current_grand_total - last_shipping_cost;
+
+    if(current_grand_total >= wholesale)
+      shipping_cost = 0;
+
+    if (shipping_cost % 1 == 0)
+      $("#order-shipping-cost").text(`${shipping_cost}.00`);
+    else
+      $("#order-shipping-cost").text(shipping_cost);
+
+    $("#shipping_cost_is_present").text("YES");
+    $("#delivery_cost").val(shipping_cost);
+
+    $("#delivery-time").text(delivery_time);
+
+    $("#order-grand-total").text(money_format(current_sub_total + shipping_cost));
+
+    $(".banks input").attr("required", true);
+  }
+</script>

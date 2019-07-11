@@ -161,17 +161,6 @@
     });
   }
 
-  function fetchParcelPrices(trigger){
-    original_target = "<%= client_ecart_parcel_prices_path(@current_user, 'replace_with_id', format: :js) %>";
-    new_target = original_target.replace("replace_with_id", trigger.value);
-    $.ajax({
-      url: new_target,
-      context: document.body
-    }).done(function(body) {});
-    // $(".banks").removeClass("hidden");
-    $(".banks input").attr("required", true);
-  }
-
   // pick a guide for package delivery based on weight
   function pickGuide(weight, available_weights){
     // if total package weight is less than max guide weight pick it
@@ -229,24 +218,6 @@
     return delivery_cost;
   }
 
-  function noShipping() {
-    // obtain the current_sub_total
-    var last_shipping_cost = parseFloat($("#order-shipping-cost").text().replace(",",""));
-    var current_grand_total = parseFloat($("#order-grand-total").text().replace(",",""));
-    var current_sub_total = current_grand_total;
-    if($("#shipping_cost_is_present").text().trim() == "YES")
-      current_sub_total = current_grand_total - last_shipping_cost;
-    
-    $("#order-shipping-cost").text("0.00");
-    $("#delivery_cost").val(0);
-    $("#guides").val("Recoje en local");
-    $("#shipping_cost_is_present").text("NO");
-    $("#order-grand-total").text(money_format(current_sub_total));
-    // $(".banks").addClass("hidden");
-    $(".banks input").removeAttr("required");
-    $("#delivery-time").text("");
-  }
-
   function stepForward(){
     let radiobutton = null;
     if(step == 5) return; // Do not step forward if you are on last step (5)
@@ -271,6 +242,11 @@
     // Omit payment method if user is going to go to the warehouse
       $("input[name='payment_method']")[0].checked = true;
       step += 1;
+    }else if(step == 2 && $("#sr-parcel").size() == 1 && $("#sr-parcel").children("option:selected").val() == ""){
+      $("#dismissible_alerts").append(`
+        <%= j render partial: "/shared/dismissible_alert",
+          locals: {message_type: :info, message: "Favor de seleccionar una paquetería"} %>`);
+      return;
     }
 
     step += 1; // Step forward
@@ -287,8 +263,8 @@
 
   function showHideButtons() {
     // Show hide buttons accordingly
-    if(step == 1) $("#step-down").addClass("hidden");
-    if(step != 1) $("#step-down").removeClass("hidden");
+    if(step == 2) $("#step-down").addClass("hidden");
+    if(step != 2) $("#step-down").removeClass("hidden");
     if(step == 5) {
       $("#step-up").addClass("hidden");
       $("#create-order").removeClass("hidden");

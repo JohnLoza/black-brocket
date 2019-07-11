@@ -30,7 +30,12 @@ class Client::FiscalDataController < ApplicationController
 
     if @fiscal_data.save
       flash[:success] = "Información fiscal guardada."
-      redirect_to client_ecart_path(@current_user.hash_id)
+
+      if session[:order]
+        redirect_to client_orders_path(@current_user.hash_id, info_for: session[:order])
+        session.delete(:order) and return
+      end
+      redirect_to products_path
     else
       params[:state_id] = params[:state_id]
       params[:city_id] = params[:city_id]

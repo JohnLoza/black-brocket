@@ -112,7 +112,7 @@ class Admin::DistributorsController < AdminController
     deny_access! and return unless @current_user.has_permission?("distributors@requests")
 
     @candidates = DistributorCandidate.all.order(created_at: :desc)
-                    .paginate(page: params[:page], per_page: 20).includes(:City)
+      .paginate(page: params[:page], per_page: 20).includes(:City)
   end
 
   def answer_candidate

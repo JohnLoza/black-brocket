@@ -1,0 +1,48 @@
+<% box = Hash.new unless box.present? %>
+
+<section>
+  <span class="pull-right text-danger" onclick="removeBoxFields(this);">
+    <i class="fa fa-trash fa-3x"></i>
+  </span>
+
+  <div class="form-group">
+    <%= label_tag :name, "Nombre de la caja", class: "col-sm-2 control-label" %>
+    <div class="col-sm-6">
+      <%= text_field_tag "name[]", box["name"], class: "form-control", maxlength: 60,
+        placeholder: "Caja grande 20Kg", required: true %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :weight, "Peso máximo en Kilogramos", class: "col-sm-2 control-label" %>
+    <div class="col-sm-6">
+      <%= number_field_tag "weight[]", box["weight"], class: "form-control", min: 1,
+        placeholder: "ej. 20", required: true, step: 0.01 %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :height, "Alto de la caja en centímetros", class: "col-sm-2 control-label" %>
+    <div class="col-sm-6">
+      <%= number_field_tag "height[]", box["height"], class: "form-control", min: 1,
+        placeholder: "ej. 60", required: true, step: 0.01 %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :width, "Ancho de la caja en centímetros", class: "col-sm-2 control-label" %>
+    <div class="col-sm-6">
+      <%= number_field_tag "width[]", box["width"], class: "form-control", min: 1,
+        placeholder: "ej. 50", required: true, step: 0.01 %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :length, "Largo de la caja en centímetros", class: "col-sm-2 control-label" %>
+    <div class="col-sm-6">
+      <%= number_field_tag "length[]", box["length"], class: "form-control", min: 1,
+        placeholder: "ej. 40", required: true, step: 0.01 %>
+    </div>
+  </div>
+</section>
+<div class="hr-line-dashed"></div>

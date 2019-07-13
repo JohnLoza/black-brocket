@@ -1,11 +1,23 @@
 class Admin::BbConfigurationController < AdminController
-  def edit
-    json = BbConfig.getJson
-    @boxes = json["boxes"]
+  def index
   end
 
-  def update
+  def boxes
+    begin
+      @boxes = Box.all
+    rescue JSON::ParserError
+      @boxes = Hash.new
+      # rescue JSON::ParserError
+    rescue Errno::ENOENT
+      directory = File.join(File.dirname(__FILE__), '../../../config/black_brocket')
+      Dir.mkdir(directory) unless Dir.exist?(directory)
+      # rescue Errno::ENOENT
+    end # begin end
+  end
+
+  def set_boxes
     json_array = Array.new
+
     # build json array
     params[:weight].each_with_index do |value, indx|
       json_array << {
@@ -13,18 +25,13 @@ class Admin::BbConfigurationController < AdminController
         weight: params[:weight][indx].to_f, 
         height: params[:height][indx].to_f,
         width: params[:width][indx].to_f, 
-        lenght: params[:lenght][indx].to_f
+        length: params[:length][indx].to_f
       }
     end
-    # order from bigger to smaller using weight as reference
-    json_array.sort!{|a, b| b[:weight] <=> a[:weight]}
 
-    if BbConfig.setBoxes(json_array) # save to file
-      flash[:success] = "configuración guardada"
-    else
-      flash[:info] = "ocurrió un error al guardar"
-    end
-
-    redirect_to edit_admin_bb_configuration_path(:boxes)
+    Box.setBoxes(json_array)
+    flash[:success] = "Cajas guardadas"
+    redirect_to admin_boxes_configuration_path()
   end
+
 end

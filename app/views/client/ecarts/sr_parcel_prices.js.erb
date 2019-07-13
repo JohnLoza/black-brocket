@@ -3,7 +3,7 @@ $("#sr-envio-parcels").remove();
 $(".step-2").append(`
   <div id="sr-envio-parcels" style="border: #f1692bff 2px solid; border-radius: 5px; padding: 1em;">
     <label for="sr-parcel">Selecciona la paquetería</label> <br>
-    <select name="sr-parcel" id="sr-parcel" 
+    <select name="sr-parcel" id="sr-parcel" class="form-control"
       onchange="setSrEnvioShippingCost();" boxes="<%= @boxes_selected %>">
       <option selected disabled value="">Selecciona paquetería</option>
       <% @parcels.keys.each do |key| %>
@@ -11,7 +11,7 @@ $(".step-2").append(`
         <% next if json["grand_total"] == 0 %>
 
         <option value="<%= key %>" shipping_cost="<%= json['grand_total'] %>" 
-          days="<%= json['days'] %> días" service="<%= "#{json['provider']}" %>"
+          days="<%= json['days'] %> días" provider="<%= "#{json['provider']}" %>"
           service_level_name="<%= json['service_level_name'] %>">
           <%= "#{json['provider']} #{json['service_level_name']} ($#{json['grand_total']})" %>
         </option>

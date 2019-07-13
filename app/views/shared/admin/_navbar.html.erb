@@ -146,7 +146,7 @@
         </li>
 
         <li class="bb_configuration">
-          <%= link_to edit_admin_bb_configuration_path(:boxes) do %>
+          <%= link_to admin_configuration_path() do %>
             <%= content_tag(:i, nil, class: 'fa fa-cog') %>
             <%= content_tag(:span, 'Configuración', class: 'nav-label') %>
           <% end if @current_user.has_permission_category?('configuration') %>

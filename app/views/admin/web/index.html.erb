@@ -17,73 +17,73 @@
     </div>
 
     <!-- Content -->
-    <%= link_to(admin_web_videos_path, style:"color: #FEFEFE;") do %>
-      <div class="col-md-6 text-center" style="padding: 15px; background-color: #33B5E5;">
-        <label>Video</label><br/>
-        <i class="fa fa-film big-icon" style="color: #FEFEFE;"></i>
+    <%= link_to(admin_web_videos_path) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #33B5E5;">
+        <p>Video</p>
+        <i class="fa fa-film big-icon"></i>
       </div>
     <% end if @current_user.has_permission?("web@video") %>
 
-    <%= link_to(admin_web_photos_path, style:"color: #FEFEFE;") do %>
-      <div class="col-md-6 text-center" style="padding: 15px; background-color: #AA66CC;">
-        <label>Galería / Imágenes</label><br/>
-        <i class="fa fa-image big-icon" style="color: #FEFEFE;"></i>
+    <%= link_to(admin_web_photos_path) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #AA66CC;">
+        <p>Galería / Imágenes</p>
+        <i class="fa fa-image big-icon"></i>
       </div>
     <% end if @current_user.has_permission?("web@gallery_images") %>
 
-    <%= link_to(admin_web_offers_path, style:"color: #FEFEFE;") do %>
-      <div class="col-md-6 text-center" style="padding: 15px; background-color: #99CC00;">
-        <label>Promociones</label><br/>
-        <i class="fa fa-tags big-icon" style="color: #FEFEFE;"></i>
+    <%= link_to(admin_web_offers_path) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #99CC00;">
+        <p>Promociones</p>
+        <i class="fa fa-tags big-icon"></i>
       </div>
     <% end if @current_user.has_permission?("web@offers") %>
 
-    <%= link_to(admin_web_info_path("WELCOME_MESSAGE"), style:"color: #FEFEFE;") do %>
-      <div class="col-md-6 text-center" style="padding: 15px; background-color: #FFBB33;">
-        <label>Texto de Bienvenida</label><br/>
-        <i class="fa fa-child big-icon" style="color: #FEFEFE;"></i>
+    <%= link_to(admin_web_info_path("WELCOME_MESSAGE")) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #FFBB33;">
+        <p>Texto de Bienvenida</p>
+        <i class="fa fa-child big-icon"></i>
       </div>
     <% end if @current_user.has_permission?("web@texts") %>
 
-    <%= link_to(admin_web_footer_details_path, style:"color: #FEFEFE;") do %>
-      <div class="col-md-6 text-center" style="padding: 15px; background-color: #AA66CC;">
-        <label>Información del pie de página</label><br/>
-        <i class="fa fa-info-circle big-icon" style="color: #FEFEFE;"></i>
+    <%= link_to(admin_web_footer_details_path) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #AA66CC;">
+        <p>Información del pie de página</p>
+        <i class="fa fa-info-circle big-icon"></i>
       </div>
     <% end if @current_user.has_permission?("web@footer_details") %>
 
-    <%= link_to(admin_web_services_path, style:"color: #FEFEFE;") do %>
-      <div class="col-md-6 text-center" style="padding: 15px; background-color: #33B5E5;">
-        <label>Cuadros de servicios</label><br/>
-        <i class="fa fa-file-text big-icon" style="color: #FEFEFE;"></i>
+    <%= link_to(admin_web_services_path) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #33B5E5;">
+        <p>Cuadros de servicios</p>
+        <i class="fa fa-file-text big-icon"></i>
       </div>
     <% end if @current_user.has_permission?("web@texts") %>
 
-    <%= link_to(admin_web_info_path("PRIVACY_POLICY"), style:"color: #FEFEFE;") do %>
-      <div class="col-md-6 text-center" style="padding: 15px; background-color: #3F51B5;">
-        <label>Aviso de privacidad</label><br/>
-        <i class="fa fa-eye-slash big-icon" style="color: #FEFEFE;"></i>
+    <%= link_to(admin_web_info_path("PRIVACY_POLICY")) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #3F51B5;">
+        <p>Aviso de privacidad</p>
+        <i class="fa fa-eye-slash big-icon"></i>
       </div>
     <% end if @current_user.has_permission?("web@privacy_policy") %>
 
-    <%= link_to(admin_web_info_path("TERMS_OF_SERVICE"), style:"color: #FEFEFE;") do %>
-      <div class="col-md-6 text-center" style="padding: 15px; background-color: #795548;">
-        <label>Términos y condiciones</label><br/>
-        <i class="fa fa-shield big-icon" style="color: #FEFEFE;"></i>
+    <%= link_to(admin_web_info_path("TERMS_OF_SERVICE")) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #795548;">
+        <p>Términos y condiciones</p>
+        <i class="fa fa-shield big-icon"></i>
       </div>
     <% end if @current_user.has_permission?("web@terms_of_service") %>
 
-    <%= link_to(admin_web_info_path("ECART_NOTICE"), style:"color: #FEFEFE;") do %>
-      <div class="col-md-6 text-center" style="padding: 15px; background-color: #FFBB33;">
-        <label>Aviso del carrito</label><br/>
-        <i class="fa fa-shopping-cart big-icon" style="color: #FEFEFE;"></i>
+    <%= link_to(admin_web_info_path("ECART_NOTICE")) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #FFBB33;">
+        <p>Aviso del carrito</p>
+        <i class="fa fa-shopping-cart big-icon"></i>
       </div>
     <% end if @current_user.has_permission?("web@texts") %>
 
-    <%= link_to(admin_web_social_networks_path, style:"color: #FEFEFE;") do %>
-      <div class="col-md-6 text-center" style="padding: 15px; background-color: #FF4444;">
-        <label>Redes Sociales</label><br/>
-        <i class="fa fa-twitch big-icon" style="color: #FEFEFE;"></i>
+    <%= link_to(admin_web_social_networks_path) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #FF4444;">
+        <p>Redes Sociales</p>
+        <i class="fa fa-twitch big-icon"></i>
       </div>
     <% end if @current_user.has_permission?("web@social_networks") %>
     <!-- Content -->
@@ -91,4 +91,9 @@
   </div>
 </div>
 <!--End content whit animation-->
-<br><br><br>
+
+<style>
+.square-link{ padding: 1em; }
+.square-link p{ font-weight: bold; color: #fefefe; font-size: 1.5em; }
+.square-link i.fa{ color: #fefefe; }
+</style>

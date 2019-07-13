@@ -1,0 +1,40 @@
+<% provide(:title, "Web") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Web", labels: ["Web"]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="ibox">
+        <div class="ibox-content text-center">
+            <h3 class="m-b-xxs">Contenido de la página web</h3>
+            <small>En este menú encotrarás opciones que te permitirán gestionar contenido de la página web.</small>
+        </div>
+    </div>
+
+    <div class="ibox-content">
+      <h3>Gestión del contenido para la página de inicio</h3>
+    </div>
+
+    <!-- Content -->
+    <%= link_to(admin_boxes_configuration_path) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #33B5E5;">
+        <p>Configurar Cajas de Envío</p>
+        <i class="fa fa-cubes big-icon"></i>
+      </div>
+    <% end if @current_user.has_permission?("configuration@all") %>
+
+    <div class="col-md-6 text-center square-link" style="background-color: #AA66CC;">
+      <p>Trabajo en proceso</p>
+      <i class="fa fa-cog big-icon"></i>
+    </div>
+
+  </div>
+</div>
+<!--End content whit animation-->
+
+<style>
+.square-link{ padding: 1em; }
+.square-link p{ font-weight: bold; color: #fefefe; font-size: 1.5em; }
+.square-link i.fa{ color: #fefefe; }
+</style>

@@ -161,64 +161,7 @@
     });
   }
 
-  // pick a guide for package delivery based on weight
-  function pickGuide(weight, available_weights){
-    // if total package weight is less than max guide weight pick it
-    for (let index = 0; index < available_weights.length; index++) {
-      if(weight <= available_weights[index]){
-        return index;
-      }
-    }
-
-    // if total package weight is more than max guide weight then send last one
-    // because it has the highest max weight possible
-    return available_weights.length - 1;
-  }
-
-  // get an object with the necessary guides for shipment
-  function getGuides(total_weight, weights, prices){
-    var guides = new Object();
-
-    // keep adding guides until we dont have product ramaining
-    while (total_weight > 0) {
-      // pick the correct guide using weight as reference
-      guide_index = pickGuide(total_weight, weights);
-      price = prices[guide_index];
-
-      // add the picked guide to our guides object
-      if(guides[price] !== undefined)
-        guides[price] += 1;
-      else
-        guides[price] = 1;
-
-      // remove the weight that can carry that guide
-      total_weight -= weights[guide_index];
-    }
-
-    return guides;
-  }
-
-  // parse the guides object to String format
-  function guidesToString(guides){
-    guides_array = [];
-    Object.keys(guides).forEach(guide_type => {
-      guides_array.push(`${guides[guide_type]} guía(s) de $${guide_type}`)
-    });
-    return guides_array.join("|");
-  }
-
-  // calculate delivery cost based on number and type of guides
-  function calculateDeliveryCost(guides){
-    var delivery_cost = 0;
-
-    Object.keys(guides).forEach(guide_type => {
-      delivery_cost += (guide_type * guides[guide_type]);
-    });
-
-    return delivery_cost;
-  }
-
-  function stepForward(){
+  function validateStep() {
     let radiobutton = null;
     if(step == 5) return; // Do not step forward if you are on last step (5)
     switch (step) {
@@ -232,24 +175,36 @@
         radiobutton = $("input[name='invoice']:checked");
         break;
     }
+
     // Do not step forward if there is no selected option in current step
     if(radiobutton && radiobutton.length == 0){ 
       $("#dismissible_alerts").append(`
         <%= j render partial: "/shared/dismissible_alert",
           locals: {message_type: :info, message: "Favor de seleccionar una opción"} %>`);
-      return;
+      return false;
     }else if(step == 2 && radiobutton[0].value == 0){
     // Omit payment method if user is going to go to the warehouse
       $("input[name='payment_method']")[0].checked = true;
       step += 1;
-    }else if(step == 2 && $("#sr-parcel").size() == 1 && $("#sr-parcel").children("option:selected").val() == ""){
+      return true;
+    }else if(step == 2 && radiobutton[0].value == 2 && $("#sr-parcel").children("option:selected").val() == ""){
       $("#dismissible_alerts").append(`
         <%= j render partial: "/shared/dismissible_alert",
           locals: {message_type: :info, message: "Favor de seleccionar una paquetería"} %>`);
-      return;
+      return false;
     }
+    return true;
+  }
+
+  function stepForward(){
+    if(!validateStep())
+      return;
 
     step += 1; // Step forward
+
+    if(step == 2)
+      fetchSrParcelPrices();
+
     showHideButtons();
     showStep();
   }

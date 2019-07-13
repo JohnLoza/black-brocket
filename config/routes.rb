@@ -228,7 +228,9 @@ Rails.application.routes.draw do
     post 'warehouse/:warehouse_id/inventory_reports/:id/solved' => 'warehouses#inventory_report_solved', as: :inventory_report_solved
 
     # black brocket configuration #
-    resources :bb_configuration, only: [:edit, :update]
+    get 'configuration/' => 'bb_configuration#index', as: :configuration
+    get 'configuration/boxes' => 'bb_configuration#boxes', as: :boxes_configuration
+    post 'configuration/boxes' => 'bb_configuration#set_boxes'
   end
 
   namespace :distributor do
@@ -348,8 +350,9 @@ Rails.application.routes.draw do
     get 'orders/get_payment/:payment_key' => 'orders#download_payment'
     get 'orders/payment_steps' => 'orders#payment_steps'
     get 'orders/available_banks' => 'orders#available_banks'
-    get 'orders/available_parcels' => 'orders#available_parcels'
     post 'orders/update_payment_method' => 'orders#update_payment_method'
+
+    get 'sr_envio/quotations' => "orders#sr_parcel_prices"
 
     namespace :distributor_api do
       get "index" => "distributors#index"

@@ -4,7 +4,7 @@
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-	  <%= render "boxes_form" %>
+	  <%= render "box_form" %>
   </div>
 </div>
 <br>
@@ -16,7 +16,7 @@ function removeBoxFields(trigger) {
 }
 
 function addBoxFields() {
-  let to_append = "<%= j render "boxes_fields" %>";
+  let to_append = "<%= j render "box_fields" %>";
   $("section.boxes_fields").append(to_append);
 }
 </script>

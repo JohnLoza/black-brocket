@@ -11,16 +11,16 @@
       </div>
       <div class="ibox-content">
 
-        <%= form_for(:box, url: admin_bb_configuration_path(:boxes), method: :put, 
+        <%= form_for(:box, url: admin_boxes_configuration_path(), method: :post, 
           html: {class: "form-horizontal"}) do |f| %>
           
           <section class="boxes_fields">
             <% if @boxes and @boxes.any? %>
               <% @boxes.each do |box| %>
-                <%= render partial: "boxes_fields", locals: {box: box} %>
+                <%= render partial: "box_fields", locals: {box: box} %>
               <% end %>
             <% else %>
-              <%= render partial: "boxes_fields" %>
+              <%= render partial: "box_fields" %>
             <% end %>
           </section>
 

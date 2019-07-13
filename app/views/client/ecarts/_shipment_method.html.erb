@@ -22,16 +22,9 @@
     </div>
   <% end %>
 
-  <div>
-    <%= radio_button_tag "parcel_id", 2, false, autocomplete: :off, required: true, 
-      onchange: "fetchSrParcelPrices(); removeFilter('.parcel_img_sr', 'parcel')",
-      info: "Sr Envío", style: "display: none;" %>
-    <label for="parcel_id_2">
-      <%= image_tag "sr-envio-logo.jpg", class: "parcel_img_sr parcel" %>
-    </label>
-  </div>
+  <%= radio_button_tag "parcel_id", 2, false, autocomplete: :off, required: true,
+    info: "Sr Envío", style: "display: none;" %>
 </section>
-
 
 <script type="text/javascript">
   function fetchSrParcelPrices(){
@@ -45,33 +38,59 @@
   }
 
   function noShipping() {
-    $("#sr-envio-parcels").remove();
+    $("#sr-parcel").val("");
     setShippingCost(0, "Recojo en almacén");
 
-    $("#guides").val("Recoje en almacén");
+    boxes = $("#sr-parcel").attr("boxes");
+    boxes = boxes.replace(/(=>)/g,":");
+
+    json = new Object(); // guides for personal recovery
+    json["shipping_cost"] = 0.0;
+    json["days"] = "Recoje en almacén";
+    json["provider"] = "";
+    json["service_level_name"] = "";
+    json["boxes"] = JSON.parse(boxes); // selected boxes
+
+    let new_value = JSON.stringify(json);
+    $("#guides").val(new_value);
+
     $(".banks input").removeAttr("required");
   }
 
   function blackBrocketParcel() {
-    $("#sr-envio-parcels").remove();
+    $("#sr-parcel").val("");
     setShippingCost(35, "Día siguiente");
 
-    $("#guides").val("Envío por paquetería BlackBrocket");
+    boxes = $("#sr-parcel").attr("boxes");
+    boxes = boxes.replace(/(=>)/g,":");
+
+    json = new Object(); // guides for black brocket parcel
+    json["shipping_cost"] = 35;
+    json["days"] = "2 días";
+    json["provider"] = "Black Brocket";
+    json["service_level_name"] = "Basic Delivery";
+    json["boxes"] = JSON.parse(boxes); // selected boxes
+
+    let new_value = JSON.stringify(json);
+    $("#guides").val(new_value);
   }
 
   function setSrEnvioShippingCost() {
+    $("input[name='parcel_id']")[2].checked = true;
+    removeFilter('.parcel_img_sr', 'parcel');
+
     opt = $("#sr-parcel").children("option:selected");
     $("#parcel_id_2").attr("info", opt.text());
 
     boxes = $("#sr-parcel").attr("boxes");
     boxes = boxes.replace(/(=>)/g,":");
 
-    json = new Object();
+    json = new Object(); // guides for sr envio
     json["shipping_cost"] = parseFloat(opt.attr("shipping_cost"));
     json["days"] = opt.attr("days");
-    json["service"] = opt.attr("service");
+    json["provider"] = opt.attr("provider");
     json["service_level_name"] = opt.attr("service_level_name");
-    json["boxes"] = JSON.parse(boxes);
+    json["boxes"] = JSON.parse(boxes); // selected boxes
 
     let new_value = JSON.stringify(json);
     $("#guides").val(new_value);

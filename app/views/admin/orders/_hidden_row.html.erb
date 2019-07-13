@@ -1,8 +1,21 @@
-<p>Guías: <b><%= o.guides %></b></p>
+<%
+  begin
+    guides_json = JSON.parse o.guides
+  rescue => exception
+    guides_json = nil
+  end
+%>
+
+<% if guides_json %>
+  <p><b>Proveedor:</b> <%= guides_json["provider"] %></p>
+  <p><b>Servicio:</b> <%= guides_json["service_level_name"] %></p>
+  <p><b>Días:</b> <%= guides_json["days"] %></p>
+  <p><b>Cajas:</b> <%= guides_json["boxes"] %></p>
+<% end %>
 
 <% if o.tracking_code.present? %>
   <p>Código de rastreo: <b><%= o.tracking_code %></b></p>
-<% end  %>
+<% end %>
 
 <% if o.invoice_folio.nil? and @current_user.has_permission?('orders@save_invoice_folio') and 
   params[:type] == "INVOICES" %>

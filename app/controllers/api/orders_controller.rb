@@ -10,20 +10,16 @@ class Api::OrdersController < ApiController
     data = Array.new
     data << {per_page: 10}
     orders.each do |order|
+      begin
+        parcel = JSON.parse order.guides
+      rescue
+        parcel = Hash.new
+      end
 
       extra_data = {hash_id: order.hash_id, date: I18n.l(order.created_at, format: :long),
-        total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, parcel: "",
-        parcel_url: "", payment_method: order.payment_method, download_payment_key: order.download_payment_key,
+        total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, parcel: parcel,
+        payment_method: order.payment_method, download_payment_key: order.download_payment_key,
         account: {}}
-
-      if order.parcel_id.present?
-        if order.parcel_id == 0
-          extra_data[:parcel] = "LOCAL"
-        else 
-          extra_data[:parcel_url] = order.Parcel.tracking_url
-          extra_data[:parcel] = order.Parcel.image.url(:mini)
-        end
-      end
 
       data << extra_data
     end
@@ -195,28 +191,6 @@ class Api::OrdersController < ApiController
     render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
-  def available_parcels
-    warehouse = @current_user.City.State.Warehouse
-    parcels = warehouse.Parcels
-    data = Array.new
-
-    parcels.each do |parcel|
-      extra_data = Hash.new
-      extra_data[parcel.parcel_name] = {image: parcel.image.url(:mini), id: parcel.id}
-      parcel_prices = Array.new
-      parcel.Prices.order(max_weight: :asc).each do |price|
-        parcel_prices << { max_weight: price.max_weight, price: price.price }
-      end
-      extra_data[parcel.parcel_name][:prices] = parcel_prices
-      extra_data[parcel.parcel_name][:delivery_time] = parcel.delivery_time
-      extra_data[parcel.parcel_name][:local_delivery] = parcel.local_delivery
-
-      data << extra_data
-    end
-
-    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
-  end
-
   def update_payment_method
     render_404 and return if params[:payment_method].nil?
     order = @current_user.Orders.find_by!(hash_id: params[:id])
@@ -234,6 +208,32 @@ class Api::OrdersController < ApiController
     elsif order.pay_pdf.present?
       send_file order.pay_pdf.path
     end
+  end
+
+  def sr_parcel_prices
+    cart_weight = params["total_weight"];
+    @boxes_selected, available_boxes = Box.selectByWeight(cart_weight)
+    
+    @parcels = Hash.new
+    @boxes_selected.keys.each do |key|
+      box = available_boxes.select{|box| box["name"] == key }[0] # get the box obj
+      jsonArray = Box.fetchSrQuotations(@current_user.cp, box) # get Quotations from Sr Envío
+      no_boxes = @boxes_selected[key]
+
+      jsonArray.each do |obj| # build up @parcels json
+        key = "#{obj['provider']}_#{obj['service_level_code']}"
+        @parcels[key] = obj unless @parcels[key].present?
+
+        if @parcels[key] and @parcels[key]["grand_total"].present?
+          @parcels[key]["grand_total"] += obj["total_pricing"].to_f * no_boxes
+        else
+          @parcels[key]["grand_total"] = obj["total_pricing"].to_f * no_boxes
+        end # end if "grand_total"
+      end # end jsonArray.each
+    end # end boxes_selected.keys.each
+
+    render status: 200, json: {success: true, info: "PARCELS_RETURNED",
+      parcels: @parcels, boxes_selected: @boxes_selected}
   end
 
   private
@@ -260,5 +260,4 @@ class Api::OrdersController < ApiController
       order.address = address
       return order
     end
-
 end

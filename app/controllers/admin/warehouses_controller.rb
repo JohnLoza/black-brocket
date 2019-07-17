@@ -118,13 +118,16 @@ class Admin::WarehousesController < AdminController
       .order(product_id: :asc).includes(:Product)
 
     @products_no_pay = OrderDetail.select("product_id, sum(quantity) as sum_quantity").joins(:Order)
-      .where(orders: {state: ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED", "PAYMENT_REJECTED"], warehouse_id: @warehouse.id}).group(:product_id)
+      .where(orders: {state: ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED", "PAYMENT_REJECTED", "LOCAL"], 
+        warehouse_id: @warehouse.id}).group(:product_id)
 
     @products_paid = OrderDetail.select("product_id, sum(quantity) as sum_quantity").joins(:Order)
-      .where(orders: {state: ["PAYMENT_ACCEPTED", "BATCHES_CAPTURED"], warehouse_id: @warehouse.id}).group(:product_id)
+      .where(orders: {state: ["PAYMENT_ACCEPTED", "BATCHES_CAPTURED", "PAYMENT_ACCEPTED_LOCAL"], 
+        warehouse_id: @warehouse.id}).group(:product_id)
 
     @complement = OrderDetail.joins(:Order)
-      .where(orders: {state: ["INSPECTIONED"], warehouse_id: @warehouse.id}).includes(:Order)
+      .where(orders: {state: ["INSPECTIONED", "PICKED_UP"], 
+        warehouse_id: @warehouse.id}).includes(:Order)
 
     render :inventory, layout: false
   end

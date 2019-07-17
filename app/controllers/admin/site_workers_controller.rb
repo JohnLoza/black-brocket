@@ -221,11 +221,6 @@ class Admin::SiteWorkersController < AdminController
       @warehouse_category << {category: "warehouses", name: "update_wholesale", description: "Modificar coste de mayoreo"}
       @warehouse_category << {category: "warehouses", name: "delete", description: "Eliminar almacenes"}
 
-      @parcel_category = []
-      @parcel_category << {category: "parcels", name: "create", description: "Dar de alta paquetería"}
-      @parcel_category << {category: "parcels", name: "delete", description: "Eliminar paqueterías"}
-      @parcel_category << {category: "parcels", name: "update", description: "Modificar información de paqueterías"}
-
       @warehouse_product_category = []
       @warehouse_product_category << {category: "warehouse_products", name: "show", description: "Visualizar productos de almacén"}
       @warehouse_product_category << {category: "warehouse_products", name: "create_shipments", description: "Enviar productos a Almacén"}

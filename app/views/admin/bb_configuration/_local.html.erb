@@ -1,0 +1,31 @@
+<section>
+  <%= link_to admin_save_local_path(key), class: "btn btn-danger pull-right",
+    method: :delete, data: {confirm: "Seguro(a) de eliminar el local?"} do %>
+    <i class="fa fa-trash fa-lg"></i>
+  <% end %>
+  
+  <%= link_to admin_edit_local_path(id: key), class: "btn btn-primary pull-right" do %>
+    <i class="fa fa-pencil fa-lg"></i>
+  <% end %>
+
+  <p>
+    <strong>Ubicación: </strong>
+    <%= local["location"] %>
+  </p>
+  <p>
+    <strong>Costo de envío: </strong>
+    <%= local["shipping_cost"] %>
+  </p>
+  <section>
+    <label>Alcance: </label>
+    <% local["cities"].keys.each do |city_id| %>
+      <%= content_tag :a, local["cities"][city_id], class: "label label-success" %>
+    <% end %>
+  </section>
+
+  <div class="hr-line-dashed"></div>
+</section>
+
+<style>
+.btn{ margin: .5em; }
+</style>

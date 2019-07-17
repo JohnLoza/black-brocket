@@ -6,20 +6,20 @@ class Api::OrdersController < ApiController
   def index
     orders = @current_user.Orders.where.not(state: "ORDER_CANCELED")
     .order(created_at: :desc).paginate(page: params[:page], per_page: 10)
-    .includes(:Parcel, City: :State)
+    .includes(City: :State)
     data = Array.new
     data << {per_page: 10}
     orders.each do |order|
       begin
-        parcel = JSON.parse order.guides
+        guides = JSON.parse order.guides
       rescue
-        parcel = Hash.new
+        guides = Hash.new
       end
 
       extra_data = {hash_id: order.hash_id, date: I18n.l(order.created_at, format: :long),
-        total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, parcel: parcel,
+        total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, guides: guides,
         payment_method: order.payment_method, download_payment_key: order.download_payment_key,
-        account: {}}
+        shipping_cost: order.shipping_cost}
 
       data << extra_data
     end
@@ -212,28 +212,28 @@ class Api::OrdersController < ApiController
 
   def sr_parcel_prices
     cart_weight = params["total_weight"];
-    @boxes_selected, available_boxes = Box.selectByWeight(cart_weight)
+    boxes_selected, available_boxes = Box.selectByWeight(cart_weight)
     
-    @parcels = Hash.new
-    @boxes_selected.keys.each do |key|
+    parcels = Hash.new
+    boxes_selected.keys.each do |key|
       box = available_boxes.select{|box| box["name"] == key }[0] # get the box obj
       jsonArray = Box.fetchSrQuotations(@current_user.cp, box) # get Quotations from Sr Envío
-      no_boxes = @boxes_selected[key]
+      no_boxes = boxes_selected[key]
 
-      jsonArray.each do |obj| # build up @parcels json
+      jsonArray.each do |obj| # build up parcels json
         key = "#{obj['provider']}_#{obj['service_level_code']}"
-        @parcels[key] = obj unless @parcels[key].present?
+        parcels[key] = obj unless parcels[key].present?
 
-        if @parcels[key] and @parcels[key]["grand_total"].present?
-          @parcels[key]["grand_total"] += obj["total_pricing"].to_f * no_boxes
+        if parcels[key] and parcels[key]["grand_total"].present?
+          parcels[key]["grand_total"] += obj["total_pricing"].to_f * no_boxes
         else
-          @parcels[key]["grand_total"] = obj["total_pricing"].to_f * no_boxes
+          parcels[key]["grand_total"] = obj["total_pricing"].to_f * no_boxes
         end # end if "grand_total"
       end # end jsonArray.each
     end # end boxes_selected.keys.each
 
     render status: 200, json: {success: true, info: "PARCELS_RETURNED",
-      parcels: @parcels, boxes_selected: @boxes_selected}
+      parcels: parcels, boxes_selected: boxes_selected, local: Local.forLocation(@current_user.city_id)}
   end
 
   private
@@ -246,7 +246,6 @@ class Api::OrdersController < ApiController
       order.shipping_cost = params[:delivery_cost]
       order.guides = params[:guides]
       order.payment_method = params[:payment_method]
-      order.parcel_id = params[:parcel_id]
 
       order.invoice = params[:invoice] if params[:invoice]
       order.cfdi = params[:cfdi] if params[:invoice] == "1"

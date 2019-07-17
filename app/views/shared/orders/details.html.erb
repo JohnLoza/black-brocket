@@ -53,7 +53,9 @@
         <%= render '/shared/orders/product_details' %>
       </div>
 
-      <%= render '/shared/orders/shipment_details' %>
+      <% unless ["LOCAL","PICKED_UP","PAYMENT_ACCEPTED_LOCAL"].include? @order.state %>
+        <%= render '/shared/orders/shipment_details' %>
+      <% end %>
       <%= render '/shared/orders/fiscal_data' %>
 
       <div class="text-center">

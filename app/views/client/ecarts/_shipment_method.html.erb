@@ -1,21 +1,20 @@
 <section class="row inline-block step step-2 hidden text-center">
   <h4>Seleccione el método de envío</h4>
-  <% if @local_regions.include? @current_user.city_id %>
+
+  <% if @local %>
     <div>
       <%= radio_button_tag "parcel_id", 0, false, autocomplete: :off, style: "display: none;",
         onchange: "noShipping(); removeFilter('.parcel_img_local', 'parcel');", required: true,
-        info: "Recoger en almacén Galeana 125, Centro, Guadalajara, Jal. cp 44100" %>
+        info: @local["location"] %>
       <label for="parcel_id_0">
         <%= image_tag "recoger-en-almacen.svg", class: "parcel_img_local parcel" %>
       </label>
     </div>
-  <% end %>
 
-  <% if @local_regions.include? @current_user.city_id %>
     <div>
       <%= radio_button_tag "parcel_id", 1, false, autocomplete: :off, required: true,
         onchange: "blackBrocketParcel(); removeFilter('.parcel_img_bb', 'parcel')",
-        info: "Paquetería Black Brocket", style: "display: none;" %>
+        info: "Paquetería Black Brocket", shipping_cost: @local["shipping_cost"], style: "display: none;" %>
       <label for="parcel_id_1">
         <%= image_tag "black-brocket-parcel.png", class: "parcel_img_bb parcel" %>
       </label>
@@ -46,7 +45,7 @@
 
     json = new Object(); // guides for personal recovery
     json["shipping_cost"] = 0.0;
-    json["days"] = "Recoje en almacén";
+    json["days"] = "";
     json["provider"] = "";
     json["service_level_name"] = "";
     json["boxes"] = JSON.parse(boxes); // selected boxes
@@ -59,13 +58,14 @@
 
   function blackBrocketParcel() {
     $("#sr-parcel").val("");
-    setShippingCost(35, "Día siguiente");
+    let shipping_cost = $("#parcel_id_1").attr("shipping_cost");
+    setShippingCost(shipping_cost, "Día siguiente");
 
     boxes = $("#sr-parcel").attr("boxes");
     boxes = boxes.replace(/(=>)/g,":");
 
     json = new Object(); // guides for black brocket parcel
-    json["shipping_cost"] = 35;
+    json["shipping_cost"] = shipping_cost;
     json["days"] = "2 días";
     json["provider"] = "Black Brocket";
     json["service_level_name"] = "Basic Delivery";

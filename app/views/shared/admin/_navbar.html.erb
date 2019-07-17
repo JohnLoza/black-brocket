@@ -59,10 +59,9 @@
         </li>
 
         <% if @current_user.has_permission_category?('warehouses') or
-              @current_user.has_permission_category?('parcels') or
               @current_user.has_permission_category?('warehouse_products') or
               @current_user.has_permission_category?('warehouse_manager') %>
-          <li class="warehouses warehouse_products warehouse_manager parcels">
+          <li class="warehouses warehouse_products warehouse_manager">
            <%= link_to admin_warehouses_path do %>
              <%= content_tag(:i, nil, class: 'fa fa-cubes') %>
              <%= content_tag(:span, 'Almacenes', class: 'nav-label') %>

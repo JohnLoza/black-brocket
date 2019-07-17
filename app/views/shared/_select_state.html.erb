@@ -3,8 +3,8 @@
     <label class="col-sm-3 control-label">Estado</label>
     <div class="col-sm-9">
       <%= select_tag :state_id, options_from_collection_for_select(
-        states, "id", "name", selected: params[:state_id]), prompt: "Selecciona...",
-        onchange: "fetchCities(this.value);",
+        states, "id", "name", selected: params[:state_id]), prompt: "Selecciona un estado...",
+        onchange: "fetchCities(this.value);", autocomplete: :off,
         class: "form-control m-b", required: true %>
     </div>
   </div>
@@ -25,7 +25,7 @@ function fetchCities(state){
 function updateCities(cities){
   select = $("#city_id");
   select.html("");
-  select.append(selectOption("", ""));
+  select.append(selectOption("Selecciona una ciudad...", ""));
   for (var i = 0; i < cities.length; i++) {
     obj = cities[i];
     select.append(selectOption(obj.name, obj.id, "lada=\""+obj.lada+"\""))

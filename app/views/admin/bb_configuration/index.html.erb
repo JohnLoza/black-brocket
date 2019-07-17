@@ -19,15 +19,17 @@
     <!-- Content -->
     <%= link_to(admin_boxes_configuration_path) do %>
       <div class="col-md-6 text-center square-link" style="background-color: #33B5E5;">
-        <p>Configurar Cajas de Envío</p>
+        <p>Configurar Cajas de Paquetería</p>
         <i class="fa fa-cubes big-icon"></i>
       </div>
     <% end if @current_user.has_permission?("configuration@all") %>
 
-    <div class="col-md-6 text-center square-link" style="background-color: #AA66CC;">
-      <p>Trabajo en proceso</p>
-      <i class="fa fa-cog big-icon"></i>
-    </div>
+    <%= link_to(admin_locals_configuration_path) do %>
+      <div class="col-md-6 text-center square-link" style="background-color: #AA66CC;">
+        <p>Locales y Envío Black Brocket</p>
+        <i class="fa fa-truck big-icon"></i>
+      </div>
+    <% end %>
 
   </div>
 </div>

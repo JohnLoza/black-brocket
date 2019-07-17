@@ -4,7 +4,7 @@
     <div class="col-sm-9">
       <%= select_tag :city_id, options_from_collection_for_select(
           cities, "id", "name", selected: params[:city_id]),
-          prompt: "Selecciona...", class: "input form-control", 
+          prompt: "Selecciona un estado...", class: "input form-control", 
           onchange: "updateLada()", required: true %>
     </div>
   </div>

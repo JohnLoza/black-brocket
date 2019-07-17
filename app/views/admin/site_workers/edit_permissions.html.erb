@@ -80,11 +80,6 @@
               <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
               <% end %>
               <div class="hr-line-dashed"></div>
-              <h1>Paqueterías</h1>
-              <% @parcel_category.each do |p| %>
-              <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>
-              <% end %>
-              <div class="hr-line-dashed"></div>
               <h1>Inventario de almacén</h1>
               <% @warehouse_product_category.each do |p| %>
               <%= render partial: "permission_check", locals: {site_worker: @worker, permission: p, f: f} %>

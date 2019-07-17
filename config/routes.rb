@@ -110,21 +110,6 @@ Rails.application.routes.draw do
     delete 'chief/warehouses/:warehouse_id/products/preparations/:id' => 'warehouse_products#discard_shipment_preparation', as: :discard_shipment_preparation
     put 'chief/warehouses/:warehouse_id/products/:id/update_min_stock' => 'warehouse_products#update_min_stock', as: :update_product_min_stock
 
-    # warehouse parcels #
-    get 'warehouses/:warehouse_id/parcels' => 'parcels#index', as: :warehouse_parcels
-    get 'warehouses/:warehouse_id/parcels/new' => 'parcels#new', as: :warehouse_new_parcel
-    post 'warehouses/:warehouse_id/parcels' => 'parcels#create'
-    get 'warehouses/:warehouse_id/parcel/:id/edit' => 'parcels#edit', as: :warehouse_edit_parcel
-    patch 'warehouses/:warehouse_id/parcel/:id' => 'parcels#update', as: :warehouse_parcel
-    delete 'warehouses/:warehouse_id/parcel/:id' => 'parcels#destroy'
-
-    get 'warehouses/:warehouse_id/parcel/:id/prices' => 'parcel_prices#index', as: :warehouse_parcel_parcel_prices
-    get 'warehouses/:warehouse_id/parcel/:id/prices/new' => 'parcel_prices#new', as: :new_parcel_price
-    post 'warehouses/:warehouse_id/parcel/:id/prices' => 'parcel_prices#create'
-    get 'warehouses/:warehouse_id/parcel/:parcel_id/price/:id/edit' => 'parcel_prices#edit', as: :edit_parcel_price
-    patch 'warehouses/:warehouse_id/parcel/:parcel_id/price/:id' => 'parcel_prices#update', as: :warehouse_parcel_parcel_price
-    delete 'warehouses/:warehouse_id/parcel/:parcel_id/price/:id' => 'parcel_prices#destroy'
-
     # shipments #
     get 'chief/warehouses/:warehouse_id/shipments' => 'warehouse_products#chief_shipments', as: :chief_shipments
     post 'chief/warehouses/:warehouse_id/shipments' => 'warehouse_products#create_shipment'
@@ -231,6 +216,11 @@ Rails.application.routes.draw do
     get 'configuration/' => 'bb_configuration#index', as: :configuration
     get 'configuration/boxes' => 'bb_configuration#boxes', as: :boxes_configuration
     post 'configuration/boxes' => 'bb_configuration#set_boxes'
+
+    get 'configuration/locals' => 'bb_configuration#locals', as: :locals_configuration
+    get 'configuration/local/edit' => 'bb_configuration#local', as: :edit_local
+    post 'configuration/local/:id' => 'bb_configuration#set_local', as: :save_local
+    delete 'configuration/local/:id' => 'bb_configuration#destroy_local'
   end
 
   namespace :distributor do

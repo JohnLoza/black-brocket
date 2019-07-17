@@ -1,0 +1,93 @@
+<div class="ibox">
+  <div class="ibox-content">
+    <%= form_for(:local, url: admin_save_local_path(@hash_id), method: :post, 
+      html: {class: "form-horizontal"}) do |f| %>
+
+      <div class="form-group">
+        <%= label_tag :location, "Ubicación", class: "col-sm-2 control-label" %>
+        <div class="col-sm-10">
+          <%= text_area_tag :location, @local["location"], class: "form-control", maxlength: 220,
+            placeholder: "ej. Galeana 125 col Centro, Guadalajara, Jalisco", required: true %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :shipping_cost, "Costo de envío", class: "col-sm-2 control-label" %>
+        <div class="col-sm-10">
+          <%= number_field_tag :shipping_cost, @local["shipping_cost"], class: "form-control", min: 1,
+            placeholder: "ej. 35.00", required: true, step: 0.01 %>
+        </div>
+      </div>
+
+      <%= render partial: "shared/select_state", locals: {states: @states} %>
+      
+      <div id="select_city">
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Población</label>
+          <div class="col-sm-9">
+            <%= select_tag :city_id, options_from_collection_for_select(
+              Array.new, "id", "name", selected: params[:city_id]),
+              prompt: "Selecciona un estado...", class: "input form-control", 
+              onchange: "addCity()" %>
+          </div>
+        </div>
+      </div>
+
+      <section class="cities col-sm-10 col-sm-offset-2">
+
+        <% @local["cities"].keys.each do |city_id| %>
+          <div class="label label-success">
+            <%= @local["cities"][city_id] %>
+            <a class="text-danger">
+              <i class="fa fa-times" onclick="$(this).parent().parent().remove()"></i>
+            </a>
+            <input type="hidden" name="cities_ids[]" value="<%= city_id %>">
+            <input type="hidden" name="cities_names[]" value="<%= @local["cities"][city_id] %>">
+          </div>
+        <% end if @local["cities"] # @local["cities"].keys.each end %>
+
+      </section>
+
+      <div class="form-group">
+        <div class="col-sm-4 col-sm-offset-2">
+          <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
+          <%= submit_tag "Guardar", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+.cities{ margin-bottom: 2em; }
+.cities > div.label{
+  display: inline-block;
+  font-size: 14px;
+  margin: 0.5em;
+}
+.cities > div.label > a{ margin-left: 0.5em; }
+</style>
+
+<script type="text/javascript">
+function addCity() {
+  let opt_selected = $("#city_id").children("option:selected");
+  
+  $(".cities").append(`
+    <div class="label label-success">
+      ${opt_selected.text()}
+      <a class="text-danger">
+        <i class="fa fa-times" onclick="$(this).parent().parent().remove()"></i>
+      </a>
+      <input type="hidden" name="cities_ids[]" value="${opt_selected.val()}">
+      <input type="hidden" name="cities_names[]" value="${opt_selected.text()}">
+    </div>
+  `); // append the opt to the current selected cities
+
+  opt_selected.remove(); // remove the city opt from select
+  $("#city_id").children("option")[0].selected = true;
+}
+
+$(document).ready(function(){
+  $("#state_id").removeAttr("required");
+});
+</script>

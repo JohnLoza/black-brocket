@@ -10,8 +10,6 @@ class Warehouse < ApplicationRecord
   has_many :TransferShipments, class_name: 'Shipment', foreign_key: :origin_warehouse_id
   has_many :IncomingShipments, class_name: 'Shipment', foreign_key: :target_warehouse_id
 
-  has_many :Parcels, class_name: 'Parcel', foreign_key: :warehouse_id
-
   validates :city_id, :name, :address, :telephone, presence: true
   validates :city_id, numericality: { only_integer: true }
 

@@ -1,0 +1,31 @@
+<% provide(:title, "Locales y Envío Black Brocket") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Locales y Envío Black Brocket", 
+  labels: ["Configuración", "Locales y Envío Black Brocket"], links: [admin_configuration_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+
+    <div class="ibox">
+      <div class="ibox-content" style="display: block;">
+        <div class="row">
+          <div class="col-sm-4 pull-right text-center">
+              <h4>Registrar Nuevo</h4>
+              <%= link_to admin_edit_local_path() do %>
+                <i class="fa fa-plus med-icon"></i>
+              <% end %>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ibox">
+      <div class="ibox-content">
+        <% @locals.keys.each do |key| %>
+          <%= render partial: 'local', locals: {local: @locals[key], key: key} %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End content whit animation-->

@@ -1,17 +1,18 @@
-<% provide(:title, "Configuración") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Configuración", labels: ["Configuración"]} %>
+<% provide(:title, "Configurar cajas de paquetería") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Configurar cajas de paquetería", 
+  labels: ["Configuración", "Cajas de paquetería"], links: [admin_configuration_path]} %>
 
 <!--Content whit animation-->
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="row">
-	  <%= render "box_form" %>
+	  <%= render "boxes_form" %>
   </div>
 </div>
 <br>
 <!--End content whit animation-->
 
 <script type="text/javascript">
-function removeBoxFields(trigger) {
+function removeParent(trigger) {
   $(trigger).parent().remove();
 }
 

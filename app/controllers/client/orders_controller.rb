@@ -197,7 +197,6 @@ class Client::OrdersController < ApplicationController
       order.shipping_cost = params[:delivery_cost]
       order.guides = params[:guides]
       order.payment_method = params[:payment_method]
-      order.parcel_id = params[:parcel_id]
 
       order.invoice = params[:invoice] if params[:invoice]
       order.cfdi = params[:cfdi] if params[:invoice] == "1"

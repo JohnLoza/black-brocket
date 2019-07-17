@@ -207,19 +207,8 @@ class CreateTables2Version < ActiveRecord::Migration[5.1]
       t.string :batch
     end
 
-    create_table :parcels do |t|
-      t.bigint :warehouse_id
-      t.string :parcel_name
-      t.decimal :cost, precision: 8, scale: 2
-      t.string :tracking_url
-      t.string :image
-
-      t.timestamps
-    end
-
     add_column :orders, :warehouse_id, :integer
     add_column :orders, :freight_worker_id, :integer
-    add_column :orders, :parcel_id, :integer
     add_column :orders, :reject_description, :text
     add_column :orders, :cancel_description, :text
   # New Orders System #

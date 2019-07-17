@@ -501,12 +501,12 @@ class Admin::OrdersController < AdminController
           .where(statements[:where])
           .byWarehouse(statements[:warehouse])
           .order(statements[:order])
-          .includes(City: :State).includes(:Distributor, :Client, :Parcel)
+          .includes(City: :State).includes(:Distributor, :Client)
       else
         Order.where(statements[:where])
           .byWarehouse(statements[:warehouse])
           .order(statements[:order])
-          .includes(City: :State).includes(:Distributor, :Client, :Parcel)
+          .includes(City: :State).includes(:Distributor, :Client)
       end
     end
 end

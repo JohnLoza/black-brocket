@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190704154959) do
+ActiveRecord::Schema.define(version: 20190717144531) do
 
   create_table "bank_accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "bank_name"
@@ -316,7 +316,7 @@ ActiveRecord::Schema.define(version: 20190704154959) do
     t.string "download_payment_key"
     t.integer "payment_method"
     t.string "payment_folio"
-    t.string "guides"
+    t.text "guides"
     t.string "invoice_folio"
     t.string "courtesy_folio"
     t.string "cfdi"

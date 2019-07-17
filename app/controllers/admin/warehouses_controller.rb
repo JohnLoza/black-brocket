@@ -117,17 +117,23 @@ class Admin::WarehousesController < AdminController
       .where(warehouse_id: @warehouse.id, describes_total_stock: true)
       .order(product_id: :asc).includes(:Product)
 
+    product_ids = @products_in_stock.map {|product| product.product_id }
+
     @products_no_pay = OrderDetail.select("product_id, sum(quantity) as sum_quantity").joins(:Order)
       .where(orders: {state: ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED", "PAYMENT_REJECTED", "LOCAL"], 
-        warehouse_id: @warehouse.id}).group(:product_id)
+        warehouse_id: @warehouse.id}, product_id: product_ids).group(:product_id)
 
     @products_paid = OrderDetail.select("product_id, sum(quantity) as sum_quantity").joins(:Order)
-      .where(orders: {state: ["PAYMENT_ACCEPTED", "BATCHES_CAPTURED", "PAYMENT_ACCEPTED_LOCAL"], 
-        warehouse_id: @warehouse.id}).group(:product_id)
+      .where(orders: {state: ["PAYMENT_ACCEPTED", "BATCHES_CAPTURED"], 
+        warehouse_id: @warehouse.id}, product_id: product_ids).group(:product_id)
 
-    @complement = OrderDetail.joins(:Order)
-      .where(orders: {state: ["INSPECTIONED", "PICKED_UP"], 
-        warehouse_id: @warehouse.id}).includes(:Order)
+    @complement = OrderDetail.joins(:Order).where(orders: {state: ["INSPECTIONED"], 
+      warehouse_id: @warehouse.id}, product_id: product_ids).includes(:Order)
+
+    @totals = @warehouse.Products.joins(:Product)
+      .select("product_id, sum(existence) as total_existence")
+      .where(products: {deleted_at: nil}, describes_total_stock: false)
+      .group(:product_id)
 
     render :inventory, layout: false
   end

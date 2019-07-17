@@ -100,6 +100,7 @@ class Admin::OrdersController < AdminController
       @details = OrderDetail.where(order_id: @order.id)
 
       @details.each do |d|
+        # TODO change ugly query for a method restock
         query = "UPDATE warehouse_products "+
             "SET existence=(existence+#{d.quantity}) WHERE "+
             "id="+d.w_product_id.to_s
@@ -112,6 +113,7 @@ class Admin::OrdersController < AdminController
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Canceló la orden")
       flash[:success] = "La orden se canceló correctamente."
     end
+    # TODO add this action to a history (log) file
 
     flash[:info] = "Oops, algo no salió como lo esperado..." unless flash[:success].present?
     redirect_to admin_orders_path(type: "CANCEL")
@@ -200,6 +202,8 @@ class Admin::OrdersController < AdminController
       OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
       flash[:success] = "Números de lote y cantidades guardadas"
     end # Transaction #
+
+    # TODO after its saved to database register the batches in a history file
 
     if flash[:success].nil? and flash[:info].blank?
       flash[:info] = "Ocurrió un error al guardar, verifica la información introducida" 

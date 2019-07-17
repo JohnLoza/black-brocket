@@ -6,14 +6,8 @@ class Local
   end
 
   def self.setLocals(json)
-    begin
-      # File.write(@@FILE_PATH, JSON.pretty_generate(json))
-      File.write(@@FILE_PATH, json.to_json)
-    rescue Errno::ENOENT
-      directory = File.join(File.dirname(__FILE__), '../../config/black_brocket')
-      Dir.mkdir(directory) unless Dir.exist?(directory)
-      setBoxes(json)
-    end
+    # File.write(@@FILE_PATH, JSON.pretty_generate(json))
+    File.write(@@FILE_PATH, json.to_json)
   end
 
   def self.forLocation(location)

@@ -5,11 +5,8 @@ class Admin::BbConfigurationController < AdminController
   def boxes
     begin
       @boxes = Box.all
-    rescue Errno::ENOENT
-      directory = File.join(File.dirname(__FILE__), '../../../config/black_brocket')
-      Dir.mkdir(directory) unless Dir.exist?(directory)
+    rescue Errno::ENOENT # when file doesnt exist
       @boxes = Hash.new
-      # rescue Errno::ENOENT
     end # begin end
   end
 
@@ -35,11 +32,8 @@ class Admin::BbConfigurationController < AdminController
   def locals
     begin
       @locals = Local.all
-    rescue Errno::ENOENT
-      directory = File.join(File.dirname(__FILE__), '../../../config/black_brocket')
-      Dir.mkdir(directory) unless Dir.exist?(directory)
+    rescue Errno::ENOENT # when file doesnt exist
       @locals = Hash.new
-      # rescue Errno::ENOENT
     end # begin end
   end
   
@@ -66,11 +60,8 @@ class Admin::BbConfigurationController < AdminController
 
     begin
       locals = Local.all
-    rescue Errno::ENOENT
-      directory = File.join(File.dirname(__FILE__), '../../../config/black_brocket')
-      Dir.mkdir(directory) unless Dir.exist?(directory)
+    rescue Errno::ENOENT # when file doesnt exist
       locals = Hash.new
-      # rescue Errno::ENOENT
     end # begin end
 
     locals[params[:id]] = local

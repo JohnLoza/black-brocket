@@ -69,14 +69,17 @@ class Client::OrdersController < ApplicationController
         redirect_to client_ecart_path(@current_user.hash_id) and return
       end
       @products.each do |p|
+        # TODO change update_attributes for "reserve"
         p.update_attributes(existence: (p.existence - session[:e_cart][p.hash_id].to_i))
       end
       flash[:success] = "Orden guardada"
       session.delete(:e_cart)
-
+      
       return unless verify_fiscal_data
       redirect_to client_orders_path(@current_user.hash_id, info_for: @order.hash_id) and return
     end
+
+    # TODO add this action to a history (log) file
 
     flash[:info] = "Ocurrió un error al guardar tu pedido, vuelve a intentarlo por favor..."
     redirect_to client_ecart_path(@current_user.hash_id)
@@ -90,6 +93,7 @@ class Client::OrdersController < ApplicationController
         @details = OrderDetail.where(order_id: @order.id)
 
         @details.each do |d|
+          # TODO change ugly query for a method restock
           query = "UPDATE warehouse_products "+
               "SET existence=(existence+#{d.quantity}) WHERE "+
               "id="+d.w_product_id.to_s
@@ -99,6 +103,7 @@ class Client::OrdersController < ApplicationController
         @order.update(state: "ORDER_CANCELED")
         @destroyed = true
       end
+      # TODO add this action to a history (log) file
     else
       @destroyed = false
     end

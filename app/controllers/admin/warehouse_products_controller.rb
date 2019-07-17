@@ -53,6 +53,7 @@ class Admin::WarehouseProductsController < AdminController
 
       success = true
     end
+    # TODO add this action to a history file
 
     flash[:success] = "Stock modificado" if success
     flash[:info] = "Ocurrió un error al modificar el stock." if !success

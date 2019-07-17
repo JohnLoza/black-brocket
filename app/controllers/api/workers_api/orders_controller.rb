@@ -105,6 +105,7 @@ class Api::WorkersApi::OrdersController < ApiController
       order.update_attribute(:state, new_state)
       OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
     end # Transaction #
+    # TODO add action to history file
 
     return if used_render_already
     render status: 200, json: {success: true, info: "BATCHES_CAPTURED"}

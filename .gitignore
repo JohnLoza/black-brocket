@@ -45,3 +45,4 @@
 
 # Ignore Black Brocket configuration files
 config/black_brocket/*
+!config/black_brocket/.keep

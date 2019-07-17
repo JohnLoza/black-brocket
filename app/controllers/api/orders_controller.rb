@@ -125,10 +125,12 @@ class Api::OrdersController < ApiController
         render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
       end
       products.each do |p|
+        # TODO change for prettier method "reserve"
         p.update_attributes(existence: (p.existence - params[:product_details][p.hash_id].to_i))
       end
       render status: 200, json: {success: true, info: "SAVED"} and return
     end
+    # TODO add action to history file
 
     render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
   end
@@ -140,6 +142,7 @@ class Api::OrdersController < ApiController
       details = OrderDetail.where(order_id: order.id)
 
       details.each do |d|
+        # change query for method restock
         query = "UPDATE warehouse_products "+
             "SET existence=(existence+#{d.quantity}) WHERE "+
             "id="+d.w_product_id.to_s
@@ -148,10 +151,10 @@ class Api::OrdersController < ApiController
 
       if order.update(state: "ORDER_CANCELED")
         render status: 200, json: {success: true, info: "SAVED"}
+        # TODO add action to history file
       else
         render status: 200, json: {success: false, info: "SAVE_ERROR"}
       end
-
     end
   end
 

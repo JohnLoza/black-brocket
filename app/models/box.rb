@@ -9,14 +9,7 @@ class Box
     # order from bigger to smaller using weight as reference
     json.sort!{|a, b| b[:weight] <=> a[:weight]}
 
-    begin
-      # File.write(@@FILE_PATH, JSON.pretty_generate(json))
-      File.write(@@FILE_PATH, json.to_json)
-    rescue Errno::ENOENT
-      directory = File.join(File.dirname(__FILE__), '../../config/black_brocket')
-      Dir.mkdir(directory) unless Dir.exist?(directory)
-      setBoxes(json)
-    end
+    File.write(@@FILE_PATH, json.to_json)
   end
 
   def self.order_by(dimension, direction)

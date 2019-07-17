@@ -44,5 +44,9 @@
 !/app/views/shared/web/_init_file.html.erb
 
 # Ignore Black Brocket configuration files
-config/black_brocket/*
-!config/black_brocket/.keep
+/config/black_brocket/*
+!/config/black_brocket/.keep
+
+# Ignore inventory history files
+/private/inventory_history/*
+!/private/inventory_history/.keep

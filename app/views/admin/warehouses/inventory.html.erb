@@ -5,53 +5,48 @@
 <% @products_in_stock.each do |ps| %>
   <p style="font-size: 12px;">
     <b style="font-size: 14px;">Nombre del producto: <%= ps.Product.name %></b><br>
-      <% total = 0 %>
       Disponible para venta: <%= ps.existence %> |
-      <% total += ps.existence %>
-
 
       <% product = nil %>
       <% @products_no_pay.each do |p_np| %>
-        <% product = p_np if p_np.product_id == ps.product_id %>
+        <% product = p_np and break if p_np.product_id == ps.product_id %>
       <% end %>
       Apartados (No se ha recibido pago):
       <% if product.nil? %>
         0
       <% else %>
         <%= product.sum_quantity %>
-        <% total += product.sum_quantity %>
       <% end %> |
 
 
       <% product = nil %>
       <% @products_paid.each do |p_np| %>
-        <% product = p_np if p_np.product_id == ps.product_id %>
+        <% product = p_np and break if p_np.product_id == ps.product_id %>
       <% end %>
       Pagados (Sin enviar):
       <% if product.nil? %>
         0
-        <% total += 0 %>
       <% else %>
         <%= product.sum_quantity %>
-        <% total += product.sum_quantity %>
       <% end %> |
 
-
-      Total en pzas: <%= total %> |
+      <% current_total = 0 %>
+      <% @totals.each do |total| %>
+        <% current_total = total.total_existence and break if total.product_id == ps.product_id %>
+      <% end %>
+      Total en pzas: <%= current_total %> |
       Conteo físico total en pzas:_____________________
   </p>
 
-
-    <label>Complemento</label>
-    <% product = nil %>
-    <% @complement.each do |c| %>
-      <% if c.product_id == ps.product_id %>
-        <p>
-          Referencia: <%= c.Order.hash_id %>, cantidad: <%= c.quantity %>
-        </p>
-      <% end %>
+  <% product = nil %>
+  <% @complement.each do |c| %>
+    <% if c.product_id == ps.product_id %>
+      <label>Complemento</label>
+      <p>
+        Referencia: <%= c.Order.hash_id %>, cantidad: <%= c.quantity %>
+      </p>
     <% end %>
-
+  <% end %>
   <br>
 <% end %>
 

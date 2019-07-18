@@ -2,7 +2,6 @@ class Admin::WarehousesController < AdminController
 
   def index
     unless @current_user.has_permission_category?("warehouses") or
-           @current_user.has_permission_category?("parcels") or
            @current_user.has_permission_category?("warehouse_products") or
            @current_user.has_permission_category?("warehouse_manager")
       deny_access! and return
@@ -115,7 +114,7 @@ class Admin::WarehousesController < AdminController
 
     @products_in_stock = @warehouse.Products.joins(:Product).where(products: {deleted_at: nil})
       .where(warehouse_id: @warehouse.id, describes_total_stock: true)
-      .order(product_id: :asc).includes(:Product)
+      .order("products.name asc").includes(:Product)
 
     product_ids = @products_in_stock.map {|product| product.product_id }
 

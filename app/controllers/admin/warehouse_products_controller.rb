@@ -45,18 +45,18 @@ class Admin::WarehouseProductsController < AdminController
       expiration_date: params[:warehouse_product][:expiration_date]).take
 
     success = false
-    ActiveRecord::Base.transaction do
-      difference = detail.existence - params[:warehouse_product][:existence].to_i
-
-      master_detail.update_attributes(existence: master_detail.existence - difference)
-      detail.update_attributes(existence: detail.existence - difference)
-
-      success = true
+    difference = detail.existence - params[:warehouse_product][:existence].to_i
+    begin
+      ActiveRecord::Base.transaction do
+        master_detail.withdraw(difference)
+        detail.withdraw(difference)
+      end
+    rescue
+      flash[:info] = "Stock resultante menor a 0"
     end
     # TODO add this action to a history file
 
-    flash[:success] = "Stock modificado" if success
-    flash[:info] = "Ocurrió un error al modificar el stock." if !success
+    flash[:success] = "Stock modificado" unless flash[:info].present?
     redirect_to admin_warehouse_products_stock_details_path(warehouse.hash_id, product.id)
   end
 

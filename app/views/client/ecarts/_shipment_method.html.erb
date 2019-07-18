@@ -58,7 +58,7 @@
 
   function blackBrocketParcel() {
     $("#sr-parcel").val("");
-    let shipping_cost = $("#parcel_id_1").attr("shipping_cost");
+    let shipping_cost = parseFloat($("#parcel_id_1").attr("shipping_cost"));
     setShippingCost(shipping_cost, "Día siguiente");
 
     boxes = $("#sr-parcel").attr("boxes");
@@ -111,10 +111,7 @@
     if(current_grand_total >= wholesale)
       shipping_cost = 0;
 
-    if (shipping_cost % 1 == 0)
-      $("#order-shipping-cost").text(`${shipping_cost}.00`);
-    else
-      $("#order-shipping-cost").text(shipping_cost);
+    $("#order-shipping-cost").text(money_format(shipping_cost));
 
     $("#shipping_cost_is_present").text("YES");
     $("#delivery_cost").val(shipping_cost);

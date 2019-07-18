@@ -120,13 +120,12 @@ class Api::OrdersController < ApiController
     ActiveRecord::Base.transaction do
       order.total = total + params[:delivery_cost].to_f
       begin
-      order.save!
+        order.save!
+        products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
       rescue ActiveRecord::RecordInvalid
         render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
-      end
-      products.each do |p|
-        # TODO change for prettier method "reserve"
-        p.update_attributes(existence: (p.existence - params[:product_details][p.hash_id].to_i))
+      rescue
+        render status: 200, json: {success: false, info: "NO_ENOUGH_STOCK"} and return
       end
       render status: 200, json: {success: true, info: "SAVED"} and return
     end
@@ -137,17 +136,10 @@ class Api::OrdersController < ApiController
 
   def cancel
     order = @current_user.Orders.where(hash_id: params[:id]).take
+    details = OrderDetail.where(order_id: order.id)
 
     ActiveRecord::Base.transaction do
-      details = OrderDetail.where(order_id: order.id)
-
-      details.each do |d|
-        # change query for method restock
-        query = "UPDATE warehouse_products "+
-            "SET existence=(existence+#{d.quantity}) WHERE "+
-            "id="+d.w_product_id.to_s
-        ActiveRecord::Base.connection.execute(query)
-      end
+      details.each {|d| WarehouseProduct.restock(d.w_product_id, d.quantity)}
 
       if order.update(state: "ORDER_CANCELED")
         render status: 200, json: {success: true, info: "SAVED"}

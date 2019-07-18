@@ -96,16 +96,9 @@ class Admin::OrdersController < AdminController
     @order = Order.find_by!(hash_id: params[:id])
     deny_access! and return unless ["WAITING_FOR_PAYMENT","PAYMENT_REJECTED","LOCAL"]
 
+    @details = OrderDetail.where(order_id: @order.id)
     ActiveRecord::Base.transaction do
-      @details = OrderDetail.where(order_id: @order.id)
-
-      @details.each do |d|
-        # TODO change ugly query for a method restock
-        query = "UPDATE warehouse_products "+
-            "SET existence=(existence+#{d.quantity}) WHERE "+
-            "id="+d.w_product_id.to_s
-        ActiveRecord::Base.connection.execute(query)
-      end
+      @details.each {|d| WarehouseProduct.restock(d.w_product_id, d.quantity)}
 
       @order.update(state: "ORDER_CANCELED", cancel_description: params[:order][:cancel_description])
       Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
@@ -202,7 +195,6 @@ class Admin::OrdersController < AdminController
       OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
       flash[:success] = "Números de lote y cantidades guardadas"
     end # Transaction #
-
     # TODO after its saved to database register the batches in a history file
 
     if flash[:success].nil? and flash[:info].blank?

@@ -46,10 +46,6 @@ class Client::OrdersController < ApplicationController
     @products = WarehouseProduct.where(hash_id: session[:e_cart].keys)
       .where(describes_total_stock: true).includes(:Product)
     @order.warehouse_id = @products[0].warehouse_id
-    unless WarehouseProduct.enoughStock?(@products, session[:e_cart])
-      flash[:info] = "Lo sentimos pero no queda suficiente inventario del producto #{product.Product.name} su existencia actual es de: #{product.existence}"
-      redirect_to client_ecart_path(@current_user.hash_id) and return
-    end
 
     # get the corresponding prices and create the details of the order #
     @total = 0
@@ -60,53 +56,40 @@ class Client::OrdersController < ApplicationController
     end # @products.each do #
 
     # finally save all the stuff to the database #
-    ActiveRecord::Base.transaction do
-      @order.total = @total + params[:delivery_cost].to_f
-      begin
+    @order.total = @total + params[:delivery_cost].to_f
+    begin
+      ActiveRecord::Base.transaction do
         @order.save!
-      rescue ActiveRecord::RecordInvalid
-        flash[:info] = "ocurrió un error al procesar la órden"
+        @products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
+      end
+    rescue ActiveRecord::RecordInvalid
+      flash[:info] = "ocurrió un error al procesar la órden"
+    rescue StandardError
+      flash[:info] = "No existe inventario suficiente"
+    ensure
+      if flash[:info].present?
         redirect_to client_ecart_path(@current_user.hash_id) and return
+      else
+        flash[:success] = "Orden guardada" and session.delete(:e_cart) # delete ecart contents
+        # TODO add this action to a history (log) file
+        return unless verify_fiscal_data # redirect to fiscal data if not complete and client asks for invoice
+        redirect_to client_orders_path(@current_user.hash_id, info_for: @order.hash_id) and return
       end
-      @products.each do |p|
-        # TODO change update_attributes for "reserve"
-        p.update_attributes(existence: (p.existence - session[:e_cart][p.hash_id].to_i))
-      end
-      flash[:success] = "Orden guardada"
-      session.delete(:e_cart)
-      
-      return unless verify_fiscal_data
-      redirect_to client_orders_path(@current_user.hash_id, info_for: @order.hash_id) and return
     end
-
-    # TODO add this action to a history (log) file
-
-    flash[:info] = "Ocurrió un error al guardar tu pedido, vuelve a intentarlo por favor..."
-    redirect_to client_ecart_path(@current_user.hash_id)
   end
 
   def cancel
-    @order = @current_user.Orders.where(hash_id: params[:id]).take
+    @order = @current_user.Orders.find_by!(hash_id: params[:id])
+    @destroyed = false and return unless ["WAITING_FOR_PAYMENT", "LOCAL"].include? @order.state
+    @details = OrderDetail.where(order_id: @order.id)
+    
+    ActiveRecord::Base.transaction do
+      @details.each {|d| WarehouseProduct.restock(d.w_product_id, d.quantity)}
 
-    if @order and ["WAITING_FOR_PAYMENT", "LOCAL"].include? @order.state
-      ActiveRecord::Base.transaction do
-        @details = OrderDetail.where(order_id: @order.id)
-
-        @details.each do |d|
-          # TODO change ugly query for a method restock
-          query = "UPDATE warehouse_products "+
-              "SET existence=(existence+#{d.quantity}) WHERE "+
-              "id="+d.w_product_id.to_s
-          ActiveRecord::Base.connection.execute(query)
-        end
-
-        @order.update(state: "ORDER_CANCELED")
-        @destroyed = true
-      end
-      # TODO add this action to a history (log) file
-    else
-      @destroyed = false
+      @order.update(state: "ORDER_CANCELED")
+      @destroyed = true
     end
+    # TODO add this action to a history (log) file
 
     respond_to do |format|
       format.js{ render :cancel, layout: false }

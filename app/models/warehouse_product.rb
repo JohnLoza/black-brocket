@@ -8,7 +8,7 @@ class WarehouseProduct < ApplicationRecord
   belongs_to :Product, foreign_key: :product_id
 
   validates :warehouse_id, :product_id, :existence, presence: true,
-                          numericality: { only_integer: true }, on: :create
+    numericality: { only_integer: true }, on: :create
 
   scope :visible, -> { where(products: {show: true}) }
   scope :active, -> { where(products: {deleted_at: nil})}
@@ -17,15 +17,6 @@ class WarehouseProduct < ApplicationRecord
   def self.by_category(category)
     return all unless category.present? and ["hot","cold","frappe"].include? category
     where("products.#{category}" => true)
-  end
-
-  def self.enoughStock?(products, required_stock)
-    products.each do |product|
-      if product.existence < required_stock[product.hash_id].to_i
-        return false
-      end
-    end
-    return true
   end
 
   def enoughStock?
@@ -37,5 +28,12 @@ class WarehouseProduct < ApplicationRecord
     self.required_quantity = quantity
     raise StandardError, "Sin stock suficiente" unless self.enoughStock?
     update_attributes(existence: self.existence - required_quantity)
+  end
+
+  def self.restock(product_id, quantity)
+    query = "UPDATE warehouse_products 
+      SET existence=(existence+#{quantity}) WHERE
+      id=#{product_id}"
+    ActiveRecord::Base.connection.execute(query)
   end
 end

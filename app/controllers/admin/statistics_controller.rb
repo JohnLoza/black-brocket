@@ -77,7 +77,7 @@ class Admin::StatisticsController < AdminController
     if ((from_date != "" and to_date != "") or products or distributors)
       if from_date != "" and to_date != ""
         # add condition to search the orders between those two dates #
-        where_cond += " DATE(order_details.created_at) BETWEEN ' + from_date + "' AND ' + to_date + "' "
+        where_cond += " DATE(order_details.created_at) BETWEEN '#{from_date}' AND '#{to_date}' "
       end
       if products and products.any?
         # add condition to search the orders with the specified products #

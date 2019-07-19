@@ -139,7 +139,7 @@
       if ( $(`#selected_${name}_${id}`).length == 0 ){
         $(`#selected_${name}s`).append(`
           <div id="selected_${name}_${id}" class="btn-success ${name}_selected">
-            <input type="hidden" name="${names}[]" value="${id}"/>
+            <input type="hidden" name="${name}s[]" value="${id}"/>
             ${item_name}
             <a onclick="RemoveItem(&quot;${name}&quot;,${id})" class="white">
               <i class="fa fa-times"></i>

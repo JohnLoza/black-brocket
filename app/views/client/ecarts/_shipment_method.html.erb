@@ -76,7 +76,7 @@
   }
 
   function setSrEnvioShippingCost() {
-    $("input[name='parcel_id']")[2].checked = true;
+    $("#parcel_id_2").attr("checked", true);
     removeFilter('.parcel_img_sr', 'parcel');
 
     opt = $("#sr-parcel").children("option:selected");

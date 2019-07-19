@@ -71,7 +71,6 @@ class Client::OrdersController < ApplicationController
         redirect_to client_ecart_path(@current_user.hash_id) and return
       else
         flash[:success] = "Orden guardada" and session.delete(:e_cart) # delete ecart contents
-        # TODO add this action to a history (log) file
         return unless verify_fiscal_data # redirect to fiscal data if not complete and client asks for invoice
         redirect_to client_orders_path(@current_user.hash_id, info_for: @order.hash_id) and return
       end
@@ -84,12 +83,11 @@ class Client::OrdersController < ApplicationController
     @details = OrderDetail.where(order_id: @order.id)
     
     ActiveRecord::Base.transaction do
-      @details.each {|d| WarehouseProduct.restock(d.w_product_id, d.quantity)}
+      @details.each {|d| WarehouseProduct.return(d.w_product_id, d.quantity)}
 
       @order.update(state: "ORDER_CANCELED")
       @destroyed = true
     end
-    # TODO add this action to a history (log) file
 
     respond_to do |format|
       format.js{ render :cancel, layout: false }

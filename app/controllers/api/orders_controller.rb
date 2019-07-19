@@ -129,7 +129,6 @@ class Api::OrdersController < ApiController
       end
       render status: 200, json: {success: true, info: "SAVED"} and return
     end
-    # TODO add action to history file
 
     render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
   end
@@ -139,11 +138,10 @@ class Api::OrdersController < ApiController
     details = OrderDetail.where(order_id: order.id)
 
     ActiveRecord::Base.transaction do
-      details.each {|d| WarehouseProduct.restock(d.w_product_id, d.quantity)}
+      details.each {|d| WarehouseProduct.return(d.w_product_id, d.quantity)}
 
       if order.update(state: "ORDER_CANCELED")
         render status: 200, json: {success: true, info: "SAVED"}
-        # TODO add action to history file
       else
         render status: 200, json: {success: false, info: "SAVE_ERROR"}
       end

@@ -54,7 +54,6 @@ class Admin::WarehouseProductsController < AdminController
     rescue
       flash[:info] = "Stock resultante menor a 0"
     end
-    # TODO add this action to a history file
 
     flash[:success] = "Stock modificado" unless flash[:info].present?
     redirect_to admin_warehouse_products_stock_details_path(warehouse.hash_id, product.id)
@@ -229,17 +228,13 @@ class Admin::WarehouseProductsController < AdminController
 
   def receive_complete_shipment
     deny_access! and return unless @current_user.has_permission?("warehouse_manager@receive_shipments")
-
     shipment = Shipment.find(params[:id])
-    if shipment.reviewed == false
-      warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
-      if update_stock_from_shipment(warehouse, shipment)
-        flash[:success] = "Se añadieron los productos al stock actual!"
-      else
-        flash[:info] = "Ocurrió un error inesperado, por favor intentelo de nuevo"
-      end
-    end
+    render_404 and return if shipment.reviewed
 
+    warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
+    update_stock_from_shipment(warehouse, shipment)
+    
+    flash[:success] = "Se añadieron los productos al stock actual!"
     redirect_to admin_shipments_path(warehouse.hash_id)
   end
 
@@ -266,18 +261,14 @@ class Admin::WarehouseProductsController < AdminController
 
   def add_report_quantity_to_stock
     deny_access! and return unless @current_user.has_permission?("warehouse_products@reject_shipment_stock")
-
     shipment = Shipment.find(params[:id])
-    if shipment.reviewed == false
-      warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
-      report = shipment.DifferenceReport
-      if update_stock_from_shipment(warehouse, shipment, report)
-        flash[:success] = "Se añadieron los productos al stock actual!"
-      else
-        flash[:info] = "Ocurrió un error inesperado, por favor intentelo de nuevo"
-      end
-    end
+    render_404 and return if shipment.reviewed
+    
+    warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
+    report = shipment.DifferenceReport
+    update_stock_from_shipment(warehouse, shipment, report)
 
+    flash[:success] = "Se añadieron los productos al stock actual!"
     redirect_to admin_warehouse_products_path(warehouse.hash_id)
   end
 
@@ -373,7 +364,7 @@ class Admin::WarehouseProductsController < AdminController
       existing_batch = WarehouseProduct.where(warehouse_id: warehouse_id, 
         product_id: detail.product_id, batch: detail.batch).take
       if existing_batch.present?
-        existing_batch.update_attributes(existence: existing_batch.existence + to_be_added)
+        existing_batch.supply(to_be_added)
       else
         WarehouseProduct.create(warehouse_id: warehouse_id, product_id: detail.product_id,
           describes_total_stock: false, hash_id: Utils.new_alphanumeric_token(9).upcase,
@@ -381,7 +372,7 @@ class Admin::WarehouseProductsController < AdminController
       end
       total_descriptor = WarehouseProduct.where(warehouse_id: warehouse_id, 
         product_id: detail.product_id, describes_total_stock: true).take
-      total_descriptor.update_attributes(existence: total_descriptor.existence + to_be_added)
+      total_descriptor.supply(to_be_added)
     end
 
     def shipment_params

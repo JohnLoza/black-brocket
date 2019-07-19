@@ -30,7 +30,11 @@ class WarehouseProduct < ApplicationRecord
     update_attributes(existence: self.existence - required_quantity)
   end
 
-  def self.restock(product_id, quantity)
+  def supply(to_be_added)
+    update_attributes(existence: self.existence + to_be_added)
+  end
+
+  def self.return(product_id, quantity)
     query = "UPDATE warehouse_products 
       SET existence=(existence+#{quantity}) WHERE
       id=#{product_id}"

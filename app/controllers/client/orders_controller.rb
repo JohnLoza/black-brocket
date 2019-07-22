@@ -40,27 +40,26 @@ class Client::OrdersController < ApplicationController
 
   def create
     render_404 and return unless session[:e_cart].present?
-    @order = setBasicInfo
+    order = setBasicInfo
 
     # find the products the client want to buy and verify stock #
-    @products = WarehouseProduct.where(hash_id: session[:e_cart].keys)
+    products = WarehouseProduct.where(hash_id: session[:e_cart].keys)
       .where(describes_total_stock: true).includes(:Product)
-    @order.warehouse_id = @products[0].warehouse_id
+    order.warehouse_id = products[0].warehouse_id
 
     # get the corresponding prices and create the details of the order #
-    @total = 0
-    @products.each do |p|
-      detail = OrderDetail.for(current_user, @products, p, session[:e_cart])
-      @total += detail.sub_total
-      @order.Details << detail
-    end # @products.each do #
+    custom_prices = @current_user.ProductPrices.where(product_id: products.map(&:product_id))
+    products.each do |p|
+      detail = OrderDetail.for(custom_prices, p, session[:e_cart])
+      order.total += detail.sub_total
+      order.Details << detail
+    end # products.each do #
 
     # finally save all the stuff to the database #
-    @order.total = @total + params[:delivery_cost].to_f
     begin
       ActiveRecord::Base.transaction do
-        @order.save!
-        @products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
+        order.save!
+        products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
       end
     rescue ActiveRecord::RecordInvalid
       flash[:info] = "ocurrió un error al procesar la órden"
@@ -68,11 +67,11 @@ class Client::OrdersController < ApplicationController
       flash[:info] = "No existe inventario suficiente"
     ensure
       if flash[:info].present?
-        redirect_to client_ecart_path(@current_user.hash_id) and return
+        redirect_to client_ecart_path(current_user.hash_id) and return
       else
         flash[:success] = "Orden guardada" and session.delete(:e_cart) # delete ecart contents
         return unless verify_fiscal_data # redirect to fiscal data if not complete and client asks for invoice
-        redirect_to client_orders_path(@current_user.hash_id, info_for: @order.hash_id) and return
+        redirect_to client_orders_path(current_user.hash_id, info_for: order.hash_id) and return
       end
     end
   end
@@ -195,6 +194,7 @@ class Client::OrdersController < ApplicationController
         cp: @current_user.cp, street_ref1: @current_user.street_ref1,
         street_ref2: @current_user.street_ref2, city_id: @current_user.city_id}
       order.address = address
+      order.total = 0 + params[:delivery_cost].to_f
       return order
     end
 end

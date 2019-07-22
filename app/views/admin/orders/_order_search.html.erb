@@ -1,5 +1,6 @@
 <% if !orders.blank? %>
   <%
+    tr_class = nil unless tr_class.present?
     sub_total = 0
     sub_iva = 0
     sub_ieps = 0
@@ -8,7 +9,7 @@
     sub_commission = 0
   %>
   <% orders.each do |o| %>
-    <tr>
+    <tr class="<%= tr_class %>">
       <td>
         <%= l(o.created_at, format: :long)%>
       </td>

@@ -11,9 +11,11 @@
       <% end %>
       <div class="caption">
         <span class="pull-right">
-          <span style="text-decoration: line-through; color: #f44336;">
-            $<%= p.price %> MXN
-          </span><br>
+          <% if @current_user.has_custom_prices? %>
+            <span style="text-decoration: line-through; color: #f44336;">
+              $<%= p.price %> MXN
+            </span><br>
+          <% end %>
           $<%= Product.priceFor(wp, @prices) %> MXN
         </span>
 

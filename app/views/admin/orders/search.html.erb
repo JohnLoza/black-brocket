@@ -51,14 +51,20 @@
           <% if !@order.blank? %>
             <%= render partial: "order_search", locals: {orders: [@order], totals: false} %>
           <% else %>
-            <tr><td colspan="9"><b>FACTURAS NO REQUERIDAS POR CLIENTE</b></td></tr>
-            <%= render partial: "order_search", locals: {orders: @no_invoice_required_orders, totals: true} %>
+            <tr class="pointer" onclick="toggle('.not-required', this)"><td colspan="9">
+              <b>FACTURAS NO REQUERIDAS POR CLIENTE</b> <i class="fa fa-chevron-down"></i>
+            </td></tr>
+            <%= render partial: "order_search", locals: {orders: @no_invoice_required_orders, totals: true, tr_class: "not-required"} %>
 
-            <tr><td colspan="9"><b>FACTURAS REQUERIDAS</b></td></tr>
-            <%= render partial: "order_search", locals: {orders:   @invoice_required_orders, totals: true} %>
+            <tr class="pointer" onclick="toggle('.required', this)"><td colspan="9">
+              <b>FACTURAS REQUERIDAS</b> <i class="fa fa-chevron-down"></i>
+            </td></tr>
+            <%= render partial: "order_search", locals: {orders:   @invoice_required_orders, totals: true, tr_class: "required"} %>
 
-            <tr><td colspan="9"><b>PEDIDOS PAGADOS POR ENVIAR</b></td></tr>
-            <%= render partial: "order_search", locals: {orders: @orders_to_be_sent, totals: true} %>
+            <tr class="pointer" onclick="toggle('.to-ship', this)"><td colspan="9">
+              <b>PEDIDOS PAGADOS POR ENVIAR</b> <i class="fa fa-chevron-down"></i>
+            </td></tr>
+            <%= render partial: "order_search", locals: {orders: @orders_to_be_sent, totals: true, tr_class: "to-ship"} %>
 
             <tr style="background-color: #42A5F5; color: #fefefe;">
               <td colspan=3 style="text-align: right;">
@@ -78,8 +84,10 @@
               </td>
             </tr>
 
-            <tr><td colspan="9"><b>PEDIDOS POR PAGAR</b></td></tr>
-            <%= render partial: "order_search", locals: {orders: @orders_to_be_paid, totals: false} %>
+            <tr class="pointer" onclick="toggle('.to-pay', this)"><td colspan="9">
+              <b>PEDIDOS POR PAGAR</b> <i class="fa fa-chevron-down"></i>
+            </td></tr>
+            <%= render partial: "order_search", locals: {orders: @orders_to_be_paid, totals: false, tr_class: "to-pay"} %>
           <% end %>
 
         </tbody>
@@ -89,11 +97,27 @@
   </div>
 </div>
 
+<style>
+  .pointer{ cursor: pointer; }
+</style>
+
 <script type="text/javascript">
   function money_format(number){
     return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
       return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
     });
+  }
+
+  function toggle(class_name, trigger) {
+    icon = $(trigger).find(".fa");
+    if(icon.hasClass("fa-chevron-up")){
+      icon.removeClass("fa-chevron-up");
+      icon.addClass("fa-chevron-down");
+    }else{
+      icon.removeClass("fa-chevron-down");
+      icon.addClass("fa-chevron-up");
+    }
+    $(class_name).toggleClass("hidden");
   }
 
   function referenceWriting(){

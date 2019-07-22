@@ -93,8 +93,7 @@ class Api::OrdersController < ApiController
   def create
     if @current_user.street.nil?
       render status: 200, json: {success: false, info: "CLIENT_DATA_NOT_COMPLETE"} and return
-    end
-    if params[:invoice]=="1" and @current_user.FiscalData.nil?
+    elsif params[:invoice]=="1" and @current_user.FiscalData.nil?
       render status: 200, json: {success: false, info: "FISCAL_DATA_NOT_FOUND"} and return
     end
     order = setBasicInfo()
@@ -103,22 +102,17 @@ class Api::OrdersController < ApiController
       .where(describes_total_stock: true).includes(:Product)
 
     order.warehouse_id = products[0].warehouse_id
-    unless WarehouseProduct.enoughStock?(products, params[:product_details])
-      render status: 200, json: {success: false, info: "NO_ENOUGH_EXISTENCE", 
-        data: {product: product.hash_id, existence: product.existence} } and return
-    end
 
     # get the corresponding prices and create the details of the order #
-    total = 0
+    custom_prices = @current_user.ProductPrices.where(product_id: products.map(&:product_id))
     products.each do |p|
-      detail = OrderDetail.for(@current_user, products, p, params[:product_details])
-      total += detail.sub_total
+      detail = OrderDetail.for(custom_prices, p, params[:product_details])
+      order.total += detail.sub_total
       order.Details << detail
     end
 
     # finally save all the stuff to the database #
     ActiveRecord::Base.transaction do
-      order.total = total + params[:delivery_cost].to_f
       begin
         order.save!
         products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
@@ -250,6 +244,7 @@ class Api::OrdersController < ApiController
         cp: @current_user.cp, street_ref1: @current_user.street_ref1,
         street_ref2: @current_user.street_ref2, city_id: @current_user.city_id}
       order.address = address
+      order.total = 0 + params[:delivery_cost].to_f
       return order
     end
 end

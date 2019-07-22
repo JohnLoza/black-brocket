@@ -7,9 +7,7 @@ class OrderDetail < ApplicationRecord
   validates :sub_total, :iva, :ieps, :total_iva, :total_ieps, 
     presence: true, numericality: true
 
-  def self.for(user, products, product, info)
-    custom_prices = user.ProductPrices.where("product_id in (?)", products.map(&:product_id))
-
+  def self.for(custom_prices, product, info)
     subtotal = 0
     current_product_price = Product.priceFor(product, custom_prices)
     subtotal = info[product.hash_id].to_i * current_product_price

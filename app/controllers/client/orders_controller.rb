@@ -78,14 +78,12 @@ class Client::OrdersController < ApplicationController
 
   def cancel
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
-    @destroyed = false and return unless ["WAITING_FOR_PAYMENT", "LOCAL"].include? @order.state
+    return unless ["WAITING_FOR_PAYMENT", "LOCAL"].include? @order.state
     @details = OrderDetail.where(order_id: @order.id)
     
     ActiveRecord::Base.transaction do
       @details.each {|d| WarehouseProduct.return(d.w_product_id, d.quantity)}
-
-      @order.update(state: "ORDER_CANCELED")
-      @destroyed = true
+      @destroyed = @order.update!(state: "ORDER_CANCELED")
     end
 
     respond_to do |format|

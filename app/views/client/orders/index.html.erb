@@ -123,6 +123,16 @@
 <script type="text/javascript">
   $(document).ready(function(){
     $("#payment-info-link-<%= params[:info_for] %>").click();
+    costs = $(".individual-cost");
+    costs.each(function(){
+      $(this).html(money_format($(this).text()));
+    });
   });
+
+  function money_format(number){
+    return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
+      return i && c !== "." && ((a.length - i) % 3 === 0) ? "," + c : c;
+    });
+  }
 </script>
 <% end %>

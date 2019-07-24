@@ -16,13 +16,13 @@
     <% if o.state == "WAITING_FOR_PAYMENT" or o.state == "LOCAL" %>
       <%= link_to "", client_cancel_order_path(@current_user.hash_id, o.hash_id), 
         class: "pull-right icon-close text-danger", remote: true, method: :delete,
-        data:{confirm: "Seguro(a) de cancelar el pedido?"},
+        data:{confirm: "Seguro(a) de cancelar el pedido?"}, onclick: "$(this).remove();",
         style: "font-size:24px; padding-right: 1em;" %>
     <% end %>
   </div>
 
   <div class="row order-box-info">
-    <div class="col-sm-3 order-info text-center">
+    <div class="col-sm-2 order-info text-center">
       <b>Stado:</b>
       <% case o.state %>
       <%when "ORDER_CANCELED"%>
@@ -47,9 +47,11 @@
       </span>
     </div>
 
-    <div class="col-sm-2 order-info text-center">
+    <div class="col-sm-3 order-info text-center">
       <b>Total:</b>
-      <span style="margin-top: 5px;">$<%= o.total %> MXN</span>
+      <span style="margin-top: 5px;">
+        $<i class="individual-cost"><%= o.total %></i> MXN
+      </span>
     </div>
     
     <div class="col-sm-2 order-info text-center">

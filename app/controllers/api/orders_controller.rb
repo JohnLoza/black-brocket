@@ -112,23 +112,25 @@ class Api::OrdersController < ApiController
     end
 
     # finally save all the stuff to the database #
-    ActiveRecord::Base.transaction do
-      begin
+    begin
+      ActiveRecord::Base.transaction do
         order.save!
-        products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
-      rescue ActiveRecord::RecordInvalid
-        render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
-      rescue
-        render status: 200, json: {success: false, info: "NO_ENOUGH_STOCK"} and return
+        products.each {|p| p.withdraw(params[:product_details][p.hash_id].to_i)}
       end
-      render status: 200, json: {success: true, info: "SAVED"} and return
+    rescue ActiveRecord::RecordInvalid
+      render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
+    rescue StandardError
+      render status: 200, json: {success: false, info: "NO_ENOUGH_STOCK"} and return
     end
-
-    render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
+    render status: 200, json: {success: true, info: "SAVED"} and return
   end
 
   def cancel
     order = @current_user.Orders.where(hash_id: params[:id]).take
+    unless ["WAITING_FOR_PAYMENT", "LOCAL"].include? order.state
+      render status: 200, json: {success: false, info: "NOT_ELIGIBLE"}
+      return
+    end
     details = OrderDetail.where(order_id: order.id)
 
     ActiveRecord::Base.transaction do
@@ -239,6 +241,7 @@ class Api::OrdersController < ApiController
       order.invoice_payment = params[:invoice_payment_method] if params[:invoice] == "1"
 
       order.state = params[:parcel_id] == "0" ? "LOCAL" : "WAITING_FOR_PAYMENT"
+      
       address = {street: @current_user.street, extnumber: @current_user.extnumber,
         intnumber: @current_user.intnumber, col: @current_user.col,
         cp: @current_user.cp, street_ref1: @current_user.street_ref1,

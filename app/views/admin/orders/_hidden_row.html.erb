@@ -10,7 +10,10 @@
   <p><b>Proveedor:</b> <%= guides_json["provider"] %></p>
   <p><b>Servicio:</b> <%= guides_json["service_level_name"] %></p>
   <p><b>Días:</b> <%= guides_json["days"] %></p>
-  <p><b>Cajas:</b> <%= guides_json["boxes"] %></p>
+  <p><b>Cajas:</b></p>
+  <% guides_json["boxes"].keys.each do |box_name| %>
+    <p><%= guides_json["boxes"][box_name] %> <%= box_name %></p>
+  <% end if guides_json["boxes"] %>
 <% end %>
 
 <% if o.tracking_code.present? %>

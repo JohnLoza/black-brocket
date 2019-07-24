@@ -30,6 +30,7 @@ es:
   PAYMENT_ACCEPTED: "Pago aceptado"
   PAYMENT_REJECTED: "Pago rechazado"
   SUPPLIED: "Surtido"
+  INSPECTIONED: "Inspeccionado"
   DELIVERED: "Pedido entregado"
   SENT: "Pedido enviado"
   BATCHES_CAPTURED: "Lotes capturados"
@@ -38,7 +39,6 @@ es:
   HIGH_QUALITY: "Alta calidad"
   EASY_SHOPPING: "Facilidad de compra"
   DISTRIBUTORS: "Distribuidores en varias zonas"
-  INSPECTIONED: "Inspecionado"
 # order states #
 
 # services titles #

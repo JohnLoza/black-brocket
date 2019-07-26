@@ -8,7 +8,8 @@
 
 <div id="<%=o.hash_id%>" class="order-box">
   <div class="row order-box-title">
-    <b>Fecha: </b>
+    <b>Referencia: </b>
+    <%= content_tag :span, o.hash_id %> | 
     <%= content_tag :span, l(o.created_at, format: :long)%>
     <%# render partial: "dropdown_options", locals: {o: o} %>
 

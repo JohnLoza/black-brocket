@@ -45,11 +45,14 @@ class StaticPagesController < ApplicationController
   def create_distributor_request
     req =  DistributorCandidate.new(distributor_request_params)
     if req.save
-      flash[:success] = "Tus datos fueron enviados, un representante se contactará contigo muy pronto."
+      flash[:success] = "Tus datos fueron enviados, 
+        un representante se contactará contigo muy pronto."
+      redirect_to root_path
     else
-      flash[:info] = "Ocurrió un error al guardar tu información, inténtalo de nuevo por favor."
+      flash[:info] = "Ocurrió un error al guardar tu información, 
+        inténtalo de nuevo por favor."
+      redirect_to distributor_request_path
     end
-    redirect_to root_path
   end
 
   def create_suggestion

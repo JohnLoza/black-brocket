@@ -5,7 +5,7 @@
       <%= select_tag :city_id, options_from_collection_for_select(
           cities, "id", "name", selected: params[:city_id]),
           prompt: "Selecciona un estado...", class: "input form-control", 
-          onchange: "updateLada()", required: true %>
+          onchange: "updateLada()", required: true, autocomplete: :off %>
     </div>
   </div>
 </div>

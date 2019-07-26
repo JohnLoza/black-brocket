@@ -3,7 +3,7 @@ class SiteWorker < ApplicationRecord
   include Searchable
   include SoftDeletable
   include User
-  attr_accessor :remember_token, :loaded_permissions
+  attr_accessor :remember_token, :loaded_permissions, :show_address
 
   before_save { self.email = email.downcase }
   has_secure_password

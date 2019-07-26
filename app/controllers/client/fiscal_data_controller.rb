@@ -1,6 +1,5 @@
 class Client::FiscalDataController < ApplicationController
-  before_action :logged_in?
-  before_action :current_user_is_a_client?
+  before_action -> { current_user_is_a?(Client) }
 
   def new
     @fiscal_data = FiscalData.new

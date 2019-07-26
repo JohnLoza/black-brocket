@@ -1,5 +1,5 @@
 class TipsController < ApplicationController
-  before_action :current_user_is_a_client?
+  before_action -> { current_user_is_a?(Client) }
 
   def index
     @tips = TipRecipe.all.order(updated_at: :desc)
@@ -8,9 +8,8 @@ class TipsController < ApplicationController
 
   def create_comment
     @tip_id = params[:id]
-    @comment = TipRecipeComment.new(tip_recipe_id: @tip_id, client_id: @current_user.id, 
+    @comment = TipRecipeComment.create(tip_recipe_id: @tip_id, client_id: @current_user.id, 
       description: params[:tip_recipe_comment][:description])
-    @comment.save
 
     respond_to do |format|
       format.html{ redirect_to tips_path }

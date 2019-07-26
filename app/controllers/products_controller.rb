@@ -38,7 +38,6 @@ class ProductsController < ApplicationController
       @product = Product.find_by!(hash_id: params[:id])
     end
 
-    redirect_to products_path and return unless @product
     @photos = @product.Photos
     @questions = ProdQuestion.where(product_id: @product.id).order(created_at: :DESC).limit(10).includes(:Answer)
   end

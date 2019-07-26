@@ -16,12 +16,13 @@
           </div>
           <br>
           <div class="col-sm-12">
-            <%= render partial: "/shared/messages", locals: {messages:@messages, create_message_url: @create_message_url}%>
+            <!-- TODO eliminate the @client_avatar, @client_username, @distributor_avatar, @distributor_username variables -->
+            <%= render partial: "/shared/messages", locals: {messages:@messages, 
+              create_message_url: @create_message_url }%>
           </div>
         <% else %>
           <p class="text-center">
-            No hay ningún distribuidor que le corresponda atender tus
-            pedidos por la población en que te encuentras, sin embargo,
+            Upsss no encontramos un distribuidor en tu zona, sin embargo,
             pronto uno de nuestros asistentes se comunicará contigo para atenderte.
           </p>
         <% end %>

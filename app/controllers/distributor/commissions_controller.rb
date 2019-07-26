@@ -1,5 +1,5 @@
 class Distributor::CommissionsController < ApplicationController
-  before_action :current_user_is_a_distributor?
+  before_action -> { current_user_is_a?(Distributor) }
   layout "distributor_layout.html.erb"
 
   def index

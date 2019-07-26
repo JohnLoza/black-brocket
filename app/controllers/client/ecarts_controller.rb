@@ -1,6 +1,5 @@
 class Client::EcartsController < ApplicationController
-  before_action :logged_in?
-  before_action :current_user_is_a_client?
+  before_action -> { current_user_is_a?(Client) }
 
   def show
     if @current_user.street.nil?

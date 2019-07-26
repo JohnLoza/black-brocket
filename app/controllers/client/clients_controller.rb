@@ -1,6 +1,8 @@
 class Client::ClientsController < ApplicationController
+  before_action except: [ :new, :create, :email_confirmation ] do
+    current_user_is_a?(Client)
+  end
   layout "static_pages.html.erb", only: [ :new ]
-  before_action :current_user_is_a_client?, except:  [ :new, :create, :email_confirmation ]
 
   def notifications
     @notifications = @current_user.Notifications.order(created_at: :desc)
@@ -19,7 +21,7 @@ class Client::ClientsController < ApplicationController
 
     if @current_user.destroy
       @current_user.update_attribute(:delete_account_hash, Utils.new_alphanumeric_token(9).upcase)
-      log_out and session.delete(:e_cart)
+      session.delete(:e_cart); log_out
     end
 
     redirect_to good_bye_path(params[:id])
@@ -47,10 +49,7 @@ class Client::ClientsController < ApplicationController
     @client = Client.new(client_params)
     @client.city_id = params[:city_id]
 
-    @city_id = params[:city_id]
-    @state_id = params[:state_id]
-
-    if @client.save
+    if false and @client.save
       @client.update_attribute(:hash_id, generateAlphKey("C", @client.id))
       SendConfirmationEmailJob.perform_later(@client)
 
@@ -59,9 +58,8 @@ class Client::ClientsController < ApplicationController
       redirect_to products_path
     else
       @states = State.order_by_name
-      @cities = City.where(state_id: @state_id)
-      flash.now[:info] = "Ocurrió un error al guardar."
-      render :new
+      @cities = City.where(state_id: params[:state_id])
+      flash.now[:info] = "Ocurrió un error al guardar." and render :new
     end
   end
 
@@ -84,12 +82,9 @@ class Client::ClientsController < ApplicationController
       flash[:success] = "Tu información ha sido actualizada!"
       redirect_to products_path and return
     else
-      flash.now[:danger] = "Ocurrió un error al guardar."
-      params[:city_id] = params[:city_id]
-      params[:state_id] = params[:state_id]
       @states = State.order_by_name
       @cities = City.where(state_id: params[:state_id]).order_by_name
-      render :edit
+      flash.now[:danger] = "Ocurrió un error al guardar." and render :edit
     end
   end
 
@@ -111,25 +106,18 @@ class Client::ClientsController < ApplicationController
       notification.update_attribute(:seen, true)
     end
 
-    @distributor = @current_user.City.Distributor
-    @distributor_is_a_worker = false
-    if !@distributor and !@current_user.worker_id.blank?
-      # see if there is a worker that will attend this client
-      @distributor = @current_user.Worker
-      @distributor_is_a_worker = true if @distributor
-    end
+    @distributor = @current_user.Worker if @current_user.worker_id
+    @distributor ||= @current_user.City.Distributor
 
-    if @distributor
-      @messages = @current_user.DistributorMessages.where("distributor_id = ? or worker_id = ?", @distributor.id, @distributor.id)
-        .order(created_at: :desc).paginate(page: params[:page], per_page: 25)
-      @create_message_url = client_create_distributor_comment_path(@distributor.id)
+    return unless @distributor
+    @messages = @distributor.ClientMessages.where(client_id: @current_user.id)
+      .order(created_at: :desc).paginate(page: params[:page], per_page: 25)
+    @create_message_url = client_create_distributor_comment_path(@distributor.id)
 
-      @client_image = @current_user.avatar_url(:mini)
-      @client_username = @current_user.name
-
-      @distributor_image = @distributor.avatar_url(:mini)
-      @distributor_username = @distributor.username
-    end
+    @client_image = @current_user.avatar_url(:mini)
+    @client_username = @current_user.name
+    @distributor_image = @distributor.avatar_url(:mini)
+    @distributor_username = @distributor.username
   end
 
   def create_distributor_comment

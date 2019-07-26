@@ -82,6 +82,7 @@ module SessionsHelper
   def redirect_back_or(default)
     redirect_to(session[:forwarding_url] || default)
     session.delete(:forwarding_url)
+    return true
   end
 
   # Stores the URL trying to be accessed.
@@ -89,49 +90,14 @@ module SessionsHelper
     session[:forwarding_url] = request.original_url if request.get?
   end
 
-  # See if the current user is a worker #
-  def current_user_is_a_worker?
-    return unless must_be_logged_in
-    
-    if session[:user_type] != "w"
-      redirect_to root_path
-      return false
-    else
-      return true
-    end
-  end
-
-  # See if the current user is a distributor #
-  def current_user_is_a_distributor?
-    return unless must_be_logged_in
-
-    if session[:user_type] != "d"
-      redirect_to root_path
-      return false
-    else
-      return true
-    end
-  end
-
-  # See if the current user is a client #
-  def current_user_is_a_client?
-    return unless must_be_logged_in
-
-    if session[:user_type] != "c"
-      redirect_to root_path
-      return false
-    else
-      return true
-    end
-  end
-
-  def must_be_logged_in
+  # Check wheter the user is a Client, SiteWorker or Distributor
+  def current_user_is_a?(type)
     unless logged_in?
       store_location
-      redirect_to log_in_path
-      return false
+      redirect_to log_in_path and return
     end
-    return true
-  end
 
+    return true if current_user.class == type
+    redirect_to root_path and return
+  end
 end

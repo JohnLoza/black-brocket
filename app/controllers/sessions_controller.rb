@@ -1,10 +1,8 @@
 class SessionsController < ApplicationController
+  layout false
 
   def new
-    unless logged_in?
-      loadBgImage()
-      render :new, layout: false and return
-    end
+    loadBgImage() and return unless logged_in?
 
     redirect_to admin_welcome_path if session[:user_type] == "w"
     redirect_to distributor_welcome_path if session[:user_type] == "d"
@@ -13,28 +11,21 @@ class SessionsController < ApplicationController
 
   def create
     worker = SiteWorker.find_by(email: params[:session][:email].downcase)
-    if try_log_in(worker, "w")
-      redirect_back_or(admin_welcome_path)
-      return
-    end 
-
+    redirect_back_or(admin_welcome_path) and return if try_log_in(worker, "w")
+    
     distributor = Distributor.find_by(email: params[:session][:email].downcase)
-    if try_log_in(distributor, "d")
-      redirect_back_or(distributor_welcome_path)
-      return
-    end 
+    redirect_back_or(distributor_welcome_path) and return if try_log_in(distributor, "d")
 
     client = Client.find_by(email: params[:session][:email].downcase)
     if try_log_in(client, "c")
       unless client.email_verified
-        flash[:info] = "Por favor confirma tu correo electrónico, en caso de no recibirlo podemos <a href=\"#{client_resend_email_confirmation_path(client.hash_id)}\">reenviarlo</a>."
+        flash[:info] = "Por favor confirma tu correo electrónico, en caso de no recibirlo 
+          podemos <a href=\"#{client_resend_email_confirmation_path(client.hash_id)}\">reenviarlo</a>."
       end
-      redirect_back_or(products_path) 
-      return
+      redirect_back_or(products_path) and return
     end
 
     flash.now[:danger] = "Email o contraseña incorrecto"
-    @email = params[:session][:email].downcase
     loadBgImage()
     render :new, layout: false
   end
@@ -46,32 +37,28 @@ class SessionsController < ApplicationController
   end
 
   def forgot_password
-    if params[:session] and params[:session][:email]
-      user = Client.find_by(email: params[:session][:email])
-      if user
-        user.update_attributes(recover_pass_digest: user.new_token)
-        SendRecoverPasswordEmailJob.perform_later(user)
-        flash[:success] = "Hemos enviado un correo a tu dirección con las instrucciones de recuperación."
-      else
-        flash[:info] = "La dirección especificada no está registrada, puedes registrarte <a href=\"#{client_sign_up_path}\">aquí</a>"
-      end
+    return unless params[:session] and params[:session][:email]
+    user = Client.find_by(email: params[:session][:email])
+    if user
+      user.update_attributes(recover_pass_digest: user.new_token)
+      SendRecoverPasswordEmailJob.perform_later(user)
+      flash.now[:success] = "Hemos enviado un correo a tu dirección con las instrucciones de recuperación."
+    else
+      flash.now[:info] = "La dirección especificada no está registrada, puedes registrarte <a href=\"#{client_sign_up_path}\">aquí</a>"
     end
-
-    render :forgot_password, layout: false
   end
 
   def recover_password
     user = Client.find_by!(recover_pass_digest: params[:token])
-
-    if params[:session] and params[:session][:password]
-      user.update_attributes(recover_pass_digest: nil,
-        password: params[:session][:password],
-        password_confirmation: params[:session][:password])
-      flash[:success] = "La contraseña ha sido actualizada!"
-      redirect_to root_path and return
+    unless params[:session] and params[:session][:password]
+      render :recover_password, layout: false and return
     end
 
-    render :recover_password, layout: false
+    user.update_attributes(recover_pass_digest: nil,
+      password: params[:session][:password],
+      password_confirmation: params[:session][:password])
+    flash[:success] = "La contraseña ha sido actualizada!"
+    redirect_to root_path
   end
 
   def update_password
@@ -112,7 +99,7 @@ class SessionsController < ApplicationController
     end
 
     def loadBgImage()
-      image = WebPhoto.where(name: "LOGIN").take
+      image = WebPhoto.find_by(name: "LOGIN")
       if image.blank?
         @bg_img = image_url "person-woman-coffee-cup-large.jpg"
       else

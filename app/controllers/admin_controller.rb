@@ -1,14 +1,7 @@
 class AdminController < ApplicationController
   helper_method :search_params
-
-  before_action :authenticate_user!
+  before_action -> { current_user_is_a?(SiteWorker) }
   layout "admin_layout.html.erb"
-
-  def authenticate_user!
-    return unless must_be_logged_in
-
-    redirect_to root_path unless session[:user_type] == "w"
-  end
 
   def deny_access!
     respond_to do |format|

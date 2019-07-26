@@ -91,7 +91,7 @@ module SessionsHelper
   end
 
   # Check wheter the user is a Client, SiteWorker or Distributor
-  def current_user_is_a?(type)
+  def user_should_be(type)
     unless logged_in?
       store_location
       redirect_to log_in_path and return

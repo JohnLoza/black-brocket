@@ -1,5 +1,5 @@
 class Client::FiscalDataController < ApplicationController
-  before_action -> { current_user_is_a?(Client) }
+  before_action -> { user_should_be(Client) }
 
   def new
     @fiscal_data = FiscalData.new

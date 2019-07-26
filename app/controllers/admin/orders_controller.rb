@@ -209,7 +209,7 @@ class Admin::OrdersController < AdminController
     @order.state = "SENT"
 
     if @order.save
-      flash[:success] = "Orden actualizada correctamente"
+      flash[:success] = "Código guardado"
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Capturó código de rastreo")
     else
       flash[:info] = "Ocurrió un error al guardar la información"
@@ -222,10 +222,10 @@ class Admin::OrdersController < AdminController
     @order = Order.find_by!(hash_id: params[:id])
 
     if @order.update_attribute(:state, "DELIVERED")
-      flash[:success]="Status de la orden actualizado"
+      flash[:success] = "Estado de la órden guardado"
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Estableció como entregado")
     else
-      flash[:info]="Ocurrió un error al guardar la información"
+      flash[:info] = "Ocurrió un error al guardar la información"
     end
     redirect_to admin_orders_path + "?type=SENT"
   end # def save_as_delivered #
@@ -235,7 +235,7 @@ class Admin::OrdersController < AdminController
     @order = Order.find_by!(hash_id: params[:id])
 
     if @order.update_attribute(:invoice_sent, true)
-      flash[:success]="Status de la orden actualizado"
+      flash[:success]="Estado de la órden guardado"
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Facturó")
     else
       flash[:info]="Ocurrió un error al guardar la información"
@@ -402,7 +402,7 @@ class Admin::OrdersController < AdminController
     order.download_payment_key = SecureRandom.urlsafe_base64
     if order.save!
       OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Subió comprobante")
-      flash[:success] = "Comprobante actualizado"
+      flash[:success] = "Comprobante guardado"
     else
       flash[:info] = "Ocurrió un error al guardar el comprobante"
     end

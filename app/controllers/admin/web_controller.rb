@@ -120,7 +120,7 @@ class Admin::WebController < AdminController
       File.open(file_path, "w"){|file| file.write(params[:web_info][:body]) }
 
       web_info.update_attributes(description_render_path: render_file_path)
-      flash[:success] = t(params[:name]) + " actualizado!"
+      flash[:success] = t(params[:name]) + " guardado!"
     else
       flash[:info] = "La página que buscas, no existe..."
     end
@@ -140,14 +140,14 @@ class Admin::WebController < AdminController
     @video = WebVideo.first
     if @video
       if @video.update_attributes(video: params[:web_video][:video])
-        flash[:success] = "Video actualizado"
+        flash[:success] = "Video guardado"
       else
         flash[:info] = "Ocurrió un error, recuerda que el video debe ser mp4"
       end
     else
       @video = WebVideo.new({ video: params[:web_video][:video] })
       if @video.save
-        flash[:success] = "Video actualizado"
+        flash[:success] = "Video guardado"
       else
         flash[:info] = "Ocurrió un error, recuerda que el video debe ser mp4"
       end
@@ -176,9 +176,9 @@ class Admin::WebController < AdminController
 
     @network = SocialNetwork.find_by!(id: params[:id])
     if @network.update_attributes(url: params[:social_network][:url])
-      flash[:success] = @network.name + " actualizado"
+      flash[:success] = @network.name + " guardado"
     else
-      flash[:info] = "Error al actualizar, inténtelo de nuevo por favor."
+      flash[:info] = "Error al guardar, inténtelo de nuevo por favor."
     end
 
     redirect_to admin_web_social_networks_path
@@ -236,7 +236,7 @@ class Admin::WebController < AdminController
       File.open(file_path, "w"){|file| file.write(params[:web_info][:body]) }
 
       web_info.update_attributes(description_render_path: render_file_path) if web_info.description_render_path != render_file_path
-      flash[:success] = "Servicio actualizado!"
+      flash[:success] = "Servicio guardado!"
     else
       flash[:info] = "La página que buscas, no existe..."
     end

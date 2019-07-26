@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
   helper_method :search_params
-  before_action -> { current_user_is_a?(SiteWorker) }
+  before_action -> { user_should_be(SiteWorker) }
   layout "admin_layout.html.erb"
 
   def deny_access!

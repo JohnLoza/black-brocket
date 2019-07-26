@@ -12,4 +12,11 @@ module ApplicationHelper
 
     return letter + new_key
   end
+
+  def process_notification
+    if params[:notification].present?
+      n = Notification.find(params[:notification])
+      n.update_attribute(:seen, true) unless n.seen
+    end
+  end
 end

@@ -1,4 +1,6 @@
 class ApiController < ActionController::API
+  include ApplicationHelper
+
   rescue_from ActiveRecord::RecordNotFound do |e|
     render_404
   end

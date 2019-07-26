@@ -57,7 +57,7 @@ class SessionsController < ApplicationController
     user.update_attributes(recover_pass_digest: nil,
       password: params[:session][:password],
       password_confirmation: params[:session][:password])
-    flash[:success] = "La contraseña ha sido actualizada!"
+    flash[:success] = "La contraseña ha sido cambiada!"
     redirect_to root_path
   end
 
@@ -84,7 +84,7 @@ class SessionsController < ApplicationController
     current_user.update_attributes(password: params[:new_password],
       password_confirmation: params[:new_password_confirmation])
 
-    flash[:success] = "¡Contraseña actualizada!"
+    flash[:success] = "¡Contraseña cambiada!"
     redirect_to success_path
   end
 

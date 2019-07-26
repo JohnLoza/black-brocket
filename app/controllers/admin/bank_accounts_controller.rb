@@ -45,7 +45,7 @@ class Admin::BankAccountsController < AdminController
     @bank_account = @bank.Accounts.find_by!(id: params[:id])
 
     if @bank_account.update_attributes(bank_account_params)
-      flash[:success] = "Actualización exitosa"
+      flash[:success] = "Cuenta guardada"
       redirect_to admin_bank_accounts_path
     else
       @url = admin_bank_account_path(@bank.id, params[:id])

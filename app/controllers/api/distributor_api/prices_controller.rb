@@ -7,7 +7,7 @@ class Api::DistributorApi::PricesController < ApiController
     client = Client.find_by!(hash_id: params[:id])
 
     product_prices = client.ProductPrices
-    products = Product.where(deleted_at: nil).order(name: :asc)
+    products = Product.active.order(name: :asc)
     @current_user.updateRevision(client)
 
     data = Array.new

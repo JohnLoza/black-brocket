@@ -2,13 +2,9 @@ class Api::DistributorApi::MessagesController < ApiController
   before_action do
     authenticate_user!(Distributor)
   end
+  before_action :process_notification, only: :index
 
   def index
-    if params[:notification].present?
-      notification = Notification.find(params[:notification])
-      notification.update_attributes(seen: true)
-    end
-
     client = Client.find_by!(hash_id: params[:id])
 
     messages = @current_user.ClientMessages.where(client_id: client.id)

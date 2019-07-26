@@ -1,4 +1,5 @@
 class Admin::WarehousesController < AdminController
+  before_action :process_notification, only: :inventory_report_details
 
   def index
     unless @current_user.has_permission_category?("warehouses") or
@@ -73,7 +74,7 @@ class Admin::WarehousesController < AdminController
     @warehouse.city_id = params[:city_id]
 
     if @warehouse.update_attributes(warehouse_params)
-      redirect_to admin_warehouses_path, flash: {success: "Almacén actualizado" }
+      redirect_to admin_warehouses_path, flash: {success: "Almacén guardado" }
     else
       @states = State.order_by_name
       @cities = City.where(state_id: params[:state_id]).order_by_name
@@ -149,11 +150,6 @@ class Admin::WarehousesController < AdminController
 
     unless @current_user.warehouse_id == @warehouse.id or @current_user.is_admin
       deny_access! and return 
-    end
-
-    if params[:notification].present?
-      notification = Notification.find(params[:notification])
-      notification.update_attributes(seen: true) unless notification.seen
     end
   end
 

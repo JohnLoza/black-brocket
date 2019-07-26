@@ -71,7 +71,7 @@ class Admin::ProductsController < AdminController
     if @product.update_attributes(product_params)
       create_render_files_and_photos
 
-      flash[:success] = "El producto se actualizó."
+      flash[:success] = "El producto se guardó."
       redirect_to admin_products_path
     else
       @photos = @product.Photos
@@ -189,7 +189,7 @@ class Admin::ProductsController < AdminController
     def update_client_prices
       client_products = ClientProduct.where(product_id: @product.id)
       client_products.update_all(client_price: params[:product][:price])
-      clients = Client.where(deleted_at: nil)
+      clients = Client.active
       clients.each do |client|
         if client.has_custom_prices
           Notification.create(client_id: client.id, icon: "fa fa-comments-o", url: client_my_distributor_path,

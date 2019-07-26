@@ -1,5 +1,5 @@
 class Distributor::AdminController < ApplicationController
-  before_action -> { current_user_is_a?(Distributor) }
+  before_action -> { user_should_be(Distributor) }
   layout "distributor_layout.html.erb"
 
   def index
@@ -7,7 +7,7 @@ class Distributor::AdminController < ApplicationController
   end
 
   def prices
-    @products = Product.where(deleted_at: nil).order(name: :asc)
+    @products = Product.active.order(name: :asc)
       .paginate(page: params[:page], per_page: 25)
   end
 

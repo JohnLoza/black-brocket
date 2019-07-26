@@ -1,7 +1,8 @@
 class Client::ClientsController < ApplicationController
   before_action except: [ :new, :create, :email_confirmation ] do
-    current_user_is_a?(Client)
+    user_should_be(Client)
   end
+  before_action :process_notification, only: [:prod_answer, :distributor]
   layout "static_pages.html.erb", only: [ :new ]
 
   def notifications
@@ -28,11 +29,6 @@ class Client::ClientsController < ApplicationController
   end
 
   def prod_answer
-    if params[:notification]
-      notification = Notification.find(params[:notification])
-      notification.update_attribute(:seen, true)
-    end
-
     @question = ProdQuestion.find(params[:id])
     @answer = @question.Answer
   end
@@ -79,7 +75,7 @@ class Client::ClientsController < ApplicationController
     @client.city_id = params[:city_id]
 
     if @client.update_attributes(client_params)
-      flash[:success] = "Tu información ha sido actualizada!"
+      flash[:success] = "Tu información ha sido guardada!"
       redirect_to products_path and return
     else
       @states = State.order_by_name
@@ -101,11 +97,6 @@ class Client::ClientsController < ApplicationController
   end
 
   def distributor
-    if params[:notification]
-      notification = Notification.find(params[:notification])
-      notification.update_attribute(:seen, true)
-    end
-
     @distributor = @current_user.Worker if @current_user.worker_id
     @distributor ||= @current_user.City.Distributor
 

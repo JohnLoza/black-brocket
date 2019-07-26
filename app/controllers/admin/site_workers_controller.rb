@@ -70,7 +70,7 @@ class Admin::SiteWorkersController < AdminController
     @worker.city_id = params[:city_id]
 
     if @worker.update_attributes(worker_params)
-      redirect_to admin_site_workers_path, flash: {success: "Trabajador actualizado correctamente."}
+      redirect_to admin_site_workers_path, flash: {success: "Trabajador guardado correctamente."}
     else
       @warehouse_id = params[:site_worker][:warehouse_id]
       @warehouses = Warehouse.active.order_by_name

@@ -1,4 +1,5 @@
 class Admin::DistributorWorkController < AdminController
+  before_action :process_notification, only: :messages
 
   def index
     deny_access! and return unless @current_user.has_permission_category?("distributor_work")
@@ -31,7 +32,7 @@ class Admin::DistributorWorkController < AdminController
 
     @product_prices = @client.ProductPrices
     @client_city = @client.City
-    @products = Product.where(deleted_at: nil).order(name: :asc)
+    @products = Product.active.order(name: :asc)
   end
 
   def create_prices
@@ -45,21 +46,16 @@ class Admin::DistributorWorkController < AdminController
       end
 
       @client.update_attributes(has_custom_prices: true, is_new: false)
-      flash[:success] = "Precios de #{@client.full_name} actualizados"
+      flash[:success] = "Precios guardados"
     end
 
-    flash[:info] = "Ocurrió un error al actualizar los precios" unless flash[:success].present?
+    flash[:info] = "Ocurrió un error al guardar los precios" unless flash[:success].present?
     redirect_to admin_distributor_work_my_clients_path
   end
 
   def messages
     deny_access! and return unless @current_user.has_permission_category?("distributor_work")
     @client = Client.find_by!(hash_id: params[:id])
-
-    if params[:notification]
-      notification = Notification.find(params[:notification])
-      notification.update_attribute(:seen, true)
-    end
 
     @client_city = @client.City
     @messages = @current_user.ClientMessages.where(client_id: @client.id)

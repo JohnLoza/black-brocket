@@ -40,7 +40,7 @@ class Admin::BanksController < AdminController
     @bank = Bank.find(params[:id])
 
     if @bank.update_attributes(bank_params)
-      flash[:success] = "Registro del banco actualizado!"
+      flash[:success] = "Banco guardado"
       redirect_to admin_banks_path
     else
       render :edit

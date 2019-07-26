@@ -22,7 +22,7 @@ class Admin::MexicoDbController < AdminController
 
     @state = State.find_by!(id: params[:id])
     @state.Cities.update_all(lada: params[:state][:lada])
-    flash[:success] = "El LADA para el estado #{@state.name} se actualizó correctamente"
+    flash[:success] = "El LADA para el estado #{@state.name} se guardó correctamente"
 
     redirect_to admin_mexico_db_path
   end
@@ -36,7 +36,7 @@ class Admin::MexicoDbController < AdminController
     @city = City.find_by!(id: params[:id])
 
     @city.update(city_params)
-    flash[:success] = "La información de #{@city.name} se actualizó correctamente"
+    flash[:success] = "La información de #{@city.name} se guardó correctamente"
 
     redirect_to admin_mexico_state_path(@city.state_id)
   end

@@ -1,5 +1,5 @@
 class Distributor::VisitsController < ApplicationController
-  before_action -> { current_user_is_a?(Distributor) }
+  before_action -> { user_should_be(Distributor) }
   layout "distributor_layout.html.erb"
 
   def index

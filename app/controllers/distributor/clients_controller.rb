@@ -1,10 +1,12 @@
 class Distributor::ClientsController < ApplicationController
-  before_action -> { current_user_is_a?(Distributor) }
+  before_action -> { user_should_be(Distributor) }
+  before_action :process_notification, only: :messages
   layout "distributor_layout.html.erb"
 
   def index
     region_ids = @current_user.Regions.map(&:id)
-    @clients = Client.where(city_id: region_ids).order(updated_at: :DESC).paginate(page: params[:page], per_page: 20).includes(City: :State)
+    @clients = Client.where(city_id: region_ids).order(updated_at: :DESC)
+      .paginate(page: params[:page], per_page: 20).includes(City: :State)
   end
 
   def show
@@ -18,7 +20,7 @@ class Distributor::ClientsController < ApplicationController
 
     @product_prices = @client.ProductPrices
     @client_city = @client.City
-    @products = Product.where(deleted_at: nil).order(name: :asc)
+    @products = Product.active.order(name: :asc)
 
     @current_user.updateRevision(@client)
   end
@@ -27,15 +29,14 @@ class Distributor::ClientsController < ApplicationController
     @client = Client.find_by!(hash_id: params[:id])
     ActiveRecord::Base.transaction do
       @client.ProductPrices.destroy_all
+      @client.update_attributes!(has_custom_prices: true, is_new: false)
       params[:product].each do |product_id|
-        ClientProduct.create(client_id: @client.id, product_id: product_id, client_price: params[:product][product_id])
+        ClientProduct.create!(client_id: @client.id, product_id: product_id, client_price: params[:product][product_id])
       end
-
-      @client.update_attributes(has_custom_prices: true, is_new: false)
-      flash[:success] = "Precios de #{@client.name} #{@client.lastname} actualizados"
+      flash[:success] = "Precios guardados"
     end
 
-    flash[:info] = "Ocurrió un error al actualizar los precios" unless flash[:success].present?
+    flash[:info] = "Ocurrió un error al guardarlos precios" unless flash[:success].present?
     redirect_to distributor_clients_path
   end
 
@@ -43,14 +44,9 @@ class Distributor::ClientsController < ApplicationController
     region_ids = @current_user.Regions.map(&:id)
     @client = Client.find_by!(hash_id: params[:id], city_id: region_ids)
 
-    if params[:notification]
-      notification = Notification.find(params[:notification])
-      notification.update_attribute(:seen, true)
-    end
-
     @client_city = @client.City
     @messages = @current_user.ClientMessages.where(client_id: @client.id)
-                  .order(created_at: :desc).paginate(page: params[:page], per_page: 50)
+      .order(created_at: :desc).paginate(page: params[:page], per_page: 50)
 
     @client_image = @client.avatar_url(:mini)
     @client_username = @client.username

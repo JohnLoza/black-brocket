@@ -101,18 +101,4 @@ class Api::UsersController < ApiController
     params.require(:distributor_visit).permit(:client_recognizes_visit,
                                        :treatment_answer, :extra_comments)
   end
-
-  def generateAlphKey(letter, number)
-    if number <= 9
-      new_key = "000"+(number).to_s
-    elsif number >= 10 and number < 100
-      new_key = "00"+(number).to_s
-    elsif number >= 100 and number < 1000
-      new_key = "0"+(number).to_s
-    else
-      new_key = (number).to_s
-    end
-
-    return letter + new_key
-  end
 end

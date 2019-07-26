@@ -54,7 +54,7 @@ class Admin::TipRecipesController < AdminController
     File.open(file_path, "w"){|file| file.write(params[:tip_recipe][:body]) }
 
     if @tip.update_attributes(tip_recipe_params)
-      flash[:success] = "Tip o Receta Actualizada!"
+      flash[:success] = "Tip o Receta guardada!"
     else
       flash[:info] = "Ocurrió un error al guardar..."
     end

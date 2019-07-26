@@ -1,6 +1,7 @@
 class Client::OrdersController < ApplicationController
-  before_action -> { current_user_is_a?(Client) }
-  before_action :verify_client_address, only: [:create]
+  before_action -> { user_should_be(Client) }
+  before_action :process_notification, only: :show
+  before_action :verify_client_address, only: :create
   # before_action :verify_fiscal_data, only: [:create]
 
   def index
@@ -12,11 +13,6 @@ class Client::OrdersController < ApplicationController
     require "barby"
     require "barby/barcode/code_128"
     require "barby/outputter/png_outputter"
-
-    if params[:notification]
-      notification = Notification.find(params[:notification])
-      notification.update_attribute(:seen, true)
-    end
 
     @order = Order.find_by!(hash_id: params[:id])
     

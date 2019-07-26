@@ -1,5 +1,5 @@
 class Client::EcartsController < ApplicationController
-  before_action -> { current_user_is_a?(Client) }
+  before_action -> { user_should_be(Client) }
 
   def show
     if @current_user.street.nil?

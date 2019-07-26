@@ -244,7 +244,7 @@
 
 	function updatePassword(){
 		modal = $("#modal")
-    modal.find(".modal-title").html("Actualizar contraseña");
+    modal.find(".modal-title").html("Cambiar contraseña");
     modal.find(".modal-body").html(`<%= j render "/shared/update_password" %>`);
 		$("#update_password").parsley();
 		modal.modal("show");

@@ -69,7 +69,7 @@ class Admin::TipRecipesController < AdminController
     if @tip.destroy
       flash[:success] = "Tip/Receta eliminado"
     else
-      flash[:warning] = "Error al eliminar el tip o receta"
+      flash[:info] = "Error al eliminar el tip o receta"
     end
     redirect_to admin_tip_recipes_path
   end

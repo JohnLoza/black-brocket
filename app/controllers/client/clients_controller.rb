@@ -15,8 +15,8 @@ class Client::ClientsController < ApplicationController
   end
 
   def destroy_account
-    if !@current_user.authenticate(params[:password])
-      flash[:warning] = "Contraseña incorrecta."
+    unless @current_user.authenticate(params[:password])
+      flash[:info] = "Contraseña incorrecta."
       redirect_to client_destroy_account_path(@current_user.hash_id) and return
     end
 
@@ -44,19 +44,25 @@ class Client::ClientsController < ApplicationController
   def create
     @client = Client.new(client_params)
     @client.city_id = params[:city_id]
+    @client.save!
+    @client.update_attribute(:hash_id, generateAlphKey("C", @client.id))
+    SendConfirmationEmailJob.perform_later(@client)
 
-    if false and @client.save
-      @client.update_attribute(:hash_id, generateAlphKey("C", @client.id))
-      SendConfirmationEmailJob.perform_later(@client)
-
-      log_in(@client, "c")
-      flash[:success] = "Bienvenido a Black Brocket, por ser su primera compra y para brindarle un mejor servicio, nuestro distribuidor de zona se pondrá en contacto o un representante de ventas se comunicará con usted. Si es una Pyme, dueño de una cafetería, tiene negocio relacionado con alimentos o es mayorista le ofrecemos precios y descuentos preferenciales bastante atractivos. Estos se los dará nuestro  representante de ventas, así como una demostración de nuestros productos. Una vez hecho el pago de su pedido los descuentos no se bonifican. Puede contactarnos en el menú en la opción \“distribuidores en la zona\”."
-      redirect_to products_path
-    else
-      @states = State.order_by_name
-      @cities = City.where(state_id: params[:state_id])
-      flash.now[:info] = "Ocurrió un error al guardar." and render :new
-    end
+    log_in(@client, "c")
+    flash[:success] = "Bienvenido a Black Brocket, por ser su primera compra 
+      y para brindarle un mejor servicio, nuestro distribuidor de zona se 
+      pondrá en contacto o un representante de ventas se comunicará con usted.
+      Si es una Pyme, dueño de una cafetería, tiene negocio relacionado 
+      con alimentos o es mayorista le ofrecemos precios y descuentos 
+      preferenciales bastante atractivos. Estos se los dará nuestro 
+      representante de ventas, así como una demostración de nuestros productos.
+      Una vez hecho el pago de su pedido los descuentos no se bonifican. 
+      Puede contactarnos en el menú en la opción \“distribuidores en la zona\”."
+    redirect_to products_path
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved 
+    @states = State.order_by_name
+    @cities = City.where(state_id: params[:state_id])
+    render :new
   end
 
   def edit
@@ -73,27 +79,20 @@ class Client::ClientsController < ApplicationController
   def update
     @client = @current_user
     @client.city_id = params[:city_id]
-
-    if @client.update_attributes(client_params)
-      flash[:success] = "Tu información ha sido guardada!"
-      redirect_to products_path and return
-    else
-      @states = State.order_by_name
-      @cities = City.where(state_id: params[:state_id]).order_by_name
-      flash.now[:danger] = "Ocurrió un error al guardar." and render :edit
-    end
+    @client.update_attributes!(client_params)
+    redirect_to products_path, flash: {success: "Perfil guardado"}
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved 
+    @states = State.order_by_name
+    @cities = City.where(state_id: params[:state_id]).order_by_name
+    flash.now[:info] = "Ocurrió un error al guardar." and render :edit
   end
 
   def update_distributor_visit
     visit = DistributorVisit.find(params[:id])
     visit.update_attributes(visit_params)
+    @current_user.set_last_visit(visit)
 
-    if visit.client_recognizes_visit
-      @current_user.update_attribute(:last_distributor_visit, visit.visit_date)
-    end
-
-    flash[:success] = "Gracias por tu participación."
-    redirect_to products_path
+    redirect_to products_path, flash: {success: "Gracias por tu participación."}
   end
 
   def distributor
@@ -112,24 +111,10 @@ class Client::ClientsController < ApplicationController
   end
 
   def create_distributor_comment
-    @distributor = @current_user.City.Distributor
-    if !@distributor and !@current_user.worker_id.blank?
-      @worker = @current_user.Worker
-    end
-
-    @message = ClientDistributorComment.new(message_params)
-
-    if @distributor
-      @message.distributor_id = @distributor.id
-      Notification.create(distributor_id: @distributor.id, icon: "fa fa-comments-o",
-        description: "El usuario " + @current_user.name + " te envió un mensaje",
-        url: distributor_client_messages_path(@current_user.hash_id))
-    elsif @worker
-      @message.worker_id = @worker.id
-      Notification.create(worker_id: @worker.id, icon: "fa fa-comments-o",
-        description: "El usuario " + @current_user.name + " te envió un mensaje",
-        url: admin_distributor_work_client_messages_path(@current_user.hash_id))
-    end
+    @distributor = @current_user.Worker if @current_user.worker_id
+    @distributor ||= @current_user.City.Distributor
+    @message = ClientDistributorComment.new(message_params(@distributor))
+    notificate_new_message(@distributor)
 
     @client_image = @current_user.avatar_url(:mini)
     @client_username = @current_user.name
@@ -165,7 +150,30 @@ class Client::ClientsController < ApplicationController
         :treatment_answer, :extra_comments)
     end
 
-    def message_params
-      {client_id: @current_user.id, comment: params[:comment], is_from_client: true}
+    def message_params(distributor)
+      message_params = {client_id: @current_user.id, comment: params[:comment], is_from_client: true}
+
+      case distributor.class.to_s
+      when "Distributor"
+        message_params[:distributor_id] = distributor.id
+      when "SiteWorker"
+        message_params[:worker_id] = distributor.id
+      end
+
+      return message_params
+    end
+
+    def notificate_new_message(user)
+      n = Notification.new(description: "#{@current_user.name} te envió un mensaje", icon: "fa fa-comments-o")
+
+      case user.class.to_s
+      when "SiteWorker"
+        n.worker_id = user.id
+        n.url = admin_distributor_work_client_messages_path(@current_user)
+      when "Distributor"
+        n.distributor_id = user.id
+        n.url = distributor_client_messages_path(@current_user)
+      end # case user.class.to_s
+      n.save
     end
 end

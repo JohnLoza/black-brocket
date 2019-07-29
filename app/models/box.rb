@@ -32,7 +32,7 @@ class Box
       boxes.each do |box|
         use_this_box = false
         if remaining_cart_weight >= box["weight"] or # if box is used fully
-          (remaining_cart_weight * 100 / box["weight"]).between?(70, 100) # or between 70 to 99 percent
+          (remaining_cart_weight * 100 / box["weight"]).between?(95, 100) # or between 70 to 99 percent
 
           no_boxes = (remaining_cart_weight / box["weight"]).floor
           no_boxes = 1 if no_boxes == 0 # change no_boxes to 1 when box is almost full
@@ -66,10 +66,13 @@ class Box
   def self.fetchSrQuotations(zc, box)
     # production API KEY = SQoaP1oPC0bXuUVIrzaARitVruXXRrVOEDiOYUUi6Q4t
     # demo API KEY = PhrFxG93iBFSQpDwmTuYGeESANNpJjNTF91l6Hf3AXQt
+    weight = box["weight"] + (box["box_weight"]/1000)
+    weight = weight.round(3)
+
     res = `curl \"https://api.srenvio.com/v1/quotations\" \\
       -H \"Authorization: Token token=SQoaP1oPC0bXuUVIrzaARitVruXXRrVOEDiOYUUi6Q4t\" \\
       -H \"Content-Type: application/json\" --request POST \\
-      --data '{\"zip_from\":\"44100\",\"zip_to\":\"#{zc}\",\"parcel\":{\"weight\":#{box["weight"]},\"height\":#{box["height"]},\"width\":#{box["width"]},\"length\":#{box["length"]}}}'`
+      --data '{\"zip_from\":\"44100\",\"zip_to\":\"#{zc}\",\"parcel\":{\"weight\":#{weight},\"height\":#{box["height"]},\"width\":#{box["width"]},\"length\":#{box["length"]}}}'`
 
     return JSON.parse res
   end

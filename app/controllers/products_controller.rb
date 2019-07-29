@@ -8,7 +8,7 @@ class ProductsController < ApplicationController
       @warehouse = @current_user.City.State.Warehouse
 
       unless @warehouse
-        flash[:warning] = "Lo sentimos pero no distribuimos nuestros productos en tu zona ¡aún!."
+        flash[:info] = "Lo sentimos pero no distribuimos nuestros productos en tu zona ¡aún!."
         redirect_to root_path and return
       end
 

@@ -33,10 +33,11 @@ class Distributor::ClientsController < ApplicationController
       params[:product].each do |product_id|
         ClientProduct.create!(client_id: @client.id, product_id: product_id, client_price: params[:product][product_id])
       end
-      flash[:success] = "Precios guardados"
     end
-
-    flash[:info] = "Ocurrió un error al guardarlos precios" unless flash[:success].present?
+    flash[:success] = "Precios guardados"
+  rescue
+    flash[:info] = "Ocurrió un error al guardarlos precios"
+  ensure
     redirect_to distributor_clients_path
   end
 

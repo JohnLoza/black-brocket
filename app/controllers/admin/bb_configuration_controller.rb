@@ -17,7 +17,8 @@ class Admin::BbConfigurationController < AdminController
     params[:weight].each_with_index do |value, indx|
       json_array << {
         name: params[:name][indx],
-        weight: params[:weight][indx].to_f, 
+        weight: params[:weight][indx].to_f,
+        box_weight: params[:box_weight][indx].to_f,
         height: params[:height][indx].to_f,
         width: params[:width][indx].to_f, 
         length: params[:length][indx].to_f

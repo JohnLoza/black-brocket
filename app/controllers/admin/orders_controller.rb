@@ -248,17 +248,17 @@ class Admin::OrdersController < AdminController
 
     @warehouses = Warehouse.all.order(:name)
     if params[:start_date].blank? and params[:end_date].blank? and params[:reference].blank?
-      flash.now[:warning] = "Se requiere estipule al menos una fecha de inicio y fin o un folio." and return
+      flash.now[:info] = "Se requiere estipule al menos una fecha de inicio y fin o un folio." and return
     end
     
     if (params[:start_date].present? and params[:end_date].blank?) or
       (params[:end_date].present? and params[:start_date].blank?)
-      flash.now[:warning] = "Se requiere estipule la fecha de inicio y también la de fin" and return
+      flash.now[:info] = "Se requiere estipule la fecha de inicio y también la de fin" and return
     end
 
     if !params[:reference].blank?
       @order = Order.find_by(hash_id: params[:reference].strip) and return
-      flash.now[:warning] = "Orden con referencia: #{params[:reference]} no encontrada :(" and return unless @order
+      flash.now[:info] = "Orden con referencia: #{params[:reference]} no encontrada :(" and return unless @order
     end
 
     if params[:warehouse_id]

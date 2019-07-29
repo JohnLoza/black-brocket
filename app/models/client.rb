@@ -81,4 +81,9 @@ class Client < ApplicationRecord
     self.hash_id = "to_be_replaced"
   end
 
+  def set_last_visit(visit)
+    return unless visit.client_recognizes_visit
+    update_attribute(:last_distributor_visit, visit.visit_date)
+  end
+
 end

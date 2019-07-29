@@ -22,36 +22,22 @@ module SessionsHelper
 
   # Returns the current logged-in user (if any).
   def current_user
-    if !session[:user_id].nil?
+    if session[:user_id].present?
       user_id = session[:user_id]
       user_type = session[:user_type]
-
-      if user_type == "w"
-        @current_user ||= SiteWorker.find_by!(id: user_id)
-      elsif  user_type == "d"
-        @current_user ||= Distributor.find_by!(id: user_id)
-      elsif  user_type == "c"
-        @current_user ||= Client.find_by!(id: user_id)
-      end
-
-    elsif !cookies.signed[:user_id].nil?
+      @current_user ||= find_user_by_type(user_type, user_id)
+    elsif cookies.signed[:user_id].present?
       user_id = cookies.signed[:user_id]
       user_type = cookies[:user_type]
+      user = find_user_by_type(user_type, user_id)
 
-      if user_type == "w"
-        user = SiteWorker.find_by!(id: user_id)
-      elsif  user_type == "d"
-        user = Distributor.find_by!(id: user_id)
-      elsif  user_type == "c"
-        user = Client.find_by!(id: user_id)
-      end
-
-      if user && user.authenticated?(:remember, cookies[:remember_token])
+      if user and user.authenticated?(:remember, cookies[:remember_token])
         log_in(user, user_type)
         @current_user = user
-      end
-
-    end
+      else
+        forget(user)
+      end # if user and user.authenticated?
+    end # if session[:user_id] / elsif 
   end
 
   # Returns true if the user is logged in, false otherwise.
@@ -61,7 +47,7 @@ module SessionsHelper
 
   # Forgets a persistent session.
   def forget(user)
-    user.forget
+    user.forget if user
     cookies.delete(:user_id)
     cookies.delete(:remember_token)
     cookies.delete(:user_type)
@@ -100,4 +86,18 @@ module SessionsHelper
     return true if current_user.class == type
     redirect_to root_path and return
   end
+
+  private
+    def find_user_by_type(user_type, user_id)
+      case user_type
+      when "w"
+        SiteWorker.find_by(id: user_id)
+      when "d"
+        Distributor.find_by(id: user_id)
+      when "c"
+        Client.find_by(id: user_id)
+      else
+        return nil
+      end
+    end
 end

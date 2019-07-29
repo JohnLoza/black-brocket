@@ -13,7 +13,7 @@ class Distributor::VisitsController < ApplicationController
   def create
     @client = Client.find_by!(hash_id: params[:id])
 
-    visit = DistributorVisit.create(distributor_id: @current_user.id,
+    DistributorVisit.create(distributor_id: @current_user.id,
       client_id: @client.id, visit_date: params[:visit_date])
 
     flash[:success] = "Visita guardada"

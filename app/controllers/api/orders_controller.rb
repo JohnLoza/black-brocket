@@ -146,19 +146,14 @@ class Api::OrdersController < ApiController
 
   def upload_payment
     render status: 200, json: {success: false, info: "PAYMENT_NOT_FOUND"} and return unless params[:payment]
-    order = @current_user.Orders.find_by!(hash_id: params[:id])
+    valid_states = %w(WAITING_FOR_PAYMENT PAYMENT_DEPOSITED PAYMENT_REJECTED LOCAL)
 
-    if params[:payment].content_type.include? "pdf"
-      order.remove_pay_img! if !order.pay_img.blank?
-      order.pay_pdf = params[:payment]
-    elsif params[:payment].content_type.include? "image"
-      order.remove_pay_pdf! if !order.pay_pdf.blank?
-      order.pay_img = params[:payment]
-    else
-      render status: 200, json: {success: false, info: "FILE_FORMAT_ERROR"} and return
-    end
+    order = Order.find_by!(hash_id: params[:id])
+    render_404 and return unless valid_states.include? order.state
+
+    order.payment = params[:payment]
     order.state = "PAYMENT_DEPOSITED"
-    order.download_payment_key = SecureRandom.urlsafe_base64 if order.download_payment_key.nil?
+    order.download_payment_key = SecureRandom.urlsafe_base64
 
     render status: 200, json: {success: true, info: "SAVED"} and return if order.save
     render status: 200, json: {success: false, info: "SAVE_ERROR"}
@@ -191,12 +186,9 @@ class Api::OrdersController < ApiController
 
   def download_payment
     order = Order.find_by!(download_payment_key: params[:payment_key])
+    render_404 and return unless order.payment.present?
 
-    if order.pay_img.present?
-      send_file order.pay_img.path
-    elsif order.pay_pdf.present?
-      send_file order.pay_pdf.path
-    end
+    send_file order.payment.path
   end
 
   def sr_parcel_prices

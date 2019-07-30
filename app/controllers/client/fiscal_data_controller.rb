@@ -25,46 +25,27 @@ class Client::FiscalDataController < ApplicationController
     @fiscal_data = FiscalData.new(fiscal_params)
     @fiscal_data.city_id = params[:city_id]
     @fiscal_data.client_id = @current_user.id
-    @fiscal_data.hash_id = Utils.new_alphanumeric_token(9).upcase
 
-    if @fiscal_data.save
-      flash[:success] = "Información fiscal guardada."
-
-      if session[:order]
-        redirect_to client_orders_path(@current_user.hash_id, info_for: session[:order])
-        session.delete(:order) and return
-      end
-      redirect_to products_path
-    else
-      params[:state_id] = params[:state_id]
-      params[:city_id] = params[:city_id]
-
-      @states = State.order_by_name
-      @cities = City.where(state_id: params[:state_id]).order_by_name
-      @url = client_fiscal_data_path
-      render :new
-    end
+    @fiscal_data.save!
+    redirect_to products_path, flash: {success: "Información fiscal guardada"}
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved
+    @states = State.order_by_name
+    @cities = City.where(state_id: params[:state_id]).order_by_name
+    @url = client_fiscal_data_path
+    render :new
   end
 
   def update
     @fiscal_data = @current_user.FiscalData
     @fiscal_data.city_id = params[:city_id]
-    @fiscal_data.lastname = params[:fiscal_data][:lastname]==""
-    @fiscal_data.mother_lastname = params[:fiscal_data][:mother_lastname]==""
 
-    if @fiscal_data.update_attributes(fiscal_params)
-      flash[:success] = "Información fiscal guardada."
-      redirect_to products_path
-    else
-      city = @fiscal_data.City
-      params[:city_id] = city.id
-      params[:state_id] = city.state_id
-
-      @states = State.order_by_name
-      @cities = City.where(state_id: params[:state_id]).order_by_name
-      @url = client_fiscal_datum_path @fiscal_data
-      render :edit
-    end
+    @fiscal_data.update_attributes!(fiscal_params)
+    redirect_to products_path, flash: {success: "Información fiscal guardada"}
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved
+    @states = State.order_by_name
+    @cities = City.where(state_id: params[:state_id]).order_by_name
+    @url = client_fiscal_datum_path @fiscal_data
+    render :edit
   end
 
   private

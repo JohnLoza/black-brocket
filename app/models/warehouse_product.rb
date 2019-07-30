@@ -26,7 +26,7 @@ class WarehouseProduct < ApplicationRecord
 
   def withdraw(quantity)
     self.required_quantity = quantity
-    raise StandardError, "Sin stock suficiente" unless self.enoughStock?
+    raise ActiveRecord::RangeError, "Sin stock suficiente" unless self.enoughStock?
     update_attributes(existence: self.existence - required_quantity)
   end
 
@@ -35,6 +35,9 @@ class WarehouseProduct < ApplicationRecord
   end
 
   def self.return(product_id, quantity)
+    unless quantity.kind_of? Integer and quantity > 0
+      raise ActiveRecord::RangeError, "Quantity should be a positive integer"
+    end
     query = "UPDATE warehouse_products 
       SET existence=(existence+#{quantity}) WHERE
       id=#{product_id}"

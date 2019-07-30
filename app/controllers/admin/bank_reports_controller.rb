@@ -18,7 +18,7 @@ class Admin::BankReportsController < AdminController
     @orders = {}
     @banks.each do |bank|
       @orders[bank.id] = Order.where("DATE(created_at) BETWEEN :from AND :to",
-        from: params[:from_date], to: params[:to_date]).where(payment_method: bank.id)
+        from: params[:from_date], to: params[:to_date]).where(payment_method: bank.id).includes(:Client)
     end
 
     render :show, layout: false

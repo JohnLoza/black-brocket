@@ -62,14 +62,10 @@ class Admin::CommissionsController < AdminController
 
     commission = Commission.find_by!(hash_id: params[:id])
 
-    if params[:commission][:payment].content_type == "application/pdf"
-      attributes = {payment_pdf: params[:commission][:payment], payment_img: nil}
-    else
-      attributes = {payment_img: params[:commission][:payment], payment_pdf: nil}
-    end
-    attributes[:state] = "PAYMENT_DEPOSITED"
-    attributes[:payment_day] = Time.now.to_formatted_s(:db)
-    flash[:success] = "Pago cargado exitosamente." if commission.update_attributes(attributes)
+    commission.payment = params[:commission][:payment]
+    commission.state = "PAYMENT_DEPOSITED"
+    commission.payment_day = Time.now.to_formatted_s(:db)
+    flash[:success] = "Pago cargado exitosamente." if commission.save
 
     flash[:info] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: jpg, jpeg, png y pdf" unless flash[:success].present?
     redirect_to admin_commissions_path
@@ -77,15 +73,10 @@ class Admin::CommissionsController < AdminController
 
   def download_payment
     deny_access! and return unless @current_user.has_permission_category?("commissions")
-
     commission = Commission.find_by!(hash_id: params[:id])
+    render_404 and return unless commission.payment.present?
 
-    render_404 and return unless commission.payment_pdf.present? or commission.payment_img.present?
-
-    file_path = commission.payment_pdf.path if commission.payment_pdf.present?
-    file_path = commission.payment_img.path if commission.payment_img.present?
-
-    send_file file_path
+    send_file commission.payment.path
   end
 
   def download_invoice

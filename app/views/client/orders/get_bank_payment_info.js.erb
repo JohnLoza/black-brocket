@@ -14,6 +14,8 @@ $("#myModal").find(".modal-footer").prepend(`<%= link %>`);
   $("#myModal").modal("show");
 <% end %>
 
+// TODO delete this function and dont render every time
+// just open the modal and update the form target
 function place_payment_method_form(){
   $("#myModal").modal("hide");
   modal = $("#modal");

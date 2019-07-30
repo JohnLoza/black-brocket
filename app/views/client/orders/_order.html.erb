@@ -58,7 +58,7 @@
     <div class="col-sm-2 order-info text-center">
       <b>Comprobante:</b>
       <span class="text-center">
-        <% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
+        <% if o.payment.present? %>
           <%= link_to client_get_order_payment_path(@current_user.hash_id, o.download_payment_key), target: "_blank" do %>
             <i class="fa fa-file-o fa-2x"></i>
           <% end %>
@@ -82,7 +82,7 @@
       <%= form_for(o, url: client_upload_pay_order_path(@current_user.hash_id, o.hash_id),
         method: :put, html:{ id:"form_photo_#{o.hash_id}"}) do |f| %>
 
-        <%= f.file_field :pay_img, id: "field_#{o.hash_id}",
+        <%= f.file_field :payment, id: "field_#{o.hash_id}",
           style: "display: none;", multiple: false,
           onchange: "$('#form_photo_#{o.hash_id}').submit();" %>
 

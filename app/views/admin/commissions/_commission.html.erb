@@ -17,7 +17,7 @@
     <%end%>
   </td>
   <td class="text-center">
-    <% if commission.payment_img.present? or commission.payment_pdf.present? %>
+    <% if commission.payment.present? %>
       <%= link_to admin_download_commission_payment_path(commission.hash_id), target: "_blank" do %>
         <i class="fa fa-file-pdf-o fa-5x"></i>
       <% end %>

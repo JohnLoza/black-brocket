@@ -2,11 +2,11 @@ class Client::OrdersController < ApplicationController
   before_action -> { user_should_be(Client) }
   before_action :process_notification, only: :show
   before_action :verify_client_address, only: :create
-  # before_action :verify_fiscal_data, only: [:create]
 
   def index
-    @orders = @current_user.Orders.where.not(state: "ORDER_CANCELED").order(created_at: :desc).paginate(page: params[:page], per_page: 10).includes(City: :State)
-    @bank_accounts = BankAccount.all
+    @orders = @current_user.Orders
+      .where.not(state: "ORDER_CANCELED").order(created_at: :desc)
+      .paginate(page: params[:page], per_page: 10).includes(City: :State)
   end
 
   def show
@@ -18,7 +18,7 @@ class Client::OrdersController < ApplicationController
     
     begin
       @guides_json = JSON.parse @order.guides
-    rescue => exception
+    rescue
       @guides_json = nil
     end
 
@@ -58,14 +58,14 @@ class Client::OrdersController < ApplicationController
       end
     rescue ActiveRecord::RecordInvalid
       flash[:info] = "ocurrió un error al procesar la órden"
-    rescue StandardError
+    rescue ActiveRecord::RangeError
       flash[:info] = "No existe inventario suficiente"
     ensure
       if flash[:info].present?
         redirect_to client_ecart_path(current_user.hash_id) and return
       else
-        flash[:success] = "Orden guardada" and session.delete(:e_cart) # delete ecart contents
-        return unless verify_fiscal_data # redirect to fiscal data if not complete and client asks for invoice
+        flash[:success] = "Orden guardada"; session.delete(:e_cart) # delete ecart contents
+        verify_fiscal_data or return # redirect to fiscal data if not complete and client asks for invoice
         redirect_to client_orders_path(current_user.hash_id, info_for: order.hash_id) and return
       end
     end
@@ -77,8 +77,9 @@ class Client::OrdersController < ApplicationController
     @details = OrderDetail.where(order_id: @order.id)
     
     ActiveRecord::Base.transaction do
+      # TODO add dependent destroy and trigger the return method on detail destroy
       @details.each {|d| WarehouseProduct.return(d.w_product_id, d.quantity)}
-      @destroyed = @order.update!(state: "ORDER_CANCELED")
+      @order.update_attributes!(state: "ORDER_CANCELED")
     end
 
     respond_to do |format|
@@ -87,49 +88,32 @@ class Client::OrdersController < ApplicationController
   end
 
   def upload_payment
-    @order = Order.find_by!(hash_id: params[:id])
-    redirect_to client_orders_path(@current_user) unless ["WAITING_FOR_PAYMENT", "PAYMENT_DEPOSITED", "PAYMENT_REJECTED", "LOCAL"].include? @order.state
+    render_404 and return unless params[:order] and params[:order][:payment]
+    valid_states = %w(WAITING_FOR_PAYMENT PAYMENT_DEPOSITED PAYMENT_REJECTED LOCAL)
 
-    if params[:order]
-      if params[:order][:pay_img].content_type == "application/pdf"
-        @order.remove_pay_img! if !@order.pay_img.blank?
-        @order.pay_pdf = params[:order][:pay_img]
-      elsif params[:order][:pay_img].content_type.include? "image/"
-        @order.remove_pay_pdf! if !@order.pay_pdf.blank?
-        @order.pay_img = params[:order][:pay_img]
-      else
-        flash[:info] = "Solo se admiten archivos jpg, png y pdf, gracias."
-        redirect_to client_orders_path(@current_user) and return
-      end
-      @order.state = "PAYMENT_DEPOSITED" unless @order.state == "LOCAL"
-      @order.download_payment_key = SecureRandom.urlsafe_base64
-      @saved = true if @order.save!
-    end
+    order = Order.find_by!(hash_id: params[:id])
+    render_404 and return unless valid_states.include? order.state
+    
+    order.payment = params[:order][:payment]
+    order.state = "PAYMENT_DEPOSITED" unless order.state == "LOCAL"
+    order.download_payment_key = SecureRandom.urlsafe_base64
+    flash[:success] = "Pago guardado, esperando confirmación" if order.save
 
-    if @saved
-      flash[:success] = "Pago guardado, esperando confirmación"
-    else
-      flash[:info] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: pdf, jpg y png."
-    end
+    flash[:info] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: pdf, jpg y png." unless flash[:success].present?
     redirect_to client_orders_path(@current_user)
   end
 
   def get_payment
-    @order = @current_user.Orders.find_by!(download_payment_key: params[:id])
-    # if there is an image of the payment send it
-    file_path = @order.pay_img.path if @order.pay_img.present?
-    # else, if there is a pdf of the payment, send it
-    file_path = @order.pay_pdf.path if @order.pay_pdf.present?
+    order = @current_user.Orders.find_by!(download_payment_key: params[:id])
+    render_404 and return unless order.payment.present?
 
-    render_404 and return unless file_path
-
-    send_file file_path
+    send_file order.payment.path
   end
 
   def get_bank_payment_info
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
     if @order.payment_method.present?
-      @bank = Bank.find_by!(id: @order.payment_method)
+      @bank = Bank.find(@order.payment_method)
       @bank_accounts = @bank.Accounts
     end
 
@@ -150,10 +134,10 @@ class Client::OrdersController < ApplicationController
 
   private
     def verify_fiscal_data
-      if params[:invoice]=="1" and @current_user.FiscalData.nil?
-        session[:order] = @order.hash_id
-        flash[:info] = "Llena tus datos fiscales por favor."
-        redirect_to new_client_fiscal_datum_path and return false
+      data = @current_user.FiscalData
+      unless data
+        flash[:info] = "Por favor completa tu información fiscal (con fines de facturación)"
+        redirect_to edit_client_fiscal_datum_path(@current_user.hash_id) and return false
       end
       return true
     end
@@ -168,7 +152,6 @@ class Client::OrdersController < ApplicationController
 
     def setBasicInfo
       order = Order.new
-      order.hash_id = Utils.new_alphanumeric_token(9).upcase
       order.client_id = @current_user.id
       order.city_id = @current_user.city_id
       order.distributor_id = @current_user.distributorId

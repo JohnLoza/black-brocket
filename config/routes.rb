@@ -273,9 +273,8 @@ Rails.application.routes.draw do
     post '/user/:id/destroy_account' => 'clients#destroy_account'
 
     get '/my_distributor/' => "clients#distributor", as: :my_distributor
-    get '/user/:id' => "clients#index"
     get 'sign_up' => "clients#new"
-    resources :clients, except: [ :new, :index ]
+    resources :clients, except: [:new, :index]
     get 'question/:id' => 'clients#prod_answer', as: :question_answer
 
     get "user/:user_id/ecart" => "ecarts#show", as: :ecart
@@ -293,7 +292,7 @@ Rails.application.routes.draw do
     get 'user/:user_id/orders/:id/get_bank_payment_info' => 'orders#get_bank_payment_info', as: :get_bank_payment_info
     patch 'user/:user_id/orders/:id/update_payment_method' => 'orders#update_payment_method', as: :update_payment_method
 
-    resources :fiscal_data, except: [ :index ]
+    resources :fiscal_data, except: [:index, :destroy]
   end
 
   namespace :api do

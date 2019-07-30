@@ -119,7 +119,7 @@ class Api::OrdersController < ApiController
       end
     rescue ActiveRecord::RecordInvalid
       render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
-    rescue StandardError
+    rescue ActiveRecord::RangeError
       render status: 200, json: {success: false, info: "NO_ENOUGH_STOCK"} and return
     end
     render status: 200, json: {success: true, info: "SAVED"} and return
@@ -228,7 +228,6 @@ class Api::OrdersController < ApiController
   private
     def setBasicInfo
       order = Order.new
-      order.hash_id = Utils.new_alphanumeric_token(9).upcase
       order.client_id = @current_user.id
       order.city_id = @current_user.city_id
       order.distributor_id = @current_user.distributorId

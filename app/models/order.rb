@@ -1,4 +1,6 @@
 class Order < ApplicationRecord
+  include HashId
+  
   belongs_to :City, foreign_key: :city_id, optional: true
   belongs_to :Distributor, foreign_key: :distributor_id, optional: true
   belongs_to :Client, foreign_key: :client_id, optional: true
@@ -14,8 +16,7 @@ class Order < ApplicationRecord
 
   validates :total, numericality: true, on: :create
 
-  mount_uploader :pay_img, PayUploader
-  mount_uploader :pay_pdf, PdfUploader
+  mount_uploader :payment, PaymentUploader
 
   def self.byWarehouse(warehouse)
     return all unless warehouse
@@ -35,4 +36,12 @@ class Order < ApplicationRecord
     str += "+#{hash[:col]}+#{hash[:cp]}"
     return str
   end
+
+  private
+    def generate_hash_id
+      loop do
+        self.hash_id = Utils.new_alphanumeric_token(9).upcase unless self.hash_id.present?
+        break unless hash_id_taken?(self.hash_id)
+      end
+    end
 end

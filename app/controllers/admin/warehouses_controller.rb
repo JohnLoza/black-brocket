@@ -86,6 +86,7 @@ class Admin::WarehousesController < AdminController
     deny_access! and return unless @current_user.has_permission?("warehouses@delete")
 
     @warehouse = Warehouse.find_by!(hash_id: params[:id])
+    @warehouse.Regions.update_all(warehouse_id: nil)
     @warehouse.destroy
     redirect_to admin_warehouses_path, flash: {success: "Almacén eliminado" }
   end

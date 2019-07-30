@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190717144531) do
+ActiveRecord::Schema.define(version: 20190730142347) do
 
   create_table "bank_accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "bank_name"
@@ -86,7 +86,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.string "street_ref2"
     t.string "telephone"
     t.string "cellphone"
-    t.string "bank_reference"
     t.string "remember_digest"
     t.string "recover_pass_digest"
     t.string "validate_email_digest"
@@ -100,11 +99,8 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.datetime "last_distributor_revision"
     t.datetime "last_distributor_visit"
     t.boolean "has_custom_prices", default: false
-    t.date "birthday"
     t.string "delete_account_hash"
     t.string "name"
-    t.string "lastname"
-    t.string "mother_lastname"
     t.string "authentication_token"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
     t.index ["hash_id"], name: "index_clients_on_hash_id", unique: true
@@ -120,8 +116,7 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.integer "distributor_id"
     t.integer "worker_id"
     t.decimal "total", precision: 8, scale: 2
-    t.string "payment_img"
-    t.string "payment_pdf"
+    t.string "payment"
     t.string "invoice"
     t.string "payment_day"
     t.string "state"
@@ -136,8 +131,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
   create_table "distributor_candidates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "city_id"
     t.string "name"
-    t.string "lastname"
-    t.string "mother_lastname"
     t.string "email"
     t.string "telephone"
     t.string "cellphone"
@@ -212,8 +205,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.string "hash_id", null: false, collation: "utf8_bin"
     t.string "rfc"
     t.string "name"
-    t.string "lastname"
-    t.string "mother_lastname"
     t.string "street"
     t.string "intnumber"
     t.string "extnumber"
@@ -297,8 +288,7 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.string "hash_id", null: false, collation: "utf8_bin"
     t.text "address"
     t.decimal "total", precision: 8, scale: 2
-    t.string "pay_img"
-    t.string "pay_pdf"
+    t.string "payment"
     t.string "tracking_code"
     t.string "state"
     t.boolean "invoice", default: false
@@ -308,7 +298,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.datetime "updated_at", null: false
     t.boolean "commission_in_progress", default: false
     t.integer "warehouse_id"
-    t.integer "freight_worker_id"
     t.integer "parcel_id"
     t.text "reject_description"
     t.text "cancel_description"
@@ -325,33 +314,10 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.index ["payment_folio"], name: "index_orders_on_payment_folio", unique: true
   end
 
-  create_table "parcel_prices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "parcel_id"
-    t.integer "max_weight"
-    t.decimal "price", precision: 8, scale: 2
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["parcel_id"], name: "index_parcel_prices_on_parcel_id"
-  end
-
-  create_table "parcels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "warehouse_id"
-    t.string "parcel_name"
-    t.decimal "cost", precision: 8, scale: 2
-    t.string "tracking_url"
-    t.string "image"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "delivery_time"
-    t.boolean "local_delivery", default: false
-  end
-
   create_table "permissions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "worker_id"
     t.string "category"
     t.string "name"
-    t.boolean "supervisor", default: false
-    t.boolean "warehouse_chief", default: false
     t.index ["worker_id", "category"], name: "index_permissions_on_worker_id_and_category"
   end
 
@@ -391,7 +357,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.decimal "price", precision: 8, scale: 2
     t.decimal "lowest_price", precision: 8, scale: 2
     t.boolean "show", default: false
-    t.decimal "shipping_cost", precision: 8, scale: 2
     t.string "video"
     t.string "preparation_render_path"
     t.boolean "hot", default: false
@@ -438,7 +403,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.integer "target_warehouse_id"
     t.integer "chief_id"
     t.integer "worker_id"
-    t.integer "freight_worker_id"
     t.boolean "got_safe_to_destination"
     t.string "shipment_type"
     t.datetime "created_at", null: false
@@ -493,7 +457,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.string "name"
     t.string "email"
     t.text "message"
-    t.text "response"
     t.boolean "answered", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -563,7 +526,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.string "description_render_path"
     t.string "image"
     t.string "video"
-    t.string "video_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -588,7 +550,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
     t.string "name"
     t.string "address"
     t.string "telephone"
-    t.boolean "is_central"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -601,7 +562,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
   create_table "web_infos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "description_render_path"
-    t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -616,7 +576,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
   create_table "web_photos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "photo"
-    t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -624,7 +583,6 @@ ActiveRecord::Schema.define(version: 20190717144531) do
   create_table "web_videos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "video"
-    t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

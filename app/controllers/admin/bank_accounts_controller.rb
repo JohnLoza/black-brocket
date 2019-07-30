@@ -48,8 +48,7 @@ class Admin::BankAccountsController < AdminController
       flash[:success] = "Cuenta guardada"
       redirect_to admin_bank_accounts_path
     else
-      @url = admin_bank_account_path(@bank.id, params[:id])
-      render :new
+      render :edit
     end
   end # def update #
 

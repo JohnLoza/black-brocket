@@ -112,10 +112,10 @@ class Client::OrdersController < ApplicationController
 
   def get_bank_payment_info
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
-    if @order.payment_method.present?
-      @bank = Bank.find(@order.payment_method)
-      @bank_accounts = @bank.Accounts
-    end
+    render_404 and return unless @order.payment_method.present?
+    
+    @bank = Bank.find(@order.payment_method)
+    @bank_accounts = @bank.Accounts
 
     respond_to do |format|
       format.js { render :get_bank_payment_info, layout: false }

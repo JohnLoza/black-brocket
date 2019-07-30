@@ -14,7 +14,7 @@ class Admin::BbConfigurationController < AdminController
     json_array = Array.new
 
     # build json array
-    params[:weight].each_with_index do |value, indx|
+    params[:weight].each.with_index do |value, indx|
       json_array << {
         name: params[:name][indx],
         weight: params[:weight][indx].to_f,
@@ -54,7 +54,7 @@ class Admin::BbConfigurationController < AdminController
     local = {location: params[:location], shipping_cost: params[:shipping_cost]}
     cities = Hash.new
 
-    params[:cities_ids].each_with_index do |city_id, index|
+    params[:cities_ids].each.with_index do |city_id, index|
       cities[city_id] = params[:cities_names][index]
     end
     local[:cities] = cities

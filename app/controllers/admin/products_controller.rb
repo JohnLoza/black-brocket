@@ -42,9 +42,9 @@ class Admin::ProductsController < AdminController
 
   def edit
     unless @current_user.has_permission?("products@update_name") or
-           @current_user.has_permission?("products@update_product_data") or
-           @current_user.has_permission?("products@update_price") or
-           @current_user.has_permission?("products@update_show_in_web_page")
+      @current_user.has_permission?("products@update_product_data") or
+      @current_user.has_permission?("products@update_price") or
+      @current_user.has_permission?("products@update_show_in_web_page")
       deny_access! and return
     end
     @product = Product.find_by!(hash_id: params[:id])
@@ -60,9 +60,9 @@ class Admin::ProductsController < AdminController
 
   def update
     unless @current_user.has_permission?("products@update_name") or
-           @current_user.has_permission?("products@update_product_data") or
-           @current_user.has_permission?("products@update_price") or
-           @current_user.has_permission?("products@update_show_in_web_page")
+      @current_user.has_permission?("products@update_product_data") or
+      @current_user.has_permission?("products@update_price") or
+      @current_user.has_permission?("products@update_show_in_web_page")
       deny_access! and return
     end
     @product = Product.find_by!(hash_id: params[:id])

@@ -2,7 +2,7 @@ class Admin::BanksController < AdminController
 
   def index
     unless @current_user.has_permission_category?("banks") or
-           @current_user.has_permission_category?("bank_accounts")
+      @current_user.has_permission_category?("bank_accounts")
       deny_access! and return
     end
     @banks = Bank.search(key_words: search_params, fields: ["name"])

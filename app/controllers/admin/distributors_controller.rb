@@ -54,11 +54,11 @@ class Admin::DistributorsController < AdminController
 
   def edit
     unless @current_user.has_permission?("distributors@update_personal_data") or
-           @current_user.has_permission?("distributors@update_fiscal_data") or
-           @current_user.has_permission?("distributors@update_bank_data") or
-           @current_user.has_permission?("distributors@update_show_address") or
-           @current_user.has_permission?("distributors@update_commission") or
-           @current_user.has_permission?("distributors@update_photo")
+      @current_user.has_permission?("distributors@update_fiscal_data") or
+      @current_user.has_permission?("distributors@update_bank_data") or
+      @current_user.has_permission?("distributors@update_show_address") or
+      @current_user.has_permission?("distributors@update_commission") or
+      @current_user.has_permission?("distributors@update_photo")
       deny_access! and return
     end
 
@@ -72,11 +72,11 @@ class Admin::DistributorsController < AdminController
 
   def update
     unless @current_user.has_permission?("distributors@update_personal_data") or
-           @current_user.has_permission?("distributors@update_fiscal_data") or
-           @current_user.has_permission?("distributors@update_bank_data") or
-           @current_user.has_permission?("distributors@update_show_address") or
-           @current_user.has_permission?("distributors@update_commission") or
-           @current_user.has_permission?("distributors@update_photo")
+      @current_user.has_permission?("distributors@update_fiscal_data") or
+      @current_user.has_permission?("distributors@update_bank_data") or
+      @current_user.has_permission?("distributors@update_show_address") or
+      @current_user.has_permission?("distributors@update_commission") or
+      @current_user.has_permission?("distributors@update_photo")
       deny_access! and return
     end
 

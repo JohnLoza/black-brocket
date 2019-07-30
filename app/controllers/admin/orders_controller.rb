@@ -33,19 +33,13 @@ class Admin::OrdersController < AdminController
 
     @order = Order.find_by!(hash_id: params[:id])
     if params[:accept] == "true"
-      if Order.find_by(payment_folio: params[:payment_folio])
-        # That Folio has already been used 
-        flash[:info] = "El folio del pago ya ha sido registrado previamente."
-        redirect_to admin_orders_path(type: "ACCEPT_REJECT_PAYMENT") and return
-      end
+      verify_payment_folio or return
 
-      # Accept the payment
-      new_state = params[:local_order].present? ? "PAYMENT_ACCEPTED_LOCAL" : "PAYMENT_ACCEPTED"
+      new_state = params[:local_order].nil? ? "PAYMENT_ACCEPTED" : "PAYMENT_ACCEPTED_LOCAL"
       @order.update_attributes(state: new_state, reject_description: nil, payment_folio: params[:payment_folio])
 
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Aceptó/Verificó el pago")
     else
-      # Reject the payment and notify the user
       @order.update_attributes(state:"PAYMENT_REJECTED", reject_description: params[:order][:reject_description])
       Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
         description: "El pago de tu pedido ha sido rechazado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
@@ -53,11 +47,8 @@ class Admin::OrdersController < AdminController
     end
 
     flash[:success] = t(@order.state)
-    if params[:local_order].present?
-      redirect_to admin_orders_path(type: "LOCAL_ORDERS")
-    else
-      redirect_to admin_orders_path(type: "ACCEPT_REJECT_PAYMENT")
-    end
+    type = params[:local_order].nil? ? "ACCEPT_REJECT_PAYMENT" : "LOCAL_ORDERS"
+    redirect_to admin_orders_path(type: type)
   end # def accept_pay #
 
   def details
@@ -99,8 +90,8 @@ class Admin::OrdersController < AdminController
     @details = OrderDetail.where(order_id: @order.id)
     ActiveRecord::Base.transaction do
       @details.each {|d| WarehouseProduct.return(d.w_product_id, d.quantity)}
-
       @order.update(state: "ORDER_CANCELED", cancel_description: params[:order][:cancel_description])
+
       Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
         description: "Pedido cancelado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Canceló la orden")
@@ -137,16 +128,19 @@ class Admin::OrdersController < AdminController
 
     shipment_details.each do |detail|
       warehouse_products.each do |warehouse_product|
+        break_loop = false
         if detail.product_id == warehouse_product.product_id and detail.batch == warehouse_product.batch
-          warehouse_product.update_attribute(:existence, warehouse_product.existence + detail.quantity)
+          WarehouseProduct.return(warehouse_product.id, detail.quantity)
+          break_loop = true
         end # if end #
+        break if break_loop
       end # warehouse_products.each #
     end # shipment_details.each #
 
     shipment_details.destroy_all
     order.update_attribute(:state, "PAYMENT_ACCEPTED")
-    OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Regresó la orden a volver a surtir")
-    flash[:success] = "Pedido regresado"
+    OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Regresó la orden para volver a surtir")
+    flash[:success] = "Regresó la orden para volver a surtir"
     redirect_to admin_orders_path(type: "INSPECTION")
   end # def supply_error #
 
@@ -172,14 +166,11 @@ class Admin::OrdersController < AdminController
     end
 
     ActiveRecord::Base.transaction do
-      indx = 0
-      while indx < params[:product_id].size do
-        detail = OrderProductShipmentDetail.create(order_id: order.id, batch: params[:batch][indx],
-          product_id: params[:product_id][indx], quantity: params[:quantity][indx], warehouse_id: order.warehouse_id)
-        # Rollback if there are any errors
-        flash[:info] = detail.errors.full_messages[0] and raise ActiveRecord::Rollback if detail.errors.any?
-        # Withdraw the quantity used for the shipment detail
-        detail.warehouse_detail.withdraw(detail.quantity) and indx += 1
+      while params[:product_id].each.with_index do |product_id, indx|
+        detail = OrderProductShipmentDetail.create!(order_id: order.id, batch: params[:batch][indx],
+          product_id: product_id, quantity: params[:quantity][indx], warehouse_id: order.warehouse_id)
+        
+        detail.warehouse_detail.withdraw(detail.quantity)
       end
 
       shipment_details = OrderProductShipmentDetail.select("product_id, sum(quantity) as t_quantity")
@@ -204,13 +195,13 @@ class Admin::OrdersController < AdminController
   def save_tracking_code
     deny_access! and return unless @current_user.has_permission?("orders@capture_tracking_code")
 
-    @order = Order.find_by!(hash_id: params[:id])
-    @order.tracking_code = params[:tracking_code]
-    @order.state = "SENT"
+    order = Order.find_by!(hash_id: params[:id])
+    order.tracking_code = params[:tracking_code]
+    order.state = "SENT"
 
-    if @order.save
+    if order.save
       flash[:success] = "Código guardado"
-      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Capturó código de rastreo")
+      OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó código de rastreo")
     else
       flash[:info] = "Ocurrió un error al guardar la información"
     end
@@ -219,11 +210,11 @@ class Admin::OrdersController < AdminController
 
   def save_as_delivered
     deny_access! and return unless @current_user.has_permission?("orders@stablish_as_delivered")
-    @order = Order.find_by!(hash_id: params[:id])
+    order = Order.find_by!(hash_id: params[:id])
 
-    if @order.update_attribute(:state, "DELIVERED")
+    if order.update_attribute(:state, "DELIVERED")
       flash[:success] = "Estado de la órden guardado"
-      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Estableció como entregado")
+      OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Estableció como entregado")
     else
       flash[:info] = "Ocurrió un error al guardar la información"
     end
@@ -232,11 +223,11 @@ class Admin::OrdersController < AdminController
 
   def invoice_delivered
     deny_access! and return unless @current_user.has_permission?("orders@invoices")
-    @order = Order.find_by!(hash_id: params[:id])
+    order = Order.find_by!(hash_id: params[:id])
 
-    if @order.update_attribute(:invoice_sent, true)
+    if @rder.update_attribute(:invoice_sent, true)
       flash[:success]="Estado de la órden guardado"
-      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Facturó")
+      OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Facturó")
     else
       flash[:info]="Ocurrió un error al guardar la información"
     end
@@ -378,27 +369,17 @@ class Admin::OrdersController < AdminController
   def download_payment_file
     deny_access! and return unless @current_user.has_permission?("orders@accept_reject_payment")
     order = Order.find_by!(download_payment_key: params[:payment_key])
-
-    if order.pay_img.present?
-      send_file order.pay_img.path
-    elsif order.pay_pdf.present?
-      send_file order.pay_pdf.path
-    end
+    render_404 and return unless order.payment.present?
+    
+    send_file order.payment.path
   end
 
   def upload_payment
     deny_access! and return unless @current_user.has_permission?("orders@local_orders")
     order = Order.find_by!(hash_id: params[:id])
-    deny_access! and return if ["PAYMENT_ACCEPTED_LOCAL","LOCAL"].include? order.state
+    render_404 and return unless order.state == "PICKED_UP"
 
-    if params[:order][:pay_img].content_type == "application/pdf"
-      order.remove_pay_img! if order.pay_img.present?
-      order.pay_pdf = params[:order][:pay_img]
-    else
-      order.remove_pay_pdf! if order.pay_pdf.present?
-      order.pay_img = params[:order][:pay_img]
-    end
-    
+    order.payment = params[:order][:payment]
     order.download_payment_key = SecureRandom.urlsafe_base64
     if order.save!
       OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Subió comprobante")
@@ -501,6 +482,17 @@ class Admin::OrdersController < AdminController
           .byWarehouse(statements[:warehouse])
           .order(statements[:order])
           .includes(City: :State).includes(:Distributor, :Client)
+      end
+    end
+
+    def verify_payment_folio(folio)
+      order = Order.find_by(payment_folio: params[:payment_folio])
+      if order.present?
+        flash[:info] = "El folio del pago ya ha sido registrado previamente."
+        redirect_to admin_orders_path(type: "ACCEPT_REJECT_PAYMENT")
+        return false
+      else
+        return true
       end
     end
 end

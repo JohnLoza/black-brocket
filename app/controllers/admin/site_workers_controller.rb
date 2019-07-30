@@ -120,13 +120,11 @@ class Admin::SiteWorkersController < AdminController
         permission_name = key.split("-")[1].upcase
         @worker.Permissions << Permission.new(category: category, name: permission_name)
       end
+      @worker.save!
+      flash[:success] = "Permisos guardados"
     end
 
-    if @worker.save
-      flash[:success] = "Permisos guardados"
-    else
-      flash[:info] = "Ocurrió un error inesperado"
-    end
+    flash[:info] = "Ocurrió un error inesperado" unless flash[:success].present?
     redirect_to admin_site_workers_path
   end # def update_permissions end #
 

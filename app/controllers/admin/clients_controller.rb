@@ -62,7 +62,6 @@ class Admin::ClientsController < AdminController
     @client_city = @client.City
     @products = Product.active.order(name: :asc).paginate(page: params[:page], per_page: 15)
     @prices = @client.ProductPrices
-
   end
 
   def supervisor_visits

@@ -32,7 +32,7 @@ class Box
       boxes.each do |box|
         use_this_box = false
         if remaining_cart_weight >= box["weight"] or # if box is used fully
-          (remaining_cart_weight * 100 / box["weight"]).between?(95, 100) # or between 70 to 99 percent
+          (remaining_cart_weight * 100 / box["weight"]).between?(90, 100) # or between 70 to 99 percent
 
           no_boxes = (remaining_cart_weight / box["weight"]).floor
           no_boxes = 1 if no_boxes == 0 # change no_boxes to 1 when box is almost full

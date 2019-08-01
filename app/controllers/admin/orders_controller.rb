@@ -24,7 +24,8 @@ class Admin::OrdersController < AdminController
     @orders = Array.new and return unless statements
 
     statements = warehouseStatement(statements)
-    @orders = getOrdersFor(statements).paginate(page: params[:page], per_page: 25)
+    @orders = Order.by_statements(statements, params[:distributor])
+      .paginate(page: params[:page], per_page: 25)
     render :local_orders if params[:type] == "LOCAL_ORDERS"
   end # def index #
 
@@ -122,27 +123,17 @@ class Admin::OrdersController < AdminController
     order = Order.find_by!(hash_id: params[:id])
     shipment_details = OrderProductShipmentDetail.where(order_id: order.id)
 
-    warehouse = order.Warehouse
-    # TODO refactor removing the warehouse_products SQL 
-    # and just use a new .return method that receives a product_id, a batch and quantity
-    warehouse_products = warehouse.Products.where(describes_total_stock: false, 
-      product_id: shipment_details.map {|d| d.product_id}, batch: shipment_details.map {|d| d.batch})
+    ActiveRecord::Base.transaction do
+      shipment_details.each do |detail|
+        WarehouseProduct.return_for_warehouse(order.warehouse_id, detail.product_id, detail.batch, detail.quantity)
+      end
+      shipment_details.destroy_all
+      order.update_attributes!(state: "PAYMENT_ACCEPTED")
+      OrderAction.create!(order_id: order.id, worker_id: @current_user.id, description: "Regresó la orden para volver a surtir")
+      flash[:success] = "Regresó la orden para volver a surtir"
+    end
 
-    shipment_details.each do |detail|
-      warehouse_products.each do |warehouse_product|
-        break_loop = false
-        if detail.product_id == warehouse_product.product_id and detail.batch == warehouse_product.batch
-          WarehouseProduct.return(warehouse_product.id, detail.quantity)
-          break_loop = true
-        end # if end #
-        break if break_loop
-      end # warehouse_products.each #
-    end # shipment_details.each #
-
-    shipment_details.destroy_all
-    order.update_attribute(:state, "PAYMENT_ACCEPTED")
-    OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Regresó la orden para volver a surtir")
-    flash[:success] = "Regresó la orden para volver a surtir"
+    flash[:info] = "Ocurrió un error inesperado al devolver" unless flash[:success].present?
     redirect_to admin_orders_path(type: "INSPECTION")
   end # def supply_error #
 
@@ -243,18 +234,17 @@ class Admin::OrdersController < AdminController
     deny_access! and return unless @current_user.has_permission?("orders@search")
 
     @warehouses = Warehouse.all.order(:name)
-    if params[:start_date].blank? and params[:end_date].blank? and params[:reference].blank?
+    unless (params[:start_date].present? and params[:end_date].present?) or params[:reference].present?
       flash.now[:info] = "Se requiere estipule al menos una fecha de inicio y fin o un folio." and return
-    end
-    
-    if (params[:start_date].present? and params[:end_date].blank?) or
-      (params[:end_date].present? and params[:start_date].blank?)
-      flash.now[:info] = "Se requiere estipule la fecha de inicio y también la de fin" and return
     end
 
     if !params[:reference].blank?
-      @order = Order.find_by(hash_id: params[:reference].strip) and return
-      flash.now[:info] = "Orden con referencia: #{params[:reference]} no encontrada :(" and return unless @order
+      @order = Order.find_by!(hash_id: params[:reference].strip)
+      if @order
+        return
+      else
+        flash.now[:info] = "Órden con referencia: #{params[:reference]} no encontrada" and return
+      end
     end
 
     if params[:warehouse_id]
@@ -470,24 +460,6 @@ class Admin::OrdersController < AdminController
         statements[:warehouse] = @current_user.warehouse_id
       end
       return statements
-    end
-
-    def getOrdersFor(statements)
-      if params[:distributor].present?
-        distributor = Distributor.find_by!(hash_id: params[:distributor])
-  
-        Order.joins(:Distributor)
-          .where(distributors: {hash_id: params[:distributor]})
-          .where(statements[:where])
-          .byWarehouse(statements[:warehouse])
-          .order(statements[:order])
-          .includes(City: :State).includes(:Distributor, :Client)
-      else
-        Order.where(statements[:where])
-          .byWarehouse(statements[:warehouse])
-          .order(statements[:order])
-          .includes(City: :State).includes(:Distributor, :Client)
-      end
     end
 
     def verify_payment_folio(folio)

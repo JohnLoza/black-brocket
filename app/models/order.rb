@@ -37,6 +37,24 @@ class Order < ApplicationRecord
     return str
   end
 
+  def self.by_statements(statements, distributor_id)
+    if distributor_id.present?
+      distributor = Distributor.find_by!(hash_id: distributor_id)
+
+      Order.joins(:Distributor)
+        .where(distributors: {hash_id: distributor_id})
+        .where(statements[:where])
+        .byWarehouse(statements[:warehouse])
+        .order(statements[:order])
+        .includes(City: :State).includes(:Distributor, :Client)
+    else
+      Order.where(statements[:where])
+        .byWarehouse(statements[:warehouse])
+        .order(statements[:order])
+        .includes(City: :State).includes(:Distributor, :Client)
+    end
+  end
+
   private
     def generate_hash_id
       loop do

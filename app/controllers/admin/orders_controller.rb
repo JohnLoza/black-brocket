@@ -33,7 +33,7 @@ class Admin::OrdersController < AdminController
 
     @order = Order.find_by!(hash_id: params[:id])
     if params[:accept] == "true"
-      verify_payment_folio or return
+      verify_payment_folio(params[:payment_folio]) or return
 
       new_state = params[:local_order].nil? ? "PAYMENT_ACCEPTED" : "PAYMENT_ACCEPTED_LOCAL"
       @order.update_attributes(state: new_state, reject_description: nil, payment_folio: params[:payment_folio])
@@ -123,6 +123,8 @@ class Admin::OrdersController < AdminController
     shipment_details = OrderProductShipmentDetail.where(order_id: order.id)
 
     warehouse = order.Warehouse
+    # TODO refactor removing the warehouse_products SQL 
+    # and just use a new .return method that receives a product_id, a batch and quantity
     warehouse_products = warehouse.Products.where(describes_total_stock: false, 
       product_id: shipment_details.map {|d| d.product_id}, batch: shipment_details.map {|d| d.batch})
 
@@ -149,6 +151,10 @@ class Admin::OrdersController < AdminController
 
     @label_styles = get_label_styles
     @order = Order.find_by!(hash_id: params[:id])
+    unless ["PAYMENT_ACCEPTED","LOCAL"].include? @order.state
+      flash[:info] = "Esta órden ya ha sido procesada"
+      redirect_to admin_orders_path + "?type=CAPTURE_BATCHES" and return
+    end
 
     product_ids = Array.new
     @details = @order.Details
@@ -162,33 +168,32 @@ class Admin::OrdersController < AdminController
 
     order = Order.find_by!(hash_id: params[:id])
     unless ["PAYMENT_ACCEPTED","LOCAL"].include? order.state
+      flash[:info] = "Esta órden ya ha sido procesada"
       redirect_to admin_orders_path + "?type=CAPTURE_BATCHES" and return
     end
 
     ActiveRecord::Base.transaction do
-      while params[:product_id].each.with_index do |product_id, indx|
+      order_details = OrderDetail.required_products_hash(order.id)
+
+      params[:product_id].each_with_index do |product_id, indx|
         detail = OrderProductShipmentDetail.create!(order_id: order.id, batch: params[:batch][indx],
           product_id: product_id, quantity: params[:quantity][indx], warehouse_id: order.warehouse_id)
-        
         detail.warehouse_detail.withdraw(detail.quantity)
+        order_details[product_id][:quantity_captured] += detail.quantity
       end
+      verify_details_captured(order_details)
 
-      shipment_details = OrderProductShipmentDetail.select("product_id, sum(quantity) as t_quantity")
-        .where(order_id: order.id).group(:product_id)
-      order_details = OrderDetail.select(:product_id, :quantity).where(order_id: order.id)
-      # Review quantities to see that are the same that the client wanted
-      validation = CustomValidation.validateOrderShipment(order_details, shipment_details)
-      flash[:info] = validation[:error_message] and raise ActiveRecord::Rollback unless validation[:success]
-
-      new_state = order.state == "LOCAL" ? "PICKED_UP" : "BATCHES_CAPTURED"
-      order.update_attribute(:state, new_state)
-      OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
-      flash[:success] = "Números de lote y cantidades guardadas"
+      order.state = order.state == "LOCAL" ? "PICKED_UP" : "BATCHES_CAPTURED"
+      order.save!
+      OrderAction.create!(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
     end # Transaction #
-
-    if flash[:success].nil? and flash[:info].blank?
-      flash[:info] = "Ocurrió un error al guardar, verifica la información introducida" 
-    end
+    
+    flash[:success] = "Números de lote y cantidades guardados"
+  rescue ActiveRecord::RecordInvalid => e
+    flash[:info] = e.record.errors.full_messages[0]
+  rescue ActiveRecord::RangeError
+    flash[:info] = "Las cantidades solicitadas por el cliente y las capturadas no coinciden"
+  ensure
     redirect_to admin_orders_path + "?type=CAPTURE_BATCHES"
   end # def save_details #
 
@@ -493,6 +498,14 @@ class Admin::OrdersController < AdminController
         return false
       else
         return true
+      end
+    end
+
+    def verify_details_captured(details)
+      details.keys.each do |product_id|
+        if details[product_id][:products_required_by_the_user] != details[product_id][:quantity_captured]
+          raise ActiveRecord::RangeError, "Cantidades solicitadas y capturadas no coinciden"
+        end
       end
     end
 end

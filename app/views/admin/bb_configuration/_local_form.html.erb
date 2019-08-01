@@ -35,16 +35,15 @@
 
       <section class="cities col-sm-10 col-sm-offset-2">
 
-        <% @local["cities"].keys.each do |city_id| %>
+        <% @cities.each do |city| %>
           <div class="label label-success">
-            <%= @local["cities"][city_id] %>
+            <%= city.name %>
             <a class="text-danger">
               <i class="fa fa-times" onclick="$(this).parent().parent().remove()"></i>
             </a>
-            <input type="hidden" name="cities_ids[]" value="<%= city_id %>">
-            <input type="hidden" name="cities_names[]" value="<%= @local["cities"][city_id] %>">
+            <input type="hidden" name="cities_ids[]" value="<%= city.id %>">
           </div>
-        <% end if @local["cities"] # @local["cities"].keys.each end %>
+        <% end if @cities # @cities.each end %>
 
       </section>
 
@@ -79,7 +78,6 @@ function addCity() {
         <i class="fa fa-times" onclick="$(this).parent().parent().remove()"></i>
       </a>
       <input type="hidden" name="cities_ids[]" value="${opt_selected.val()}">
-      <input type="hidden" name="cities_names[]" value="${opt_selected.text()}">
     </div>
   `); // append the opt to the current selected cities
 

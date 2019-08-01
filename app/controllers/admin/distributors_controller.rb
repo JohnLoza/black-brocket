@@ -118,12 +118,11 @@ class Admin::DistributorsController < AdminController
   def answer_candidate
     deny_access! and return unless @current_user.has_permission?("distributors@requests")
     candidate = DistributorCandidate.find(params[:id])
-    if candidate
-      SendAnswerToCandidateJob.perform_later(candidate, params[:answer])
-      candidate.update_attribute(:read, true)
-      flash[:success] = "Respuesta a #{candidate.name} enviada!."
-      redirect_to admin_distributor_candidates_path
-    end
+    
+    SendAnswerToCandidateJob.perform_later(candidate, params[:answer])
+    candidate.update_attribute(:read, true)
+    flash[:success] = "Respuesta a #{candidate.name} enviada!."
+    redirect_to admin_distributor_candidates_path
   end
 
   private

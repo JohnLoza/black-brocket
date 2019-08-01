@@ -18,8 +18,8 @@
   </p>
   <section>
     <label>Alcance: </label>
-    <% local["cities"].keys.each do |city_id| %>
-      <%= content_tag :a, local["cities"][city_id], class: "label label-success" %>
+    <% @cities.each do |city| %>
+      <%= content_tag :a, city.name, class: "label label-success" if local["cities"].include? city.id %>
     <% end %>
   </section>
 

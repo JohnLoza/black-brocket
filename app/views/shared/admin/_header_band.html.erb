@@ -5,7 +5,7 @@
        <ol class="breadcrumb">
        	  <li><%= link_to "Inicio", admin_welcome_path %></li>
 
-       	  <% labels.each.with_index do |label, index| %>
+       	  <% labels.each_with_index do |label, index| %>
        	  	<% if index == labels.size - 1 %>
        	  		<li><b><%= link_to label, nil %></b></li>
        	  	<% else %>

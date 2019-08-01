@@ -35,7 +35,7 @@
   <p>Folio de factura: <b><%= o.invoice_folio %></b></p>
 <% end %>
 
-<% if !o.pay_img.file.nil? or !o.pay_pdf.file.nil? %>
+<% if o.payment.present? %>
   <%= link_to admin_download_payment_path(o.download_payment_key), target: "_blank" do %>
     <i class="fa fa-file-pdf-o fa-3x"></i>
   <% end %><br>

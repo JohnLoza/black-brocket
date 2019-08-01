@@ -71,42 +71,41 @@ class Api::WorkersApi::OrdersController < ApiController
   end
 
   def save_details
-    used_render_already = false
     order = Order.find_by!(hash_id: params[:id])
     unless ["PAYMENT_ACCEPTED", "LOCAL"].include? order.state 
       render status: 200, json: {success: false, info: "ORDER_NOT_ELIGIBLE"} and return
     end
-    
+
     ActiveRecord::Base.transaction do
-      indx = 0
-      while indx < params[:product_id].size do
-        detail = OrderProductShipmentDetail.create(order_id: order.id, batch: params[:batch][indx],
-          product_id: params[:product_id][indx], quantity: params[:quantity][indx], warehouse_id: order.warehouse_id)
-        # Rollback if there are any errors
-        if detail.errors.any?
-          render status: 200, json: {success: false, info: detail.errors.full_messages[0]}
-          used_render_already = true and raise ActiveRecord::Rollback
-        end
-        # Withdraw the quantity used for the shipment detail
-        detail.warehouse_detail.withdraw(detail.quantity) and indx += 1
-      end
+      order_details = OrderDetail.required_products_hash(order.id)
 
-      shipment_details = OrderProductShipmentDetail.select("product_id, sum(quantity) as t_quantity")
-        .where(order_id: order.id).group(:product_id)
-      order_details = OrderDetail.select(:product_id, :quantity).where(order_id: order.id)
-      # Review quantities to see that are the same that the client wanted
-      validation = CustomValidation.validateOrderShipment(order_details, shipment_details)
-      unless validation[:success]
-        render status: 200, json: {success: false, info: validation[:error_message]}
-        used_render_already = true and raise ActiveRecord::Rollback
+      params[:product_id].each_with_index do |product_id, indx|
+        detail = OrderProductShipmentDetail.create!(order_id: order.id, batch: params[:batch][indx],
+          product_id: product_id, quantity: params[:quantity][indx], warehouse_id: order.warehouse_id)
+        detail.warehouse_detail.withdraw(detail.quantity)
+        order_details[product_id][:quantity_captured] += detail.quantity
       end
+      verify_details_captured(order_details)
 
-      new_state = order.state == "LOCAL" ? "PICKED_UP" : "BATCHES_CAPTURED"
-      order.update_attribute(:state, new_state)
-      OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
+      order.state = order.state == "LOCAL" ? "PICKED_UP" : "BATCHES_CAPTURED"
+      order.save!
+      OrderAction.create!(order_id: order.id, worker_id: @current_user.id, description: "Capturó lotes y cantidades")
     end # Transaction #
 
-    return if used_render_already
     render status: 200, json: {success: true, info: "BATCHES_CAPTURED"}
+  rescue ActiveRecord::RecordInvalid => e
+    render status: 200, json: {success: false, info: "NOT_SAVED", error: e.record.errors.full_messages[0]}
+  rescue ActiveRecord::RangeError
+    error = "Las cantidades solicitadas por el cliente y las capturadas no coinciden"
+    render status: 200, json: {success: false, info: "NOT_SAVED", error: error}
   end # def save_details #
+
+  private
+    def verify_details_captured(details)
+      details.keys.each do |product_id|
+        if details[product_id][:products_required_by_the_user] != details[product_id][:quantity_captured]
+          raise ActiveRecord::RangeError, "Cantidades solicitadas y capturadas no coinciden"
+        end
+      end
+    end
 end

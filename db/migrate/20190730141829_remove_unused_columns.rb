@@ -51,5 +51,7 @@ class RemoveUnusedColumns < ActiveRecord::Migration[5.1]
 
     rename_column :commissions, :payment_img, :payment
     remove_column :commissions, :payment_pdf
+
+    ClientProduct.where(client_id: nil).destroy_all
   end
 end

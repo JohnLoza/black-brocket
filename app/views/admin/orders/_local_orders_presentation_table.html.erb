@@ -77,11 +77,11 @@
                 <%# render partial: "hidden_row", locals: {o: o} %>
               </td>
               <td class="text-center">
-                <% if o.pay_img.file or o.pay_pdf.file %>
+                <% if o.payment.present? %>
                   <%= link_to admin_download_payment_path(o.download_payment_key), target: "_blank" do %>
                     <i class="fa fa-file-o fa-3x"></i>
                   <% end %><br>
-                <% end # if !o.pay_img.blank? # %>
+                <% end # if o.payment.present? # %>
               </td>
               <td><%= l(o.created_at, format: :long) %></td>
               <td>
@@ -100,9 +100,9 @@
                       data: {confirm: "Seguro(a) de ser el archivo correcto?"},
                       html: {style: 'display: contents;'}) do |f| %>
 
-                    <%= f.file_field :pay_img, id: "field_#{o.hash_id}",
+                    <%= f.file_field :payment, id: "field_#{o.hash_id}",
                       style: "display: none;", multiple: false,
-                      onchange: "$('#pay_img_commit_#{o.hash_id}').click();" %>
+                      onchange: "$('#payment_commit_#{o.hash_id}').click();" %>
 
                     <a href="#" onclick="$('#field_<%=o.hash_id%>').click();"
                       class="btn btn-white btn-sm m-b-xs hidden-button">
@@ -110,7 +110,7 @@
                     </a>
 
                     <%= f.submit "Subir foto del pago".html_safe,
-                      id: "pay_img_commit_#{o.hash_id}", style: "display: none;" %>
+                      id: "payment_commit_#{o.hash_id}", style: "display: none;" %>
                   <% end %>
                 <% end %>
 
@@ -131,7 +131,7 @@
               </td>
               <td>
                 <% if @current_user.has_permission?('orders@accept_reject_payment') and 
-                  o.state == "PICKED_UP" and (o.pay_img.present? or o.pay_pdf.present?) %>
+                  o.state == "PICKED_UP" and o.payment.present? %>
                   <%= form_tag admin_accept_order_pay_path(o.hash_id, "true"), method: :put do  %>
                     <%= hidden_field_tag :local_order, true %>
                     <%= label_tag :payment_folio, 'Folio del pago/depósito' %>

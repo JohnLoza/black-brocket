@@ -20,5 +20,19 @@ class OrderDetail < ApplicationRecord
       w_product_id: product.id, ieps: product.Product.ieps, 
       total_iva: total_iva * info[product.hash_id].to_i,
       total_ieps: total_ieps * info[product.hash_id].to_i)
-end
+  end
+
+  def self.required_products_hash(order_id)
+    order_details = OrderDetail.select(:product_id, :quantity).where(order_id: order_id)
+    raise ActiveRecord::RecordNotFound unless order_details.size > 0
+
+    details_hash = Hash.new
+    order_details.each do |detail|
+      key = detail.product_id.to_s
+      details_hash[key] = Hash.new
+      details_hash[key][:products_required_by_the_user] = detail.quantity
+      details_hash[key][:quantity_captured] = 0
+    end
+    return details_hash
+  end
 end

@@ -7,7 +7,7 @@ class Admin::ProductsController < AdminController
     @products = Product.active.order_by_name
       .search(key_words: search_params, fields: [:hash_id, :name])
       .paginate(page: params[:page], per_page: 20)
-    @photos = ProdPhoto.by_product(@products.map(&:id).uniq).principal
+    @photos = ProdPhoto.by_product(@products.map(&:id)).principal
   end
 
   def new

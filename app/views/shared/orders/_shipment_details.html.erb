@@ -22,7 +22,7 @@
           <% if @fiscal_data.blank? %>
             <%= @client.name %> 
           <% else %>
-            <%=@fiscal_data.name%> <%=@fiscal_data.lastname%> <%=@fiscal_data.mother_lastname%>
+            <%= @fiscal_data.name %>
           <% end # if @fiscal_data.blank? # %>
         </td>
       </tr>

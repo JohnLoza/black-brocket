@@ -40,12 +40,12 @@ class Admin::DistributorWorkController < AdminController
     @client = Client.find_by!(hash_id: params[:id])
 
     ActiveRecord::Base.transaction do
-      @client.ProductPrices.delete_all
+      @client.ProductPrices.destroy_all
       params[:product].each do |product_id|
-        ClientProduct.create(client_id: @client.id, product_id: product_id, client_price: params[:product][product_id])
+        ClientProduct.create!(client_id: @client.id, product_id: product_id, client_price: params[:product][product_id])
       end
 
-      @client.update_attributes(has_custom_prices: true, is_new: false)
+      @client.update_attributes!(has_custom_prices: true, is_new: false)
       flash[:success] = "Precios guardados"
     end
 
@@ -59,7 +59,7 @@ class Admin::DistributorWorkController < AdminController
 
     @client_city = @client.City
     @messages = @current_user.ClientMessages.where(client_id: @client.id)
-                  .order(created_at: :desc).paginate(page: params[:page], per_page: 25)
+      .order(created_at: :desc).paginate(page: params[:page], per_page: 25)
 
     @client_image = @client.avatar_url(:mini)
     @client_username = @client.username
@@ -101,7 +101,7 @@ class Admin::DistributorWorkController < AdminController
     deny_access! and return unless client.worker_id == @current_user.id
 
     client.update_attributes(worker_id: nil)
-    @current_user.ClientMessages.where(client_id: client.id).delete_all
+    @current_user.ClientMessages.where(client_id: client.id).destroy_all
     flash[:success] = "Cliente transferido, si cometió un error puede buscarlo de nuevo en 'clientes sin distribuidor'"
     redirect_to admin_distributor_work_my_clients_path
   end

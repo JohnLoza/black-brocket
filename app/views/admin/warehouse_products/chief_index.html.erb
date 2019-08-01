@@ -25,20 +25,22 @@
                   <div class="ibox-content">
 
                     <div id="prepare_product_for_shipment">
-                      <% hash = session[:shipment_products].clone %>
-                      <% hash.delete("warehouse") %>
-                      <% hash.keys.each do |k| %>
-                        <% products = hash[k] %>
-                        <div class="col-md-12 well" id="<%=k%>">
+                      <% if session[:shipment_products].present? %>
+                        <% hash = session[:shipment_products].clone %>
+                        <% hash.delete("warehouse") %>
+                        <% hash.keys.each do |k| %>
+                          <% products = hash[k] %>
+                          <div class="col-md-12 well" id="<%=k%>">
 
-                            <h4 class="m-l">Lote(s) de producto: <small><%= hash[k]["name"] %></small></h4>
-                            <% products.keys.each do |p_k| %>
-                              <% if p_k != "name" %>
-                                  <%= render partial: "product_preparated", locals: {product: products[p_k], product_key: p_k} %>
+                              <h4 class="m-l">Lote(s) de producto: <small><%= hash[k]["name"] %></small></h4>
+                              <% products.keys.each do |p_k| %>
+                                <% if p_k != "name" %>
+                                    <%= render partial: "product_preparated", locals: {product: products[p_k], product_key: p_k} %>
+                                <% end %>
                               <% end %>
-                            <% end %>
 
-                        </div>
+                          </div>
+                        <% end %>
                       <% end %>
                     </div>
 

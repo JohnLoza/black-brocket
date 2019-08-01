@@ -96,9 +96,9 @@ class Admin::ClientsController < AdminController
     @visit_detail = SupervisorVisitDetail.new(visit_params)
 
     ActiveRecord::Base.transaction do
-      visit.save
+      visit.save!
       @visit_detail.visit_id = visit.id
-      @visit_detail.save
+      @visit_detail.save!
       flash[:success] = "Se guardaron los datos de la encuesta."
     end
 

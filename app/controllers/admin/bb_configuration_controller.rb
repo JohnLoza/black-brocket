@@ -14,7 +14,7 @@ class Admin::BbConfigurationController < AdminController
     json_array = Array.new
 
     # build json array
-    params[:weight].each.with_index do |value, indx|
+    params[:weight].each_with_index do |value, indx|
       json_array << {
         name: params[:name][indx],
         weight: params[:weight][indx].to_f,
@@ -36,6 +36,12 @@ class Admin::BbConfigurationController < AdminController
     rescue Errno::ENOENT # when file doesnt exist
       @locals = Hash.new
     end # begin end
+
+    @locals.keys.any? or return
+
+    cities_ids = Array.new
+    @locals.values.each{|local| local["cities"].each{|city| cities_ids << city }}
+    @cities = City.where(id: cities_ids)
   end
   
   def local
@@ -45,20 +51,17 @@ class Admin::BbConfigurationController < AdminController
     
     if params[:id]
       @local = Local.all[params[:id]]
-      render_404 unless @local
+      render_404 and return unless @local
+      @cities = City.where(id: @local["cities"])
     end
   end
 
   def set_local
-    render_404 and return unless params[:cities_ids]
+    render_404 and return unless params[:id] and params[:cities_ids]
+
     local = {location: params[:location], shipping_cost: params[:shipping_cost]}
-    cities = Hash.new
-
-    params[:cities_ids].each.with_index do |city_id, index|
-      cities[city_id] = params[:cities_names][index]
-    end
-    local[:cities] = cities
-
+    local[:cities] = params[:cities_ids].map {|city_id| city_id.to_i}
+      
     begin
       locals = Local.all
     rescue Errno::ENOENT # when file doesnt exist

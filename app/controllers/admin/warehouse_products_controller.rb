@@ -6,7 +6,6 @@ class Admin::WarehouseProductsController < AdminController
     elsif !@current_user.has_permission_category?("warehouse_manager")
       deny_access! and return
     end
-    session[:shipment_products] = Hash.new if !session[:shipment_products]
 
     @warehouse = @current_user.Warehouse
 
@@ -44,14 +43,13 @@ class Admin::WarehouseProductsController < AdminController
       product_id: product.id, describes_total_stock: false,
       expiration_date: params[:warehouse_product][:expiration_date]).take
 
-    success = false
     difference = detail.existence - params[:warehouse_product][:existence].to_i
     begin
       ActiveRecord::Base.transaction do
         master_detail.withdraw(difference)
         detail.withdraw(difference)
       end
-    rescue
+    rescue ActiveRecord::RangeError
       flash[:info] = "Stock resultante menor a 0"
     end
 
@@ -61,7 +59,6 @@ class Admin::WarehouseProductsController < AdminController
 
   def chief_index
     deny_access! and return unless @current_user.has_permission_category?("warehouse_products")
-    session[:shipment_products] = Hash.new if !session[:shipment_products]
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
 
@@ -74,7 +71,7 @@ class Admin::WarehouseProductsController < AdminController
 
   def prepare_product_for_shipment
     unless @current_user.has_permission?("warehouse_manager@transfer_mercancy") or
-           @current_user.has_permission?("warehouse_products@create_shipments")
+      @current_user.has_permission?("warehouse_products@create_shipments")
       deny_access! and return
     end
 
@@ -100,18 +97,17 @@ class Admin::WarehouseProductsController < AdminController
 
   def discard_shipment_preparation
     unless @current_user.has_permission?("warehouse_manager@transfer_mercancy") or
-           @current_user.has_permission?("warehouse_products@create_shipments")
+      @current_user.has_permission?("warehouse_products@create_shipments")
       deny_access! and return
     end
-
+    # TODO refactor
     @k = nil
     session[:shipment_products].keys.each do |k|
-      if k != "warehouse"
-        has_the_target = session[:shipment_products][k].has_key?(params[:id])
-        if has_the_target
-          session[:shipment_products][k].delete(params[:id])
-          @k = k
-        end
+      next if k == "warehouse"
+      has_the_target = session[:shipment_products][k].has_key?(params[:id])
+      if has_the_target
+        session[:shipment_products][k].delete(params[:id])
+        @k = k
       end
     end
 
@@ -136,7 +132,7 @@ class Admin::WarehouseProductsController < AdminController
     shipment = Shipment.new(shipment_params)
 
     ActiveRecord::Base.transaction do
-      raise ActiveRecord::Rollback, "could not save shipment" unless shipment.save
+      shipment.save!
       session[:shipment_products].delete("warehouse")
       products = Product.select(:id, :hash_id).where("id in (?)", session[:shipment_products].keys)
 
@@ -153,20 +149,17 @@ class Admin::WarehouseProductsController < AdminController
             quantity: product_info["quantity"], batch: product_info["batch"], 
             expiration_date: product_info["expiration_date"], type: shipment.shipment_type, 
             target_warehouse_id: shipment.target_warehouse_id, origin_warehouse_id: shipment.origin_warehouse_id)
-          unless current_detail.save
-            flash[:info] = current_detail.errors.full_messages[0]
-            raise ActiveRecord::Rollback
-          end
+          current_detail.save!
 
         end # session[:shipment_products][product_id].keys.each #
 
       end # session[:shipment_products].keys.each #
 
-      session[:shipment_products] = nil
+      session.delete(:shipment_products)
       flash[:success] = "Envío registrado!"
     end
     
-    flash[:info] = "Ocurrió un error al guardar el envío" unless flash[:success].present? or flash[:info].present?
+    flash[:info] = "Ocurrió un error al guardar el envío" unless flash[:success].present?
     if shipment.shipment_type == "TRANSFER"
       redirect_to admin_warehouse_products_path(params[:warehouse_id])
     else
@@ -304,10 +297,8 @@ class Admin::WarehouseProductsController < AdminController
 
     if params[:warehouse_product][:min_stock].to_i > 0
       w_product = WarehouseProduct.joins(:Warehouse).joins(:Product)
-            .where(
-                  warehouses: {hash_id: params[:warehouse_id]},
-                  products: {hash_id: params[:id]},
-                  describes_total_stock: true).take
+        .where(warehouses: {hash_id: params[:warehouse_id]},
+          products: {hash_id: params[:id]}, describes_total_stock: true).take
 
       raise ActiveRecord::RecordNotFound unless w_product
       w_product.update_attributes(min_stock: params[:warehouse_product][:min_stock])

@@ -11,8 +11,8 @@ class Local
   end
 
   def self.forLocation(location)
-    location = location.to_s unless location.class == String
-    locals = self.all.select{|key, hash| hash["cities"].has_key? location }
+    raise ArgumentError, "location must be an Integer" unless location.class == Integer
+    locals = self.all.select{|key, hash| hash["cities"].include? location }
 
     return locals.values[0] || nil
   end

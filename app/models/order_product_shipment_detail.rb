@@ -10,11 +10,11 @@ class OrderProductShipmentDetail < ApplicationRecord
   private
     def warehouse_product_exists
       product_detail = WarehouseProduct.where(warehouse_id: warehouse_id,
-        product_id: product_id, batch: batch).take
+        product_id: product_id, batch: batch, describes_total_stock: false).take
       self.warehouse_detail = product_detail
       # add an error if the product with the given key and batch doesn't exist #
       unless product_detail
-        errors.add(:warehouse_detail, "No existe el producto #{product_id} con lote #{batch}")
+        errors.add(:warehouse_detail, "No existe el producto con lote #{batch}")
       end
     end
 
@@ -22,7 +22,7 @@ class OrderProductShipmentDetail < ApplicationRecord
       return unless self.warehouse_detail
       # if the current existence of the product is less than the one captured stop the execution #
       unless self.warehouse_detail.existence >= quantity
-        errors.add(:quantity, "No hay existencias suficientes para el producto #{product_id} con lote #{batch}")
+        errors.add(:quantity, "No hay existencias suficientes para el producto con lote #{batch}")
       end
     end
 end

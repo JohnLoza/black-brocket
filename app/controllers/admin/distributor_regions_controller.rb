@@ -12,7 +12,6 @@ class Admin::DistributorRegionsController < AdminController
 
   def create
     deny_access! and return unless @current_user.has_permission?("distributors@update_distribution_regions")
-    @saved = false
     @city = City.find_by!(id: params[:city_id])
 
     if @city.distributor_id == nil
@@ -28,9 +27,7 @@ class Admin::DistributorRegionsController < AdminController
   def destroy
     deny_access! and return unless @current_user.has_permission?("distributors@update_distribution_regions")
 
-    @deleted = false
     @city = City.find_by!(id: params[:id])
-
     distributor = Distributor.find_by!(hash_id: params[:dist_id])
 
     if @city.distributor_id == distributor.id

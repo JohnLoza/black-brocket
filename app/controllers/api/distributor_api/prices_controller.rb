@@ -33,7 +33,7 @@ class Api::DistributorApi::PricesController < ApiController
     client = Client.find_by!(hash_id: params[:id])
 
     ActiveRecord::Base.transaction do
-      client.ProductPrices.delete_all
+      client.ProductPrices.destroy_all
       params[:product].each do |product_id|
         ClientProduct.create(client_id: client.id, product_id: product_id, client_price: params[:product][product_id])
       end

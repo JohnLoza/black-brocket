@@ -315,15 +315,13 @@ class Admin::OrdersController < AdminController
       client = order.Client
       fiscal_data = client.FiscalData
       if !fiscal_data.blank?
-        f.puts("#{last_folio}|3|#{client.hash_id}|#{fiscal_data.rfc}|#{fiscal_data.name} "+
-        "#{fiscal_data.lastname} #{fiscal_data.mother_lastname}|#{fiscal_data.street}|"+
-        "#{fiscal_data.extnumber}|#{fiscal_data.intnumber}|#{fiscal_data.col}||"+
-        "#{fiscal_data.City.name}|#{fiscal_data.City.State.name}|México|#{fiscal_data.cp}|#{client.email}")
+        f.puts("#{last_folio}|3|#{client.hash_id}|#{fiscal_data.rfc}|#{fiscal_data.name}|
+        #{fiscal_data.street}|#{fiscal_data.extnumber}|#{fiscal_data.intnumber}|#{fiscal_data.col}||
+        #{fiscal_data.City.name}|#{fiscal_data.City.State.name}|México|#{fiscal_data.cp}|#{client.email}")
       else
-        f.puts("#{last_folio}|3|#{client.hash_id}||#{client.name} #{client.lastname} "+
-        "#{client.mother_lastname}|#{client.street}|#{client.extnumber}|"+
-        "#{client.intnumber}|#{client.col}||#{client.City.name}|"+
-        "#{client.City.State.name}|México|#{client.cp}|#{client.email}")
+        f.puts("#{last_folio}|3|#{client.hash_id}||#{client.name}|
+        #{client.street}|#{client.extnumber}|#{client.intnumber}|#{client.col}||
+        #{client.City.name}|#{client.City.State.name}|México|#{client.cp}|#{client.email}")
       end # if fiscal data #
 
       # writting products data #

@@ -65,7 +65,7 @@ class Admin::OrdersController < AdminController
     @details = @order.Details.includes(:Product) unless params[:only_address]
     @client = @order.Client
     @fiscal_data = @client.FiscalData
-    if !@fiscal_data.blank?
+    if @fiscal_data.present?
       @city = @fiscal_data.City
       @state = @city.State
     end
@@ -91,11 +91,11 @@ class Admin::OrdersController < AdminController
     @details = OrderDetail.where(order_id: @order.id)
     ActiveRecord::Base.transaction do
       @details.each {|d| WarehouseProduct.return(d.w_product_id, d.quantity)}
-      @order.update(state: "ORDER_CANCELED", cancel_description: params[:order][:cancel_description])
+      @order.update_attributes!(state: "ORDER_CANCELED", cancel_description: params[:order][:cancel_description])
 
-      Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
+      Notification.create!(client_id: @order.client_id, icon: "fa fa-comments-o",
         description: "Pedido cancelado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
-      OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Canceló la orden")
+      OrderAction.create!(order_id: @order.id, worker_id: @current_user.id, description: "Canceló la orden")
       flash[:success] = "La orden se canceló correctamente."
     end
 
@@ -155,7 +155,6 @@ class Admin::OrdersController < AdminController
 
   def save_details
     deny_access! and return unless @current_user.has_permission?("orders@capture_batches")
-    deny_access! and return if params[:product_id].nil?
 
     order = Order.find_by!(hash_id: params[:id])
     unless ["PAYMENT_ACCEPTED","LOCAL"].include? order.state

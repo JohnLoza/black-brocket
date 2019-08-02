@@ -65,7 +65,7 @@ class Client::OrdersController < ApplicationController
         redirect_to client_ecart_path(current_user.hash_id) and return
       else
         flash[:success] = "Orden guardada"; session.delete(:e_cart) # delete ecart contents
-        verify_fiscal_data or return # redirect to fiscal data if not complete and client asks for invoice
+        verify_fiscal_data or return 
         redirect_to client_orders_path(current_user.hash_id, info_for: order.hash_id) and return
       end
     end
@@ -134,12 +134,14 @@ class Client::OrdersController < ApplicationController
 
   private
     def verify_fiscal_data
+      return true if params[:invoice] == "0" # doesn't require invoice
+
       data = @current_user.FiscalData
-      unless data
-        flash[:info] = "Por favor completa tu información fiscal (con fines de facturación)"
-        redirect_to edit_client_fiscal_datum_path(@current_user.hash_id) and return false
-      end
-      return true
+      return true if data.present?
+      
+      flash[:info] = "Por favor completa tu información fiscal (con fines de facturación)"
+      redirect_to edit_client_fiscal_datum_path(@current_user.hash_id)
+      return false
     end
 
     def verify_client_address

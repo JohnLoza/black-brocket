@@ -39,6 +39,7 @@ class Client::ClientsController < ApplicationController
     @client = Client.new
     @states = State.order_by_name
     @cities = Array.new
+    params[:no_loader] = true
   end
 
   def create

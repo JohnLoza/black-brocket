@@ -69,11 +69,13 @@ class Api::DistributorsController < ApiController
       Notification.create(distributor_id: distributor.id, icon: "fa fa-comments-o",
                       description: "El usuario " + @current_user.username + " te envió un mensaje",
                       url: distributor_client_messages_path(@current_user.hash_id))
+      SendMessageNotificationJob.perform_later(user: distributor, sender: @current_user, message: params[:comment])
     elsif worker
       message.worker_id = worker.id
       Notification.create(worker_id: worker.id, icon: "fa fa-comments-o",
                       description: "El usuario " + @current_user.username + " te envió un mensaje",
                       url: admin_distributor_work_client_messages_path(@current_user.hash_id))
+      SendMessageNotificationJob.perform_later(user: worker, sender: @current_user, message: params[:comment])
     end
 
     if message.save

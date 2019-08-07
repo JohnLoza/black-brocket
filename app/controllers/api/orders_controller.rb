@@ -122,6 +122,7 @@ class Api::OrdersController < ApiController
     rescue ActiveRecord::RangeError
       render status: 200, json: {success: false, info: "NO_ENOUGH_STOCK"} and return
     end
+    SendOrderConfirmationJob.perform_later(@current_user, order)
     render status: 200, json: {success: true, info: "SAVED"} and return
   end
 

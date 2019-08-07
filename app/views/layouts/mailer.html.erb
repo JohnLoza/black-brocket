@@ -3,12 +3,40 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
-      /* Email styles need to be inline */
+      .email-header{
+        background-color: #E6CA9A;
+        border-radius: 3px;
+      }
+
+      .email-header, .email-body{
+        margin-left: 20em;
+        margin-right: 20em;
+      }
+
+      .logo{
+        width: 65px;
+        padding: 10px;
+      }
+
+      span.title{
+        color: #353535;
+        font-size: 25px;
+        float: right !important;
+        padding-right: 1em;
+        padding-top: 1em;
+      }
+
+      .email-body{ 
+        color: #353535;
+        font-size: 14px;
+        padding: 0.5em;
+      }
+
       .button {
         background-color: #E6CA9A;
         border: none;
         border-radius: 10px;
-        color: #333;
+        color: #333 !important;
         padding: 15px 32px;
         text-align: center;
         text-decoration: none;
@@ -18,18 +46,47 @@
         cursor: pointer;
       }
 
-      a.button {
-        color: #333;
+      @media screen and (max-width: 1200px) {
+        .email-header, .email-body{
+          margin-left: 15em !important;
+          margin-right: 15em !important;
+        }
       }
+      @media screen and (max-width: 800px) {
+        .email-header, .email-body{
+          margin-left: 10em !important;
+          margin-right: 10em !important;
+        }
+      }
+      @media screen and (max-width: 720px) {
+        .email-header, .email-body{
+          margin-left: 5em !important;
+          margin-right: 5em !important;
+        }
+      }
+      @media screen and (max-width: 590px) {
+        .email-header, .email-body{
+          margin-left: 0.1em !important;
+          margin-right: 0.1em !important;
+        }
 
-      .logo{
-        width: 85px;
+        .email-header span{
+          font-size: 16px;
+          padding-right: 0.5em;
+          padding-top: 2em;
+        }
       }
     </style>
   </head>
 
   <body>
-    <% image_tag 'black-brocket-gold-logo.png', class: 'logo' %><br>
-    <%= yield %>
+    <div class="email-header">
+      <%= mailer_image_tag "black-brocket-black-logo.png", class: "logo" %>
+      <%= content_tag :span, @user.name, class: "title" if @user.present? %>
+    </div>
+
+    <div class="email-body">
+      <%= yield %>
+    </div>
   </body>
 </html>

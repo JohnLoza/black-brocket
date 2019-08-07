@@ -1,0 +1,13 @@
+<p>Estás a punto de terminar tu compra, <br> 
+  solo hace falta que realices tu pago y ¡listo!</p>
+
+<%= link_to "Ver detalles para pagar",
+  client_orders_url(@user, info_for: @order), class: 'button' %>
+<br><br>
+<%= link_to "Ver detalles de la compra", 
+  client_order_url(@user, @order)%>
+
+<p>
+  En caso de algún error puedes cancelar tu compra
+  <%= link_to "aquí", client_orders_url(@user) %>
+</p>

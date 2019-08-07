@@ -67,6 +67,7 @@ class Distributor::ClientsController < ApplicationController
 
     Notification.create(client_id: @client.id, icon: "fa fa-comments-o",
       description: "El distribuidor respondió a tu mensaje", url: client_my_distributor_path)
+    SendMessageNotificationJob.perform_later(user: @client, sender: @current_user, message: params[:comment])
 
     @distributor_image = @current_user.avatar_url(:mini)
     @distributor_username = @current_user.username

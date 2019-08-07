@@ -4,8 +4,7 @@
   debes confirmar tu dirección de correo electrónico.</p>
 
 <%= link_to 'Confirmar Correo',
-  client_email_confirmation_url(@user.validate_email_digest, host: 'blackbrocket.com'),
-  class: 'button' %>
+  client_email_confirmation_url(@user.validate_email_digest), class: 'button' %>
 
 <p>Gracias, <br>
   El equipo de BlackBrocket.</p>

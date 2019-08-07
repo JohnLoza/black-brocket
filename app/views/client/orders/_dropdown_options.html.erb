@@ -52,7 +52,7 @@
     <% if o.state == "WAITING_FOR_PAYMENT" or o.state == "LOCAL" %>
       <li role="separator" class="divider"></li>
       <li>
-        <%= link_to client_cancel_order_path(@current_user.hash_id, o.hash_id), class: "icon",
+        <%= link_to client_order_path(@current_user.hash_id, o.hash_id), class: "icon",
           data:{confirm: "Seguro(a) de cancelar el pedido?"}, remote: true, method: :delete do %>
           <i class="fa fa-trash"></i><span>Cancelar</span>
         <% end %>

@@ -115,7 +115,9 @@ class Client::ClientsController < ApplicationController
     @distributor = @current_user.Worker if @current_user.worker_id
     @distributor ||= @current_user.City.Distributor
     @message = ClientDistributorComment.new(message_params(@distributor))
+
     notificate_new_message(@distributor)
+    SendMessageNotificationJob.perform_later(user: @distributor, sender: @current_user, message: params[:comment])
 
     @client_image = @current_user.avatar_url(:mini)
     @client_username = @current_user.name

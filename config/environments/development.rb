@@ -54,6 +54,7 @@ Rails.application.configure do
 
   # Mail configuration
   config.action_mailer.delivery_method = :smtp
+  config.action_mailer.default_url_options = { :host => "192.168.1.90:3000" }
   config.openssl_verify_mode = OpenSSL::SSL::VERIFY_NONE
   config.action_mailer.smtp_settings = {
     address:              'mail.blackbrocket.com',

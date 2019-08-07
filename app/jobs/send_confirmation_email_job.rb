@@ -2,6 +2,6 @@ class SendConfirmationEmailJob < ApplicationJob
   queue_as :default
 
   def perform(user)
-    ApplicationMailer.with(user: user).send_confirmation_email.deliver_now
+    ApplicationMailer.with(user: user).email_confirmation.deliver_now
   end
 end

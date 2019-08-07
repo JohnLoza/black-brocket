@@ -22,9 +22,7 @@ class Admin::ProductsController < AdminController
     if @product.save
       @product.update_attribute(:hash_id, generateAlphKey("P", @product.id))
       create_render_files_and_photos
-      # create warehouse products based on current product
       create_warehouse_products
-      # create product special prices slots for each user #
       create_client_prices
 
       redirect_to admin_products_path, flash: {success: "Producto creado" }
@@ -77,7 +75,7 @@ class Admin::ProductsController < AdminController
       @photos = @product.Photos
       flash.now[:danger] = "Ocurrió un error al guardar los datos, inténtalo de nuevo por favor."
       render :edit
-    end # if @product.update_attributes(product_params) #
+    end
   end
 
   def destroy
@@ -142,10 +140,9 @@ class Admin::ProductsController < AdminController
     end
 
     def create_render_files_and_photos
-      # create the files containing the description and preparation texts
       create_product_file(description_param, "description") if description_param
       create_product_file(preparation_param, "preparation") if preparation_param
-      # create the main photo and other photos if any
+      
       create_photo(photo: main_photo_param, principal: true) if main_photo_param
       photo_params.each do |photo|
         create_photo(photo: photo, principal: false)

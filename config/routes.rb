@@ -280,13 +280,13 @@ Rails.application.routes.draw do
     get "user/:user_id/ecart" => "ecarts#show", as: :ecart
     put 'products/:id/add_to_cart' => 'ecarts#add_to_cart', as: :add_to_cart
     put 'user/:user_id/ecart/remove/:product' => "ecarts#remove_from_cart", as: :remove_from_cart
-    put 'user/:user_id/ecart/change_quantity' => "ecarts#update_quantity", as: :ecart_update_quantity
+    put 'user/:user_id/ecart/update_quantity' => "ecarts#update_quantity", as: :ecart_update_quantity
     get 'user/:user_id/ecart/sr_parcel_prices' => "ecarts#sr_parcel_prices", as: :ecart_sr_parcel_prices
 
     get 'user/:user_id/orders/' => "orders#index", as: :orders
     get 'user/:user_id/orders/:id' => "orders#show", as: :order
     post 'user/:user_id/orders/' => "orders#create", as: :create_order
-    delete 'user/:user_id/orders/:id' => "orders#cancel", as: :cancel_order
+    delete 'user/:user_id/orders/:id' => "orders#cancel"
     put 'user/:user_id/orders/:id' => "orders#upload_payment", as: :upload_pay_order
     get 'user/:user_id/orders/:id/get_payment' => 'orders#get_payment', as: :get_order_payment
     get 'user/:user_id/orders/:id/get_bank_payment_info' => 'orders#get_bank_payment_info', as: :get_bank_payment_info

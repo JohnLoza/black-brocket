@@ -45,6 +45,8 @@ class Admin::OrdersController < AdminController
       Notification.create(client_id: @order.client_id, icon: "fa fa-comments-o",
         description: "El pago de tu pedido ha sido rechazado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Rechazó pago")
+      NotifyPaymentRejectedJob.perform_later(user: @order.Client, 
+        order: @order, reason: params[:order][:reject_description])
     end
 
     flash[:success] = t(@order.state)
@@ -98,6 +100,9 @@ class Admin::OrdersController < AdminController
       OrderAction.create!(order_id: @order.id, worker_id: @current_user.id, description: "Canceló la orden")
       flash[:success] = "La orden se canceló correctamente."
     end
+
+    NotifyOrderCanceledJob.perform_later(user: @order.Client, 
+      order: @order, reason: params[:order][:cancel_description])
 
     flash[:info] = "Oops, algo no salió como lo esperado..." unless flash[:success].present?
     redirect_to admin_orders_path(type: "CANCEL")

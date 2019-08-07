@@ -64,7 +64,8 @@ class Client::OrdersController < ApplicationController
       if flash[:info].present?
         redirect_to client_ecart_path(current_user.hash_id) and return
       else
-        flash[:success] = "Orden guardada"; session.delete(:e_cart) # delete ecart contents
+        flash[:success] = "Orden guardada"; session.delete(:e_cart)
+        SendOrderConfirmationJob.perform_later(current_user, order)
         verify_fiscal_data or return 
         redirect_to client_orders_path(current_user.hash_id, info_for: order.hash_id) and return
       end
@@ -83,6 +84,10 @@ class Client::OrdersController < ApplicationController
     end
 
     respond_to do |format|
+      format.html{
+        flash[:info] = "Órden #{@order} cancelada"
+        redirect_to client_orders_path(@current_user)
+      }
       format.js{ render :cancel, layout: false }
     end
   end

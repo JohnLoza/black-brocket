@@ -79,16 +79,11 @@
 
   <% if ["WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED","PAYMENT_REJECTED","LOCAL"].include? o.state %>
     <div class="row order-box-foot">
-      <%= form_for(o, url: client_upload_pay_order_path(@current_user.hash_id, o.hash_id),
-        method: :put, html:{ id:"form_photo_#{o.hash_id}"}) do |f| %>
+      <input class="hidden" type="file" name="order[payment]"
+        onchange="resize_and_upload(this, '<%= o.hash_id %>')">
 
-        <%= f.file_field :payment, id: "field_#{o.hash_id}",
-          style: "display: none;", multiple: false,
-          onchange: "$('#form_photo_#{o.hash_id}').submit();" %>
-
-        <span onclick="$('#field_<%=o.hash_id%>').click();"
-          class="btn btn-gold pull-right">Enviar comprobante de pago</span>
-      <% end %>
+      <span onclick="$(this).parent().find('input').click();"
+        class="btn btn-gold pull-right">Enviar comprobante de pago</span>
 
       <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id),
         class: "darklink label-custom-2", style: "cursor:pointer; color: #FEFEFE;", 

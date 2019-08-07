@@ -98,14 +98,18 @@ class Client::OrdersController < ApplicationController
 
     order = Order.find_by!(hash_id: params[:id])
     render_404 and return unless valid_states.include? order.state
+
+    payment = params[:order][:payment]
+    timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+    extension = payment.content_type.split('/')[1]
+    payment.original_filename = "#{timestamp}.#{extension}"
     
     order.payment = params[:order][:payment]
     order.state = "PAYMENT_DEPOSITED" unless order.state == "LOCAL"
-    order.download_payment_key = SecureRandom.urlsafe_base64
-    flash[:success] = "Pago guardado, esperando confirmación" if order.save
+    order.download_payment_key = SecureRandom.urlsafe_base64 unless order.download_payment_key.present?
+    order.save
 
-    flash[:info] = "Ocurrió un error al guardar el pago, recuerda que los formatos admitidos son: pdf, jpg y png." unless flash[:success].present?
-    redirect_to client_orders_path(@current_user)
+    render status: 200, json: { success: order.valid? }
   end
 
   def get_payment

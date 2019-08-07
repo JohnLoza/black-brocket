@@ -27,4 +27,4 @@ $("#order-grand-total").text(money_format(new_grand_total.toString()));
     locals: {message_type: :success, message: message} %>`);
 <% end %>
 
-$(".loader-overlay").remove();
+removeLoader();

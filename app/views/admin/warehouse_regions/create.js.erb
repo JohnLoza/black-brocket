@@ -16,4 +16,4 @@
   $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
     locals: {message_type: :info, message: "El estado no existe o ya está asignado."} %>`);
 <% end %>
-$(".loader-overlay").remove();
+removeLoader();

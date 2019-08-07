@@ -119,15 +119,42 @@
   }
 </style>
 
-<% if params[:info_for].present? %>
+<%= javascript_include_tag 'image-tools' %>
+
 <script type="text/javascript">
-  $(document).ready(function(){
-    $("#payment-info-link-<%= params[:info_for] %>").click();
-    costs = $(".individual-cost");
-    costs.each(function(){
-      $(this).html(money_format($(this).text()));
+  function resize_and_upload(trigger, order_id) {
+    initLoader();
+
+    ImageTools.resize(trigger.files[0], {
+      width: 720,
+      height: 720
+    }, function(blob, resized) {
+      let url = "<%= client_upload_pay_order_path(@current_user.hash_id, "to_be_replaced", format: :json) %>";
+      url = url.replace("to_be_replaced", order_id);
+
+      let form_data = new FormData();
+      form_data.append("order[payment]", blob);
+
+      $.ajax({
+        type: "PUT", 
+        url: url, data: 
+        form_data, 
+        processData: false,
+        contentType: false
+      }).done(function(response) {
+        if(response.success){
+          $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+            locals: {message_type: :success, message: "Comprobante de pago guardado"} %>`);
+        }else{
+          $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+            locals: {message_type: :success, message: "Los formatos admitidos son jpg, png y pdf."} %>`);
+        }
+        removeLoader();
+        //location.reload();
+      });
     });
-  });
+
+  }
 
   function money_format(number){
     return parseFloat(number).toFixed(2).replace(/./g, function(c, i, a) {
@@ -135,4 +162,15 @@
     });
   }
 </script>
+
+<% if params[:info_for].present? %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $("#payment-info-link-<%= params[:info_for] %>").click();
+      costs = $(".individual-cost");
+      costs.each(function(){
+        $(this).html(money_format($(this).text()));
+      });
+    });
+  </script>
 <% end %>

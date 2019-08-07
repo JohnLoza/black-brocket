@@ -7,4 +7,4 @@
 <% else %>
   $("#dismissible_alerts").append("<%= j render partial: '/shared/dismissible_alert', locals: {message_type: :success, message: 'Ocurrió un error al guardar, inténtalo de nuevo.'} %>");
 <% end %>
-$(".loader-overlay").remove();
+removeLoader();

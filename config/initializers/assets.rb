@@ -29,3 +29,5 @@ Rails.application.config.assets.precompile += %w( ekko-lightbox.min.js )
 
 Rails.application.config.assets.precompile += %w( parsley-custom.js )
 Rails.application.config.assets.precompile += %w( Chart.min.js )
+
+Rails.application.config.assets.precompile += %w( image-tools.js )

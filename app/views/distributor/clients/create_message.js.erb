@@ -1,4 +1,4 @@
 <% to_render = j render partial: "/shared/message", locals: {message: @message} %>
 $("#messages-container").prepend("<%= to_render %>");
 $("#comment").val("");
-$(".loader-overlay").remove();
+removeLoader();

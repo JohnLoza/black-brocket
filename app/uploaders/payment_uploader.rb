@@ -24,7 +24,7 @@ class PaymentUploader < CarrierWave::Uploader::Base
   end
 
   process :rotate_according_to_exif
-  process :resize_to_limit => [1200, 1000], :if => :scale_image?
+  process :resize_to_limit => [720, 720], :if => :scale_image?
 
   def rotate_according_to_exif
     return unless its_an_image?
@@ -54,7 +54,7 @@ class PaymentUploader < CarrierWave::Uploader::Base
     width = image_width #function defined above
     height = image_height #function defined above
 
-    if width > 1200 || height > 1000
+    if width > 720 || height > 720
       return true
     else
       return false

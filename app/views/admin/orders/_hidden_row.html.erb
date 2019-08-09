@@ -50,7 +50,7 @@
   <% end %>
 
   <%= link_to "Rechazar", "#", class: "btn btn-danger btn-sm m-t" ,
-            onclick: "update_reject_pay_form('#{o.hash_id}')" %>
+    onclick: "update_reject_pay_form('#{o.hash_id}')" %>
 <% end # if o.state == "PAYMENT_DEPOSITED" # %>
 
 <% if @current_user.has_permission?('orders@capture_tracking_code') and params[:type] == "CAPTURE_TRACKING_CODE" %>

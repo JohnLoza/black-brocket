@@ -97,13 +97,11 @@ class Api::OrdersController < ApiController
       render status: 200, json: {success: false, info: "FISCAL_DATA_NOT_FOUND"} and return
     end
     order = setBasicInfo()
-    # find the products the client want to buy #
+
     products = WarehouseProduct.where(hash_id: params[:product_details].keys)
       .where(describes_total_stock: true).includes(:Product)
-
     order.warehouse_id = products[0].warehouse_id
 
-    # get the corresponding prices and create the details of the order #
     custom_prices = @current_user.ProductPrices.where(product_id: products.map(&:product_id))
     products.each do |p|
       detail = OrderDetail.for(custom_prices, p, params[:product_details])
@@ -111,19 +109,28 @@ class Api::OrdersController < ApiController
       order.Details << detail
     end
 
-    # finally save all the stuff to the database #
-    begin
-      ActiveRecord::Base.transaction do
-        order.save!
-        products.each {|p| p.withdraw(params[:product_details][p.hash_id].to_i)}
-      end
-    rescue ActiveRecord::RecordInvalid
-      render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
-    rescue ActiveRecord::RangeError
-      render status: 200, json: {success: false, info: "NO_ENOUGH_STOCK"} and return
+    ActiveRecord::Base.transaction do
+      order.save!
+      products.each {|p| p.withdraw(params[:product_details][p.hash_id].to_i)}
+      order.create_conekta_order(@current_user, products, custom_prices) if order.payment_method_code == "OXXO_PAY"
     end
+
+  rescue ActiveRecord::RecordInvalid
+    render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
+  rescue ActiveRecord::RangeError
+    render status: 200, json: {success: false, info: "NO_ENOUGH_STOCK"} and return
+  rescue Conekta::ParameterValidationError => error
+    render status: 200, json: {success: false, info: "SAVE_ERROR_CONEKTA_1010"} and return
+    logger.error error.message
+    logger.error error.backtrace.join("\n")
+  rescue Conekta::ErrorList => error_list
+    render status: 200, json: {success: false, info: "SAVE_ERROR_CONEKTA_1020"} and return
+    for error_detail in error_list.details do
+      logger.info error_detail.message
+    end
+  ensure
     SendOrderConfirmationJob.perform_later(@current_user, order)
-    render status: 200, json: {success: true, info: "SAVED"} and return
+    render status: 200, json: {success: true, info: "SAVED"}
   end
 
   def cancel
@@ -180,7 +187,19 @@ class Api::OrdersController < ApiController
     render_404 and return if params[:payment_method].nil?
     order = @current_user.Orders.find_by!(hash_id: params[:id])
 
-    order.update_attributes(payment_method: params[:payment_method])
+    ActiveRecord::Base.transaction do
+      order.update_attributes(payment_method: params[:payment_method])
+      if order.payment_method_code == "OXXO_PAY"
+        break if order.conekta_order_id.present?
+
+        order_details = order.Details
+        products = WarehouseProduct.where(id: order_details.map{ |detail| detail.w_product_id })
+          .where(describes_total_stock: true).includes(:Product)
+        custom_prices = @current_user.ProductPrices.where(product_id: products.map(&:product_id))
+
+        order.create_conekta_order(@current_user, products, custom_prices)
+      end
+    end
 
     render status: 200, json: {success: true, info: "SAVED"}
   end

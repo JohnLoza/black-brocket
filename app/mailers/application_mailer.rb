@@ -29,7 +29,19 @@ class ApplicationMailer < ActionMailer::Base
   def order_confirmation
     @user = params[:user]
     @order = params[:order]
-    mail(to: @user.email, subject: "Termina tu compra - Black Brocket")
+
+    if @order.payment_method_code == "OXXO_PAY"
+      require "conekta"
+      Conekta.api_key = "key_H4tGgYkAV9sG8zpLw6sUzA"
+      Conekta.api_version = "2.0.0"
+
+      @conekta_order = Conekta::Order.find(@order.conekta_order_id)
+      mail(to: @user.email, subject: "Termina tu compra ##{@order.hash_id}- Black Brocket") do |format|
+        format.html{ render "oxxo_order_confirmation", layout: false }
+      end
+    else
+      mail(to: @user.email, subject: "Termina tu compra ##{@order.hash_id}- Black Brocket")
+    end 
   end
 
   def message_notification

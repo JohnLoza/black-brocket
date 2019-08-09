@@ -55,11 +55,77 @@ class Order < ApplicationRecord
     end
   end
 
+  def json_guides
+    begin
+      JSON.parse self.guides
+    rescue => exception
+      nil
+    end
+  end
+
+  def payment_method_code
+    if self.payment_method == 0
+      "OXXO_PAY"
+    else
+      "BANK_DEPOSIT"
+    end
+  end
+
+  def payment_method_label
+    if self.payment_method == 0
+      "Oxxo Pay"
+    else
+      "Depósito bancario / transferencia"
+    end
+  end
+
+  def create_conekta_order(current_user, products, custom_prices)
+    require "conekta"
+    Conekta.api_key = "key_H4tGgYkAV9sG8zpLw6sUzA"
+    Conekta.api_version = "2.0.0"
+
+    line_items = fill_line_items(self, products, custom_prices)
+    
+    shipping_lines = [{ 
+      amount: self.json_guides["shipping_cost"] * 100, 
+      carrier: self.json_guides["provider"]
+    }]
+
+    conekta_order = Conekta::Order.create({
+      line_items: line_items,
+      shipping_lines: shipping_lines,
+      currency: "MXN",
+      customer_info: current_user.conekta_customer_info,
+      shipping_contact: current_user.conekta_shipping_contact,
+      charges: [{
+        payment_method: { type: "oxxo_cash" }
+      }]
+    })
+    
+    self.update_attributes!(conekta_order_id: conekta_order.id)
+  end
+
   private
     def generate_hash_id
       loop do
         self.hash_id = Utils.new_alphanumeric_token(9).upcase unless self.hash_id.present?
         break unless hash_id_taken?(self.hash_id)
       end
+    end
+
+    def fill_line_items(order, warehouse_products, custom_prices)
+      line_items = Array.new
+      order.Details.each do |order_detail|
+        wp = warehouse_products.find{ |wp| wp.product_id == order_detail.product_id }
+        product = wp.Product
+        price = Product.priceFor(wp, custom_prices)
+        line_items << { 
+          name: product.name, 
+          unit_price: (price * 100).to_i,
+          quantity: order_detail.quantity
+        }
+      end
+
+      return line_items
     end
 end

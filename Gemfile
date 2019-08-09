@@ -44,21 +44,17 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-# CarrierWave provides a simple and extremely flexible way to upload files from Ruby applications. #
-gem 'carrierwave', '~> 1.2.1'
-# Use SCSS for stylesheets
-gem 'sass-rails'
-# Compress js
-gem 'uglifier'
-# MiniMagick gives you access to all the command line options ImageMagick has (it's used by carrierwave too, for image manipulation) #
-gem 'mini_magick', '~> 4.3.6'
-# WillPaginate is a pagination library #
-gem 'will_paginate', '~> 3.0.7'
-# Integrates the Twitter Bootstrap pagination component with the will_paginate pagination gem. #
-gem 'will_paginate-bootstrap', '~> 1.0.1'
-# rqrcode for qr code generation #
-gem 'rqrcode'
-# barby for barcode rendering #
-gem 'barby'
-# jQuery #
 gem 'jquery-rails'
+gem 'sass-rails'
+gem 'uglifier'
+
+gem 'carrierwave', '~> 1.2.1'
+gem 'mini_magick', '~> 4.3.6' # required by carrierwave
+
+gem 'will_paginate', '~> 3.0.7'
+gem 'will_paginate-bootstrap', '~> 1.0.1'
+
+gem 'rqrcode' # qr codes
+gem 'barby' # barcodes
+
+gem 'conekta'

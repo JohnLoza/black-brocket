@@ -86,4 +86,22 @@ class Client < ApplicationRecord
     update_attribute(:last_distributor_visit, visit.visit_date)
   end
 
+  def conekta_customer_info
+    {
+      name: self.name,
+      email: self.email,
+      phone: self.cellphone || self.telephone
+    }
+  end
+
+  def conekta_shipping_contact
+    {
+      address: {
+        street1: "#{self.street_ref1} #{self.extnumber}",
+        postal_code: self.cp,
+        country: "MX"
+      }
+    }
+  end
+
 end

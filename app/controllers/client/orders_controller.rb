@@ -35,14 +35,12 @@ class Client::OrdersController < ApplicationController
 
   def create
     render_404 and return unless session[:e_cart].present?
-    order = setBasicInfo
+    order = setBasicInfo()
 
-    # find the products the client want to buy and verify stock #
     products = WarehouseProduct.where(hash_id: session[:e_cart].keys)
       .where(describes_total_stock: true).includes(:Product)
     order.warehouse_id = products[0].warehouse_id
 
-    # get the corresponding prices and create the details of the order #
     custom_prices = @current_user.ProductPrices.where(product_id: products.map(&:product_id))
     products.each do |p|
       detail = OrderDetail.for(custom_prices, p, session[:e_cart])
@@ -50,25 +48,33 @@ class Client::OrdersController < ApplicationController
       order.Details << detail
     end # products.each do #
 
-    # finally save all the stuff to the database #
-    begin
-      ActiveRecord::Base.transaction do
-        order.save!
-        products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
-      end
-    rescue ActiveRecord::RecordInvalid
-      flash[:info] = "ocurrió un error al procesar la órden"
-    rescue ActiveRecord::RangeError
-      flash[:info] = "No existe inventario suficiente"
-    ensure
-      if flash[:info].present?
-        redirect_to client_ecart_path(current_user.hash_id) and return
-      else
-        flash[:success] = "Orden guardada"; session.delete(:e_cart)
-        SendOrderConfirmationJob.perform_later(current_user, order)
-        verify_fiscal_data or return 
-        redirect_to client_orders_path(current_user.hash_id, info_for: order.hash_id) and return
-      end
+    ActiveRecord::Base.transaction do
+      order.save!
+      products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
+      order.create_conekta_order(@current_user, products, custom_prices) if order.payment_method_code == "OXXO_PAY"
+    end
+      
+  rescue ActiveRecord::RecordInvalid
+    flash[:info] = "Ocurrió un error al procesar la órden"
+  rescue ActiveRecord::RangeError
+    flash[:info] = "No existe inventario suficiente"
+  rescue Conekta::ParameterValidationError => error
+    flash[:info] = "Ocurrió un error al procesar la órden (ConektaError 1010)"
+    logger.error error.message
+    logger.error error.backtrace.join("\n")
+  rescue Conekta::ErrorList => error_list
+    flash[:info] = "Ocurrió un error al procesar la órden (ConektaError 1020)"
+    for error_detail in error_list.details do
+      logger.info error_detail.message
+    end
+  ensure
+    if flash[:info].present?
+      redirect_to client_ecart_path(current_user.hash_id) and return
+    else
+      flash[:success] = "Orden guardada"; session.delete(:e_cart)
+      SendOrderConfirmationJob.perform_later(current_user, order)
+      verify_fiscal_data or return 
+      redirect_to client_orders_path(current_user.hash_id, info_for: order.hash_id) and return
     end
   end
 
@@ -123,8 +129,15 @@ class Client::OrdersController < ApplicationController
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
     render_404 and return unless @order.payment_method.present?
     
-    @bank = Bank.find(@order.payment_method)
-    @bank_accounts = @bank.Accounts
+    if @order.payment_method_code == "OXXO_PAY"
+      require "conekta"
+      Conekta.api_key = "key_H4tGgYkAV9sG8zpLw6sUzA"
+      Conekta.api_version = "2.0.0"
+      @conekta_order = Conekta::Order.find(@order.conekta_order_id)
+    else
+      @bank = Bank.find(@order.payment_method)
+      @bank_accounts = @bank.Accounts
+    end
 
     respond_to do |format|
       format.js { render :get_bank_payment_info, layout: false }
@@ -134,7 +147,20 @@ class Client::OrdersController < ApplicationController
   def update_payment_method
     return if params[:order][:payment_method].nil?
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
-    @order.update_attributes(payment_method: params[:order][:payment_method])
+
+    ActiveRecord::Base.transaction do
+      @order.update_attributes(payment_method: params[:order][:payment_method])
+      if @order.payment_method_code == "OXXO_PAY"
+        break if @order.conekta_order_id.present?
+
+        order_details = @order.Details
+        products = WarehouseProduct.where(id: order_details.map{ |detail| detail.w_product_id })
+          .where(describes_total_stock: true).includes(:Product)
+        custom_prices = @current_user.ProductPrices.where(product_id: products.map(&:product_id))
+
+        @order.create_conekta_order(@current_user, products, custom_prices)
+      end
+    end
 
     respond_to do |format|
       format.js { render :update_payment_method, layout: false }

@@ -49,7 +49,15 @@
 <% end %>
 
 <% if @current_user.has_permission?("orders@cancel") and (o.state == "WAITING_FOR_PAYMENT" or
-      o.state == "PAYMENT_REJECTED") and params[:type] != "INVOICES" %>
+  o.state == "PAYMENT_REJECTED") and params[:type] != "INVOICES" %>
+
+  <% if o.payment_method_code == "OXXO_PAY" and @current_user.has_permission?('orders@accept_reject_payment')%>
+    <%= link_to "Aceptar pago de Oxxo",
+      admin_accept_order_pay_path(o.hash_id, "true", payment_folio: o.conekta_order_id),
+      method: :put, class: "btn btn-primary btn-sm m-b-xs hidden-button",
+      data: { confirm: "Seguro(a) de aceptar el pago de esta órden?" } %>
+  <% end %>
+
   <a class="btn btn-danger btn-sm m-b-xs hidden-button"
     onclick="update_cancel_form('<%=o.hash_id%>')">
     <i class="fa fa-trash"></i> Cancelar

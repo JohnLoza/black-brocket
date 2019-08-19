@@ -49,7 +49,12 @@
         <tbody>
           <% @orders.each do |o| %>
             <tr id="<%=o.hash_id%>">
-              <td><%=o.hash_id%></td>
+              <td>
+                <%= o.hash_id %>
+                <% if o.conekta_order_id.present? %>
+                  <p>Conekta id: <b><%= o.conekta_order_id %></b></p>
+                <% end %>
+              </td>
               <td><%= o.Client.email %></td>
               <% o_city = o.City %>
               <td><%= o_city.name %>, <%= o_city.State.name %></td>

@@ -7,45 +7,16 @@ class Api::OrdersController < ApiController
     orders = @current_user.Orders.where.not(state: "ORDER_CANCELED")
     .order(created_at: :desc).paginate(page: params[:page], per_page: 10)
     .includes(City: :State)
-    data = Array.new
-    data << {per_page: 10}
+    data = [{per_page: 10}]
     orders.each do |order|
-      begin
-        guides = JSON.parse order.guides
-      rescue
-        guides = Hash.new
-      end
-
       extra_data = {hash_id: order.hash_id, date: I18n.l(order.created_at, format: :long),
-        total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, guides: guides,
+        total: order.total, status: I18n.t(order.state), tracking_code: order.tracking_code, guides: order.json_guides,
         payment_method: order.payment_method, download_payment_key: order.download_payment_key,
         shipping_cost: order.shipping_cost}
 
       data << extra_data
     end
 
-    render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
-  end
-
-  def payment_steps
-    data = Hash.new
-    data[:step1]="Realice el pago total de su compra a una de las siguientes cuentas."
-    data[:step2]="Tome una foto, escanee o guarde el archivo del comprobante de pago."
-    data[:step3]="Seleccione el comprobante de pago dando click en \“Enviar comprobante de pago\”"
-    data[:note]="Si por error eligió un archivo equivocado y desea enviar otro, solo de click nuevamente en \“Enviar comprobante de pago\” y seleccione el correcto."
-
-    order = @current_user.Orders.find_by!(hash_id: params[:id])
-    bank = Bank.find_by!(id: order.payment_method)
-    bank_accounts = bank.Accounts
-
-    extra_data = Array.new
-    bank_accounts.each do |account|
-      extra_data << {bank_name: bank.name, account_number: account.account_number, 
-        interbank_clabe: account.interbank_clabe, owner: account.owner, 
-        email: account.email, RFC: account.RFC}
-    end
-
-    data[:bank_data] = extra_data
     render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
   end
 
@@ -235,6 +206,20 @@ class Api::OrdersController < ApiController
 
     render status: 200, json: {success: true, info: "PARCELS_RETURNED",
       parcels: parcels, boxes_selected: boxes_selected, local: Local.forLocation(@current_user.city_id)}
+  end
+
+  def oxxo_pay_stub
+    order = @current_user.Orders.where(hash_id: params[:id]).take
+    render_404 and return unless order.payment_method_code == "OXXO_PAY"
+
+    require "conekta"
+    Conekta.api_key = Order.conekta_api_key()
+    Conekta.api_version = "2.0.0"
+    conekta_order = Conekta::Order.find(order.conekta_order_id)
+
+    render status: 200, json:{
+      success: true, info: "ORDER_DATA_RETURNED", data: conekta_order
+    }
   end
 
   private

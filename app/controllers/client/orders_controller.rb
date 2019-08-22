@@ -131,7 +131,7 @@ class Client::OrdersController < ApplicationController
     
     if @order.payment_method_code == "OXXO_PAY"
       require "conekta"
-      Conekta.api_key = "key_H4tGgYkAV9sG8zpLw6sUzA"
+      Conekta.api_key = Order.conekta_api_key()
       Conekta.api_version = "2.0.0"
       @conekta_order = Conekta::Order.find(@order.conekta_order_id)
     else

@@ -52,10 +52,13 @@ gem 'uglifier'
 gem 'carrierwave', '~> 1.2.1'
 gem 'mini_magick', '~> 4.3.6' # required by carrierwave
 
-gem 'will_paginate', '~> 3.0.7'
-gem 'will_paginate-bootstrap', '~> 1.0.1'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
 
 gem 'rqrcode' # qr codes
 gem 'barby' # barcodes
 
 gem 'conekta'
+
+#gem 'wicked_pdf' # for pdf rendering
+#gem 'wkhtmltopdf-binary'

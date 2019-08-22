@@ -29,8 +29,7 @@ class Distributor::CommissionsController < ApplicationController
   def download_payment
     commission = @current_user.Commissions.find_by!(hash_id: params[:id])
 
-    file_path = commission.payment_pdf.path if commission.payment_pdf.present?
-    file_path = commission.payment_img.path if commission.payment_img.present?
+    file_path = commission.payment.path if commission.payment.present?
     render_404 and return unless file_path
 
     send_file file_path

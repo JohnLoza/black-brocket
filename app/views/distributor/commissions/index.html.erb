@@ -56,7 +56,7 @@
                     <%end%>
                   </td>
                   <td class="text-center">
-                    <% if c.payment_img.present? or c.payment_pdf.present? %>
+                    <% if c.payment.present? %>
                       <%= link_to distributor_download_commission_payment_path(c.hash_id), target: "_blank" do %>
                         <i class="fa fa-file-pdf-o fa-5x"></i>
                       <% end %>

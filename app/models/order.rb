@@ -81,7 +81,7 @@ class Order < ApplicationRecord
 
   def create_conekta_order(current_user, products, custom_prices)
     require "conekta"
-    Conekta.api_key = "key_H4tGgYkAV9sG8zpLw6sUzA"
+    Conekta.api_key = Order.conekta_api_key()
     Conekta.api_version = "2.0.0"
 
     line_items = fill_line_items(self, products, custom_prices)
@@ -103,6 +103,10 @@ class Order < ApplicationRecord
     })
     
     self.update_attributes!(conekta_order_id: conekta_order.id)
+  end
+
+  def self.conekta_api_key()
+    Rails.env == "production" ? "production_key" : "key_H4tGgYkAV9sG8zpLw6sUzA"
   end
 
   private

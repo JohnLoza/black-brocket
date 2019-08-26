@@ -2,6 +2,15 @@
   <h4>Seleccione el método de pago</h4>
 
   <div>
+    <%= radio_button_tag "payment_method", -1, false, autocomplete: :off, required: true, 
+      onchange: "removeFilter('.payment_img_#{-1}', 'payment_type')",
+      info: "Pago con tarjeta", style: 'display: none;' %>
+    <label for="payment_method_<%= -1 %>">
+      <%= image_tag "visa-mastercard-logo.png", class: "payment_img_#{-1} payment_type" %>
+    </label>
+  </div>
+
+  <div>
     <%= radio_button_tag "payment_method", 0, false, autocomplete: :off, required: true, 
       onchange: "removeFilter('.payment_img_#{0}', 'payment_type')",
       info: "Oxxo pay", style: 'display: none;' %>

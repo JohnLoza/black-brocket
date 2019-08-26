@@ -38,6 +38,9 @@ class Admin::OrdersController < AdminController
 
       new_state = params[:local_order].nil? ? "PAYMENT_ACCEPTED" : "PAYMENT_ACCEPTED_LOCAL"
       @order.update_attributes(state: new_state, reject_description: nil, payment_folio: params[:payment_folio])
+      if @order.state == "PAYMENT_ACCEPTED"
+        NotifyPaymentValidatedJob.perform_later(@order)
+      end
 
       OrderAction.create(order_id: @order.id, worker_id: @current_user.id, description: "Aceptó/Verificó el pago")
     else
@@ -90,16 +93,11 @@ class Admin::OrdersController < AdminController
     @order = Order.find_by!(hash_id: params[:id])
     deny_access! and return unless ["WAITING_FOR_PAYMENT","PAYMENT_REJECTED","LOCAL"]
 
-    @details = OrderDetail.where(order_id: @order.id)
-    ActiveRecord::Base.transaction do
-      @details.each {|d| WarehouseProduct.return(d.w_product_id, d.quantity)}
-      @order.update_attributes!(state: "ORDER_CANCELED", cancel_description: params[:order][:cancel_description])
-
-      Notification.create!(client_id: @order.client_id, icon: "fa fa-comments-o",
-        description: "Pedido cancelado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
-      OrderAction.create!(order_id: @order.id, worker_id: @current_user.id, description: "Canceló la orden")
-      flash[:success] = "La orden se canceló correctamente."
-    end
+    @order.cancel!(params[:order][:cancel_description])
+    Notification.create!(client_id: @order.client_id, icon: "fa fa-comments-o",
+      description: "Pedido cancelado", url: client_order_path(@order.Client.hash_id, @order.hash_id))
+    OrderAction.create!(order_id: @order.id, worker_id: @current_user.id, description: "Canceló la orden")
+    flash[:success] = "La orden se canceló correctamente."
 
     NotifyOrderCanceledJob.perform_later(user: @order.Client, 
       order: @order, reason: params[:order][:cancel_description])
@@ -201,12 +199,14 @@ class Admin::OrdersController < AdminController
 
     if order.save
       flash[:success] = "Código guardado"
-      OrderAction.create(order_id: order.id, worker_id: @current_user.id, description: "Capturó código de rastreo")
+      NotifyOrderSentJob.perform_later(order)
+      OrderAction.create(order_id: order.id, worker_id: @current_user.id, 
+        description: "Capturó código de rastreo")
     else
       flash[:info] = "Ocurrió un error al guardar la información"
     end
     redirect_to admin_orders_path + "?type=CAPTURE_TRACKING_CODE"
-  end
+  end # def save_tracking_code #
 
   def save_as_delivered
     deny_access! and return unless @current_user.has_permission?("orders@stablish_as_delivered")

@@ -48,26 +48,27 @@ class Client::OrdersController < ApplicationController
       order.Details << detail
     end # products.each do #
 
-    ActiveRecord::Base.transaction do
-      order.save!
-      products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
-      order.create_conekta_order(@current_user, products, custom_prices) if order.payment_method_code == "OXXO_PAY"
-    end
-      
-  rescue ActiveRecord::RecordInvalid
-    flash[:info] = "Ocurrió un error al procesar la órden"
-  rescue ActiveRecord::RangeError
-    flash[:info] = "No existe inventario suficiente"
-  rescue Conekta::ParameterValidationError => error
-    flash[:info] = "Ocurrió un error al procesar la órden (ConektaError 1010)"
-    logger.error error.message
-    logger.error error.backtrace.join("\n")
-  rescue Conekta::ErrorList => error_list
-    flash[:info] = "Ocurrió un error al procesar la órden (ConektaError 1020)"
-    for error_detail in error_list.details do
-      logger.info error_detail.message
-    end
-  ensure
+    begin
+      ActiveRecord::Base.transaction do
+        order.save!
+        products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
+        order.create_conekta_charge(@current_user, products, custom_prices) if order.payment_method_code == "OXXO_PAY"
+        if order.payment_method_code == "BBVA"
+          response = order.create_bbva_charge(@current_user, order)
+          order.update_attributes!(bbva_charge_id: response["id"])
+          session.delete(:e_cart)
+          redirect_to response["payment_method"]["url"]
+        end
+      end # transaction
+    rescue ActiveRecord::RecordInvalid
+      flash[:info] = "Ocurrió un error al procesar la órden"
+    rescue ActiveRecord::RangeError
+      flash[:info] = "No existe inventario suficiente"
+    rescue BbvaTransactionException
+      flash[:info] = "Ocurrió un error al procesar la órden (BbvaError 1030)"
+    end # begin
+
+    return if performed?
     if flash[:info].present?
       redirect_to client_ecart_path(current_user.hash_id) and return
     else
@@ -75,19 +76,13 @@ class Client::OrdersController < ApplicationController
       SendOrderConfirmationJob.perform_later(current_user, order)
       verify_fiscal_data or return 
       redirect_to client_orders_path(current_user.hash_id, info_for: order.hash_id) and return
-    end
+    end # if flash[:info].present?
   end
 
   def cancel
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
     return unless ["WAITING_FOR_PAYMENT", "LOCAL"].include? @order.state
-    @details = OrderDetail.where(order_id: @order.id)
-    
-    ActiveRecord::Base.transaction do
-      # TODO add dependent destroy and trigger the return method on detail destroy
-      @details.each {|d| WarehouseProduct.return(d.w_product_id, d.quantity)}
-      @order.update_attributes!(state: "ORDER_CANCELED")
-    end
+    @order.cancel!
 
     respond_to do |format|
       format.html{
@@ -127,7 +122,7 @@ class Client::OrdersController < ApplicationController
 
   def get_bank_payment_info
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
-    render_404 and return unless @order.payment_method.present?
+    return unless @order.payment_method.present?
     
     if @order.payment_method_code == "OXXO_PAY"
       require "conekta"
@@ -149,7 +144,8 @@ class Client::OrdersController < ApplicationController
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
 
     ActiveRecord::Base.transaction do
-      @order.update_attributes(payment_method: params[:order][:payment_method])
+      @order.update_attributes!(payment_method: params[:order][:payment_method])
+
       if @order.payment_method_code == "OXXO_PAY"
         break if @order.conekta_order_id.present?
 
@@ -158,12 +154,45 @@ class Client::OrdersController < ApplicationController
           .where(describes_total_stock: true).includes(:Product)
         custom_prices = @current_user.ProductPrices.where(product_id: products.map(&:product_id))
 
-        @order.create_conekta_order(@current_user, products, custom_prices)
+        @order.create_conekta_charge(@current_user, products, custom_prices)
+      elsif @order.payment_method_code == "BBVA"
+        break if @order.bbva_charge_id.present?
+
+        response = @order.create_bbva_charge(@current_user, @order)
+        @order.update_attributes!(bbva_charge_id: response["id"])
+        @redirect_to = response["payment_method"]["url"]
       end
     end
 
     respond_to do |format|
       format.js { render :update_payment_method, layout: false }
+    end
+  end
+
+  def pay_through_bbva
+    order = @current_user.Orders.find_by!(hash_id: params[:id])
+    render_404 and return unless order.payment_method_code == "BBVA"
+
+    bbva = order.bbva_instance
+    charges = bbva.create(:charges)
+    begin
+      charge = charges.get(order.bbva_charge_id)
+    rescue BbvaTransactionException
+      render_404 and return
+    end
+    
+    case charge["status"]
+    when "completed"
+      redirect_to client_orders_path(@current_user), 
+        flash: {success: "Ya has completado tu pago, estamos en proceso de su validacón" }
+    when "expired"
+      order.cancel!("Fecha límite de pago alcanzada")
+      redirect_to client_orders_path(@current_user),
+        flash: {info: "Fecha límite de pago alcanzada para la órden #{order.hash_id}"}
+    when "charge_pending"
+      redirect_to charge["payment_method"]["url"]
+    else
+      render_404
     end
   end
 

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   get '/distributor_request' => 'static_pages#new_distributor_request', as: :distributor_request
   post '/distributor_request' => 'static_pages#create_distributor_request'
+  get '/callbacks/bbva/:id' => 'static_pages#bbva_callback', as: :bbva_callback
 
   # sessions paths
   get 'log_in/' => 'sessions#new'
@@ -291,6 +292,7 @@ Rails.application.routes.draw do
     get 'user/:user_id/orders/:id/get_payment' => 'orders#get_payment', as: :get_order_payment
     get 'user/:user_id/orders/:id/get_bank_payment_info' => 'orders#get_bank_payment_info', as: :get_bank_payment_info
     patch 'user/:user_id/orders/:id/update_payment_method' => 'orders#update_payment_method', as: :update_payment_method
+    get 'user/:user_id/orders/:id/pay_through_bbva' => 'orders#pay_through_bbva', as: :pay_through_bbva
 
     resources :fiscal_data, except: [:index, :destroy]
   end

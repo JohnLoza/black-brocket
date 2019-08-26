@@ -79,19 +79,22 @@
 
   <% if ["WAITING_FOR_PAYMENT","PAYMENT_DEPOSITED","PAYMENT_REJECTED","LOCAL"].include? o.state %>
     <div class="row order-box-foot">
-      <% unless o.payment_method_code == "OXXO_PAY" %>
+      <% if o.payment_method_code == "BANK_DEPOSIT" %>
         <input class="hidden" type="file" name="order[payment]"
           onchange="resize_and_upload(this, '<%= o.hash_id %>')">
 
         <span onclick="$(this).parent().find('input').click();"
           class="btn btn-gold pull-right">Enviar comprobante de pago</span>
+      <% elsif o.payment_method_code == "BBVA" %>
+        <%= link_to "Paga ahora!", client_pay_through_bbva_path(current_user, o),
+          class: "btn btn-gold pull-right", target: "_blank" %>
       <% end %>
 
-      <%= link_to client_get_bank_payment_info_path(@current_user.hash_id, o.hash_id),
+      <%= link_to client_get_bank_payment_info_path(@current_user, o),
         class: "darklink label-custom-2", style: "cursor:pointer; color: #FEFEFE;", 
         remote: true, id: "payment-info-link-#{o.hash_id}" do %>
         <span class="btn btn-white pull-right">Información para pagar</span>
-      <% end %>
+      <% end unless o.payment_method_code == "BBVA" %>
     </div>
   <% end %>
 

@@ -1,0 +1,22 @@
+<p>
+  Hemos enviado tu producto(s) de la órden con folio: 
+  <%= link_to @order.hash_id, client_order_url(@user, @order) %>
+</p>
+
+<p>Datos de envío: </p>
+<p>Paquetería: <%= content_tag :strong, @guides["provider"] %></p>
+<p>Servicio: <%= content_tag :strong, @guides["service_level_name"] %></p>
+<p>Tiempo de entrega: <%= content_tag :strong, @guides["days"] %> (hábiles)</p>
+<p>Código de rastreo: <%= content_tag :strong, @order.tracking_code %></p>
+
+<br><hr>
+<p>Vínculos para rastrear tu pedido:</p>
+<p>
+  <a href="http://www.redpack.com.mx/rastreo-de-envios/">RedPack</a> |
+  <a href="https://www.estafeta.com/Herramientas/Rastreo">Estafeta</a> |
+  <a href="https://www.fedex.com/es-mx/tracking.html">Fedex</a> |
+  <a href="http://www.dhl.com.mx/es/express/rastreo.html">DHL</a> |
+  <a href="https://www.ups.com/track?loc=es_MX&requester=MB/">UPS</a> |
+  <a href="https://www.grupocarssa.com/new/">Carssa</a> |
+  <a href="http://www.sendex.mx/Rastreo/Rastreo/">Sendex</a>
+</p>

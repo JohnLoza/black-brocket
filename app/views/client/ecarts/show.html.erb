@@ -183,8 +183,6 @@
           locals: {message_type: :info, message: "Favor de seleccionar una opción"} %>`);
       return false;
     }else if(step == 2 && radiobutton[0].value == 0){
-    // Omit payment method if user is going to go to the warehouse
-      $("input[name='payment_method']")[0].checked = true;
       step += 1;
       return true;
     }else if(step == 2 && radiobutton[0].value == 2 && $("#sr-parcel").children("option:selected").val() == ""){

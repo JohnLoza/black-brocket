@@ -72,6 +72,10 @@ class StaticPagesController < ApplicationController
     end
   end
 
+  def bbva_callback
+    # order = Order.find_by!(hash_id: params[:id])
+  end
+
   private
     def suggestion_params
       {name: params[:name], email: params[:email].strip, message: params[:message],

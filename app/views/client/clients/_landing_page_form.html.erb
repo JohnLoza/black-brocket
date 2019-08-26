@@ -32,7 +32,7 @@
         <div class="col-sm-12 form-group">
           <%= f.label :password_confirmation, "Confirma contraseña" %>
           <%= f.password_field :password_confirmation, placeholder: "********", class: "form-control form-control-black",
-              required: true, "data-parsley-equalto"=>"#client_password" %>
+            required: true, "data-parsley-equalto"=>"#client_password" %>
         </div>
       </div><!-- .row -->
 
@@ -40,7 +40,7 @@
 				<div class="col-sm-12 form-group">
 					<%= f.label :cellphone, "Teléfono celular a 10 dígitos" %>
 					<%= f.text_field :cellphone, class: "form-control form-control-black", 
-						placeholder: "000 000 00", minlength: 9, maxlength: 15 %>
+						required: true, placeholder: "000 000 00", minlength: 10, maxlength: 15 %>
 				</div>
 			</div><!-- .row -->
     </div>

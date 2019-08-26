@@ -90,7 +90,7 @@ class Client < ApplicationRecord
     {
       name: self.name,
       email: self.email,
-      phone: self.cellphone || self.telephone
+      phone: self.cellphone
     }
   end
 

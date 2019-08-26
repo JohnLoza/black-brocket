@@ -27,16 +27,16 @@
 				<%= params[:lada] ? params[:lada] : "000"  %>
 				</span>)</label><br>
 
-				<%= f.text_field :telephone, class: "form-control form-control-black", placeholder: "0000 0000",
-						required: true, minlength: 7, maxlength: 12 %>
+				<%= f.text_field :telephone, class: "form-control form-control-black", 
+					placeholder: "0000 0000", minlength: 7, maxlength: 12 %>
 			</div>
 		</div><!-- .row -->
 
 		<div class="row">
 			<div class="col-sm-12 form-group">
 				<%= f.label :cellphone, "Teléfono celular a 10 dígitos" %>
-				<%= f.text_field :cellphone, class: "form-control form-control-black", placeholder: "000 000 00",
-						required: true, minlength: 9, maxlength: 15 %>
+				<%= f.text_field :cellphone, class: "form-control form-control-black", 
+					placeholder: "000 000 00", required: true, minlength: 10, maxlength: 15 %>
 			</div>
 		</div><!-- .row -->
 
@@ -197,33 +197,6 @@
 	$(document).ready(function(){
 		// Init parsley to validate the formularie
 		$("#client_form").parsley();
-
-		telephone = $("#client_telephone");
-	  cellphone = $("#client_cellphone");
-
-		if(telephone.val() != ""){
-			cellphone.removeAttr("required");
-		}else if (cellphone.val() != "") {
-			telephone.removeAttr("required");
-		}
-
-	  telephone.on("change", function(){
-	    console.log("telephone");
-	    telephone.attr("required", true);
-	    cellphone.removeAttr("required")
-	    if (telephone.val() == ""){
-	      cellphone.attr("required", true)
-	    }
-	  });
-
-	  cellphone.on("change", function(){
-	    console.log("cellphone");
-	    cellphone.attr("required", true);
-	    telephone.removeAttr("required")
-	    if (cellphone.val() == ""){
-	      telephone.attr("required", true)
-	    }
-	  });
 	});
 
 	function PreviewImage() {

@@ -9,10 +9,10 @@ class Order < ApplicationRecord
   has_many :Actions, class_name: :OrderAction, foreign_key: :order_id
 
   validates :client_id, :city_id, :distributor_id,
-  :total, presence: true, on: :create
+    :total, presence: true, on: :create
 
   validates :client_id, :distributor_id,
-  numericality: { only_integer: true }, on: :create
+    numericality: { only_integer: true }, on: :create
 
   validates :total, numericality: true, on: :create
 
@@ -63,23 +63,31 @@ class Order < ApplicationRecord
     end
   end
 
+  def cancel!(message = nil)
+    details = OrderDetail.where(order_id: self.id)
+    
+    ActiveRecord::Base.transaction do
+      details.each {|d| WarehouseProduct.return(d.w_product_id, d.quantity)}
+
+      self.state = "ORDER_CANCELED"
+      self.cancel_description = message if message
+
+      self.save!
+    end
+  end
+
   def payment_method_code
-    if self.payment_method == 0
+    case self.payment_method
+    when 0
       "OXXO_PAY"
+    when -1
+      "BBVA"
     else
       "BANK_DEPOSIT"
     end
   end
 
-  def payment_method_label
-    if self.payment_method == 0
-      "Oxxo Pay"
-    else
-      "Depósito bancario / transferencia"
-    end
-  end
-
-  def create_conekta_order(current_user, products, custom_prices)
+  def create_conekta_charge(current_user, products, custom_prices)
     require "conekta"
     Conekta.api_key = Order.conekta_api_key()
     Conekta.api_version = "2.0.0"
@@ -106,7 +114,34 @@ class Order < ApplicationRecord
   end
 
   def self.conekta_api_key()
-    Rails.env == "production" ? "production_key" : "key_H4tGgYkAV9sG8zpLw6sUzA"
+    Rails.env == "production" ? "key_ijaE3XbzbzhjdaYmrzKWMg" : "key_H4tGgYkAV9sG8zpLw6sUzA"
+  end
+
+  def create_bbva_charge(client, order)
+    bbva = self.bbva_instance()
+    charges = bbva.create(:charges)
+
+    charge_params = {
+      "affiliation_bbva" => "582762",
+      "amount" => order.total,
+      "currency" => "MXN",
+      "description" => "Compra de productos Black Brocket",
+      "order_id" => order.hash_id,
+      "redirect_url" => Rails.application.routes.url_helpers.bbva_callback_url(order.hash_id),
+      "customer" => client.bbva_customer_info
+    }
+
+    response = charges.create(charge_params)
+    return response
+  end
+
+  def bbva_instance
+    require 'bbva'
+    merchant_id = 'mx316pz06s7aq7svcyrg'
+    private_key = 'sk_365b9b836b624816ae433004589c8bff'
+    is_production = Rails.env == "production"
+
+    BbvaApi.new(merchant_id, private_key, is_production)
   end
 
   private

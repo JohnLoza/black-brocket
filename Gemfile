@@ -62,3 +62,5 @@ gem 'conekta'
 
 #gem 'wicked_pdf' # for pdf rendering
 #gem 'wkhtmltopdf-binary'
+
+gem 'bbva', git: "https://github.com/EcommerceBBVA/BBVA-RUBY"

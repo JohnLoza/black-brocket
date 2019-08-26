@@ -29,6 +29,7 @@ class ApplicationMailer < ActionMailer::Base
   def order_confirmation
     @user = params[:user]
     @order = params[:order]
+    subject = "Termina tu compra ##{@order.hash_id} - Black Brocket"
 
     if @order.payment_method_code == "OXXO_PAY"
       require "conekta"
@@ -36,11 +37,12 @@ class ApplicationMailer < ActionMailer::Base
       Conekta.api_version = "2.0.0"
 
       @conekta_order = Conekta::Order.find(@order.conekta_order_id)
-      mail(to: @user.email, subject: "Termina tu compra ##{@order.hash_id}- Black Brocket") do |format|
+      
+      mail(to: @user.email, subject: subject) do |format|
         format.html{ render "oxxo_order_confirmation", layout: false }
       end
     else
-      mail(to: @user.email, subject: "Termina tu compra ##{@order.hash_id}- Black Brocket")
+      mail(to: @user.email, subject: subject)
     end 
   end
 
@@ -59,8 +61,8 @@ class ApplicationMailer < ActionMailer::Base
     @answer = params[:answer]
 
     product = @question.Product
-    subject = "Respondieron a tu pregunta sobre #{product.name} - Black Brocket"
-
+    subject = "Respondieron a tu pregunta sobre 
+      #{product.name} - Black Brocket"
     mail(to: @user.email, subject: subject)
   end
 
@@ -69,9 +71,8 @@ class ApplicationMailer < ActionMailer::Base
     @order = params[:order]
     @reason = params[:reason]
 
-    subject = "El pago de tu órden con folio #{@order.hash_id}
+    subject = "El pago de tu órden con folio ##{@order.hash_id}
       ha sido rechazado - Black Brocket"
-
     mail(to: @user.email, subject: subject)
   end
 
@@ -80,8 +81,27 @@ class ApplicationMailer < ActionMailer::Base
     @order = params[:order]
     @reason = params[:reason]
 
-    subject = "Tu órden con folio #{@order.hash_id} ha sido cancelada - Black Brocket"
+    subject = "Tu órden con folio ##{@order.hash_id} 
+      ha sido cancelada - Black Brocket"
+    mail(to: @user.email, subject: subject)
+  end
 
+  def notify_payment_validated
+    @user = params[:user]
+    @order = params[:order]
+
+    subject = "Hemos confirmado el pago de tu órden 
+      ##{@order.hash_id} - Black Brocket"
+    mail(to: @user.email, subject: subject)
+  end
+
+  def notify_order_sent
+    @user = params[:user]
+    @order = params[:order]
+    @guides = @order.json_guides
+
+    subject = "Ya enviamos tu producto(s)
+      ##{@order.hash_id} - Black Brocket"
     mail(to: @user.email, subject: subject)
   end
 end

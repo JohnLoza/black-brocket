@@ -1,0 +1,6 @@
+<p>
+  El pago de tu órden con folio 
+  <%= link_to @order.hash_id, client_order_url(@user, @order) %>
+  ha sido validado, pronto te enviaremos tu producto
+  y te informaremos de tu código para rastrearlo.
+</p>

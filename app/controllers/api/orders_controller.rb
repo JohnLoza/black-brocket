@@ -64,8 +64,6 @@ class Api::OrdersController < ApiController
   def create
     if @current_user.street.nil?
       render status: 200, json: {success: false, info: "CLIENT_DATA_NOT_COMPLETE"} and return
-    elsif params[:invoice]=="1" and @current_user.FiscalData.nil?
-      render status: 200, json: {success: false, info: "FISCAL_DATA_NOT_FOUND"} and return
     end
     order = setBasicInfo()
 
@@ -80,28 +78,29 @@ class Api::OrdersController < ApiController
       order.Details << detail
     end
 
-    ActiveRecord::Base.transaction do
-      order.save!
-      products.each {|p| p.withdraw(params[:product_details][p.hash_id].to_i)}
-      order.create_conekta_order(@current_user, products, custom_prices) if order.payment_method_code == "OXXO_PAY"
-    end
+    begin
+      ActiveRecord::Base.transaction do
+        order.save!
+        products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
+        order.create_conekta_charge(@current_user, products, custom_prices) if order.payment_method_code == "OXXO_PAY"
+        if order.payment_method_code == "BBVA"
+          response = order.create_bbva_charge(@current_user, order)
+          order.update_attributes!(bbva_charge_id: response["id"])
+          render status: 200, json:{ success: true, info: "BBVA_SAVED", 
+            redirect_to: response["payment_method"]["url"] }
+          return
+        end
+      end # transaction
+    rescue ActiveRecord::RecordInvalid
+      render status: 200, json: { success: false, info: "SAVE_ERROR" } and return
+    rescue ActiveRecord::RangeError
+      render status: 200, json: { success: false, info: "NO_ENOUGH_STOCK" } and return
+    rescue BbvaTransactionException
+      render status: 200, json: { success: false, info: "SAVE_ERROR_BBVA_1030" } and return
+    end # begin
 
-  rescue ActiveRecord::RecordInvalid
-    render status: 200, json: {success: false, info: "SAVE_ERROR"} and return
-  rescue ActiveRecord::RangeError
-    render status: 200, json: {success: false, info: "NO_ENOUGH_STOCK"} and return
-  rescue Conekta::ParameterValidationError => error
-    render status: 200, json: {success: false, info: "SAVE_ERROR_CONEKTA_1010"} and return
-    logger.error error.message
-    logger.error error.backtrace.join("\n")
-  rescue Conekta::ErrorList => error_list
-    render status: 200, json: {success: false, info: "SAVE_ERROR_CONEKTA_1020"} and return
-    for error_detail in error_list.details do
-      logger.info error_detail.message
-    end
-  ensure
     SendOrderConfirmationJob.perform_later(@current_user, order)
-    render status: 200, json: {success: true, info: "SAVED"}
+    render status: 200, json: { success: true, info: "SAVED" }
   end
 
   def cancel
@@ -168,7 +167,7 @@ class Api::OrdersController < ApiController
           .where(describes_total_stock: true).includes(:Product)
         custom_prices = @current_user.ProductPrices.where(product_id: products.map(&:product_id))
 
-        order.create_conekta_order(@current_user, products, custom_prices)
+        order.create_conekta_charge(@current_user, products, custom_prices)
       end
     end
 

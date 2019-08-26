@@ -104,4 +104,13 @@ class Client < ApplicationRecord
     }
   end
 
+  def bbva_customer_info
+    {
+      "name" => self.name,
+      "last_name" => "",
+      "phone_number" => self.cellphone || self.telephone,
+      "email" => self.email
+    }
+  end
+
 end

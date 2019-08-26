@@ -1,6 +1,12 @@
-<% if !params[:order][:payment_method].nil? %>
-  $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
-    locals: {message_type: :success, message: "Método de pago actualizado."} %>`);
-  $("#modal").modal("hide");
-<% end %>
-$("#payment-info-link-<%= @order.hash_id %>").click();
+<% if @redirect_to.present? %>
+  window.location.replace("<%= @redirect_to %>");
+<% else %>
+
+  <% if !params[:order][:payment_method].nil? %>
+    $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
+      locals: {message_type: :success, message: "Método de pago actualizado."} %>`);
+    $("#modal").modal("hide");
+  <% end %>
+  $("#payment-info-link-<%= @order.hash_id %>").click();
+
+<% end # if @redirect_to.present? %>

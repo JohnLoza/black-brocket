@@ -106,7 +106,7 @@ class Order < ApplicationRecord
   end
 
   def self.conekta_api_key()
-    Rails.env == "production" ? "production_key" : "key_H4tGgYkAV9sG8zpLw6sUzA"
+    Rails.env == "production" ? "key_ijaE3XbzbzhjdaYmrzKWMg" : "key_H4tGgYkAV9sG8zpLw6sUzA"
   end
 
   private

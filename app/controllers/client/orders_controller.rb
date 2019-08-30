@@ -65,7 +65,11 @@ class Client::OrdersController < ApplicationController
     rescue ActiveRecord::RangeError
       flash[:info] = "No existe inventario suficiente"
     rescue BbvaTransactionException
-      flash[:info] = "Ocurrió un error al procesar la órden (BbvaError 1030)"
+      flash[:info] = "Ocurrió un error al procesar la órden (BbvaError 1020)"
+    rescue Conekta::ParameterValidationError => error
+      flash[:info] = "Ocurrió un error al procesar la órden (ConektaError 1010)"
+      logger.error "<<< message: #{error.message}"
+      logger.error error.backtrace.join("\n")
     end # begin
 
     return if performed?

@@ -96,7 +96,11 @@ class Api::OrdersController < ApiController
     rescue ActiveRecord::RangeError
       render status: 200, json: { success: false, info: "NO_ENOUGH_STOCK" } and return
     rescue BbvaTransactionException
-      render status: 200, json: { success: false, info: "SAVE_ERROR_BBVA_1030" } and return
+      render status: 200, json: { success: false, info: "SAVE_ERROR_BBVA_1020" } and return
+    rescue Conekta::ParameterValidationError => error
+      logger.error "<<< message: #{error.message}"
+      logger.error error.backtrace.join("\n")
+      render status: 200, json: { success: false, info: "SAVE_ERROR_CONEKTA_1010" } and return
     end # begin
 
     SendOrderConfirmationJob.perform_later(@current_user, order)
@@ -219,6 +223,34 @@ class Api::OrdersController < ApiController
     render status: 200, json:{
       success: true, info: "ORDER_DATA_RETURNED", data: conekta_order
     }
+  end
+
+  def pay_through_bbva
+    order = @current_user.Orders.find_by!(hash_id: params[:id])
+    render_404 and return unless order.payment_method_code == "BBVA"
+
+    bbva = order.bbva_instance
+    charges = bbva.create(:charges)
+    begin
+      charge = charges.get(order.bbva_charge_id)
+    rescue BbvaTransactionException
+      render_404 and return
+    end
+    
+    case charge["status"]
+    when "completed"
+      render status: 200, json: { success: true, info: "PAYMENT_COMPLETED" }
+    when "expired"
+      order.cancel!("Fecha límite de pago alcanzada")
+      render status: 200, json: { success: false, info: "PAYMENT_EXPIRED", order_id: order.hash_id }
+    when "charge_pending"
+      render status: 200, json: {
+        success: true, info: "REDIRECTING_TO_BBVA", 
+        redirect_to: charge["payment_method"]["url"]
+      }
+    else
+      render_404
+    end
   end
 
   private

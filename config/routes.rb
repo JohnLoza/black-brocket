@@ -342,6 +342,7 @@ Rails.application.routes.draw do
     get 'orders/available_banks' => 'orders#available_banks'
     post 'orders/update_payment_method' => 'orders#update_payment_method'
     get 'orders/:id/oxxo_pay_stub' => 'orders#oxxo_pay_stub'
+    get 'orders/:id/pay_through_bbva' => 'orders#pay_through_bbva'
 
     get 'sr_envio/quotations' => "orders#sr_parcel_prices"
 

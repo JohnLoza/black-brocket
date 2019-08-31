@@ -37,13 +37,18 @@
                     <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Buscar en tabla">
                   </div>
                   <div class="col-md-4">
+                    <span>Establecer precios: </span><br>
                     <i class="btn btn-white btn-sm"
-                      onclick="update_product_prices_to_default()">
-                      Establecer todos los precios recomendados
+                        onclick="update_product_prices('min')">
+                        Mínimos
                     </i>
                     <i class="btn btn-white btn-sm"
-                      onclick="update_product_prices_to_maximum()">
-                      Establecer todos los precios máximos
+                        onclick="update_product_prices('recommended')">
+                        Recomendados
+                    </i>
+                    <i class="btn btn-white btn-sm"
+                        onclick="update_product_prices('max')">
+                        Máximos
                     </i>
                   </div>
                 </div>
@@ -113,23 +118,13 @@
 </div>
 
 <script type="text/javascript">
-  function update_product_prices_to_default(){
+  function update_product_prices(price_type){
     products = $(".product-control");
     for(indx=0; indx<products.length; indx++){
       p = $(products[indx]);
-      p.val(p.attr("recommended"));
+      new_price = p.attr(price_type);
+      p.val(new_price);
     }
-    $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
-      locals: {message_type: :success, message: "Establecido el precio recomendado."} %>`);
-  }
-  function update_product_prices_to_maximum(){
-    products = $(".product-control");
-    for(indx=0; indx<products.length; indx++){
-      p = $(products[indx]);
-      p.val(p.attr("max"));
-    }
-    $("#dismissible_alerts").append(`<%= j render partial: "/shared/dismissible_alert", 
-      locals: {message_type: :info, message: "Establecidos los precios máximos."} %>`);
   }
 </script>
 

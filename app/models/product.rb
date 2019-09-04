@@ -35,12 +35,10 @@ class Product < ApplicationRecord
       custom_prices.each do |cp|
         return cp.client_price if cp.product_id == product.product_id
       end
-      # return the default price if we dont find it in custom prices list
-      return product.Product.price
-    else
-      # return the default price if we dont have a custom prices list
-      return product.Product.price
     end
+    
+    # return the default price
+    return product.Product.price
   end
 
   private

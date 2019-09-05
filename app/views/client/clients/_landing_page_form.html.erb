@@ -18,6 +18,14 @@
 			</div>
 		</div><!-- .row -->
 
+		<div class="row">
+        <div class="col-sm-12 form-group">
+          <%= f.label :email_confirmation, "Confirma el correo electrónico" %>
+					<%= f.email_field :email_confirmation, placeholder: "john@example.com", 
+						class: "form-control form-control-black", required: true, "data-parsley-equalto"=>"#client_email" %>
+        </div>
+      </div><!-- .row -->
+
     <div class="form-group <%= "parsley-error" if @client.errors.any? %>">
       <div class="row">
         <div class="col-sm-12 form-group">

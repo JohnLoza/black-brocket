@@ -16,7 +16,14 @@
               $<%= p.price %> MXN
             </span><br>
           <% end %>
-          $<%= Product.priceFor(wp, @prices) %> MXN
+          $<%= Product.priceFor(wp, @prices, @offers) %> MXN
+
+          <% if @offers %>
+            <% sp = WebOffer.specialOfferFor(p.id, @offers) %>
+            <%= content_tag :span, "(-#{sp['discount']}%)",
+              style: "color: #f44336;" if sp %>
+          <% end %>
+
         </span>
 
         <h3><b><%= p.name %></b></h3>

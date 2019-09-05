@@ -2,7 +2,7 @@
   <div class="row animated fadeInRight">
     <div class="ibox float-e-margins">
       <div class="ibox-title">
-          <h5>Configuración de Cajas</h5>
+          <h5>Configuración de Ofertas</h5>
           <div class="ibox-tools">
             <a class="collapse-link">
               <i class="fa fa-chevron-up"></i>
@@ -11,16 +11,16 @@
       </div>
       <div class="ibox-content">
 
-        <%= form_for(:box, url: admin_boxes_configuration_path(), 
+        <%= form_for(:box, url: admin_offers_configuration_path(), 
           method: :post, html: {class: "form-horizontal"}) do |f| %>
           
-          <section class="boxes_fields">
-            <% if @boxes and @boxes.any? %>
-              <% @boxes.each do |box| %>
-                <%= render partial: "box_fields", locals: {box: box} %>
+          <section class="offer_fields">
+            <% if @offers %>
+              <% @offers.each do |offer| %>
+                <%= render partial: "offer_fields", locals: { offer: offer } %>
               <% end %>
             <% else %>
-              <%= render partial: "box_fields" %>
+              <%= render partial: "offer_fields" %>
             <% end %>
           </section>
 
@@ -28,10 +28,13 @@
             <div class="col-sm-4 col-sm-offset-2">
               <a class="btn btn-white" href="javascript:history.back();">Cancelar</a>
 
-              <a class="btn btn-white" onclick="addBoxFields();">
+              <a class="btn btn-white" onclick="addOfferFields();">
                 <i class="fa fa-plus"></i>
                 Añadir campos
               </a>
+
+              <%= link_to "Limpiar ofertas", admin_offers_configuration_path(),
+                class: "btn btn-danger", method: :delete %>
 
               <%= submit_tag "Guardar", class: "btn btn-primary" %>
             </div>

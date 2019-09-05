@@ -222,6 +222,10 @@ Rails.application.routes.draw do
     get 'configuration/local/edit' => 'bb_configuration#local', as: :edit_local
     post 'configuration/local/:id' => 'bb_configuration#set_local', as: :save_local
     delete 'configuration/local/:id' => 'bb_configuration#destroy_local'
+
+    get 'configuration/offers' => 'bb_configuration#offers', as: :offers_configuration
+    post 'configuration/offers' => 'bb_configuration#set_offers'
+    delete 'configuration/offers' => 'bb_configuration#destroy_offers'
   end
 
   namespace :distributor do

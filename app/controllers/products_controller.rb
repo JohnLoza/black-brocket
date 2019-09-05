@@ -17,6 +17,7 @@ class ProductsController < ApplicationController
         .paginate(page: params[:page], per_page: 20).includes(:Product)
 
       @prices = @current_user.ProductPrices
+      @offers = WebOffer.getSpecialOffers
       @photos = ProdPhoto.where("product_id in (?) and is_principal=true", @products.map{|p| p.product_id})
     else
       @products = Product.active.visible.by_category(params[:category])
@@ -33,6 +34,7 @@ class ProductsController < ApplicationController
       @warehouse = @warehouse_product.Warehouse
       @product = @warehouse_product.Product
       @product_price = @current_user.ProductPrices.where(product_id: @product.id).take
+      @offers = WebOffer.getSpecialOffers
     else
       @product = Product.find_by!(hash_id: params[:id])
     end

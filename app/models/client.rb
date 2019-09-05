@@ -3,7 +3,7 @@ class Client < ApplicationRecord
   include Searchable
   include SoftDeletable
   include User
-  attr_accessor :remember_token
+  attr_accessor :remember_token, :email_confirmation
 
   before_save { self.email = email.downcase }
   before_create { self.validate_email_digest = self.new_token }
@@ -31,8 +31,8 @@ class Client < ApplicationRecord
   # validates :street, :street_ref1, :street_ref2, :cp, :col, :extnumber, presence: true, on: :update
 
   validates :email, uniqueness: { case_sensitive: false }, on: :create
-  # validates :email, confirmation: true
-  # validates :email_confirmation, presence: true, on: :create
+  validates :email, confirmation: true
+  validates :email_confirmation, presence: true, on: :create
 
   # validates :name, format: { with: /\A[a-zA-ZÑñáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙ\s\.']+\z/ }
 

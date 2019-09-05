@@ -26,15 +26,21 @@ class Api::ProductsController < ApiController
     end
 
     data << {user_data: {username: @current_user.username, photo: @current_user.avatar_url}}
+    offers = WebOffer.getSpecialOffers
 
     products.each do |w_product|
       p = w_product.Product
       sub_data = {
-        hash_id: w_product.hash_id, name: p.name, price: p.price,
+        hash_id: w_product.hash_id, name: p.name, discount: nil,
         existence: w_product.existence, category_cold: p.cold,
         category_hot: p.hot, category_frappe: p.frappe, 
         p_key: p.hash_id, total_weight: p.total_weight
       }
+      sub_data[:price] = Product.priceFor(w_product, product_prices, offers).to_f
+      if offers
+        offer = WebOffer.specialOfferFor(p.id, offers)
+        sub_data[:discount] = offer["discount"] if offer
+      end 
 
       # get the photo for the product #
       p.Photos.each do |photo|
@@ -50,14 +56,6 @@ class Api::ProductsController < ApiController
         photo_urls << p_photo.photo.url unless p_photo.is_principal
       end
       sub_data[:photos] = photo_urls
-
-      # get the custom price if any #
-      product_prices.each do |custom_price|
-        if custom_price.product_id == p.id
-          sub_data[:price] = custom_price.client_price
-          break
-        end
-      end
 
       data << sub_data
     end

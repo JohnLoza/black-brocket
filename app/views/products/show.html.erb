@@ -95,11 +95,17 @@
             <tr>
               <td><b>Precio:</b></td>
               <% if @product_price.present?
-                  price = @product_price.client_price
+                  price = Product.priceFor(@warehouse_product, @product_price, @offers)
                  else
                   price = @product.price
                  end %>
               <td colspan="2">$ <span class="money_format"><%= price %></span> MXN
+
+              <% if @offers %>
+                <% sp = WebOffer.specialOfferFor(@product.id, @offers) %>
+                <%= content_tag :span, "(-#{sp['discount']}%)",
+                  style: "color: #f44336;" if sp %>
+              <% end %>
             </tr>
             <tr>
               <td colspan="3"><b>Descripción:</b></td>

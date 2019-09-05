@@ -1,0 +1,26 @@
+<% offer = Hash.new unless offer.present? %>
+
+<section>
+  <span class="pull-right text-danger pointer" onclick="removeParent(this);">
+    <i class="fa fa-trash fa-3x"></i>
+  </span>
+
+  <div class="form-group">
+    <%= label_tag :product_id, "Producto", class: "col-sm-2 control-label" %>
+    <div class="col-sm-6">
+      <%= select_tag "product_id[]", options_from_collection_for_select(
+        @products, "id", "name", selected: offer["product_id"]), prompt: "Selecciona un producto...",
+        autocomplete: :off, class: "form-control m-b", required: true %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :discount, "Descuento", class: "col-sm-2 control-label" %>
+    <div class="col-sm-6">
+      <%= number_field_tag "discount[]", offer["discount"], class: "form-control", min: 1,
+        placeholder: "ej. 20", required: true, step: 1, max: 99 %>
+    </div>
+  </div>
+
+  <div class="hr-line-dashed"></div>
+</section>

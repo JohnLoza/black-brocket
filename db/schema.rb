@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190822175444) do
+ActiveRecord::Schema.define(version: 20190905152749) do
 
   create_table "bank_accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "bank_name"
@@ -271,6 +271,7 @@ ActiveRecord::Schema.define(version: 20190822175444) do
     t.decimal "ieps", precision: 5, scale: 2
     t.decimal "total_iva", precision: 8, scale: 2
     t.decimal "total_ieps", precision: 8, scale: 2
+    t.decimal "discount", precision: 5, scale: 2
     t.index ["hash_id"], name: "index_order_details_on_hash_id", unique: true
   end
 

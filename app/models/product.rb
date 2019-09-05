@@ -29,16 +29,27 @@ class Product < ApplicationRecord
     where("#{category}" => true)
   end
 
-  def self.priceFor(product, custom_prices)
-    if custom_prices.size > 0
-      # search the custom prices for the price of the given product
+  def self.priceFor(product, custom_prices, offers = WebOffer.getSpecialOffers)
+    price = 0
+    if custom_prices.kind_of? ClientProduct
+      custom_prices = [custom_prices] if custom_prices
+    end
+
+    if custom_prices and custom_prices.size > 0
       custom_prices.each do |cp|
-        return cp.client_price if cp.product_id == product.product_id
+        price = cp.client_price if cp.product_id == product.product_id
       end
     end
     
-    # return the default price
-    return product.Product.price
+    price = product.Product.price if price == 0
+    if offers
+      offer = WebOffer.specialOfferFor(product.product_id, offers)
+      if offer
+        price = price * (100 - offer["discount"]) / 100
+      end
+    end
+
+    return price
   end
 
   private

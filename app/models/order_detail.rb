@@ -9,17 +9,25 @@ class OrderDetail < ApplicationRecord
 
   def self.for(custom_prices, product, info)
     subtotal = 0
-    current_product_price = Product.priceFor(product, custom_prices)
+    offers = WebOffer.getSpecialOffers
+    current_product_price = Product.priceFor(product, custom_prices, offers)
     subtotal = info[product.hash_id].to_i * current_product_price
     total_iva = current_product_price-(current_product_price*100/(product.Product.iva+100))
     total_ieps = (current_product_price-total_iva)-((current_product_price-total_iva)*100/(product.Product.ieps+100))
 
-    return OrderDetail.new(product_id: product.product_id, price: current_product_price,
+    detail = OrderDetail.new(product_id: product.product_id, price: current_product_price,
       hash_id: Utils.new_alphanumeric_token(9).upcase, iva: product.Product.iva,
       quantity: info[product.hash_id], sub_total: subtotal,
       w_product_id: product.id, ieps: product.Product.ieps, 
       total_iva: total_iva * info[product.hash_id].to_i,
       total_ieps: total_ieps * info[product.hash_id].to_i)
+
+    if offers
+      offer = WebOffer.specialOfferFor(product.id, offers)
+      detail.discount = offer["discount"] if offer
+    end 
+
+    return detail
   end
 
   def self.required_products_hash(order_id)

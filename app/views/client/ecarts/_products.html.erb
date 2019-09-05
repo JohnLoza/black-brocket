@@ -28,25 +28,25 @@
       <div class="col-sm-2 text-center">
         <label class="product-descriptor">Precio Unitario:</label>
           $<span>
-            <% monto = 0 %>
-            <% if @product_prices.any? %>
-              <% @product_prices.each do |pp| %>
-                <% if p.id == pp.product_id %>
-                  <% monto = pp.client_price * session[:e_cart][wp.hash_id].to_i %>
-                  <%= pp.client_price %>
-                <% end # if p.id == pp.product_id # %>
-              <% end # @product_prices.each # %>
-            <% else %>
-              <% monto = p.price * session[:e_cart][wp.hash_id].to_i %>
-              <%= p.price %>
-            <% end # if @product_prices.any? # %>
+            <% 
+              sub_total = 0
+              unit_price = Product.priceFor(wp, @product_prices, @offers)
+              sub_total = unit_price * session[:e_cart][wp.hash_id].to_i
+            %>
+            <%= unit_price %>
+
+            <% if @offers %>
+              <% offer = WebOffer.specialOfferFor(p.id, @offers) %>
+              <%= content_tag :span, "(-#{offer['discount']}%)",
+                style: "color: #f44336;" if offer %>
+            <% end %>
           </span>
       </div>
       <div class="col-sm-1 text-center">
-        <% @total += monto %>
+        <% @total += sub_total %>
         <label class="product-descriptor">Importe: </label>
           $<span id="<%=wp.hash_id%>-cost" class="individual-cost">
-            <%= monto %>
+            <%= sub_total %>
           </span>
       </div>
       <div class="col-sm-1 text-center">

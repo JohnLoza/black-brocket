@@ -29,7 +29,12 @@
           <td><%= p.presentation %><br><br></td>
           <td><span class="number_format"><%= d.quantity %></span><br><br></td>
           <% unit_price = d.price %>
-          <td>$<span class="number_format"><%= unit_price %></span><br><br></td>
+          <td>
+            $<span class="number_format"><%= unit_price %></span>
+            <%= content_tag :span, "(-#{d.discount}%)",
+              style: "color: #f44336;" if d.discount %>
+            <br><br>
+          </td>
           <!-- IVA -->
           <td>
             <%=d.iva%> %<br>

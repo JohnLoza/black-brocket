@@ -81,7 +81,7 @@ class Api::OrdersController < ApiController
     begin
       ActiveRecord::Base.transaction do
         order.save!
-        products.each {|p| p.withdraw(session[:e_cart][p.hash_id].to_i)}
+        products.each {|p| p.withdraw(params[:product_details][p.hash_id].to_i)}
         order.create_conekta_charge(@current_user, products, custom_prices) if order.payment_method_code == "OXXO_PAY"
         if order.payment_method_code == "BBVA"
           response = order.create_bbva_charge(@current_user, order)

@@ -84,4 +84,32 @@ class Admin::BbConfigurationController < AdminController
     redirect_to admin_locals_configuration_path()
   end
 
+  def offers
+    @products = Product.active
+    @offers = WebOffer.getSpecialOffers
+
+    # obj = WebOffer.specialOfferFor(10, @offers)
+  end
+
+  def set_offers
+    json_array = Array.new
+
+    params[:product_id].each_with_index do |value, indx|
+      json_array << {
+        product_id: params[:product_id][indx].to_i,
+        discount: params[:discount][indx].to_f
+      }
+    end
+
+    WebOffer.setSpecialOffers(json_array)
+    flash[:success] = "Ofertas guardadas"
+    redirect_to admin_offers_configuration_path()
+  end
+
+  def destroy_offers
+    WebOffer.setSpecialOffers(nil)
+    flash[:success] = "Ofertas eliminadas"
+    redirect_to admin_offers_configuration_path()
+  end
+
 end

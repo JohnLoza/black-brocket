@@ -1,0 +1,29 @@
+<% provide(:title, "Configurar ofertas") %>
+<%= render partial: "/shared/admin/header_band", locals: {title: "Configurar ofertas", 
+  labels: ["Configuración", "Ofertas"], links: [admin_configuration_path]} %>
+
+<!--Content whit animation-->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+	  <%= render "offers_form" %>
+  </div>
+</div>
+<br>
+<!--End content whit animation-->
+
+<style>
+  .pointer{
+    cursor: pointer;
+  }
+</style>
+
+<script type="text/javascript">
+function removeParent(trigger) {
+  $(trigger).parent().remove();
+}
+
+function addOfferFields() {
+  let to_append = "<%= j render "offer_fields" %>";
+  $("section.offer_fields").append(to_append);
+}
+</script>

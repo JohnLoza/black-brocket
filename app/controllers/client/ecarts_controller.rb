@@ -10,6 +10,7 @@ class Client::EcartsController < ApplicationController
     return unless session[:e_cart]
     @products = WarehouseProduct.where("hash_id in (?)", session[:e_cart].keys).includes(:Product)
     @product_prices = @current_user.ProductPrices.where("product_id in (?)", @products.map(&:product_id))
+    @offers = WebOffer.getSpecialOffers
     @warehouse = @products[0].Warehouse if @products.any?
     
     @banks = Bank.all

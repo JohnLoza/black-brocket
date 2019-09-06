@@ -87,8 +87,6 @@ class Admin::BbConfigurationController < AdminController
   def offers
     @products = Product.active
     @offers = WebOffer.getSpecialOffers
-
-    # obj = WebOffer.specialOfferFor(10, @offers)
   end
 
   def set_offers
@@ -97,7 +95,8 @@ class Admin::BbConfigurationController < AdminController
     params[:product_id].each_with_index do |value, indx|
       json_array << {
         product_id: params[:product_id][indx].to_i,
-        discount: params[:discount][indx].to_f
+        discount: params[:discount][indx].to_f,
+        expire_at: params[:expire_at][indx]
       }
     end
 

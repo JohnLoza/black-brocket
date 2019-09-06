@@ -22,5 +22,13 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <%= label_tag :expire_at, "Fecha de expiración", class: "col-sm-2 control-label" %>
+    <div class="col-sm-6">
+      <%= text_field_tag "expire_at[]", offer["expire_at"], class: "form-control date-picker", min: 1,
+        placeholder: "DD-MM-YYYY", required: true, step: 1, max: 99 %>
+    </div>
+  </div>
+
   <div class="hr-line-dashed"></div>
 </section>

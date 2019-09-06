@@ -18,6 +18,30 @@
 </style>
 
 <script type="text/javascript">
+  $(document).ready(() => {
+    // Prepare the calendar script to be run
+    options = {
+      locale: "es",
+      format: "DD-MM-YYYY",
+      icons: {
+          time: "fa fa-clock-o",
+          date: "fa fa-calendar",
+          up: "fa fa-chevron-up",
+          down: "fa fa-chevron-down",
+          previous: "fa fa-chevron-left",
+          next: "fa fa-chevron-right",
+          today: "fa fa-arrows",
+          clear: "fa fa-times"
+      }
+    }
+    $(".date-picker").datetimepicker(options);
+  });
+</script>
+
+<%= stylesheet_link_tag "bootstrap-datetimepicker.min", media: "all" %>
+<%= javascript_include_tag "bootstrap-datetimepicker-custom" %>
+
+<script type="text/javascript">
 function removeParent(trigger) {
   $(trigger).parent().remove();
 }
@@ -25,5 +49,6 @@ function removeParent(trigger) {
 function addOfferFields() {
   let to_append = "<%= j render "offer_fields" %>";
   $("section.offer_fields").append(to_append);
+  $(".date-picker").datetimepicker(options);
 }
 </script>

@@ -10,9 +10,13 @@ class WebOffer < ApplicationRecord
   
   def self.getSpecialOffers
     begin
-      JSON.parse File.read(@@FILE_PATH)
+      obj = JSON.parse File.read(@@FILE_PATH)
+      return nil unless obj and obj.kind_of? Array
+
+      offers = obj.select { |offer| Date.parse(offer["expire_at"]) >= Date.today }
+      return offers.any? ? offers : nil
     rescue
-      nil
+      return nil
     end
   end
 

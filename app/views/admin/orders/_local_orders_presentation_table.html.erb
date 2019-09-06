@@ -55,6 +55,8 @@
                 <%=o.hash_id%>
                 <% if o.conekta_order_id.present? %>
                   <p>Conekta id: <b><%= o.conekta_order_id %></b></p>
+                <% elsif o.bbva_charge_id.present? %>
+                  <p>Bbva id: <b><%= o.bbva_charge_id %></b></p>
                 <% end %>  
               </td>
               <td><%= o.Client.email %></td>

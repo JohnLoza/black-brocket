@@ -11,7 +11,7 @@
       <% end %>
       <div class="caption">
         <span class="pull-right">
-          <% if @current_user.has_custom_prices? %>
+          <% if @current_user.has_custom_prices? and !@offers %>
             <span style="text-decoration: line-through; color: #f44336;">
               $<%= p.price %> MXN
             </span><br>
@@ -19,6 +19,7 @@
           $<%= Product.priceFor(wp, @prices, @offers) %> MXN
 
           <% if @offers %>
+            <br>
             <% sp = WebOffer.specialOfferFor(p.id, @offers) %>
             <%= content_tag :span, "(-#{sp['discount']}%)",
               style: "color: #f44336;" if sp %>

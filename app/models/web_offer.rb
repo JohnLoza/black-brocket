@@ -8,10 +8,11 @@ class WebOffer < ApplicationRecord
     File.write(@@FILE_PATH, json.to_json)
   end
   
-  def self.getSpecialOffers
+  def self.getSpecialOffers(do_not_filter_offers = false)
     begin
       obj = JSON.parse File.read(@@FILE_PATH)
       return nil unless obj and obj.kind_of? Array
+      return obj if do_not_filter_offers
 
       offers = obj.select do |offer| 
         Date.parse(offer["start_at"]) <= Date.today &&

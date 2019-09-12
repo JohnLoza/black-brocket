@@ -86,7 +86,7 @@ class Admin::BbConfigurationController < AdminController
 
   def offers
     @products = Product.active
-    @offers = WebOffer.getSpecialOffers
+    @offers = WebOffer.getSpecialOffers(true)
   end
 
   def set_offers

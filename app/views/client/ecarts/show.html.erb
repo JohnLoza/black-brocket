@@ -235,8 +235,12 @@
       invoice = $("input[type='radio'][name='invoice']:checked");
 
       $("#review-shipment-method").text(shipment[0].getAttribute("info"));
-      $("#review-payment-method").text(payment[0].getAttribute("info"));
       $("#review-invoice-requirement").text(invoice[0].getAttribute("info"));
+      if(payment.size() > 0){
+        $("#review-payment-method").text(payment[0].getAttribute("info"));
+      }else{
+        $("#review-payment-method").text("Efectivo");
+      }
     }
 
     // Add hidden class to all steps

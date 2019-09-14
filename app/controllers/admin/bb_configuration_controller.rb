@@ -95,7 +95,7 @@ class Admin::BbConfigurationController < AdminController
     params[:product_id].each_with_index do |value, indx|
       json_array << {
         product_id: params[:product_id][indx].to_i,
-        discount: params[:discount][indx].to_f,
+        discount: params[:discount][indx].to_i,
         start_at: params[:start_at][indx],
         expire_at: params[:expire_at][indx]
       }

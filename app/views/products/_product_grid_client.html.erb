@@ -21,8 +21,8 @@
           <% if @offers %>
             <br>
             <% sp = WebOffer.specialOfferFor(p.id, @offers) %>
-            <%= content_tag :span, "(-#{sp['discount']}%)",
-              style: "color: #f44336;" if sp %>
+            <%= content_tag :span, "incluye #{sp['discount']}% desc",
+              style: "color: #f44336; font-size: 12px;" if sp %>
           <% end %>
 
         </span>

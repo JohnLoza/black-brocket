@@ -83,7 +83,7 @@ class StaticPagesController < ApplicationController
     end
 
     def distributor_request_params
-      {name: params[:name],cellphone: params[:cellphone], telephone: params[:telephone], 
-       city_id: params[:city_id], email: params[:email]}
+      {name: params[:name], cellphone: params[:cellphone], telephone: params[:telephone], 
+        city_id: params[:city_id], email: params[:email]}
     end
 end

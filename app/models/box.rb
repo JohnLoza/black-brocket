@@ -74,6 +74,16 @@ class Box
       -H \"Content-Type: application/json\" --request POST \\
       --data '{\"zip_from\":\"44100\",\"zip_to\":\"#{zc}\",\"parcel\":{\"weight\":#{weight},\"height\":#{box["height"]},\"width\":#{box["width"]},\"length\":#{box["length"]}}}'`
 
-    return JSON.parse res
+    quotations = JSON.parse res
+    quotations = quotations.select do |hash|
+      case hash["provider"]
+      when "SENDEX", "CARSSA", "REDPACK"
+        false
+      else
+        true
+      end
+    end
+
+    return quotations
   end
 end

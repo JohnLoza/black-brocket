@@ -248,6 +248,12 @@ class Api::OrdersController < ApiController
         success: true, info: "REDIRECTING_TO_BBVA", 
         redirect_to: charge["payment_method"]["url"]
       }
+    when "failed"
+      render status: 200, json: { success: false, info: "FAILED" }
+    when "refunded"
+      render status: 200, json: { success: false, info: "REFUNDED" }
+    when "cancelled"
+      render status: 200, json: { success: false, info: "CANCELLED" }
     else
       render_404
     end

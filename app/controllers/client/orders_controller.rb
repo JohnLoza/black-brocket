@@ -185,19 +185,27 @@ class Client::OrdersController < ApplicationController
       render_404 and return
     end
     
+    msg = ""
     case charge["status"]
     when "completed"
       redirect_to client_orders_path(@current_user), 
         flash: {success: "Ya has completado tu pago, estamos en proceso de su validacón" }
     when "expired"
       order.cancel!("Fecha límite de pago alcanzada")
-      redirect_to client_orders_path(@current_user),
-        flash: {info: "Fecha límite de pago alcanzada para la órden #{order.hash_id}"}
+      msg = "Fecha límite de pago alcanzada, órden expirada."
     when "charge_pending"
       redirect_to charge["payment_method"]["url"]
+    when "failed"
+      msg = "Ocurrió un error inesperado al pagar."
+    when "refunded"
+      msg = "Pago reembolsado."
+    when "cancelled"
+      msg = "Transacción cancelada."
     else
       render_404
     end
+
+    redirect_to client_orders_path(@current_user), flash: {info: msg }
   end
 
   private

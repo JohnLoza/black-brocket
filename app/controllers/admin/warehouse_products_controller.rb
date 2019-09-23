@@ -316,7 +316,7 @@ class Admin::WarehouseProductsController < AdminController
     end
 
     @product = Product.find_by!(hash_id: params[:product_qr][:product])
-    @qr = RQRCode::QRCode.new( "#{@product.name}|#{params[:product_qr][:batch]}")
+    @qr = RQRCode::QRCode.new("#{@product.name}|#{params[:product_qr][:batch]}")
 
     render :print_qr, layout: false
   end

@@ -69,15 +69,15 @@ class Admin::StatisticsController < AdminController
   private
   def getStatisticDetails(from_date, to_date, products, distributors)
     selection = "order_details.product_id, sum(order_details.quantity) as sum_q"
-    where_cond = ""
+    where_cond = "(orders.state not in ('WAITING_FOR_PAYMENT','ORDER_CANCELED','PAYMENT_REJECTED','PAYMENT_DEPOSITED','LOCAL','PICKED_UP'))"
     group_cond = "order_details.product_id"
     details = Array.new
 
     # build the sentence with the given parameters #
     if ((from_date != "" and to_date != "") or products or distributors)
       if from_date != "" and to_date != ""
-        # add condition to search the orders between those two dates #
-        where_cond += " DATE(order_details.created_at) BETWEEN '#{from_date}' AND '#{to_date}' "
+        # add condition to search the orders between those two dates#
+        where_cond += " AND DATE(order_details.created_at) BETWEEN '#{from_date}' AND '#{to_date}' "
       end
       if products and products.any?
         # add condition to search the orders with the specified products #

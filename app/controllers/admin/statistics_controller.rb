@@ -82,14 +82,14 @@ class Admin::StatisticsController < AdminController
       if products and products.any?
         # add condition to search the orders with the specified products #
         where_cond += " AND " if where_cond != ""
-        where_cond += " order_details.product_id IN ("+ products.map(&:inspect).join(", ") +") "
+        where_cond += " order_details.product_id IN (#{products.map(&:inspect).join(", ").gsub("\"", "\'")}) "
       end
       if distributors and distributors.any?
         # add condition to search the orders from the specified distributors #
         selection += ", orders.distributor_id as dist_id"
         group_cond = "dist_id, order_details.product_id"
         where_cond += " AND " if where_cond != ""
-        where_cond += " orders.distributor_id IN ("+ distributors.map(&:inspect).join(", ") +") "
+        where_cond += " orders.distributor_id IN (#{distributors.map(&:inspect).join(", ").gsub("\"", "\'")}) "
       end
 
       # search #

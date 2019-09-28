@@ -5,13 +5,13 @@ class Api::DistributorApi::CommissionsController < ApiController
 
   def index
     commissions = @current_user.Commissions.order(created_at: :desc)
-                    .limit(100).paginate(page: params[:page], per_page: 25)
+      .limit(100).paginate(page: params[:page], per_page: 25)
     data = Array.new
     data<<{per_page: 25}
     commissions.each do |commission|
       data << {hash_id: commission.hash_id, total: commission.total,
         status: I18n.t(commission.state), date: I18n.l(commission.created_at, format: :long),
-        payment_img: commission.payment_img.url, payment_pdf: commission.payment_pdf.url}
+        payment: commission.payment.url}
     end
 
     render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}
@@ -25,7 +25,7 @@ class Api::DistributorApi::CommissionsController < ApiController
     data = Array.new
     orders.each do |order|
       data << {hash_id: order.hash_id, total: order.total, client_username: order.Client.username,
-        client_hash_id: order.Client.hash_id, status: I18n.t(order.state), payment_img: commission.payment_img.url, payment_pdf: commission.payment_pdf.url}
+        client_hash_id: order.Client.hash_id, status: I18n.t(order.state), payment: commission.payment.url}
     end
 
     render status: 200, json: {success: true, info: "DATA_RETURNED", data: data}

@@ -21,11 +21,13 @@ class Api::UsersController < ApiController
 
   def show
     u = @current_user
-    data = {username: u.username, email: u.email, street: u.street,
-            colony: u.col, intnumber: u.intnumber, extnumber: u.extnumber,
-            zipcode: u.cp, street_ref1: u.street_ref1, street_ref2: u.street_ref2,
-            telephone: u.telephone, birthday: u.birthday, cellphone: u.cellphone,
-            name: u.name, lastname: u.lastname, mother_lastname: u.mother_lastname, city: @current_user.City.id }
+    data = {
+      username: u.username, email: u.email, street: u.street,
+      colony: u.col, intnumber: u.intnumber, extnumber: u.extnumber,
+      zipcode: u.cp, street_ref1: u.street_ref1, street_ref2: u.street_ref2,
+      telephone: u.telephone, cellphone: u.cellphone,
+      name: u.name, city: @current_user.City.id
+    }
 
     render status: 200, json: {success: true, info: "USER_DATA", 
       data: data, state: @current_user.City.state_id}

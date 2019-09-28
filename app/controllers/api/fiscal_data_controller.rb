@@ -43,8 +43,6 @@ class Api::FiscalDataController < ApiController
 
   private
   def fiscal_params
-    params.require(:fiscal_data).permit(
-        :name, :lastname, :mother_lastname, :rfc,
-        :street, :intnumber, :extnumber, :col, :cp)
+    params.require(:fiscal_data).permit(:name, :rfc, :street, :intnumber, :extnumber, :col, :cp)
   end
 end

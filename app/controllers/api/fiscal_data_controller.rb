@@ -31,8 +31,6 @@ class Api::FiscalDataController < ApiController
   def update
     @fiscal_data = @current_user.FiscalData
     @fiscal_data.city_id = params[:city_id]
-    @fiscal_data.lastname = params[:fiscal_data][:lastname]==""
-    @fiscal_data.mother_lastname = params[:fiscal_data][:mother_lastname]==""
 
     if @fiscal_data.update_attributes(fiscal_params)
       render status: 200, json: {success: true, info: "SAVED"}

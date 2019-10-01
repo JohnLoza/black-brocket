@@ -452,7 +452,7 @@ class Admin::OrdersController < AdminController
       end # case params[:type] #
 
       if search_params.present?
-        statements[:where] += " and orders.hash_id like '%#{search_params}%'"
+        statements[:where] += " and orders.hash_id like '%#{search_params.gsub("'",%q(\\\'))}%'"
       end
       return statements
     end

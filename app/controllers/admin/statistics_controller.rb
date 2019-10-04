@@ -12,16 +12,11 @@ class Admin::StatisticsController < AdminController
 
   def sales
     deny_access! and return unless @current_user.has_permission_category?("statistics")
-    # params[:products].sort! { |x,y| x.to_i <=> y.to_i } if params[:products]
-
-    # get the orders details given the parameters the user entered #
     @details = getStatisticDetails(params[:from_date], params[:to_date], params[:products], params[:distributors])
 
     if @details
-      # @chartDataSets Array with the data to be displayed by Chart.js #
       @chartDataSets = Array.new
 
-      # fetch the products #
       if params[:products] and params[:products].any?
         @products = Product.select(:id, :hash_id, :name).active
           .where(id: params[:products]).order(id: :ASC)
@@ -29,7 +24,6 @@ class Admin::StatisticsController < AdminController
         @products = Product.select(:id, :hash_id, :name).active.order(id: :ASC)
       end
 
-      # fetch the distributors #
       if params[:distributors] and params[:distributors].any?
         @distributors = Distributor.select(:id, :hash_id, :username).active
           .where(id: params[:distributors]).order(id: :ASC)
@@ -38,7 +32,6 @@ class Admin::StatisticsController < AdminController
       end
 
       @chartDataSets = buildChartDataSet(@products, @distributors, @details)
-
     end # if @details
   end
 
@@ -94,7 +87,7 @@ class Admin::StatisticsController < AdminController
 
       # search #
       details = OrderDetail.select(selection).joins(:Order)
-          .where(where_cond).group(group_cond).order(product_id: :asc)
+        .where(where_cond).group(group_cond).order(product_id: :asc)
     else # no parameters given #
       # searching all the orders of all the products from the beginning of time #
       details = OrderDetail.select(selection).group(group_cond).order(product_id: :asc)

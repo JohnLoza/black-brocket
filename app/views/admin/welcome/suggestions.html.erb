@@ -22,7 +22,8 @@
 
       <% @suggestions.each do |s| %>
         <p><b>Nombre:</b> <%= s.name %></p>
-        <p><b>Mensaje:</b> <%= s.message %></p>
+	<p><b>Mensaje:</b> <%= s.message %></p>
+		<p><b>Teleéfono:</b> <%= s.telephone %></p>
         <p><b>E-mail:</b> <%= s.email %></p>
         <p><b>Fecha:</b> <%= l(s.created_at, format: :long) %></p>
         <% if params[:answered]  %>

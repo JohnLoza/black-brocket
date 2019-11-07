@@ -27,7 +27,7 @@ class Box
     boxes = self.order_by(:weight, :desc) # bigger boxes first
     boxes_selected = Hash.new
     remaining_cart_weight = cart_weight.to_f / 1000
-  
+
     while remaining_cart_weight > 0 # keep adding boxes til there is no product left
       boxes.each do |box|
         use_this_box = false
@@ -36,7 +36,7 @@ class Box
 
           no_boxes = (remaining_cart_weight / box["weight"]).floor
           no_boxes = 1 if no_boxes == 0 # change no_boxes to 1 when box is almost full
-          
+
           if boxes_selected[box["name"]].present?
             boxes_selected[box["name"]] += no_boxes
           else
@@ -57,7 +57,7 @@ class Box
           boxes_selected[boxes.last["name"]] = 1
         end
         remaining_cart_weight -= boxes.last["weight"]
-      end # end if 
+      end # end if
     end # end while
 
     return boxes_selected, boxes
@@ -69,7 +69,7 @@ class Box
     weight = box["weight"] + (box["box_weight"]/1000)
     weight = weight.round(3)
 
-    res = `curl \"https://api.srenvio.com/v1/quotations\" \\
+    res = `curl \"https://api.skydropx.com/v1/quotations\" \\
       -H \"Authorization: Token token=SQoaP1oPC0bXuUVIrzaARitVruXXRrVOEDiOYUUi6Q4t\" \\
       -H \"Content-Type: application/json\" --request POST \\
       --data '{\"zip_from\":\"44100\",\"zip_to\":\"#{zc}\",\"parcel\":{\"weight\":#{weight},\"height\":#{box["height"]},\"width\":#{box["width"]},\"length\":#{box["length"]}}}'`

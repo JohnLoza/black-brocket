@@ -121,8 +121,10 @@ class Order < ApplicationRecord
     bbva = self.bbva_instance()
     charges = bbva.create(:charges)
 
+    affiliation = Rails.env == "production" ? '4186051', '582762'
+
     charge_params = {
-      "affiliation_bbva" => "582762",
+      "affiliation_bbva" => affiliation,
       "amount" => order.total,
       "currency" => "MXN",
       "description" => "Compra de productos Black Brocket",

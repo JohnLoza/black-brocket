@@ -1,6 +1,6 @@
 class Order < ApplicationRecord
   include HashId
-  
+
   belongs_to :City, foreign_key: :city_id, optional: true
   belongs_to :Distributor, foreign_key: :distributor_id, optional: true
   belongs_to :Client, foreign_key: :client_id, optional: true
@@ -28,7 +28,7 @@ class Order < ApplicationRecord
   def address_hash
     eval self.address
   end
-  
+
   def address_for_google
     hash = address_hash
     str = "#{hash[:street]}+#{hash[:extnumber]}"
@@ -65,7 +65,7 @@ class Order < ApplicationRecord
 
   def cancel!(message = nil)
     details = OrderDetail.where(order_id: self.id)
-    
+
     ActiveRecord::Base.transaction do
       details.each {|d| WarehouseProduct.return(d.w_product_id, d.quantity)}
 
@@ -93,9 +93,9 @@ class Order < ApplicationRecord
     Conekta.api_version = "2.0.0"
 
     line_items = fill_line_items(self, products, custom_prices)
-    
-    shipping_lines = [{ 
-      amount: self.json_guides["shipping_cost"] * 100, 
+
+    shipping_lines = [{
+      amount: self.json_guides["shipping_cost"] * 100,
       carrier: self.json_guides["provider"]
     }]
 
@@ -109,7 +109,7 @@ class Order < ApplicationRecord
         payment_method: { type: "oxxo_cash" }
       }]
     })
-    
+
     self.update_attributes!(conekta_order_id: conekta_order.id)
   end
 
@@ -137,8 +137,12 @@ class Order < ApplicationRecord
 
   def bbva_instance
     require 'bbva'
-    merchant_id = 'mx316pz06s7aq7svcyrg'
-    private_key = 'sk_365b9b836b624816ae433004589c8bff'
+    merchant_id = Rails.env == "production" ? 'muk6sqpsrrax6rkee078' : 'mx316pz06s7aq7svcyrg'
+    if Rails.env == "production"
+      private_key = 'sk_83944fb5358a49cabd2d6a762bbccadb'
+    else
+      private_key = 'sk_365b9b836b624816ae433004589c8bff'
+    end
     is_production = Rails.env == "production"
 
     BbvaApi.new(merchant_id, private_key, is_production)
@@ -158,8 +162,8 @@ class Order < ApplicationRecord
         wp = warehouse_products.find{ |wp| wp.product_id == order_detail.product_id }
         product = wp.Product
         price = Product.priceFor(wp, custom_prices)
-        line_items << { 
-          name: product.name, 
+        line_items << {
+          name: product.name,
           unit_price: (price * 100).to_i,
           quantity: order_detail.quantity
         }

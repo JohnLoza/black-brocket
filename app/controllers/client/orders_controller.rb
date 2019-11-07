@@ -15,7 +15,7 @@ class Client::OrdersController < ApplicationController
     require "barby/outputter/png_outputter"
 
     @order = Order.find_by!(hash_id: params[:id])
-    
+
     begin
       @guides_json = JSON.parse @order.guides
     rescue
@@ -64,12 +64,14 @@ class Client::OrdersController < ApplicationController
       flash[:info] = "Ocurrió un error al procesar la órden"
     rescue ActiveRecord::RangeError
       flash[:info] = "No existe inventario suficiente"
-    rescue BbvaTransactionException
+    rescue BbvaTransactionException => error
       flash[:info] = "Ocurrió un error al procesar la órden (BbvaError 1020)"
+      logger.debug "<<< exception message: #{error.message}"
+      logger.debug error.backtrace.join("\n")
     rescue Conekta::ParameterValidationError => error
       flash[:info] = "Ocurrió un error al procesar la órden (ConektaError 1010)"
-      logger.error "<<< message: #{error.message}"
-      logger.error error.backtrace.join("\n")
+      logger.debug "<<< message: #{error.message}"
+      logger.debug error.backtrace.join("\n")
     end # begin
 
     return if performed?
@@ -78,7 +80,7 @@ class Client::OrdersController < ApplicationController
     else
       flash[:success] = "Orden guardada"; session.delete(:e_cart)
       SendOrderConfirmationJob.perform_later(current_user, order)
-      verify_fiscal_data or return 
+      verify_fiscal_data or return
       redirect_to client_orders_path(current_user.hash_id, info_for: order.hash_id) and return
     end # if flash[:info].present?
   end
@@ -108,7 +110,7 @@ class Client::OrdersController < ApplicationController
     timestamp = Time.now.strftime("%Y%m%d%H%M%S")
     extension = payment.content_type.split('/')[1]
     payment.original_filename = "#{timestamp}.#{extension}"
-    
+
     order.payment = params[:order][:payment]
     order.state = "PAYMENT_DEPOSITED" unless order.state == "LOCAL"
     order.download_payment_key = SecureRandom.urlsafe_base64 unless order.download_payment_key.present?
@@ -127,7 +129,7 @@ class Client::OrdersController < ApplicationController
   def get_bank_payment_info
     @order = @current_user.Orders.find_by!(hash_id: params[:id])
     return unless @order.payment_method.present?
-    
+
     if @order.payment_method_code == "OXXO_PAY"
       require "conekta"
       Conekta.api_key = Order.conekta_api_key()
@@ -184,11 +186,11 @@ class Client::OrdersController < ApplicationController
     rescue BbvaTransactionException
       render_404 and return
     end
-    
+
     msg = ""
     case charge["status"]
     when "completed"
-      redirect_to client_orders_path(@current_user), 
+      redirect_to client_orders_path(@current_user),
         flash: {success: "Ya has completado tu pago, estamos en proceso de su validacón" }
       return
     when "expired"
@@ -206,7 +208,7 @@ class Client::OrdersController < ApplicationController
       render_404 and return
     end
 
-    redirect_to client_orders_path(@current_user), 
+    redirect_to client_orders_path(@current_user),
       flash: {info: msg } unless performed?
   end
 
@@ -216,7 +218,7 @@ class Client::OrdersController < ApplicationController
 
       data = @current_user.FiscalData
       return true if data.present?
-      
+
       flash[:info] = "Por favor completa tu información fiscal (con fines de facturación)"
       redirect_to edit_client_fiscal_datum_path(@current_user.hash_id)
       return false

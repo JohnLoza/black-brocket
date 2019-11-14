@@ -77,7 +77,7 @@ class Box
     quotations = JSON.parse res
     quotations = quotations.select do |hash|
       case hash["provider"]
-      when "SENDEX", "CARSSA", "REDPACK"
+      when "SENDEX", "CARSSA", "REDPACK", "ESTAFETA", "QUIKEN", "PAQUETEXPRESS"
         false
       else
         true

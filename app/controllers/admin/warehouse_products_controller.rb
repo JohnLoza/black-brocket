@@ -21,7 +21,7 @@ class Admin::WarehouseProductsController < AdminController
   def stock_details
     unless @current_user.has_permission_category?("warehouse_manager") or
       @current_user.has_permission_category?("warehouse_products")
-      deny_access! and return 
+      deny_access! and return
     end
 
     @warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
@@ -145,9 +145,9 @@ class Admin::WarehouseProductsController < AdminController
 
           product_info = session[:shipment_products][product_id][hash]
           product_expiration_date = product_info["expiration_date"]
-          current_detail = ShipmentDetail.new(shipment_id: shipment.id, product_id: product_id, 
-            quantity: product_info["quantity"], batch: product_info["batch"], 
-            expiration_date: product_info["expiration_date"], type: shipment.shipment_type, 
+          current_detail = ShipmentDetail.new(shipment_id: shipment.id, product_id: product_id,
+            quantity: product_info["quantity"], batch: product_info["batch"],
+            expiration_date: product_info["expiration_date"], type: shipment.shipment_type,
             target_warehouse_id: shipment.target_warehouse_id, origin_warehouse_id: shipment.origin_warehouse_id)
           current_detail.save!
 
@@ -158,7 +158,7 @@ class Admin::WarehouseProductsController < AdminController
       session.delete(:shipment_products)
       flash[:success] = "Envío registrado!"
     end
-    
+
     flash[:info] = "Ocurrió un error al guardar el envío" unless flash[:success].present?
     if shipment.shipment_type == "TRANSFER"
       redirect_to admin_warehouse_products_path(params[:warehouse_id])
@@ -205,7 +205,7 @@ class Admin::WarehouseProductsController < AdminController
     @shipments = @warehouse.IncomingShipments.includes(:Chief, :Worker, :OriginWarehouse)
       .order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
-  
+
   def shipment_details
     deny_access! and return unless @current_user.has_permission?("warehouse_manager@receive_shipments")
 
@@ -226,7 +226,7 @@ class Admin::WarehouseProductsController < AdminController
 
     warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     update_stock_from_shipment(warehouse, shipment)
-    
+
     flash[:success] = "Se añadieron los productos al stock actual!"
     redirect_to admin_shipments_path(warehouse.hash_id)
   end
@@ -256,7 +256,7 @@ class Admin::WarehouseProductsController < AdminController
     deny_access! and return unless @current_user.has_permission?("warehouse_products@reject_shipment_stock")
     shipment = Shipment.find(params[:id])
     render_404 and return if shipment.reviewed
-    
+
     warehouse = Warehouse.find_by!(hash_id: params[:warehouse_id])
     report = shipment.DifferenceReport
     update_stock_from_shipment(warehouse, shipment, report)
@@ -312,7 +312,7 @@ class Admin::WarehouseProductsController < AdminController
   def print_qr
     unless @current_user.has_permission_category?("warehouse_products") or
       @current_user.has_permission_category?("warehouse_manager")
-      deny_access! and return 
+      deny_access! and return
     end
 
     @product = Product.find_by!(hash_id: params[:product_qr][:product])
@@ -352,7 +352,7 @@ class Admin::WarehouseProductsController < AdminController
     end
 
     def update_product_stock(warehouse_id, detail, to_be_added)
-      existing_batch = WarehouseProduct.where(warehouse_id: warehouse_id, 
+      existing_batch = WarehouseProduct.where(warehouse_id: warehouse_id,
         product_id: detail.product_id, batch: detail.batch).take
       if existing_batch.present?
         existing_batch.supply(to_be_added)
@@ -361,13 +361,13 @@ class Admin::WarehouseProductsController < AdminController
           describes_total_stock: false, hash_id: Utils.new_alphanumeric_token(9).upcase,
           existence: to_be_added, batch: detail.batch, expiration_date: detail.expiration_date)
       end
-      total_descriptor = WarehouseProduct.where(warehouse_id: warehouse_id, 
+      total_descriptor = WarehouseProduct.where(warehouse_id: warehouse_id,
         product_id: detail.product_id, describes_total_stock: true).take
       total_descriptor.supply(to_be_added)
     end
 
     def shipment_params
-      params.require(:shipment).permit(:shipment_type, :chief_id, 
+      params.require(:shipment).permit(:shipment_type, :chief_id,
         :target_warehouse_id, :origin_warehouse_id)
     end
 

@@ -1,5 +1,5 @@
 <% provide(:title, "Productos en el almacén") %>
-<%= render partial: "/shared/admin/header_band", locals: {title: "Productos en el almacén", 
+<%= render partial: "/shared/admin/header_band", locals: {title: "Productos en el almacén",
   labels: ["Almacenes", "Productos en el almacén"], links: [admin_warehouses_path]} %>
 
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -64,7 +64,7 @@
 
 <% if @current_user.has_permission?("warehouse_products@create_shipments") %>
 <script type="text/javascript">
-  function update_shipment_preparations_form(product_name, product_id) {
+  function update_shipment_preparations_form(product_name, product_id, product_hash_id) {
     modal = $("#modal")
     modal.find(".modal-title").html("Agregar existencia a: "+product_name);
     modal.find(".modal-body").html("<%= j render 'preparation_form' %>");
@@ -73,7 +73,7 @@
 
     var _href = $("#existence-form").attr("action");
     $("#existence-form").get(0).setAttribute("action", _href.replace("0x0", product_id));
-    $("#product_qr_product").val(product_id);
+    $("#product_qr_product").val(product_hash_id);
 
     modal.modal("show");
   }

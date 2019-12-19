@@ -1,7 +1,7 @@
 <% provide(:title, "Productos") %>
 <% provide(:keywords, "productos, black brocket, blackbrocket, white chocolate,
   double chocolate, caramel, chai green tea latte, mocha latte, cappuccino,
-  cappuccino french vanilla, french vanilla, chai tea latte, 
+  cappuccino french vanilla, french vanilla, chai tea latte,
   apple cinnamon chai tea latte, chai, frappé, café, bases para frappe,
   polvos para frappe, suministros para cafeteria") %>
 <% provide(:meta_description, "Lista de los productos Black Brocket")%>
@@ -18,7 +18,7 @@
 
     <% if logged_in?%>
       <div class="text-center">
-        <%= image_tag @current_user.avatar_url, class: "img-rounded", 
+        <%= image_tag @current_user.avatar_url, class: "img-rounded",
           style: "width:130px; margin-bottom: 1em;" %><br>
       </div>
     <% end %>
@@ -26,7 +26,7 @@
     <%= form_tag(products_path, method: :get) do %>
       <div class="input-group">
         <%= text_field_tag :search, params[:search],
-          class: "input form-control", maxlength: 20, 
+          class: "input form-control", maxlength: 20,
           placeholder: "Buscar producto...", required: true %>
 
         <span class="input-group-btn">
@@ -101,7 +101,7 @@
     height:20px;
     text-overflow:ellipsis;
     white-space:nowrap;
-    overflow:hidden; 
+    overflow:hidden;
   }
   .thumbnail h3{
     font-size: 1em;
@@ -137,6 +137,9 @@
   }
 
   $(document).ready(function(){
+    $("#dismissible_alerts").append("<%= j render partial: "/shared/dismissible_alert",
+      locals: {message_type: :warning, message: "Le avisamos a todos nuestros clientes que del día 25 de Diciembre al 01 de Enero, se suspenderá toda labor en envíos de pedidos, reanudando actividades el día 02 de Enero de 2020."} %>");
+
     numbers_to_format = $(".money_format");
     numbers_to_format.each(function(){
       $(this).html(money_format($(this).text()));

@@ -138,7 +138,7 @@
 
   $(document).ready(function(){
     $("#dismissible_alerts").append("<%= j render partial: "/shared/dismissible_alert",
-      locals: {message_type: :warning, message: "Le avisamos a todos nuestros clientes que del día 25 de Diciembre al 01 de Enero, se suspenderá toda labor en envíos de pedidos, reanudando actividades el día 02 de Enero de 2020."} %>");
+      locals: {message_type: :danger, message: "Le avisamos a todos nuestros clientes que del día 25 de Diciembre al 01 de Enero, se suspenderá toda labor en envíos de pedidos, reanudando actividades el día 02 de Enero de 2020."} %>");
 
     numbers_to_format = $(".money_format");
     numbers_to_format.each(function(){

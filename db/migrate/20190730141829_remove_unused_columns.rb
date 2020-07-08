@@ -1,8 +1,5 @@
 class RemoveUnusedColumns < ActiveRecord::Migration[5.1]
   def change
-    drop_table :parcel_prices
-    drop_table :parcels
-
     remove_column :clients, :bank_reference
     remove_column :clients, :lastname
     remove_column :clients, :mother_lastname

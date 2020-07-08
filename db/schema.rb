@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "bank_report_views", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "worker_id"
+    t.bigint "worker_id"
     t.date "from_date"
     t.date "to_date"
     t.string "details"
@@ -53,8 +53,8 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "client_distributor_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "client_id"
-    t.integer "distributor_id"
+    t.bigint "client_id"
+    t.bigint "distributor_id"
     t.text "comment"
     t.boolean "is_from_client"
     t.datetime "created_at", null: false
@@ -63,16 +63,16 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "client_products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "client_id"
-    t.integer "product_id"
+    t.bigint "client_id"
+    t.bigint "product_id"
     t.decimal "client_price", precision: 8, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "clients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "city_id"
-    t.string "hash_id", null: false, collation: "utf8_bin"
+    t.bigint "city_id"
+    t.string "hash_id", null: false
     t.string "email"
     t.boolean "email_verified", default: false
     t.string "username"
@@ -107,14 +107,14 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "commission_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "commission_id"
-    t.integer "order_id"
+    t.bigint "commission_id"
+    t.bigint "order_id"
   end
 
   create_table "commissions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "hash_id", null: false, collation: "utf8_bin"
-    t.integer "distributor_id"
-    t.integer "worker_id"
+    t.string "hash_id", null: false
+    t.bigint "distributor_id"
+    t.bigint "worker_id"
     t.decimal "total", precision: 8, scale: 2
     t.string "payment"
     t.string "invoice"
@@ -129,7 +129,7 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "distributor_candidates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "city_id"
+    t.bigint "city_id"
     t.string "name"
     t.string "email"
     t.string "telephone"
@@ -140,22 +140,22 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "distributor_client_revisions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "distributor_id"
-    t.integer "client_id"
+    t.bigint "distributor_id"
+    t.bigint "client_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "distributor_supervisions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "supervisor_id"
-    t.integer "distributor_id"
+    t.bigint "supervisor_id"
+    t.bigint "distributor_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "distributor_visits", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "distributor_id"
-    t.integer "client_id"
+    t.bigint "distributor_id"
+    t.bigint "client_id"
     t.date "visit_date"
     t.boolean "client_recognizes_visit"
     t.string "treatment_answer"
@@ -165,8 +165,8 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "distributors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "city_id"
-    t.string "hash_id", null: false, collation: "utf8_bin"
+    t.bigint "city_id"
+    t.string "hash_id", null: false
     t.string "name"
     t.string "lastname"
     t.string "mother_lastname"
@@ -200,9 +200,9 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "fiscal_data", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "client_id"
-    t.integer "city_id"
-    t.string "hash_id", null: false, collation: "utf8_bin"
+    t.bigint "client_id"
+    t.bigint "city_id"
+    t.string "hash_id", null: false
     t.string "rfc"
     t.string "name"
     t.string "street"
@@ -238,7 +238,7 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "notifications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "client_id"
+    t.bigint "client_id"
     t.string "icon"
     t.string "url"
     t.string "description"
@@ -250,19 +250,19 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "order_actions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "order_id"
-    t.integer "worker_id"
+    t.bigint "order_id"
+    t.bigint "worker_id"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "order_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "order_id"
-    t.integer "product_id"
-    t.integer "w_product_id"
-    t.string "hash_id", null: false, collation: "utf8_bin"
-    t.integer "quantity"
+    t.bigint "order_id"
+    t.bigint "product_id"
+    t.bigint "w_product_id"
+    t.string "hash_id", null: false
+    t.bigint "quantity"
     t.decimal "sub_total", precision: 8, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -276,17 +276,17 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "order_product_shipment_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "order_id"
-    t.integer "product_id"
-    t.integer "quantity"
+    t.bigint "order_id"
+    t.bigint "product_id"
+    t.bigint "quantity"
     t.string "batch"
   end
 
   create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "client_id"
-    t.integer "city_id"
-    t.integer "distributor_id"
-    t.string "hash_id", null: false, collation: "utf8_bin"
+    t.bigint "client_id"
+    t.bigint "city_id"
+    t.bigint "distributor_id"
+    t.string "hash_id", null: false
     t.text "address"
     t.decimal "total", precision: 8, scale: 2
     t.string "payment"
@@ -299,7 +299,6 @@ ActiveRecord::Schema.define(version: 20190905152749) do
     t.datetime "updated_at", null: false
     t.boolean "commission_in_progress", default: false
     t.integer "warehouse_id"
-    t.integer "parcel_id"
     t.text "reject_description"
     t.text "cancel_description"
     t.decimal "shipping_cost", precision: 8, scale: 2
@@ -318,23 +317,23 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "permissions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "worker_id"
+    t.bigint "worker_id"
     t.string "category"
     t.string "name"
     t.index ["worker_id", "category"], name: "index_permissions_on_worker_id_and_category"
   end
 
   create_table "prod_answers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "question_id"
-    t.integer "site_worker_id"
+    t.bigint "question_id"
+    t.bigint "site_worker_id"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "prod_photos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "product_id"
-    t.string "hash_id", null: false, collation: "utf8_bin"
+    t.bigint "product_id"
+    t.string "hash_id", null: false
     t.string "photo"
     t.boolean "is_principal", default: false
     t.datetime "created_at", null: false
@@ -343,9 +342,9 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "prod_questions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "product_id"
-    t.integer "client_id"
-    t.string "hash_id", null: false, collation: "utf8_bin"
+    t.bigint "product_id"
+    t.bigint "client_id"
+    t.string "hash_id", null: false
     t.text "description"
     t.boolean "answered", default: false
     t.datetime "created_at", null: false
@@ -354,7 +353,7 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "hash_id", null: false, collation: "utf8_bin"
+    t.string "hash_id", null: false
     t.string "name"
     t.string "description_render_path"
     t.decimal "price", precision: 8, scale: 2
@@ -372,29 +371,28 @@ ActiveRecord::Schema.define(version: 20190905152749) do
     t.decimal "recommended_price", precision: 8, scale: 2
     t.decimal "ieps", precision: 5, scale: 2
     t.decimal "iva", precision: 5, scale: 2
-    t.integer "total_weight", default: 1535
     t.index ["deleted_at"], name: "index_products_on_deleted_at"
     t.index ["hash_id"], name: "index_products_on_hash_id", unique: true
   end
 
   create_table "shipment_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "shipment_id"
-    t.integer "product_id"
-    t.integer "quantity"
+    t.bigint "shipment_id"
+    t.bigint "product_id"
+    t.bigint "quantity"
     t.string "batch"
     t.string "expiration_date"
   end
 
   create_table "shipment_difference_report_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "difference_report_id"
-    t.integer "shipment_detail_id"
-    t.integer "difference"
+    t.bigint "difference_report_id"
+    t.bigint "shipment_detail_id"
+    t.bigint "difference"
   end
 
   create_table "shipment_difference_reports", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "shipment_id"
-    t.integer "worker_id"
-    t.integer "chief_id"
+    t.bigint "shipment_id"
+    t.bigint "worker_id"
+    t.bigint "chief_id"
     t.boolean "reviewed", default: false
     t.text "observations"
     t.datetime "created_at", null: false
@@ -402,10 +400,10 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "shipments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "origin_warehouse_id"
-    t.integer "target_warehouse_id"
-    t.integer "chief_id"
-    t.integer "worker_id"
+    t.bigint "origin_warehouse_id"
+    t.bigint "target_warehouse_id"
+    t.bigint "chief_id"
+    t.bigint "worker_id"
     t.boolean "got_safe_to_destination"
     t.string "shipment_type"
     t.datetime "created_at", null: false
@@ -414,9 +412,9 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "site_workers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "city_id"
-    t.integer "warehouse_id"
-    t.string "hash_id", null: false, collation: "utf8_bin"
+    t.bigint "city_id"
+    t.bigint "warehouse_id"
+    t.string "hash_id", null: false
     t.string "name"
     t.string "lastname"
     t.string "mother_lastname"
@@ -467,7 +465,7 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "supervisor_visit_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "visit_id"
+    t.bigint "visit_id"
     t.string "client_type"
     t.string "location"
     t.string "local_size"
@@ -510,15 +508,15 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "supervisor_visits", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "worker_id"
-    t.integer "client_id"
+    t.bigint "worker_id"
+    t.bigint "client_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "tip_recipe_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "tip_recipe_id"
-    t.integer "client_id"
+    t.bigint "tip_recipe_id"
+    t.bigint "client_id"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -534,11 +532,11 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "warehouse_products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "hash_id", null: false, collation: "utf8_bin"
-    t.integer "warehouse_id"
-    t.integer "product_id"
-    t.integer "existence", default: 0
-    t.integer "min_stock"
+    t.string "hash_id", null: false
+    t.bigint "warehouse_id"
+    t.bigint "product_id"
+    t.bigint "existence", default: 0
+    t.bigint "min_stock"
     t.string "batch"
     t.date "expiration_date"
     t.boolean "describes_total_stock", default: false
@@ -548,8 +546,8 @@ ActiveRecord::Schema.define(version: 20190905152749) do
   end
 
   create_table "warehouses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "city_id"
-    t.string "hash_id", null: false, collation: "utf8_bin"
+    t.bigint "city_id"
+    t.string "hash_id", null: false
     t.string "name"
     t.string "address"
     t.string "telephone"

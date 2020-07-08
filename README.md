@@ -6,9 +6,10 @@ How to set it up:
 
 ## 2. Install and configure the database manager
 [Install MySQL Server](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04) for development machines.
-MySQL gem ´mysql2´ may require to install this library as a dependency
+MySQL gem ´mysql2´ may require to install these libraries as dependencies
 
-    $ apt install mysql-client
+    $ apt install mysql-client libmysqlclient-dev
+
 
 [Install PostgreSQL](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04) for a production server.
 
@@ -17,7 +18,7 @@ Postgres gem ´pg´ may require to install this library as a dependency
     $ sudo apt install libpq-dev
 
 ## 3. Install RMagick dependencies
-    apt install imagemagick libmagickwand-dev
+    $ sudo apt install imagemagick libmagickwand-dev
 
 ## 4. Bundle install gems
 ### For a development machine

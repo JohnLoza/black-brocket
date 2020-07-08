@@ -57,11 +57,13 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { :host => "192.168.1.90:3000" }
   config.openssl_verify_mode = OpenSSL::SSL::VERIFY_NONE
   config.action_mailer.smtp_settings = {
-    address:              'mail.blackbrocket.com',
+    address:              'smtp.gmail.com',
     port:                 587,
-    user_name:            'noreply@blackbrocket.com',
-    password:             'Jf4TknV9iN',
-    authentication:       'plain',
-    enable_starttls_auto: false
+    domain:               'gmail.com',
+    user_name:            'ventasddtech6@gmail.com',
+    password:             '04%discos?00',
+    authentication:       :plain,
+    enable_starttls_auto: true
   }
-  end
+
+end

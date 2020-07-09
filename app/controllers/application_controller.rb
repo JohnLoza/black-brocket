@@ -13,10 +13,6 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::UnknownFormat do |e|
     render_404
   end
-  
-  rescue_from ActionController::UnknownController do |e|
-    render_404
-  end
 
   rescue_from ActionController::InvalidAuthenticityToken do |e|
     render_404

@@ -75,14 +75,14 @@ class Box
       --data '{\"zip_from\":\"44100\",\"zip_to\":\"#{zc}\",\"parcel\":{\"weight\":#{weight},\"height\":#{box["height"]},\"width\":#{box["width"]},\"length\":#{box["length"]}}}'`
 
     quotations = JSON.parse res
-    quotations = quotations.select do |hash|
-      case hash["provider"]
-      when "SENDEX", "CARSSA", "REDPACK", "ESTAFETA", "QUIKEN", "PAQUETEXPRESS"
-        false
-      else
-        true
-      end
-    end
+    # quotations = quotations.select do |hash|
+    #   case hash["provider"]
+    #   when "SENDEX", "CARSSA", "REDPACK", "ESTAFETA", "QUIKEN", "PAQUETEXPRESS"
+    #     false
+    #   else
+    #     true
+    #   end
+    # end
 
     return quotations
   end

@@ -9,10 +9,6 @@ class ApiController < ActionController::API
     render_404
   end
 
-  rescue_from ActionController::UnknownController do |e|
-    render_404
-  end
-
   def authenticate_user!(model)
     render_authentication_error and return unless model.present?
     render_authentication_error and return unless params[:authentication_token].present?

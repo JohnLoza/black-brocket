@@ -101,7 +101,7 @@ class SessionsController < ApplicationController
     def loadBgImage()
       image = WebPhoto.find_by(name: "LOGIN")
       if image.blank?
-        @bg_img = image_url "person-woman-coffee-cup-large.jpg"
+        @bg_img = ActionController::Base.helpers.image_url "person-woman-coffee-cup-large.jpg"
       else
         @bg_img = image.photo.url
       end

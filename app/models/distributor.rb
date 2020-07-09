@@ -77,9 +77,4 @@ class Distributor < ApplicationRecord
       DistributorClientRevision.create(distributor_id: self.id, client_id: client.id)
     end
   end
-
-  private
-    def generate_hash_id
-      self.hash_id = "to_be_replaced"
-    end
 end

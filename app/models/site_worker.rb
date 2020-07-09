@@ -82,9 +82,4 @@ class SiteWorker < ApplicationRecord
     end
   end
 
-  private
-    def generate_hash_id
-      self.hash_id = "to_be_replaced"
-    end
-
 end

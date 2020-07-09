@@ -63,8 +63,4 @@ class Product < ApplicationRecord
 
       self.video = "https://www.youtube.com/embed/#{video_key}"
     end
-
-    def generate_hash_id
-      self.hash_id = "to_be_replaced"
-    end
 end

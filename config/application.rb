@@ -24,8 +24,5 @@ module BlackBrocket
 
     # load locales subfolders
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
-
-    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif *.mp4)
-    config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
   end
 end

@@ -16,7 +16,7 @@ end
 
 puts '--- going to create admin if needed'
 if SiteWorker.where(is_admin: true).take.blank?
-  admin = SiteWorker.new(city_id: 19597, warehouse_id: 1, hash_id: "T0001",
+  SiteWorker.create(city_id: 19597, warehouse_id: 1, hash_id: "T0001",
     name: "Admin", lastname: "foo", mother_lastname: "bar",
     password: "foobar", password_confirmation: "foobar",
     email: "admin@example.com", rfc: "LA872ASD7783A",
@@ -159,7 +159,7 @@ end
 puts '--- going to create products'
 sample_coffe_names.each do |coffe_name|
   product = Product.new({
-      name: coffe_name, show: true, iva: '16', ieps: '8',
+      name: coffe_name, show: true, iva: '16', ieps: '8', total_weight: 1530,
       price: '350.00', recommended_price: '280.000', lowest_price: '250.00',
       presentation: 'Bolsa de 500grs.', hot: true, cold: true
     })
